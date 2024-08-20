@@ -122,6 +122,7 @@ class AppTextStyle {
       fontWeight: FontWeight.w700);
   static TextStyle font12OpenSansRegularWhiteTextStyle = GoogleFonts.openSans(
       color: AppColors.white, fontSize: 12, fontWeight: FontWeight.w400);
+
   static TextStyle font12OpenSansRegularBlackTextStyle = GoogleFonts.openSans(
       color: AppColors.black, fontSize: 12, fontWeight: FontWeight.w400);
   static TextStyle font12OpenSansRegularGreyTextStyle = GoogleFonts.openSans(

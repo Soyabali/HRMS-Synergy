@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:untitled/presentation/applyleave/applyLeave.dart';
 import '../../app/generalFunction.dart';
+import '../attendancelist/attendancelist.dart';
+import '../expensemanagement/expense_management.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import '../resources/routes_manager.dart';
 
 class DashBoard extends StatelessWidget {
   const DashBoard({super.key});
@@ -78,8 +80,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     debugPrint(position.toString());
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     // change status bar colore
@@ -133,7 +133,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               children: [
                 Container(
                   height: 200.0, // Set the height of the container
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(ImageAssets.deshboardtop), // Path to your asset image
                       fit: BoxFit.cover, // Adjust the image to cover the container
@@ -168,93 +168,748 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                     mainAxisSpacing: 5.0,
                     shrinkWrap: true,
                     children: <Widget>[
-                      _buildFoodCard('Profile', 'assets/images/ic_profile_dashboard.PNG'),
-                     // _buildFoodCard('Profile', 'assets/images/ic_profile'),
                       GestureDetector(
-                          onTap: (){
-                            print('---Mark Attendance---');
-                            getLocation();
-                          },
-                          child: _buildFoodCard('Mark Attendance','assets/images/ic_reminder_dashboard.PNG')),
-                      _buildFoodCard('Attendance List','assets/images/ic_achievement.PNG'),
-                      _buildFoodCard('Attandance','assets/images/ic_attendance_dashboard.PNG'),
-                      _buildFoodCard('Apply Leave','assets/images/ic_leave_dashboard.PNG'),
-                      _buildFoodCard('Pay Slip','assets/images/ic_payslip.PNG'),
-                      _buildFoodCard('Policy Doc','assets/images/ic_policy_dashboard.PNG'),
-                      _buildFoodCard('Holiday','assets/images/ic_holiday_dashboard.PNG'),
-                      _buildFoodCard('User Query','assets/images/ic_user_query_dashboard.PNG'),
-                      _buildFoodCard('Expense Management','assets/images/ic_expeses.PNG'),
-                      _buildFoodCard('Work Detail','assets/images/ic_master_work_status.PNG'),
-                      _buildFoodCard('Notification','assets/images/ic_announcement.PNG'),
+                        onTap: (){
+                          print('---Profle----');
+                                 // Navigator.push(
+                                 //   context,
+                                 //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                                 // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_profile_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Profile",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Mark Attendance----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_reminder_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Mark Attendance",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---AttendanceList----');
+                         // Navigator.pushNamed(context, '/attendancelist');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Attendancelist()),
+                          );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_attendance_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Attendance List",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Second Part
+                      GestureDetector(
+                        onTap: (){
+                          print('-------');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_attendance_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Attandance",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---AttendanceList----');
+                          // Navigator.pushNamed(context, '/attendancelist');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Applyleave()),
+                          );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_leave_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Apply Leave",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Profle----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_payslip.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Pay Slip",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // third Part
+                      GestureDetector(
+                        onTap: (){
+                          print('-------');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_policy_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Policy Doc",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Mark Attendance----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_holiday_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Holiday",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Profle----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_user_query_dashboard.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "User Query",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // fourth part
+                      GestureDetector(
+                        onTap: (){
+                          print('-------');
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                          );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset('assets/images/ic_expeses.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Expense Management",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Mark Attendance----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset('assets/images/ic_master_work_status.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Work Detail",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          print('---Profle----');
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                          // );
+                        },
+                        child: Container(
+                          height: 100.0,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                              style: BorderStyle.solid,
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                height: 50,
+                                width: 50,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey, // Border color
+                                    width: 1.0, // Border width
+                                  ),
+                                  shape: BoxShape.circle, // Container shape
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    margin: EdgeInsets.all(10.0),
+                                    child: Image.asset(
+                                      'assets/images/ic_announcement.PNG', // Replace with your SVG asset
+                                      fit: BoxFit.contain, // Ensure the SVG fits within the container
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Center(
+                                  child: Text(
+                                    "Notification",
+                                    textAlign: TextAlign.center, // Center align the text
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                    // style: TextStyle(
+                                    //   fontFamily: 'Quicksand',
+                                    //   fontSize: 12.0,
+                                    //   fontWeight: FontWeight.normal,
+                                    // ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
 
                     ],
                   ),
                 ),
               ),
             ),
-
           ],
-
-      ),
-    );
-  }
-  // gridView Card
-  Widget _buildFoodCard(String name, String cardImage) {
-    return GestureDetector(
-      onTap: (){
-        print('------$name---');
-      },
-      child: Container(
-        height: 100.0,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(
-            color: Colors.grey.withOpacity(0.2),
-            style: BorderStyle.solid,
-            width: 1.0,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.grey, // Border color
-                  width: 1.0, // Border width
-                ),
-                shape: BoxShape.circle, // Container shape
-              ),
-              child: Center(
-                child: Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Image.asset(
-                    cardImage, // Replace with your SVG asset
-                    fit: BoxFit.contain, // Ensure the SVG fits within the container
-                  ),
-                ),
-                ),
-              ),
-            SizedBox(height: 10.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Center(
-                child: Text(
-                  name,
-                  textAlign: TextAlign.center, // Center align the text
-                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                  // style: TextStyle(
-                  //   fontFamily: 'Quicksand',
-                  //   fontSize: 12.0,
-                  //   fontWeight: FontWeight.normal,
-                  // ),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
