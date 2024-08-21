@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementstatus.dart';
+import 'package:untitled/presentation/expensemanagement/reimbursementclarification/reimbursementclarification.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 import 'addReimbursement/addReimbursement.dart';
 import 'addReimbursement/shopSurvey.dart';
+import 'expensereport/expensereport.dart';
 
 
 class ExpenseManagement extends StatelessWidget {
@@ -151,7 +154,10 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
               // Repeat for the other containers...
               GestureDetector(
                 onTap: () {
-                  print('---Profile----');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Reimbursementstatus()),
+                  );
                 },
                 child: Container(
                   height: 100.0,  // Set the height to 100
@@ -203,7 +209,10 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
               ),
               GestureDetector(
                 onTap: () {
-                  print('---Profile----');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReimbursementClarification()),
+                  );
                 },
                 child: Container(
                   height: 100.0,  // Set the height to 100
@@ -255,7 +264,10 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
               ),
               GestureDetector(
                 onTap: () {
-                  print('---Profile----');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ExpenseReport()),
+                  );
                 },
                 child: Container(
                   height: 100.0,  // Set the height to 100
