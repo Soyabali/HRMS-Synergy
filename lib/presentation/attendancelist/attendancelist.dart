@@ -74,6 +74,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
           ),
         ), // Removes shadow under the AppBar
       ),
+
       body: ListView(
         children: [
           Column(
@@ -106,7 +107,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                 ),
               ),
               SizedBox(height: 15),
-
               Padding(
                 padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                 child:Card(

@@ -1,9 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../attendancelist/attendancelist.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
+import 'addReimbursement/addReimbursement.dart';
+import 'addReimbursement/shopSurvey.dart';
 
 
 class ExpenseManagement extends StatelessWidget {
@@ -75,27 +76,32 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
         ), // Removes shadow under the AppBar
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 12,right: 12),
+        padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
         child: Container(
+          color: Colors.white,
           height: MediaQuery.of(context).size.height,
           child: GridView.count(
             crossAxisCount: 2,
             primary: false,
             crossAxisSpacing: 5.0,
-            childAspectRatio: 0.85,
+            childAspectRatio: 1.5, // Adjust this to maintain the proportion of the items
             mainAxisSpacing: 5.0,
             shrinkWrap: true,
             children: <Widget>[
               GestureDetector(
-                onTap: (){
-                  print('---Profle----');
+                onTap: () {
+                  print('---Profile----');
                   // Navigator.push(
                   //   context,
-                  //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
+                  //   MaterialPageRoute(builder: (context) => AddReimbursement()),
                   // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ShopSurvey()),
+                  );
                 },
                 child: Container(
-                  height: 100.0,
+                  height: 100.0,  // Set the height to 100
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
@@ -108,38 +114,33 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.grey, // Border color
-                            width: 1.0, // Border width
+                            color: Colors.grey,
+                            width: 1.0,
                           ),
-                          shape: BoxShape.circle, // Container shape
+                          shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.all(10.0),
+                            margin: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/ic_profile_dashboard.PNG', // Replace with your SVG asset
-                              fit: BoxFit.contain, // Ensure the SVG fits within the container
+                              'assets/images/ic_profile_dashboard.PNG',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Center(
                           child: Text(
                             "Add Reimbursement",
-                            textAlign: TextAlign.center, // Center align the text
+                            textAlign: TextAlign.center,
                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                            // style: TextStyle(
-                            //   fontFamily: 'Quicksand',
-                            //   fontSize: 12.0,
-                            //   fontWeight: FontWeight.normal,
-                            // ),
                           ),
                         ),
                       ),
@@ -147,16 +148,13 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                   ),
                 ),
               ),
+              // Repeat for the other containers...
               GestureDetector(
-                onTap: (){
-                  print('---Mark Attendance----');
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                  // );
+                onTap: () {
+                  print('---Profile----');
                 },
                 child: Container(
-                  height: 100.0,
+                  height: 100.0,  // Set the height to 100
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
@@ -169,38 +167,33 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.grey, // Border color
-                            width: 1.0, // Border width
+                            color: Colors.grey,
+                            width: 1.0,
                           ),
-                          shape: BoxShape.circle, // Container shape
+                          shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.all(10.0),
+                            margin: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/ic_reminder_dashboard.PNG', // Replace with your SVG asset
-                              fit: BoxFit.contain, // Ensure the SVG fits within the container
+                              'assets/images/ic_reminder_dashboard.PNG',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Center(
                           child: Text(
                             "Reimbursement Status",
-                            textAlign: TextAlign.center, // Center align the text
+                            textAlign: TextAlign.center,
                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                            // style: TextStyle(
-                            //   fontFamily: 'Quicksand',
-                            //   fontSize: 12.0,
-                            //   fontWeight: FontWeight.normal,
-                            // ),
                           ),
                         ),
                       ),
@@ -209,16 +202,11 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                 ),
               ),
               GestureDetector(
-                onTap: (){
-                  print('---AttendanceList----');
-                  // Navigator.pushNamed(context, '/attendancelist');
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const Attendancelist()),
-                  );
+                onTap: () {
+                  print('---Profile----');
                 },
                 child: Container(
-                  height: 100.0,
+                  height: 100.0,  // Set the height to 100
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
@@ -231,38 +219,33 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.grey, // Border color
-                            width: 1.0, // Border width
+                            color: Colors.grey,
+                            width: 1.0,
                           ),
-                          shape: BoxShape.circle, // Container shape
+                          shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.all(10.0),
+                            margin: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/ic_attendance_dashboard.PNG', // Replace with your SVG asset
-                              fit: BoxFit.contain, // Ensure the SVG fits within the container
+                              'assets/images/ic_attendance_dashboard.PNG',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Center(
                           child: Text(
-                            "Attendance List",
-                            textAlign: TextAlign.center, // Center align the text
+                            "Reimbursement Clarification",
+                            textAlign: TextAlign.center,
                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                            // style: TextStyle(
-                            //   fontFamily: 'Quicksand',
-                            //   fontSize: 12.0,
-                            //   fontWeight: FontWeight.normal,
-                            // ),
                           ),
                         ),
                       ),
@@ -270,17 +253,12 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                   ),
                 ),
               ),
-              // Second Part
               GestureDetector(
-                onTap: (){
-                  print('-------');
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                  // );
+                onTap: () {
+                  print('---Profile----');
                 },
                 child: Container(
-                  height: 100.0,
+                  height: 100.0,  // Set the height to 100
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     border: Border.all(
@@ -293,38 +271,33 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                        height: 100,
-                        width: 100,
+                        height: 50,
+                        width: 50,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.grey, // Border color
-                            width: 1.0, // Border width
+                            color: Colors.grey,
+                            width: 1.0,
                           ),
-                          shape: BoxShape.circle, // Container shape
+                          shape: BoxShape.circle,
                         ),
                         child: Center(
                           child: Container(
-                            margin: EdgeInsets.all(10.0),
+                            margin: EdgeInsets.all(8.0),
                             child: Image.asset(
-                              'assets/images/ic_attendance_dashboard.PNG', // Replace with your SVG asset
-                              fit: BoxFit.contain, // Ensure the SVG fits within the container
+                              'assets/images/ic_attendance_dashboard.PNG',
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 8.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Center(
                           child: Text(
-                            "Attandance",
-                            textAlign: TextAlign.center, // Center align the text
+                            "Expense Report",
+                            textAlign: TextAlign.center,
                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                            // style: TextStyle(
-                            //   fontFamily: 'Quicksand',
-                            //   fontSize: 12.0,
-                            //   fontWeight: FontWeight.normal,
-                            // ),
                           ),
                         ),
                       ),
@@ -332,11 +305,10 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                   ),
                 ),
               ),
-
-
             ],
           ),
         ),
+
       ),
     );
   }

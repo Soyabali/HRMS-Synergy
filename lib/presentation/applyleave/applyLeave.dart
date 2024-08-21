@@ -641,7 +641,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
               Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
+                        padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 0),
                         child:Card(
                             color: Colors.white,
                             elevation: 5.0, // Elevation of the card
@@ -670,8 +670,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                       ),
                                       // Center the text within the container
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 10),
+                                      child: const Padding(
+                                        padding: EdgeInsets.only(left: 10),
                                         child: Column(
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -847,7 +847,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                 Align(
                                   alignment: Alignment.centerRight,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.only(bottom: 10,right: 10),
                                     child: Container(
                                       height: 40, // Height of the second container
                                       width: 110, // Width of the second container
@@ -1075,7 +1075,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(left: 5.0),
+                                      padding: const EdgeInsets.only(left: 10.0),
                                       child: Text('Note:-Salary will be deducated for this leave.',style: TextStyle(
                                           color: Colors.redAccent,fontSize: 10,fontWeight: FontWeight.normal
                                       ),),
@@ -1084,7 +1084,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(bottom: 10),
+                                        padding: const EdgeInsets.only(bottom: 10,right: 10),
                                         child: Container(
                                           height: 40, // Height of the second container
                                           width: 110, // Width of the second container

@@ -34,8 +34,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Helpers/loader_helper.dart';
 import 'baseurl.dart';
+import 'loader_helper.dart';
 
 class ShopTypeRepo
 {
