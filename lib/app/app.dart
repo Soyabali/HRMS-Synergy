@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
 import 'package:untitled/presentation/login/loginScreen.dart';
 
@@ -38,6 +39,7 @@ class _MyAppState extends State<MyApp> {
         '/attendancelist': (context) => const Attendancelist(),
         // Add other routes here
       },
+      builder: EasyLoading.init(),
      // debugShowCheckedModeBanner: false,
       //onGenerateRoute: RouteGenerator.getRoute,
     //  initialRoute: Routes.splashRoute,

@@ -5,12 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/resources/app_colors.dart';
 import '../../app/generalFunction.dart';
+import '../../data/loginrepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
-import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 
@@ -34,6 +35,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -292,7 +294,6 @@ class _LoginPageState extends State<LoginPage> {
                                ],
                           ),
                         ),
-
                       ],
                     ),
                     GestureDetector(
@@ -390,110 +391,136 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(height: AppPadding.p10),
                               /// LoginButton code and onclik Operation
                               InkWell(
-                                onTap: () {
-                                  print('---DashBoard Screen------');
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => DashBoard()),
-                                        (Route<dynamic> route) => false, // Remove all previous routes
-                                  );
-                                  // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
-                                  //Navigator.pushReplacementNamed(context, Routes.mainRoute);
-                                },
-                                // onTap: () async {
-                                //   Navigator.pushReplacementNamed(
-                                //       context, Routes.forgotPasswordRoute);
-                                //  // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
-                                //   getLocation();
-                                //    var phone = _phoneNumberController.text;
-                                //    var password = passwordController.text;
-                                //
-                                //    if(_formKey.currentState!.validate() && phone != null && password != null){
-                                //      // Call Api
-                                //             // loginMap = await LoginRepo1().authenticate(context, phone!, password!);
-                                //
-                                //
-                                //              print('---358----$loginMap');
-                                //              result = "${loginMap['Result']}";
-                                //              msg = "${loginMap['Msg']}";
-                                //              print('---361----$result');
-                                //              print('---362----$msg');
-                                //    }else{
-                                //      if(_phoneNumberController.text.isEmpty){
-                                //        phoneNumberfocus.requestFocus();
-                                //      }else if(passwordController.text.isEmpty){
-                                //        passWordfocus.requestFocus();
-                                //      }
-                                //    } // condition to fetch a response form a api
-                                //   if(result=="1"){
-                                //       var iUserId = "${loginMap['Data'][0]['iUserId']}";
-                                //       var sName =
-                                //           "${loginMap['Data'][0]['sName']}";
-                                //       var sContactNo =
-                                //           "${loginMap['Data'][0]['sContactNo']}";
-                                //       var sDesgName =
-                                //           "${loginMap['Data'][0]['sDesgName']}";
-                                //       var iDesgCode =
-                                //           "${loginMap['Data'][0]['iDesgCode']}";
-                                //       var iDeptCode =
-                                //           "${loginMap['Data'][0]['iDeptCode']}";
-                                //       var iUserTypeCode =
-                                //           "${loginMap['Data'][0]['iUserTypeCode']}";
-                                //       var sToken =
-                                //           "${loginMap['Data'][0]['sToken']}";
-                                //       var dLastLoginAt =
-                                //           "${loginMap['Data'][0]['dLastLoginAt']}";
-                                //       var iAgencyCode =
-                                //           "${loginMap['Data'][0]['iAgencyCode']}";
-                                //
-                                //       // To store value in  a SharedPreference
-                                //
-                                //       SharedPreferences prefs = await SharedPreferences.getInstance();
-                                //       prefs.setString('iUserId',iUserId);
-                                //       prefs.setString('sName',sName);
-                                //       prefs.setString('sContactNo',sContactNo);
-                                //       prefs.setString('sDesgName',sDesgName);
-                                //       prefs.setString('iDesgCode',iDesgCode);
-                                //       prefs.setString('iDeptCode',iDeptCode);
-                                //       prefs.setString('iUserTypeCode',iUserTypeCode);
-                                //       prefs.setString('sToken',sToken);
-                                //       prefs.setString('dLastLoginAt',dLastLoginAt);
-                                //       prefs.setString('iAgencyCode',iAgencyCode);
-                                //      // prefs.setDouble('lat',lat!);
-                                //       //prefs.setDouble('long',long!);
-                                //       String? stringName = prefs.getString('sName');
-                                //       String? stringContact = prefs.getString('sContactNo');
-                                //        iAgencyCode = prefs.getString('iAgencyCode').toString();
-                                //       print('---464-----stringContact--$stringName');
-                                //       print('---465----stringContact----$stringContact');
-                                //       print('---473----iAgencyCode----$iAgencyCode');
-                                //       if(iAgencyCode =="1"){
-                                //
-                                //         // Navigator.pushReplacement(
-                                //         //   context,
-                                //         //   MaterialPageRoute(builder: (context) => HomePage()),
-                                //         // );
-                                //        // print('----570---To go with $iAgencyCode---');
-                                //       }else{
-                                //         // HomeScreen_2
-                                //         // Navigator.pushReplacement(
-                                //         //   context,
-                                //         //   MaterialPageRoute(builder: (context) => HomeScreen_2()),
-                                //         // );
-                                //       //  print('----572---To go with $iAgencyCode---');
-                                //
-                                //       }
-                                //       // Navigator.pushReplacement(
-                                //       //   context,
-                                //       //   MaterialPageRoute(builder: (context) => HomePage()),
-                                //       // );
-                                //
-                                //   }else{
-                                //     print('----373---To display error msg---');
-                                //     displayToast(msg);
-                                //
-                                //   }
-                                //   },
+                                // onTap: () {
+                                //   print('---DashBoard Screen------');
+                                //   Navigator.pushAndRemoveUntil(
+                                //     context,
+                                //     MaterialPageRoute(builder: (context) => DashBoard()),
+                                //         (Route<dynamic> route) => false, // Remove all previous routes
+                                //   );
+                                //   // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
+                                //   //Navigator.pushReplacementNamed(context, Routes.mainRoute);
+                                // },
+
+                                onTap: () async {
+                                  // Navigator.pushReplacementNamed(
+                                  //     context, Routes.forgotPasswordRoute);
+                                 // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
+                                 // getLocation();
+                                   var phone = _phoneNumberController.text;
+                                   var password = passwordController.text;
+
+                                   if(_formKey.currentState!.validate() && phone != null && password != null){
+                                     // Call Api
+                                             loginMap = await LoginRepo().login(context, phone!, password!);
+
+                                             print('---418----$loginMap');
+                                             result = "${loginMap[0]['Result']}";
+                                             msg = "${loginMap[0]['Msg']}";
+                                             print('---421----$result');
+                                             print('---422----$msg');
+                                   }else{
+                                     if(_phoneNumberController.text.isEmpty){
+                                       phoneNumberfocus.requestFocus();
+                                     }else if(passwordController.text.isEmpty){
+                                       passWordfocus.requestFocus();
+                                     }
+                                   } // condition to fetch a response form a api
+                                  if(result=="1"){
+                                    print('---data store --Local data b---431----');
+                                      var sEmpCode = "${loginMap[0]['sEmpCode']}";
+                                      var sCompEmpCode = "${loginMap[0]['sCompEmpCode']}";
+                                      var sFirstName = "${loginMap[0]['sFirstName']}";
+                                      var sLastName = "${loginMap[0]['sLastName']}";
+                                      var sContactNo = "${loginMap[0]['sContactNo']}";
+                                      var dDOJ = "${loginMap[0]['dDOJ']}";
+                                      var dDOB = "${loginMap[0]['dDOB']}";
+                                      var sEmergencyContactPerson = "${loginMap[0]['sEmergencyContactPerson']}";
+                                      var sEmergencyContactNo = "${loginMap[0]['sEmergencyContactNo']}";
+                                      var sEmergencyContactRelation = "${loginMap[0]['sEmergencyContactRelation']}";
+                                      var sBloodGroup = "${loginMap[0]['sBloodGroup']}";
+                                      var sCategory = "${loginMap[0]['sCategory']}";
+                                      var sDsgCode = "${loginMap[0]['sDsgCode']}";
+                                      var sDsgName = "${loginMap[0]['sDsgName']}";
+                                      var sDeptCode = "${loginMap[0]['sDeptCode']}";
+                                      var sDeptName = "${loginMap[0]['sDeptName']}";
+                                      var sLocCode = "${loginMap[0]['sLocCode']}";
+                                      var sLocName = "${loginMap[0]['sLocName']}";
+                                      var sLocation = "${loginMap[0]['sLocation']}";
+                                      var sBankName = "${loginMap[0]['sBankName']}";
+                                      var sBankAcNo = "${loginMap[0]['sBankAcNo']}";
+                                      var sISFCode = "${loginMap[0]['sISFCode']}";
+                                      var Entitlement = "${loginMap[0]['Entitlement']}";
+                                      var Availed = "${loginMap[0]['Availed']}";
+                                      var Balance = "${loginMap[0]['Balance']}";
+                                      var sToken = "${loginMap[0]['sToken']}";
+                                      var sEmpImage = "${loginMap[0]['sEmpImage']}";
+                                      var sCompEmailId = "${loginMap[0]['sCompEmailId']}";
+                                      var sMngrName = "${loginMap[0]['sMngrName']}";
+                                      var sMngrDesgName = "${loginMap[0]['sMngrDesgName']}";
+                                      var Development = "${loginMap[0]['Development']}";
+                                      var sMngrContactNo = "${loginMap[0]['sMngrContactNo']}";
+                                      var iIsEligibleShLv = "${loginMap[0]['iIsEligibleShLv']}";
+
+                                      // To store value in  a SharedPreference
+
+                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                      prefs.setString('sEmpCode',sEmpCode);
+                                      prefs.setString('sCompEmpCode',sCompEmpCode);
+                                      prefs.setString('sFirstName',sFirstName);
+                                      prefs.setString('sLastName',sLastName);
+                                    prefs.setString('sLastName',sLastName);
+                                    prefs.setString('sContactNo',sContactNo);
+                                    prefs.setString('dDOJ',dDOJ);
+                                    prefs.setString('dDOB',dDOB);
+                                    prefs.setString('sEmergencyContactPerson',sEmergencyContactPerson);
+                                    prefs.setString('sEmergencyContactNo',sEmergencyContactNo);
+                                    prefs.setString('sEmergencyContactRelation',sEmergencyContactRelation);
+                                    prefs.setString('sBloodGroup',sBloodGroup);
+                                    prefs.setString('sCategory',sCategory);
+                                    prefs.setString('sDsgCode',sDsgCode);
+                                    prefs.setString('sDsgName',sDsgName);
+                                    prefs.setString('sDeptCode',sDeptCode);
+                                    prefs.setString('sDeptName',sDeptName);
+                                    prefs.setString('sLocCode',sLocCode);
+                                    prefs.setString('sLocName',sLocName);
+                                    prefs.setString('sLocation',sLocation);
+                                    prefs.setString('sBankName',sBankName);
+                                    prefs.setString('sBankAcNo',sBankAcNo);
+                                    prefs.setString('sISFCode',sISFCode);
+                                    prefs.setString('Entitlement',Entitlement);
+                                    prefs.setString('Availed',Availed);
+                                    prefs.setString('Balance',Balance);
+                                    prefs.setString('sToken',sToken);
+                                    prefs.setString('sEmpImage',sEmpImage);
+                                    prefs.setString('sCompEmailId',sCompEmailId);
+                                    prefs.setString('sMngrName',sMngrName);
+                                    prefs.setString('sMngrDesgName',sMngrDesgName);
+                                    prefs.setString('Development',Development);
+                                    prefs.setString('sMngrContactNo',sMngrContactNo);
+                                    prefs.setString('iIsEligibleShLv',iIsEligibleShLv);
+
+                                    // navigate to dashboard
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => DashBoard()),
+                                            (Route<dynamic> route) => false, // Remove all previous routes
+                                      );
+
+                                    // prefs.setDouble('lat',lat!);
+                                      //prefs.setDouble('long',long!);
+                                    //  String? sEmpCode1 = prefs.getString('sEmpCode');
+                                      //String? sCompEmpCode1 = prefs.getString('sCompEmpCode');
+                                      //String? sFirstName1 = prefs.getString('sFirstName');
+
+                                      // iAgencyCode = prefs.getString('iAgencyCode').toString();
+
+                                  }else{
+                                    displayToast(msg);
+                                    print('---Value is not store in a local data-----508--');
+                                  }
+                                  },
+
                                 child: Container(
                                   width: double.infinity,
                                   // Make container fill the width of its parent

@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../Helpers/loader_helper.dart';
 import 'baseurl.dart';
+import 'loader_helper.dart';
 
 
 class AppVersionRepo {
@@ -16,24 +16,23 @@ class AppVersionRepo {
 
 
       var baseURL = BaseRepo().baseurl;
-      var endPoint = "VerifyAppVersion/VerifyAppVersion";
+      var endPoint = "hrmscheckversionNew/hrmscheckversionNew";
       var versionApi = "$baseURL$endPoint";
       print('------------17---versionApi---$versionApi');
 
       showLoader();
       var headers = {'Content-Type': 'application/json'};
-      var request = http.Request(
-          'POST',
-          Uri.parse('$versionApi'));
-      request.body = json.encode({"sVersion": version});
+      var request = http.Request('POST', Uri.parse('$versionApi'));
+      request.body = json.encode({
+        "sAppVersion": version,
+        "sEmpCode": 'NA',
+      });
       request.headers.addAll(headers);
-
       http.StreamedResponse response = await request.send();
       var map;
       var data = await response.stream.bytesToString();
       map = json.decode(data);
       print('----------20---version RESPONSE----$map');
-
       if (response.statusCode == 200) {
         hideLoader();
         print('----------22-----$map');

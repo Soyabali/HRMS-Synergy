@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:untitled/presentation/applyleave/applyLeave.dart';
 import '../../app/generalFunction.dart';
+import '../../data/hrmsattendance.dart';
+import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../resources/app_text_style.dart';
@@ -44,27 +47,30 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   // get a location :
   void getLocation() async {
-    print('---location---');
+    showLoader();
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      hideLoader();
       return Future.error('Location services are disabled.');
     }
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
+      hideLoader();
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        hideLoader();
         return Future.error('Location permissions are denied');
       }
     }
     if (permission == LocationPermission.deniedForever) {
+      hideLoader();
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     debugPrint("-------------Position-----------------");
     debugPrint(position.latitude.toString());
 
@@ -72,6 +78,15 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       lat = position.latitude;
       long = position.longitude;
     });
+    if(lat!=null && long !=null){
+       var location = '{$lat$long}';
+       displayToast(location);
+       attendaceapi();
+      print('---call Api---xxxxxxxxx--');
+
+      hideLoader();
+    }
+
 
     print('-----------105----$lat');
     print('-----------106----$long');
@@ -79,6 +94,31 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     // });
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
+  }
+   attendaceapi() async{
+     var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
+      print('-----99---$attendance');
+    var result = "${attendance[0]['Result']}";
+     var msg = "${attendance[0]['Msg']}";
+    if(result!=null){
+      print('-----104 -A-sussful--');
+      displayToast("$msg");
+    }else{
+      print('-----104 -A-failed--');
+      displayToast("$msg");
+    }
+  }
+
+  // toast
+  void displayToast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 
   @override
@@ -103,8 +143,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
           //   padding: const EdgeInsets.only(left: 5.0),
           //   child: Icon(Icons.menu, size: 24,color: Colors.white,),
           // ),
-          title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          title: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: Text(
               'Welcome, Have a nice day!',
               style: TextStyle(
@@ -232,7 +272,9 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       ),
                       GestureDetector(
                         onTap: (){
+
                           print('---Mark Attendance----');
+                          getLocation();
                           // Navigator.push(
                           //   context,
                           //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
