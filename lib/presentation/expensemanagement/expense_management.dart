@@ -262,61 +262,61 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ExpenseReport()),
-                  );
-                },
-                child: Container(
-                  height: 100.0,  // Set the height to 100
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                      color: Colors.grey.withOpacity(0.2),
-                      style: BorderStyle.solid,
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Container(
-                            margin: EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              'assets/images/ic_attendance_dashboard.PNG',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                        child: Center(
-                          child: Text(
-                            "Expense Report",
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(builder: (context) => ExpenseReport()),
+              //     );
+              //   },
+              //   child: Container(
+              //     height: 100.0,  // Set the height to 100
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(10.0),
+              //       border: Border.all(
+              //         color: Colors.grey.withOpacity(0.2),
+              //         style: BorderStyle.solid,
+              //         width: 1.0,
+              //       ),
+              //     ),
+              //     child: Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: <Widget>[
+              //         Container(
+              //           height: 50,
+              //           width: 50,
+              //           decoration: BoxDecoration(
+              //             border: Border.all(
+              //               color: Colors.grey,
+              //               width: 1.0,
+              //             ),
+              //             shape: BoxShape.circle,
+              //           ),
+              //           child: Center(
+              //             child: Container(
+              //               margin: EdgeInsets.all(8.0),
+              //               child: Image.asset(
+              //                 'assets/images/ic_attendance_dashboard.PNG',
+              //                 fit: BoxFit.contain,
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //         SizedBox(height: 8.0),
+              //         Padding(
+              //           padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              //           child: Center(
+              //             child: Text(
+              //               "Expense Report",
+              //               textAlign: TextAlign.center,
+              //               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

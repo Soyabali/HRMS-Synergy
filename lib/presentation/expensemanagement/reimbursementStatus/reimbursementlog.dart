@@ -79,7 +79,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
 
   // Distic List
   updatedSector() async {
-    distList = await DistRepo().getDistList();
+    distList = await ProjectRepo().projectList();
     print(" -----xxxxx-  list Data--65---> $distList");
     setState(() {});
   }

@@ -9,15 +9,21 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../data/district_repo.dart';
+import '../../../data/expensecategory_repo.dart';
+import '../../../data/hrmsPopUpWarning_repo.dart';
+import '../../../data/hrmspostreimbursement.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/shopSubmitRepo.dart';
 import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
+import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
+import '../../resources/strings_manager.dart';
 import '../../resources/values_manager.dart';
+import 'dart:math';
 
 class ShopSurvey extends StatelessWidget {
   const ShopSurvey({super.key});
@@ -47,6 +53,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   DateTime? _date;
+  DateTime? _selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
@@ -65,15 +72,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List stateList = [];
-  List distList = [];
+  List<dynamic> distList = [];
+  List<dynamic> expenseList = [];
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
 
   // Distic List
   updatedSector() async {
-    distList = await DistRepo().getDistList();
-    print(" -----xxxxx-  list Data--65---> $distList");
+    distList = await ProjectRepo().projectList();
+    print(" -----xxxxx-  projectList--76---> $distList");
+    setState(() {});
+  }
+
+  expenseCategory() async {
+    expenseList = await ExpenseRepo().expenseList();
+    print(" -----xxxxx-  expenseList--84---> $expenseList");
     setState(() {});
   }
 
@@ -103,6 +117,8 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _contactController = TextEditingController();
   TextEditingController _landMarkController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
+  TextEditingController _amountController = TextEditingController();
+  TextEditingController _expenseController = TextEditingController();
 
   // focus
   // FocusNode locationfocus = FocusNode();
@@ -138,8 +154,11 @@ class _MyHomePageState extends State<MyHomePage> {
   File? image;
   var uplodedImage;
   double? lat, long;
+  var dExpDate;
 
   // Uplode Id Proof with gallary
+
+  // pick image from a Camera
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -151,7 +170,27 @@ class _MyHomePageState extends State<MyHomePage> {
       if (pickFileid != null) {
         image = File(pickFileid.path);
         setState(() {});
-        print('Image File path Id Proof-------135----->$image');
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage(sToken!, image!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+  // pick image from a Gallery
+  Future pickImageGallery() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
         uploadImage(sToken!, image!);
       } else {
@@ -173,21 +212,24 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 16.0);
   }
 
-  // image code
+
   Future<void> uploadImage(String token, File imageFile) async {
     try {
+      print('-----xx-x----214----');
       showLoader();
+
       // Create a multipart request
-      var request = http.MultipartRequest('POST',
-          Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('http://49.50.76.136/hrmsapis/api/UploadTrackingImage/UploadTrackingImage'),
+      );
 
       // Add headers
       request.headers['token'] = token;
 
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
-        'file',
-        imageFile.path,
+        'sImagePath', imageFile.path,
       ));
 
       // Send the request
@@ -197,16 +239,15 @@ class _MyHomePageState extends State<MyHomePage> {
       var response = await http.Response.fromStream(streamedResponse);
 
       // Parse the response JSON
-      var responseData = json.decode(response.body);
+      List<dynamic> responseData = json.decode(response.body);
 
-      // Print the response data
-      print(responseData);
+      // Extracting the image path
+      uplodedImage = responseData[0]['Data'][0]['sImagePath'];
+      print('Uploaded Image Path----242--: $uplodedImage');
+
       hideLoader();
-      print('---------172---$responseData');
-      uplodedImage = "${responseData['Data'][0]['sImagePath']}";
-      print('----174---$uplodedImage');
     } catch (error) {
-      showLoader();
+      hideLoader();
       print('Error uploading image: $error');
     }
   }
@@ -237,6 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
     updatedSector();
     shopType();
     getLocation();
+    expenseCategory();
     super.initState();
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -292,6 +334,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _contactfocus.dispose();
     _landMarkfocus.dispose();
     _addressfocus.dispose();
+    _amountController.dispose();
+    _expenseController.dispose();
   }
 
   // Todo bind sector code
@@ -307,6 +351,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: ButtonTheme(
             alignedDropdown: true,
             child: DropdownButton(
+              isDense: true, // Helps to control the vertical size of the button
+              isExpanded: true, // Allows the DropdownButton to take full width
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
@@ -317,38 +363,38 @@ class _MyHomePageState extends State<MyHomePage> {
                       color: Colors.black,
                       fontSize: 16,
                       fontWeight: FontWeight.normal),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
                 ),
               ),
-              // Not necessary for Option 1
               value: _dropDownSector,
               key: sectorFocus,
               onChanged: (newValue) {
                 setState(() {
                   _dropDownSector = newValue;
-                  print('---187---$_dropDownSector');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
                   distList.forEach((element) {
-                    if (element["sSectorName"] == _dropDownSector) {
-                      _selectedSectorId = element['iSectorCode'];
+                    if (element["sProjectName"] == _dropDownSector) {
+                      _selectedSectorId = element['sProjectCode'];
                       setState(() {});
-                      print('-----286-----sector id---$_selectedSectorId');
                     }
                   });
                 });
               },
               items: distList.map((dynamic item) {
                 return DropdownMenuItem(
-                  child: Text(item['sSectorName'].toString()),
-                  value: item["sSectorName"].toString(),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item['sProjectName'].toString(),
+                          overflow: TextOverflow.ellipsis, // Handles long text
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  value: item["sProjectName"].toString(),
                 );
               }).toList(),
             ),
@@ -358,8 +404,71 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // Widget _bindSector() {
+  //   return Material(
+  //     color: Colors.white,
+  //     borderRadius: BorderRadius.circular(10.0),
+  //     child: Container(
+  //       width: MediaQuery.of(context).size.width - 50,
+  //       height: 42,
+  //       color: Color(0xFFf2f3f5),
+  //       child: DropdownButtonHideUnderline(
+  //         child: ButtonTheme(
+  //           alignedDropdown: true,
+  //           child: DropdownButton(
+  //             onTap: () {
+  //               FocusScope.of(context).unfocus();
+  //             },
+  //             hint: RichText(
+  //               text: const TextSpan(
+  //                 text: "Select Project",
+  //                 style: TextStyle(
+  //                     color: Colors.black,
+  //                     fontSize: 16,
+  //                     fontWeight: FontWeight.normal),
+  //                 children: <TextSpan>[
+  //                   TextSpan(
+  //                       text: '',
+  //                       style: TextStyle(
+  //                           color: Colors.red,
+  //                           fontSize: 16,
+  //                           fontWeight: FontWeight.bold)),
+  //                 ],
+  //               ),
+  //             ),
+  //             // Not necessary for Option 1
+  //             value: _dropDownSector,
+  //             key: sectorFocus,
+  //             onChanged: (newValue) {
+  //               setState(() {
+  //                 _dropDownSector = newValue;
+  //                 print('---187---$_dropDownSector');
+  //                 //  _isShowChosenDistError = false;
+  //                 // Iterate the List
+  //                 distList.forEach((element) {
+  //                   if (element["sProjectName"] == _dropDownSector) {
+  //                     _selectedSectorId = element['sProjectCode'];
+  //                     setState(() {});
+  //                     print('-----344-----project code ---$_selectedSectorId');
+  //                   }
+  //                 });
+  //               });
+  //             },
+  //             items: distList.map((dynamic item) {
+  //               return DropdownMenuItem(
+  //                 child: Text(item['sProjectName'].toString()),
+  //                 value: item["sProjectName"].toString(),
+  //               );
+  //             }).toList(),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   /// Todo same way you should bind point Type data.
-  Widget _bindShopType() {
+  Widget _bindExpenseCategory() {
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(10.0),
@@ -400,13 +509,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   print('---333-------$_dropDownValueShopeType');
                   //  _isShowChosenDistError = false;
                   // Iterate the List
-                  shopTypeList.forEach((element) {
-                    if (element["sShopType"] == _dropDownValueShopeType) {
+                  expenseList.forEach((element) {
+                    if (element["sExpHeadName"] == _dropDownValueShopeType) {
                       setState(() {
-                        _selectedShopId = element['iTranId'];
-                        print('----349--shoptype id ------$_selectedShopId');
+                        _selectedShopId = element['sExpHeadCode'];
+                        print(
+                            '----349--sExpHeadCode id ------$_selectedShopId');
                       });
-                      print('-----Point id----241---$_selectedShopId');
+                      //print('-----Point id----241---$_selectedShopId');
                       if (_selectedShopId != null) {
                         // updatedBlock();
                       } else {
@@ -419,10 +529,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 });
               },
-              items: shopTypeList.map((dynamic item) {
+              items: expenseList.map((dynamic item) {
                 return DropdownMenuItem(
-                  child: Text(item['sShopType'].toString()),
-                  value: item["sShopType"].toString(),
+                  child: Text(item['sExpHeadName'].toString()),
+                  value: item["sExpHeadName"].toString(),
                 );
               }).toList(),
             ),
@@ -531,8 +641,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             children: <Widget>[
                               // 'assets/images/favicon.png',
                               Container(
-                                margin:
-                                    EdgeInsets.only(left: 0, right: 10, top: 10),
+                                margin: const EdgeInsets.only(
+                                    left: 0, right: 10, top: 10),
                                 child: Image.asset(
                                   'assets/images/ic_expense.png',
                                   // Replace with your image asset path
@@ -557,80 +667,74 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           _bindSector(),
                           SizedBox(height: 10),
-                          _bindShopType(),
+                          // BIND Expense Category
+                          _bindExpenseCategory(),
+                          SizedBox(height: 10),
                           SizedBox(height: 10),
                           InkWell(
-                            onTap: () async {
-                              print('---pick a date---');
-                              //_selectDate(context);
-                              DateTime? selectedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
-                              );
-
-                              if (selectedDate != null) {
+                              onTap: () async {
+                                print('---pick a date---');
+                                DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2100),
+                                );
+                                if (pickedDate != null) {
+                                  setState(() {
+                                    _selectedDate = pickedDate;
+                                  });
+                                }
+                                print('XX----617-----${DateFormat('dd/MMM/yyyy').format(_selectedDate!)}');
                                 setState(() {
-                                  _date = selectedDate;
+                                  dExpDate = '${DateFormat('dd/MMM/yyyy').format(_selectedDate!)}';
                                 });
-                              }
-                              print('------576---${_date?.toLocal().toString()}'.split(' ')[0]);
-                            },
+                                displayToast(dExpDate);
 
-                            // print('------577---${_date?.toLocal().toString()}'.split(' ')[0]);
-                            child:  Text(
-                              _date == null
-                                  ? 'Select Bill / Expense Date'
-                                  : 'Selected Date: ${_date?.toLocal().toString()}'
-                                  .split(' ')[0],
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.black45),
-                            ),
-                            // child: Center(
-                            //   child: DottedBorder(
-                            //     color: Colors.grey,
-                            //     // Color of the dotted line
-                            //     strokeWidth: 1.0,
-                            //     // Width of the dotted line
-                            //     dashPattern: [4, 2],
-                            //     // Dash pattern for the dotted line
-                            //     borderType: BorderType.RRect,
-                            //     radius: Radius.circular(5.0),
-                            //     // Optional: rounded corners
-                            //     child: Padding(
-                            //       padding: EdgeInsets.all(8.0),
-                            //       // Equal padding on all sides
-                            //
-                            //       child: Row(
-                            //         mainAxisAlignment: MainAxisAlignment.center,
-                            //         // Center the row contents
-                            //         children: [
-                            //           const Icon(
-                            //             Icons.calendar_month,
-                            //             size: 20,
-                            //             color: Color(0xFF0098a6),
-                            //           ),
-                            //           SizedBox(width: 5.0),
-                            //           // Space between 'Day' and ':'
-                            //           Text(
-                            //             _date == null
-                            //                 ? 'Select Bill / Expense Date'
-                            //                 : 'Selected Date: ${_date?.toLocal().toString()}'
-                            //                     .split(' ')[0],
-                            //             style: TextStyle(
-                            //                 fontSize: 20, color: Colors.black45),
-                            //           ),
-                            //
-                            //           // Text(
-                            //           //     'Select Bill / Expense Date',
-                            //           //     style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                            //           // ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
+                              },
+
+                            child: DottedBorder(
+                                  color: Colors.grey,
+                                  // Color of the dotted line
+                                  strokeWidth: 1.0,
+                                  // Width of the dotted line
+                                  dashPattern: [4, 2],
+                                  // Dash pattern for the dotted line
+                                  borderType: BorderType.RRect,
+                                  radius: Radius.circular(5.0),
+                                  // Optional: rounded corners
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    // Equal padding on all sides
+
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      // Center the row contents
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_month,
+                                          size: 20,
+                                          color: Color(0xFF0098a6),
+                                        ),
+                                        SizedBox(width: 5.0),
+                                        // Space between 'Day' and ':'
+                                        Text(
+                                          _date == null
+                                              ? 'Select Bill / Expense Date'
+                                              : 'Selected Date: ${_date?.toLocal().toString()}'
+                                                  .split(' ')[0],
+                                          style: TextStyle(
+                                              fontSize: 20, color: Colors.black45),
+                                        ),
+
+                                        // Text(
+                                        //     'Select Bill / Expense Date',
+                                        //     style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                           ),
                           SizedBox(height: 10),
                           Padding(
@@ -663,7 +767,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   focusNode: _shopfocus,
-                                  controller: _shopController,
+                                  controller: _amountController,
                                   textInputAction: TextInputAction.next,
                                   onEditingComplete: () =>
                                       FocusScope.of(context).nextFocus(),
@@ -716,7 +820,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: TextFormField(
                                   focusNode: _owenerfocus,
-                                  controller: _ownerController,
+                                  controller: _expenseController,
                                   textInputAction: TextInputAction.next,
                                   onEditingComplete: () =>
                                       FocusScope.of(context).nextFocus(),
@@ -770,9 +874,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               dashPattern: [4, 2],
                               // Dash pattern for the dotted line
                               borderType: BorderType.RRect,
-                              radius: const Radius.circular(5.0),
+                              radius:  Radius.circular(5.0),
                               // Optional: rounded corners
-                              child: const Padding(
+                              child: Padding(
                                 padding: EdgeInsets.all(8.0),
                                 // Equal padding on all sides
                                 child: Center(
@@ -784,20 +888,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Icon(Icons.camera_alt_outlined,
-                                                  size: 25),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                'Click Photo',
-                                                style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 16),
-                                              )
-                                            ],
+                                          InkWell(
+                                            onTap: () {
+                                              // Your onTap logic here
+                                              print('--pick a Camra pick---');
+                                              pickImage();
+                                            },
+                                            child: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Icon(Icons.camera_alt_outlined,
+                                                    size: 25),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  'Click Photo',
+                                                  style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 16),
+                                                )
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),
@@ -806,22 +917,28 @@ class _MyHomePageState extends State<MyHomePage> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Icon(
-                                                  Icons
-                                                      .photo_camera_back_outlined,
-                                                  size: 25),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                'Select Photo',
-                                                style: TextStyle(
-                                                    color: Colors.black45,
-                                                    fontSize: 16),
-                                              )
-                                            ],
+                                          InkWell(
+                                            onTap: (){
+                                              print('--pick a Gallery---');
+                                              pickImageGallery();
+                                            },
+                                            child: const Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Icon(
+                                                    Icons
+                                                        .photo_camera_back_outlined,
+                                                    size: 25),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  'Select Photo',
+                                                  style: TextStyle(
+                                                      color: Colors.black45,
+                                                      fontSize: 16),
+                                                )
+                                              ],
+                                            ),
                                           )
                                         ],
                                       ),
@@ -832,7 +949,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           SizedBox(height: 10),
-                          SizedBox(height: 10),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -840,7 +956,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ? Stack(
                                         children: [
                                           GestureDetector(
-                                            behavior: HitTestBehavior.translucent,
+                                            behavior:
+                                                HitTestBehavior.translucent,
                                             onTap: () {
                                               // Navigator.push(
                                               //     context,
@@ -878,119 +995,111 @@ class _MyHomePageState extends State<MyHomePage> {
                                       )
                                     : Text(
                                         "",
-                                        style: TextStyle(color: Colors.red[700]),
+                                        style:
+                                            TextStyle(color: Colors.red[700]),
                                       )
                               ]),
-                          ElevatedButton(
-                              onPressed: () async {
-                                // random number
-                                // var random = Random();
-                                // // Generate an 8-digit random number
-                                // int randomNumber = random.nextInt(99999999 - 10000000) + 10000000;
-                                // print('Random 8-digit number---770--: $randomNumber');
-                                //
-                                // DateTime currentDate = DateTime.now();
-                                // todayDate = DateFormat('dd/MMM/yyyy HH:mm').format(currentDate);
+                          InkWell(
+                            onTap: () async {
 
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                iUserTypeCode = prefs.getString('iUserTypeCode');
-                                userId = prefs.getString('iUserId');
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              String? sEmpCode = prefs.getString('sEmpCode');
+                              String? sContactNo = prefs.getString('sContactNo');
+                              print('----sEmpCode--15---$sEmpCode');
 
-                                var shopName = _shopController.text;
-                                var ownerName = _ownerController.text;
-                                var contactNo = _contactController.text;
-                                var landMark = _landMarkController.text;
-                                var address = _addressController.text;
+                              /// TODO GET A RANDOM NUMBER
+                              Random random = Random();
+                              int sTranCode = 10000000 + random.nextInt(90000000);
 
-                                print('---995--sShopName---$shopName');
-                                print('---996--OwnerName---$ownerName');
-                                print('---997--sShopType---$_selectedShopId');
-                                print('---998--sContactNo ---$contactNo');
-                                print(
-                                    '---1000--isectorCode ---$_selectedSectorId');
-                                print('---1001--sAddress ---$address');
-                                print('---1002--sLandmark ---$landMark');
-                                print('---1003--sPhoto ---$uplodedImage');
-                                print('---1004--slat ---$lat');
-                                print('---1005--slong ---$long');
-                                print('---1006--sGoogleLocation ---');
-                                print('---1007--sSurveyBt ---$userId');
+                              print('--1001--sTranCode---$sTranCode');
+                              print('--1002--sEmpCode---$sEmpCode');
+                              print('--1003--sProjectCode---$_selectedSectorId');
+                              print('--1004--sExpHeadCode---$_selectedShopId');
+                              print('--1005--dExpDate---$dExpDate');
+                              print('--1006--fAmount---${_amountController.text}');
+                              print('--1007--sExpDetails---${_expenseController.text}');
+                              print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
+                              print('--1009--sEntryBy---$sContactNo');
+                              print('--1010--sRemarks---${'NA'}');
+                              print('--1011--sResult---$result');
 
-                                // apply condition
-                                if (_formKey.currentState!.validate() &&
-                                    _selectedSectorId != null &&
-                                    _selectedShopId != null &&
-                                    shopName != null &&
-                                    ownerName != null &&
-                                    contactNo != null &&
-                                    address != null &&
-                                    uplodedImage != null) {
-                                  print('---call Api---');
+                              var amount = '${_amountController.text}';
+                              var expenseDetails = '${_expenseController.text}';
 
-                                  var shopSurveyResponse = await ShopSubmitRepo()
-                                      .shopSummit(
-                                          context,
-                                          shopName,
-                                          ownerName,
-                                          _selectedShopId,
-                                          contactNo,
-                                          _selectedSectorId,
-                                          address,
-                                          landMark,
-                                          uplodedImage,
-                                          lat,
-                                          long,
-                                          userId);
-                                  print('---1036----$shopSurveyResponse');
-                                  result2 = shopSurveyResponse['Result'];
-                                  msg2 = shopSurveyResponse['Msg'];
-                                } else {
-                                  if (_selectedSectorId == null) {
-                                    displayToast('Select Sector');
-                                  } else if (_selectedShopId == null) {
-                                    displayToast('Select Shop Type');
-                                  } else if (shopName == "") {
-                                    displayToast('Enter Shop Name');
-                                  } else if (ownerName == "") {
-                                    displayToast('Enter Owner Name');
-                                  } else if (contactNo == "") {
-                                    displayToast('Enter Contact No');
-                                  } else if (address == "") {
-                                    displayToast('Enter Address');
-                                  } else if (uplodedImage == null) {
-                                    displayToast('Please pick a Photo');
-                                  }
+                              print('----964--amount----$amount');
+                              print('----965--expenseDetails----$expenseDetails');
+
+
+                              if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
+                              _selectedSectorId!=null && _selectedShopId!=null &&
+                              dExpDate!=null && amount !=null && expenseDetails!=null &&
+                              uplodedImage!=null && sContactNo!=null){
+                                // Call Api
+                                print('---call Api---');
+                                var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode,dExpDate,amount);
+                                print('---975--$hrmsPopWarning');
+                                result = "${hrmsPopWarning[0]['Result']}";
+                                msg = "${hrmsPopWarning[0]['Msg']}";
+
+                              }else{
+                                if(sTranCode==null){
+                                  displayToast('Genrate Random Number');
+                                }else if(sEmpCode==null){
+                                  displayToast('Enter sEmpCode');
+                                }else if(_selectedSectorId==null){
+                                  displayToast('Please Select Project');
+                                }else if(_selectedShopId==null){
+                                  displayToast('Please Select Expense Category');
+                                }else if(dExpDate==null){
+                                  displayToast('Select Expense Date');
+                                }else if(amount==null || amount==''){
+                                  displayToast('Please Enter Amount');
+                                }else if(expenseDetails==null || expenseDetails==''){
+                                  displayToast('Please Enter Expense Details');
+                                }else if(uplodedImage==null){
+                                  displayToast('Please pick a photo');
+                                }else if(sContactNo==null){
+                                  displayToast('Please get a contact number');
                                 }
-                                if (result2 == "1") {
-                                  print('------823----xxxxxxxxxxxxxxx----');
-                                  print(
-                                      '------823---result2  -xxxxxxxxxxxxxxx--$result2');
-                                  displayToast(msg2);
-                                  // Navigator.pop(context);
-                                  //  Navigator.push(
-                                  //    context,
-                                  //    MaterialPageRoute(
-                                  //        builder: (context) => const HomePage()),
-                                  //  );
-                                } else {
-                                  displayToast(msg2);
-                                }
+                              } // condition to fetch a response form a api
+                              if(result=="0"){
+                                // CALL API HRMS Reimbursement
+                                var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
+                                    _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                                );
+                                print('---1050--$hrmsPostReimbursement');
+                                result = "${hrmsPostReimbursement[0]['Result']}";
+                                msg = "${hrmsPostReimbursement[0]['Msg']}";
+                                displayToast(msg);
 
-                                /// Todo next Apply condition
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(
-                                    0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
+                              }else{
+                                showCustomDialog(context,msg);
+                                //displayToast(msg);
+                                print('---diaplay dialog --');
+                              }
+                            },
+
+                            child: Container(
+                              width: double.infinity,
+                              // Make container fill the width of its parent
+                              height: AppSize.s45,
+                              padding: EdgeInsets.all(AppPadding.p5),
+                              decoration: BoxDecoration(
+                                color: AppColors.loginbutton,
+                                // Background color using HEX value
+                                borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
                               ),
-                              child: const Text(
-                                "Send Reimbursement",
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold),
-                              ))
+                              //  #00b3c7
+                              child: Center(
+                                child: Text(
+                                  "Send Reimbursement",
+                                  style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                                ),
+                              ),
+                            ),
+                          ),
+
+
                         ],
                       ),
                     ),
@@ -1001,6 +1110,67 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
+    );
+  }
+  // alert dialog box
+  void showCustomDialog(BuildContext context, String dynamicValue) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0.0),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.warning, color: Colors.red),
+                  SizedBox(width: 8),
+                  Text('Duplicate Entry', style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              SizedBox(height: 16),
+              Text(dynamicValue),
+            ],
+          ),
+          actions: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Dismiss the dialog
+                  },
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    String? sEmpCode = prefs.getString('sEmpCode');
+                    String? sContactNo = prefs.getString('sContactNo');
+                    /// TODO GET A RANDOM NUMBER
+                    Random random = Random();
+                    int sTranCode = 10000000 + random.nextInt(90000000);
+                    var amount = '${_amountController.text}';
+                    var expenseDetails = '${_expenseController.text}';
+
+                    var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
+                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                    );
+                    print('---1050--$hrmsPostReimbursement');
+                    result = "${hrmsPostReimbursement[0]['Result']}";
+                    msg = "${hrmsPostReimbursement[0]['Msg']}";
+                    displayToast(msg);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Yes'),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

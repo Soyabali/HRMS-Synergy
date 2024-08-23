@@ -74,7 +74,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
   // Distic List
   updatedSector() async {
-    distList = await DistRepo().getDistList();
+    distList = await ProjectRepo().projectList();
     print(" -----xxxxx-  list Data--65---> $distList");
     setState(() {});
   }

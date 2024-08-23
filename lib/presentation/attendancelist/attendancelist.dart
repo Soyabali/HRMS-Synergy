@@ -2,6 +2,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:math';
+import '../../data/getCurrentAndPreviousMonth.dart';
+import '../../data/hrmsMonthlyAttendanceRepo.dart';
+import '../../domain/getCurrentAndPreviouseMonthModel.dart';
+import '../../domain/hrmsMonthlyAttendanceModel.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
@@ -32,13 +36,43 @@ class AttendaceListHome extends StatefulWidget {
 }
 
 class _AttendaceListHomeState extends State<AttendaceListHome> {
+
+  List<dynamic> getCurrentAndPreviouseMonthModel = [];
+  List<Map<String, dynamic>>? myPoinList;
+  List<dynamic>?  getCurrentAndPreviousMonth;
+  List<dynamic>?  monthlyAttendance;
+
+  //List<GetcurrentandpreviousemonthModel>? getCurrentAndPreviouseMonthModel;
+  //List<HrmsmonthlyattendanceModel>? monthlyAttendanceList;
+
+
+  getCurrentMonthandPreviousMonth() async {
+    getCurrentAndPreviousMonth = await GetCurrentAndpreviousMonthRepo().getCurrentAndPreviousMonth();
+    print(" -----xxxxx-  distList--49---> $getCurrentAndPreviousMonth");
+    setState(() {});
+  }
+  //
+  monthAttendance(String dDate) async {
+    monthlyAttendance = await HrmsmonthlyattendanceRepo().monthlyAttendanceList(context,dDate);
+    print(" -----57---  monthlyAttendanceList--42---> $monthlyAttendance");
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getCurrentMonthandPreviousMonth();
+   // monthAttendance();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         // statusBarColore
-        systemOverlayStyle: SystemUiOverlayStyle(
+        systemOverlayStyle: const SystemUiOverlayStyle(
           // Status bar color  // 2a697b
           statusBarColor: Color(0xFF2a697b),
           // Status bar brightness (optional)
@@ -74,7 +108,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
           ),
         ), // Removes shadow under the AppBar
       ),
-
       body: ListView(
         children: [
           Column(
@@ -83,27 +116,39 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
               SizedBox(height: 15),
               SizedBox(
                 height: 40, // Set the height for the horizontal list
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10, // Adjust the number of items as needed
-                  itemBuilder: (context, index) {
-                    // Generate a random color
-                    final randomColor = Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
-                    return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 8), // Add spacing between items
-                      height: 40,
-                      width: 120, // Width of the container
-                      decoration: BoxDecoration(
-                        color: randomColor, // Use the randomly generated color
-                        borderRadius: BorderRadius.circular(25), // Border radius
-                      ),
-                      alignment: Alignment.center, // Center the text within the container
-                      child: Text(
-                        'Dummy Text',
-                        style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
-                      ),
-                    );
-                  },
+                child: GestureDetector(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: getCurrentAndPreviousMonth?.length ?? 0, // Adjust the number of items as needed
+                    itemBuilder: (context, index) {
+                     // GetcurrentandpreviousemonthModel month = getCurrentAndPreviouseMonthModel![index];
+                      // Generate a random color
+                      final randomColor = Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
+                      return GestureDetector(
+                        onTap: (){
+                          var dDate = '${getCurrentAndPreviousMonth?[index]['dDate']}';
+                           print('----129--$dDate');
+                           /// TODO CALL A NEXT API
+                          monthAttendance(dDate);
+
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8), // Add spacing between items
+                          height: 40,
+                          width: 120, // Width of the container
+                          decoration: BoxDecoration(
+                            color: randomColor, // Use the randomly generated color
+                            borderRadius: BorderRadius.circular(25), // Border radius
+                          ),
+                          alignment: Alignment.center, // Center the text within the container
+                          child: Text(
+                            '${getCurrentAndPreviousMonth?[index]['sMonthName']}.',
+                            style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
               SizedBox(height: 15),
@@ -254,8 +299,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                     ),
                   ),
                 ),
-
-
 
             ],
           ),

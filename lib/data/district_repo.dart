@@ -34,37 +34,48 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'baseurl.dart';
 
-class DistRepo
+
+class ProjectRepo
 {
-  List distList = [];
-  Future<List> getDistList() async
+  List<dynamic>  distList = [];
+  Future<List> projectList() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    String? iUserId = prefs.getString('iUserId');
 
     print('-----22---$sToken');
-    print('-----23---$iUserId');
+
+
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "hrmsprojectlist/hrmsprojectlist";
+    var projectList = "$baseURL$endPoint";
+    print('------------17---loginApi---$projectList');
+
+    //showLoader();
+
     try
     {
       var headers = {
         'token': '$sToken',
         'Content-Type': 'application/json'
       };
-      var request = http.Request('POST', Uri.parse('https://upegov.in/noidaoneapi/Api/BindSector/BindSector'));
-      request.body = json.encode({
-        "iUserId": "$iUserId"
-      });
+      var request = http.Request('GET', Uri.parse('$projectList'));
+      // request.body = json.encode({
+      //   "iUserId": "$iUserId"
+      // });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200)
       {
         var data = await response.stream.bytesToString();
-        Map<String, dynamic> parsedJson = jsonDecode(data);
-        distList = parsedJson['Data'];
-        print("Dist list xxxxxxxxx 61----61------>:$distList");
+        //print('--74---xxx---${jsonDecode(data)}');
+       // Map<String, dynamic> parsedJson = jsonDecode(data);
+        //distList = parsedJson['Data'];
+       // distList = jsonDecode(data);
+        List<dynamic> distList = jsonDecode(data);
         return distList;
       } else
       {

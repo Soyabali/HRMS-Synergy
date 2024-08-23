@@ -36,8 +36,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController(text: "9871950881");
+  TextEditingController passwordController = TextEditingController(text: "2345");
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscured = true;
