@@ -21,7 +21,6 @@ import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
-import '../../resources/strings_manager.dart';
 import '../../resources/values_manager.dart';
 import 'dart:math';
 
@@ -55,22 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime? _date;
   DateTime? _selectedDate;
 
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _date = selectedDate;
-      });
-    }
-    print('------67---${_date?.toLocal().toString()}'.split(' ')[0]);
-  }
-
   List stateList = [];
   List<dynamic> distList = [];
   List<dynamic> expenseList = [];
@@ -100,23 +83,17 @@ class _MyHomePageState extends State<MyHomePage> {
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
-    var postimageResponse =
-        await PostImageRepo().postImage(context, _imageFile);
+    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
 
-  String? _chosenValue;
   var msg;
   var result;
   var SectorData;
   var stateblank;
   final stateDropdownFocus = GlobalKey();
-  TextEditingController _shopController = TextEditingController();
-  TextEditingController _ownerController = TextEditingController();
-  TextEditingController _contactController = TextEditingController();
-  TextEditingController _landMarkController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
+
   TextEditingController _amountController = TextEditingController();
   TextEditingController _expenseController = TextEditingController();
 
@@ -154,7 +131,9 @@ class _MyHomePageState extends State<MyHomePage> {
   File? image;
   var uplodedImage;
   double? lat, long;
-  var dExpDate;
+  //var dExpDate;
+  String? dExpDate;
+
 
   // Uplode Id Proof with gallary
 
@@ -243,7 +222,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       // Extracting the image path
       uplodedImage = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----242--: $uplodedImage');
+      print('Uploaded Image Path----245--: $uplodedImage');
 
       hideLoader();
     } catch (error) {
@@ -286,7 +265,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
   }
-
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -324,7 +302,6 @@ class _MyHomePageState extends State<MyHomePage> {
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
   }
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -403,69 +380,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  // Widget _bindSector() {
-  //   return Material(
-  //     color: Colors.white,
-  //     borderRadius: BorderRadius.circular(10.0),
-  //     child: Container(
-  //       width: MediaQuery.of(context).size.width - 50,
-  //       height: 42,
-  //       color: Color(0xFFf2f3f5),
-  //       child: DropdownButtonHideUnderline(
-  //         child: ButtonTheme(
-  //           alignedDropdown: true,
-  //           child: DropdownButton(
-  //             onTap: () {
-  //               FocusScope.of(context).unfocus();
-  //             },
-  //             hint: RichText(
-  //               text: const TextSpan(
-  //                 text: "Select Project",
-  //                 style: TextStyle(
-  //                     color: Colors.black,
-  //                     fontSize: 16,
-  //                     fontWeight: FontWeight.normal),
-  //                 children: <TextSpan>[
-  //                   TextSpan(
-  //                       text: '',
-  //                       style: TextStyle(
-  //                           color: Colors.red,
-  //                           fontSize: 16,
-  //                           fontWeight: FontWeight.bold)),
-  //                 ],
-  //               ),
-  //             ),
-  //             // Not necessary for Option 1
-  //             value: _dropDownSector,
-  //             key: sectorFocus,
-  //             onChanged: (newValue) {
-  //               setState(() {
-  //                 _dropDownSector = newValue;
-  //                 print('---187---$_dropDownSector');
-  //                 //  _isShowChosenDistError = false;
-  //                 // Iterate the List
-  //                 distList.forEach((element) {
-  //                   if (element["sProjectName"] == _dropDownSector) {
-  //                     _selectedSectorId = element['sProjectCode'];
-  //                     setState(() {});
-  //                     print('-----344-----project code ---$_selectedSectorId');
-  //                   }
-  //                 });
-  //               });
-  //             },
-  //             items: distList.map((dynamic item) {
-  //               return DropdownMenuItem(
-  //                 child: Text(item['sProjectName'].toString()),
-  //                 value: item["sProjectName"].toString(),
-  //               );
-  //             }).toList(),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   /// Todo same way you should bind point Type data.
   Widget _bindExpenseCategory() {
@@ -590,6 +504,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ), // Removes shadow under the AppBar
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -670,72 +585,66 @@ class _MyHomePageState extends State<MyHomePage> {
                           // BIND Expense Category
                           _bindExpenseCategory(),
                           SizedBox(height: 10),
-                          SizedBox(height: 10),
                           InkWell(
-                              onTap: () async {
-                                print('---pick a date---');
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate != null) {
-                                  setState(() {
-                                    _selectedDate = pickedDate;
-                                  });
-                                }
-                                print('XX----617-----${DateFormat('dd/MMM/yyyy').format(_selectedDate!)}');
+                            onTap: () async {
+                              print('---pick a date---');
+
+                              // Show date picker and store the picked date
+                              DateTime? pickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(2000),
+                                lastDate: DateTime(2100),
+                              );
+
+                              // Check if a date was picked
+                              if (pickedDate != null) {
+                                // Format the picked date
+                                String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+
+                                // Update the state with the picked date
                                 setState(() {
-                                  dExpDate = '${DateFormat('dd/MMM/yyyy').format(_selectedDate!)}';
+                                  dExpDate = formattedDate;
                                 });
-                                displayToast(dExpDate);
 
-                              },
-
+                                // Display the selected date as a toast
+                                //displayToast(dExpDate.toString());
+                              } else {
+                                // Handle case where no date was selected
+                                //displayToast("No date selected");
+                              }
+                            },
                             child: DottedBorder(
-                                  color: Colors.grey,
-                                  // Color of the dotted line
-                                  strokeWidth: 1.0,
-                                  // Width of the dotted line
-                                  dashPattern: [4, 2],
-                                  // Dash pattern for the dotted line
-                                  borderType: BorderType.RRect,
-                                  radius: Radius.circular(5.0),
-                                  // Optional: rounded corners
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    // Equal padding on all sides
-
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      // Center the row contents
-                                      children: [
-                                        const Icon(
-                                          Icons.calendar_month,
-                                          size: 20,
-                                          color: Color(0xFF0098a6),
-                                        ),
-                                        SizedBox(width: 5.0),
-                                        // Space between 'Day' and ':'
-                                        Text(
-                                          _date == null
-                                              ? 'Select Bill / Expense Date'
-                                              : 'Selected Date: ${_date?.toLocal().toString()}'
-                                                  .split(' ')[0],
-                                          style: TextStyle(
-                                              fontSize: 20, color: Colors.black45),
-                                        ),
-
-                                        // Text(
-                                        //     'Select Bill / Expense Date',
-                                        //     style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                        // ),
-                                      ],
+                              color: Colors.grey, // Color of the dotted line
+                              strokeWidth: 1.0, // Width of the dotted line
+                              dashPattern: [4, 2], // Dash pattern for the dotted line
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(5.0), // Optional: rounded corners
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0), // Equal padding on all sides
+                                child: Row(
+                                  // Center the row contents
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.calendar_month,
+                                      size: 20,
+                                      color: Color(0xFF0098a6),
                                     ),
-                                  ),
+                                    SizedBox(width: 5.0),
+                                    // Display the selected date or a placeholder if no date is selected
+                                    Text(
+                                      dExpDate == null
+                                          ? 'Select Bill / Expense Date'
+                                          : '$dExpDate',
+                                      style: TextStyle(fontSize: 20, color: Colors.black45),
+                                    ),
+                                  ],
                                 ),
+                              ),
+                            ),
                           ),
+
                           SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5, top: 5),
@@ -759,33 +668,29 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 0, right: 0),
+                            padding: const EdgeInsets.only(left: 10, right: 0),
                             child: Container(
                               height: 42,
-                              color: Color(0xFFf2f3f5),
+                              color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                                padding: const EdgeInsets.only(left: 0),
                                 child: TextFormField(
                                   focusNode: _shopfocus,
                                   controller: _amountController,
                                   textInputAction: TextInputAction.next,
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context).nextFocus(),
-                                  decoration: const InputDecoration(
-                                    // labelText: AppStrings.txtMobile,
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly, // Only allows digits
+                                  ],
+                                  decoration: InputDecoration(
                                     border: OutlineInputBorder(),
-                                    //border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AppPadding.p10),
+                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                    filled: true, // Enable background color
+                                    fillColor: Color(0xFFf2f3f5)// Set your desired background color here
                                   ),
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  // validator: (value) {
-                                  //   if (value!.isEmpty) {
-                                  //     return 'Enter location';
-                                  //   }
-                                  //   return null;
-                                  // },
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+
                                 ),
                               ),
                             ),
@@ -812,12 +717,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 0, right: 0),
+                            padding: const EdgeInsets.only(left: 10, right: 0),
                             child: Container(
                               height: 42,
-                              color: Color(0xFFf2f3f5),
+                              color: Colors.white,
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
+                                padding: const EdgeInsets.only(left: 0),
                                 child: TextFormField(
                                   focusNode: _owenerfocus,
                                   controller: _expenseController,
@@ -825,17 +730,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onEditingComplete: () =>
                                       FocusScope.of(context).nextFocus(),
                                   decoration: const InputDecoration(
-                                    // labelText: AppStrings.txtMobile,
-                                    border: OutlineInputBorder(),
-                                    // border: InputBorder.none,
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AppPadding.p10),
+                                      border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                      filled: true, // Enable background color
+                                      fillColor: Color(0xFFf2f3f5),// Set your desired background color here
                                   ),
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   // validator: (value) {
-                                  //   if (value!.isEmpty) {
-                                  //     return 'Enter location';
+                                  //   if (value !=null && value =="0") {
+                                  //     return 'Enter an amount greater than 0';
                                   //   }
                                   //   return null;
                                   // },
@@ -1029,7 +933,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               print('----964--amount----$amount');
                               print('----965--expenseDetails----$expenseDetails');
 
-
                               if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
                               _selectedSectorId!=null && _selectedShopId!=null &&
                               dExpDate!=null && amount !=null && expenseDetails!=null &&
@@ -1054,7 +957,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   displayToast('Select Expense Date');
                                 }else if(amount==null || amount==''){
                                   displayToast('Please Enter Amount');
-                                }else if(expenseDetails==null || expenseDetails==''){
+                                }
+                                else if(expenseDetails==null || expenseDetails==''){
                                   displayToast('Please Enter Expense Details');
                                 }else if(uplodedImage==null){
                                   displayToast('Please pick a photo');

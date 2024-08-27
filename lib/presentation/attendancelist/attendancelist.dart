@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'dart:math';
 import '../../data/getCurrentAndPreviousMonth.dart';
 import '../../data/hrmsMonthlyAttendanceRepo.dart';
-import '../../domain/getCurrentAndPreviouseMonthModel.dart';
 import '../../domain/hrmsMonthlyAttendanceModel.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
@@ -16,6 +15,7 @@ class Attendancelist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(
@@ -29,6 +29,7 @@ class Attendancelist extends StatelessWidget {
 }
 
 class AttendaceListHome extends StatefulWidget {
+
   const AttendaceListHome({super.key});
 
   @override
@@ -42,14 +43,21 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
   List<dynamic>?  getCurrentAndPreviousMonth;
   List<dynamic>?  monthlyAttendance;
   Color? containerColor;
-
-  //List<GetcurrentandpreviousemonthModel>? getCurrentAndPreviouseMonthModel;
-  //List<HrmsmonthlyattendanceModel>? monthlyAttendanceList;
+  List? reversedList;
+  bool isMarked = false;
+  int? markedIndex;
 
 
   getCurrentMonthandPreviousMonth() async {
     getCurrentAndPreviousMonth = await GetCurrentAndpreviousMonthRepo().getCurrentAndPreviousMonth();
     print(" -----xxxxx-  distList--49---> $getCurrentAndPreviousMonth");
+    reversedList = getCurrentAndPreviousMonth?.reversed.toList();
+    var dDate =  '${reversedList?[0]['dDate']}';
+    print('---56---$dDate');
+    if(dDate!=null){
+      monthAttendance(dDate);
+    }
+    print('-----52---reversedList----$reversedList');
     setState(() {});
   }
   //
@@ -120,31 +128,57 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                 child: GestureDetector(
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: getCurrentAndPreviousMonth?.length ?? 0, // Adjust the number of items as needed
+                    itemCount: reversedList?.length ?? 0, // Adjust the number of items as needed
                     itemBuilder: (context, index) {
-                     // GetcurrentandpreviousemonthModel month = getCurrentAndPreviouseMonthModel![index];
+                      bool isMarked = markedIndex == index;
+                      String iIsCurrentMonth = '${reversedList?[index]['iIsCurrentMonth']}';
+                       // GetcurrentandpreviousemonthModel month = getCurrentAndPreviouseMonthModel![index];
                       // Generate a random color
                       final randomColor = Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
                       return GestureDetector(
                         onTap: (){
-                          var dDate = '${getCurrentAndPreviousMonth?[index]['dDate']}';
-                           print('----129--$dDate');
+                          markedIndex = isMarked ? null : index;
+                        //  isMarked = !isMarked;
+                          var dDate = '${reversedList?[index]['dDate']}';
+                           print('----150----xxx---$dDate');
                            /// TODO CALL A NEXT API
                           monthAttendance(dDate);
-
-                        },
+                          },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 8), // Add spacing between items
                           height: 40,
                           width: 120, // Width of the container
                           decoration: BoxDecoration(
                             color: randomColor, // Use the randomly generated color
-                            borderRadius: BorderRadius.circular(25), // Border radius
+                            borderRadius: BorderRadius.circular(25),
+                            // Border radius
+                            // border: isMarked
+                            //     ? Border.all(color: Colors.green, width: 3.0) // Mark with a green border
+                            //     : null,
                           ),
                           alignment: Alignment.center, // Center the text within the container
-                          child: Text(
-                            '${getCurrentAndPreviousMonth?[index]['sMonthName']}.',
-                            style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
+                          // child: Text(
+                          //   '${reversedList?[index]['sMonthName']}.',
+                          //   style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
+                          // ),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Text(
+                                '${reversedList?[index]['sMonthName']}', // Example month text
+                                style: TextStyle(color: Colors.white, fontSize: 20),
+                              ),
+                              if (isMarked)
+                                const Positioned(
+                                  left: 0,
+                                  top: 10,
+                                  child: Icon(
+                                    Icons.check_circle, // Mark symbol
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                       );

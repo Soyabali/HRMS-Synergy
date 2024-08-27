@@ -10,14 +10,14 @@ import 'loader_helper.dart';
 class HrmsmonthlyattendanceRepo
 {
   List<dynamic>  distList = [];
-  Future<List> monthlyAttendanceList(BuildContext context, String dDate,) async
+  Future<List> monthlyAttendanceList(BuildContext context, String dDate) async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');
 
     print('-----19---$sToken');
-    print('-----20--DDATE----$dDate');
+    print('-----20--Datee----$dDate');
 
 
     var baseURL = BaseRepo().baseurl;
@@ -35,7 +35,8 @@ class HrmsmonthlyattendanceRepo
       };
       var request = http.Request('POST', Uri.parse('$projectList'));
       request.body = json.encode({
-          "dMonth": '31/Aug/2024',
+         // "dMonth": '31/Aug/2024',
+          "dMonth": dDate.toString(),
           "sEmpCode": sEmpCode,
       });
       request.headers.addAll(headers);
