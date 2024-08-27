@@ -1,6 +1,4 @@
-
 class GetcurrentandpreviousemonthModel {
-
   final String dDate;
   final String sMonthName;
   final String iIsCurrentMonth;
@@ -17,5 +15,9 @@ class GetcurrentandpreviousemonthModel {
       sMonthName: json['sMonthName'],
       iIsCurrentMonth: json['iIsCurrentMonth'],
     );
+  }
+  @override
+  String toString() {
+    return 'GetcurrentandpreviousemonthModel(dDate: $dDate, sMonthName: $sMonthName, iIsCurrentMonth: $iIsCurrentMonth)';
   }
 }
