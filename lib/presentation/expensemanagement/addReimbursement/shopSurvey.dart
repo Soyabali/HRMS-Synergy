@@ -30,6 +30,7 @@ class ShopSurvey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(
@@ -37,7 +38,7 @@ class ShopSurvey extends StatelessWidget {
           ),
         ),
       ),
-      debugShowCheckedModeBanner: false,
+
       home: MyHomePage(),
     );
   }
@@ -191,12 +192,10 @@ class _MyHomePageState extends State<MyHomePage> {
         fontSize: 16.0);
   }
 
-
   Future<void> uploadImage(String token, File imageFile) async {
     try {
       print('-----xx-x----214----');
       showLoader();
-
       // Create a multipart request
       var request = http.MultipartRequest(
         'POST',
@@ -302,6 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -517,7 +517,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   opacity: 0.9,
                   //step3.jpg
                   child: Image.asset(
-                    'assets/images/deshboardtop.jpeg',
+                    'assets/images/addreimbursement.jpeg',
                     // Replace 'image_name.png' with your asset image path
                     fit: BoxFit
                         .cover, // Adjust the image fit to cover the container
@@ -588,7 +588,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           InkWell(
                             onTap: () async {
                               print('---pick a date---');
-
                               // Show date picker and store the picked date
                               DateTime? pickedDate = await showDatePicker(
                                 context: context,
@@ -596,17 +595,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                 firstDate: DateTime(2000),
                                 lastDate: DateTime(2100),
                               );
-
                               // Check if a date was picked
                               if (pickedDate != null) {
                                 // Format the picked date
                                 String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-
                                 // Update the state with the picked date
                                 setState(() {
                                   dExpDate = formattedDate;
                                 });
-
                                 // Display the selected date as a toast
                                 //displayToast(dExpDate.toString());
                               } else {
@@ -644,7 +640,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                           ),
-
                           SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5, top: 5),
@@ -670,7 +665,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 0),
                             child: Container(
-                              height: 42,
+                              height: 65,
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 0),
@@ -683,15 +678,43 @@ class _MyHomePageState extends State<MyHomePage> {
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly, // Only allows digits
                                   ],
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                                     filled: true, // Enable background color
-                                    fillColor: Color(0xFFf2f3f5)// Set your desired background color here
+                                    fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                   ),
                                   autovalidateMode: AutovalidateMode.onUserInteraction,
-
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a value';
+                                    }
+                                    final intValue = int.tryParse(value);
+                                    if (intValue == null || intValue <= 0) {
+                                      return 'Enter an amount greater than 0';
+                                    }
+                                    return null;
+                                  },
                                 ),
+
+                                // child: TextFormField(
+                                //   focusNode: _shopfocus,
+                                //   controller: _amountController,
+                                //   textInputAction: TextInputAction.next,
+                                //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                //   keyboardType: TextInputType.number,
+                                //   inputFormatters: [
+                                //     FilteringTextInputFormatter.digitsOnly, // Only allows digits
+                                //   ],
+                                //   decoration: const InputDecoration(
+                                //     border: OutlineInputBorder(),
+                                //       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                //     filled: true, // Enable background color
+                                //     fillColor: Color(0xFFf2f3f5)// Set your desired background color here
+                                //   ),
+                                //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                                //
+                                // ),
                               ),
                             ),
                           ),
@@ -938,7 +961,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               dExpDate!=null && amount !=null && expenseDetails!=null &&
                               uplodedImage!=null && sContactNo!=null){
                                 // Call Api
+
                                 print('---call Api---');
+
                                 var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode,dExpDate,amount);
                                 print('---975--$hrmsPopWarning');
                                 result = "${hrmsPopWarning[0]['Result']}";

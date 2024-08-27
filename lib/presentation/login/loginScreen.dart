@@ -245,7 +245,8 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: AppPadding.p25),
+                //padding: const EdgeInsets.only(top: AppPadding.p25),
+                padding: const EdgeInsets.only(top: 10),
                 child: Column(
                   children: <Widget>[
                     Stack(

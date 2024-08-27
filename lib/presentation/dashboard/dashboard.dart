@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/applyleave/applyLeave.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsattendance.dart';
@@ -20,6 +21,7 @@ class DashBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     // change StatusBarColore
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(
@@ -27,8 +29,6 @@ class DashBoard extends StatelessWidget {
           ),
         ),
       ),
-      debugShowCheckedModeBanner: false,
-
       home: DashBoardHomePage(),
     );
   }
@@ -44,6 +44,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   GeneralFunction generalFunction = GeneralFunction();
   double? lat, long;
+  var sFirstName,sCompEmailId;
 
   // get a location :
   void getLocation() async {
@@ -108,7 +109,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       displayToast("$msg");
     }
   }
-
   // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(
@@ -119,6 +119,21 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+   getLocalDataInfo()async{
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     // get a stored value
+     setState(() {
+       sFirstName = prefs.getString('sFirstName');
+       sCompEmailId = prefs.getString('sCompEmailId');
+     });
+   }
+
+   @override
+  void initState() {
+    // TODO: implement initState
+     getLocalDataInfo();
+    super.initState();
   }
 
   @override
@@ -160,13 +175,27 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
-              child: Icon(Icons.logout, size: 24,color: Colors.white),
+             // child: Icon(Icons.logout, size: 24,color: Colors.white),
+              child:  InkWell(
+                onTap: (){
+                  generalFunction.logout(context);
+                },
+                child: Container(
+                  margin: EdgeInsets.all(8.0), // Apply margin around the image
+                  child: Image.asset(
+                    'assets/images/logout.jpeg',
+                    width: 25,
+                    height: 25,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
             ),
           ],
           elevation: 0, // Removes shadow under the AppBar
         ),
       // drawer
-      drawer: generalFunction.drawerFunction(context,'Abc','9871xxxxxx'),
+      drawer: generalFunction.drawerFunction(context,'$sFirstName','$sCompEmailId'),
 
       body: Column(
           children: [

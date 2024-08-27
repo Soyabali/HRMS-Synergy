@@ -12,6 +12,7 @@ class HrmsmonthlyattendanceRepo
   List<dynamic>  distList = [];
   Future<List> monthlyAttendanceList(BuildContext context, String dDate) async
   {
+    showLoader();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');
@@ -44,6 +45,7 @@ class HrmsmonthlyattendanceRepo
 
       if (response.statusCode == 200)
       {
+        hideLoader();
         var data = await response.stream.bytesToString();
         //print('--74---xxx---${jsonDecode(data)}');
         // Map<String, dynamic> parsedJson = jsonDecode(data);
@@ -53,79 +55,13 @@ class HrmsmonthlyattendanceRepo
         return distList;
       } else
       {
+        hideLoader();
         return distList;
       }
     } catch (e)
     {
+      hideLoader();
       throw (e);
     }
   }
 }
-
-
-// class HrmsmonthlyattendanceRepo
-// {
-//   //List<dynamic>  monthlyAttendancehList = [];
-//
-//   Future<List<HrmsmonthlyattendanceModel>?>  monthlyAttendanceList(BuildContext context) async
-//   {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     String? sToken = prefs.getString('sToken');
-//
-//     print('-----22---$sToken');
-//
-//
-//     var baseURL = BaseRepo().baseurl;
-//     var endPoint = "hrmsMonthlyAttendance/hrmsMonthlyAttendance";
-//     var monthlyAttendanceList = "$baseURL$endPoint";
-//     print('------------17---getCurrentPreviousMonth---$monthlyAttendanceList');
-//
-//     showLoader();
-//
-//     try
-//     {
-//       var headers = {
-//         'token': '$sToken',
-//         'Content-Type': 'application/json'
-//       };
-//       var request = http.Request('POST', Uri.parse('$monthlyAttendanceList'));
-//       request.body = json.encode({
-//           "dMonth": '31/Aug/2024',
-//           "sEmpCode": '7286130446',
-//       });
-//       request.headers.addAll(headers);
-//       http.StreamedResponse response = await request.send();
-//
-//       if (response.statusCode == 200)
-//       {
-//
-//         var data = await response.stream.bytesToString();
-//         hideLoader();
-//         //print('--74---xxx---${jsonDecode(data)}');
-//         // Map<String, dynamic> parsedJson = jsonDecode(data);
-//         //distList = parsedJson['Data'];
-//         // distList = jsonDecode(data);
-//         List<dynamic> getCurrentAndPreviousMonthList = jsonDecode(data);
-//
-//         if (getCurrentAndPreviousMonthList != null) {
-//           // response convert into the model
-//           List<HrmsmonthlyattendanceModel> temples = getCurrentAndPreviousMonthList.map((json) => HrmsmonthlyattendanceModel.fromJson(json)).toList();
-//           print('-----57----$temples');
-//           return temples;
-//         } else {
-//           hideLoader();
-//           return null;
-//         }
-//
-//       } else
-//       {
-//         hideLoader();
-//         return null;
-//       }
-//     } catch (e)
-//     {
-//       throw (e);
-//     }
-//   }
-// }
-

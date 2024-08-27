@@ -518,7 +518,15 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                    Container(
+                      height: 32,
+                      width: 32,
+                      child: Image.asset(
+                        "assets/images/reimicon_2.png",
+                        fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                      ),
+                    ),
+                    //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                     SizedBox(width: 10),
                     Icon(Icons.calendar_month,size: 16,color: Colors.white),
                     SizedBox(width: 4),

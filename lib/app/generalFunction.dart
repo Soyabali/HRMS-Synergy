@@ -9,22 +9,60 @@ import '../presentation/login/loginScreen.dart';
 import '../presentation/resources/assets_manager.dart';
 import '../presentation/resources/values_manager.dart';
 
+String? sFirstName;
+String? sCompEmailId;
 
 class GeneralFunction {
   void logout(BuildContext context)async {
        /// TODO LOGOUT CODE
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // get a stored value
+     sFirstName = prefs.getString('sFirstName');
+     sCompEmailId = prefs.getString('sCompEmailId');
 
-    prefs.remove("iUserId");
-    prefs.remove("sName");
+    prefs.remove("sEmpCode");
+    prefs.remove("sCompEmpCode");
+    prefs.remove("sFirstName");
+    prefs.remove("sLastName");
+
+    prefs.remove("sLastName");
     prefs.remove("sContactNo");
-    prefs.remove("sDesgName");
-    prefs.remove("iDesgCode");
-    prefs.remove("iDeptCode");
-    prefs.remove("iUserTypeCode");
+    prefs.remove("dDOJ");
+    prefs.remove("dDOB");
+
+    prefs.remove("sEmergencyContactPerson");
+    prefs.remove("sEmergencyContactNo");
+    prefs.remove("sEmergencyContactRelation");
+    prefs.remove("sBloodGroup");
+
+    prefs.remove("sCategory");
+    prefs.remove("sDsgCode");
+    prefs.remove("sDsgName");
+    prefs.remove("sDeptCode");
+
+    prefs.remove("sDeptName");
+    prefs.remove("sLocCode");
+    prefs.remove("sLocName");
+    prefs.remove("sLocation");
+
+    prefs.remove("sBankName");
+    prefs.remove("sBankAcNo");
+    prefs.remove("sISFCode");
+    prefs.remove("Entitlement");
+
+    prefs.remove("Availed");
+    prefs.remove("Balance");
     prefs.remove("sToken");
-    prefs.remove("dLastLoginAt");
-    //displayToastlogout();
+    prefs.remove("sEmpImage");
+
+    prefs.remove("sCompEmailId");
+    prefs.remove("sMngrName");
+    prefs.remove("sMngrDesgName");
+    prefs.remove("Development");
+
+    prefs.remove("sMngrContactNo");
+    prefs.remove("iIsEligibleShLv");
+
     goNext(context);
   }
 
@@ -50,52 +88,62 @@ class GeneralFunction {
   }
   // drawerFunction
 
-  drawerFunction(BuildContext context, String sName, String sContactNo) {
+  drawerFunction(BuildContext context, String sName, String email) {
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero, // Remove any default padding
         children: <Widget>[
           DrawerHeader(
             decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/splash_logo.png'), // Replace with your asset image path
-                fit: BoxFit.fill,
-              ),
+              color: Color(0xFF0098a6),
+              // image: DecorationImage(
+              //   image: AssetImage('assets/images/splash_logo.png'), // Replace with your asset image path
+              //   fit: BoxFit.fill,
+              // ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  sName,
-                  style: const TextStyle(
-                    fontFamily: 'Montserrat',
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/post_complaint.png',
+                              height: 80,
+                               width: 80,
+                    fit: BoxFit.cover,
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    const Icon(
-                      Icons.call,
-                      size: 18,
-                      color: Colors.black,
+                  // Container(
+                  //   width: 80.0,
+                  //   height: 80.0,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle, // This automatically sets the border radius to half the height/width
+                  //     image: DecorationImage(
+                  //       image: AssetImage('assets/images/post_complaint.png'), // Replace with your image path
+                  //       fit: BoxFit.fill, // Fit the image within the container
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(height: 10),
+                  Text(
+                    '$sName',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Colors.white,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
                     ),
-                    SizedBox(width: 5),
-                    Text(
-                      sContactNo,
-                      style: const TextStyle(
-                        fontFamily: 'Montserrat',
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  Text(
+                    '$email',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      color: Colors.white,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
                     ),
-                  ],
-                )
-              ],
+                  ),
+
+                ],
+              ),
             ),
           ),
           Padding(
@@ -103,20 +151,31 @@ class GeneralFunction {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                drawerItem('assets/images/post_complaint.png', "Today's Attendance"),
-                drawerItem('assets/images/post_complaint.png', "All Leave Status"),
-                drawerItem('assets/images/post_complaint.png', "My Leave Status"),
-                drawerItem('assets/images/post_complaint.png', "Action On Leave"),
-                drawerItem('assets/images/post_complaint.png', "Leave Cancellation Request"),
-                drawerItem('assets/images/post_complaint.png', "Trip Details"),
-                drawerItem('assets/images/post_complaint.png', "Trip List"),
-                drawerItem('assets/images/post_complaint.png', "Employee List"),
-                drawerItem('assets/images/post_complaint.png', "Family Details (Dependents)"),
-                drawerItem('assets/images/post_complaint.png', "Employees Nomination Details"),
-                drawerItem('assets/images/post_complaint.png', "Emergency Contact List"),
-                drawerItem('assets/images/post_complaint.png', "Thought Of The Day"),
-                drawerItem('assets/images/post_complaint.png', "Change Password"),
-                drawerItem('assets/images/post_complaint.png', "Logout"),
+                drawerItem('assets/images/tripdetails.jpeg', "Trip Details"),
+                drawerItem('assets/images/triplistfirst.jpeg', "Trip List"),
+                InkWell(
+                    onTap: (){
+                      print('---Logout---');
+                      logout(context);
+                    },
+                    child: drawerItem('assets/images/logout.jpeg', "Logout")),
+                // drawerItem('assets/images/tripdetails.jpeg', "Trip List"),
+                // drawerItem('assets/images/post_complaint.png', "Today's Attendance"),
+                // drawerItem('assets/images/post_complaint.png', "All Leave Status"),
+                // drawerItem('assets/images/post_complaint.png', "My Leave Status"),
+                // drawerItem('assets/images/post_complaint.png', "Action On Leave"),
+                // drawerItem('assets/images/post_complaint.png', "Employee List"),
+                // drawerItem('assets/images/post_complaint.png', "Family Details (Dependents)"),
+                // drawerItem('assets/images/post_complaint.png', "Employees Nomination Details"),
+                // drawerItem('assets/images/post_complaint.png', "Emergency Contact List"),
+                // drawerItem('assets/images/post_complaint.png', "Thought Of The Day"),
+                // drawerItem('assets/images/post_complaint.png', "Change Password"),
+                // InkWell(
+                //      onTap: (){
+                //        print('---Logout---');
+                //        logout(context);
+                //      },
+                //     child: drawerItem('assets/images/logout.jpeg', "Logout")),
               ],
             ),
           ),
@@ -133,10 +192,13 @@ class GeneralFunction {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Image.asset(
-                imagePath,
-                width: 25,
+              Container(
                 height: 25,
+                width: 25,
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                ),
               ),
               const SizedBox(width: 10),
               Text(
