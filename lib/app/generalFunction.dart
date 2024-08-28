@@ -106,26 +106,26 @@ class GeneralFunction {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/post_complaint.png',
-                              height: 80,
-                               width: 80,
-                    fit: BoxFit.cover,
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300], // Light gray color
+                      borderRadius: BorderRadius.circular(40), // Border radius of 40
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14.0),
+                      child: Container(
+                        child:   Image.asset('assets/images/post_complaint.png',
+                          fit: BoxFit.cover,
+                         ),
+                      ),
+                    ),
                   ),
-                  // Container(
-                  //   width: 80.0,
-                  //   height: 80.0,
-                  //   decoration: BoxDecoration(
-                  //     shape: BoxShape.circle, // This automatically sets the border radius to half the height/width
-                  //     image: DecorationImage(
-                  //       image: AssetImage('assets/images/post_complaint.png'), // Replace with your image path
-                  //       fit: BoxFit.fill, // Fit the image within the container
-                  //     ),
-                  //   ),
-                  // ),
                   SizedBox(height: 10),
                   Text(
-                    '$sName',
-                    style: TextStyle(
+                    sName,
+                    style: const TextStyle(
                       fontFamily: 'Montserrat',
                       color: Colors.white,
                       fontSize: 14.0,
@@ -133,8 +133,8 @@ class GeneralFunction {
                     ),
                   ),
                   Text(
-                    '$email',
-                    style: TextStyle(
+                    email,
+                    style: const TextStyle(
                       fontFamily: 'Montserrat',
                       color: Colors.white,
                       fontSize: 14.0,

@@ -96,6 +96,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
   }
+
    attendaceapi() async{
      var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
       print('-----99---$attendance');
@@ -365,7 +366,10 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       GestureDetector(
                         onTap: (){
                           print('---AttendanceList----');
-                         // Navigator.pushNamed(context, '/attendancelist');
+                        //  Navigator.pushNamed(context, '/attendancelist');
+                         // Navigator.pushNamed(context, "/attendancelist");
+                        //  Navigator.pushNamed(context, '/login');
+                          // Navigator.pushNamed(context, Routes.attendanceListRoute);
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const Attendancelist()),

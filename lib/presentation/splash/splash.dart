@@ -5,12 +5,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/resources/values_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../data/appversionrepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
-import '../resources/routes_manager.dart';
+
 
 class SplashView extends StatefulWidget {
 
@@ -27,6 +26,7 @@ class _SplashViewState extends State<SplashView> {
   // to check Internet is connected or not
   bool activeConnection = false;
   String T = "";
+
 
   Future checkUserConnection() async {
     try {
@@ -55,7 +55,6 @@ class _SplashViewState extends State<SplashView> {
       throw 'Could not launch $url';
     }
   }
-  //
   void displayToast(String msg){
     Fluttertoast.showToast(
         msg: msg,
@@ -67,33 +66,55 @@ class _SplashViewState extends State<SplashView> {
         fontSize: 16.0
     );
   }
-
   // local database
+  getLocalDataInfo()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // get a stored value
+    setState(() {
+    var  sFirstName = prefs.getString('sFirstName');
+    var  sCompEmailId = prefs.getString('sCompEmailId');
+    if(sFirstName!=null){
+      // to Open DashBoard
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => DashBoard()),
+            (Route<dynamic> route) => false, // Remove all previous routes
+      );
+    }else{
+      // call the Api
+      checkUserConnection();
+    }
+    });
+  }
 
 
   @override
   void initState() {
     super.initState();
-   // getUserValueFromaLocalDataBase();
-    checkUserConnection();
-    //_startDelay();
+    //checkUserConnection();
+    getLocalDataInfo();
   }
 
   // version api call
-  versionAliCall() async{
+  versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
     var loginMap = await AppVersionRepo().appversion(context,'16');
-    print('----114--$loginMap');
-
-     var result = "${loginMap[0]['Msg']}";
+    var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
 
      if(result=="1"){
-      Navigator.pushNamed(context, '/loginScreen');
 
-    }else{
+       Navigator.pushNamed(
+         context,
+         '/loginScreen',
+       );
+     // Navigator.pushNamed(context, '/login');  // home
+     // Navigator.pushNamed(context, '/home');  //   /attendancelist
+     // Navigator.pushNamed(context, '/attendancelist');
+
+     }else{
       showDialog(context: context,
         builder: (BuildContext context) {
           return AlertDialog(
@@ -122,7 +143,6 @@ class _SplashViewState extends State<SplashView> {
     _timer?.cancel();
     super.dispose();
   }
-
   // get a localdatabase
   getUserValueFromaLocalDataBase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

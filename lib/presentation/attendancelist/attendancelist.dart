@@ -45,7 +45,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
   Color? containerColor;
   List? reversedList;
   bool isMarked = false;
-  int? markedIndex;
+  int? markedIndex=0;
   String? status;
 
 
@@ -131,14 +131,11 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                     itemCount: reversedList?.length ?? 0, // Adjust the number of items as needed
                     itemBuilder: (context, index) {
                       bool isMarked = markedIndex == index;
-                      String iIsCurrentMonth = '${reversedList?[index]['iIsCurrentMonth']}';
-                       // GetcurrentandpreviousemonthModel month = getCurrentAndPreviouseMonthModel![index];
                       // Generate a random color
                       final randomColor = Color((Random().nextDouble() * 0xFFFFFF).toInt()).withOpacity(1.0);
                       return GestureDetector(
                         onTap: (){
                           markedIndex = isMarked ? null : index;
-                        //  isMarked = !isMarked;
                           var dDate = '${reversedList?[index]['dDate']}';
                            print('----150----xxx---$dDate');
                            /// TODO CALL A NEXT API
@@ -147,37 +144,37 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 8), // Add spacing between items
                           height: 35,
-                          width: 120, // Width of the container
+                          width: 135, // Width of the container
                           decoration: BoxDecoration(
                             color: randomColor, // Use the randomly generated color
                             borderRadius: BorderRadius.circular(25),
-                            // Border radius
-                            // border: isMarked
-                            //     ? Border.all(color: Colors.green, width: 3.0) // Mark with a green border
-                            //     : null,
                           ),
                           alignment: Alignment.center, // Center the text within the container
-                          // child: Text(
-                          //   '${reversedList?[index]['sMonthName']}.',
-                          //   style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
-                          // ),
                           child: Stack(
                             alignment: Alignment.center,
                             children: [
-                              Text(
-                                '${reversedList?[index]['sMonthName']}', // Example month text
-                                style: TextStyle(color: Colors.white, fontSize: 20),
-                              ),
                               if (isMarked)
                                 const Positioned(
-                                  left: 0,
-                                  top: 10,
+                                  left: 5,
+                                  top: 0,
+                                  bottom: 0,
                                   child: Icon(
                                     Icons.check_circle, // Mark symbol
                                     color: Colors.white,
-                                    size: 20,
+                                    size: 30,
                                   ),
                                 ),
+                        Positioned.fill(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: isMarked ? 35 : 0), // Adjust left padding when icon is present
+                              child:  Text('${reversedList?[index]['sMonthName']}', // Example month text
+                                 style: TextStyle(color: Colors.white, fontSize: 20),
+                               ),
+                            ),
+                          ),
+                        ),
+
                             ],
                           ),
                         ),
@@ -187,7 +184,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                 ),
               ),
               SizedBox(height: 15),
-
               Padding(
                  padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                  child: Container(
@@ -199,13 +195,12 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                          child: Container(
                            child: ListView.builder(
                                itemCount: monthlyAttendance?.length ?? 0,
-                               //itemCount: monthlyAttendance?.length ?? 0,
                                itemBuilder: (context,index){
 
                                  status = '${monthlyAttendance?[index]['sStatus']}';
                                   // Determine the color based on the country
                                   containerColor;
-                                 if (status == "Early Going") {
+                                  if (status == "Early Going") {
                                    containerColor = Colors.redAccent;
                                  } else if (status == "Present") {
                                    containerColor = Colors.green;

@@ -12,6 +12,7 @@ import '../../data/loginrepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
+import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 
@@ -121,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // TODO: implement initState
+    print('---login---Screen---');
     super.initState();
     // getLocation();
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -502,6 +504,17 @@ class _LoginPageState extends State<LoginPage> {
                                     prefs.setString('iIsEligibleShLv',iIsEligibleShLv);
 
                                     // navigate to dashboard
+
+                                   // Navigator.pushNamed(context,'/dashBoard',);
+                                    // Navigator.pushNamed(
+                                    //   context,
+
+                                    //   '/loginScreen',
+                                    // );
+                                    //Navigator.pushNamed(context, '/main');
+                                  //  Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
+                                    //Navigator.pushNamed(context, Routes.mainRoute);
+
                                       Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(builder: (context) => DashBoard()),

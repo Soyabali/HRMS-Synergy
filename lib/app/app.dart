@@ -18,31 +18,40 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
- // AppPreferences _appPreferences = instance<AppPreferences>();
+
   @override
   void didChangeDependencies() {
-    //_appPreferences.getLocal().then((local) => {context.setLocale(local)});
     super.didChangeDependencies();
   }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-     // localizationsDelegates: context.localizationDelegates,
-      //supportedLocales: context.supportedLocales,
-      //locale: context.locale,
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
-        '/': (context) => SplashView(),
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const SplashView(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
         '/loginScreen': (context) => const LoginScreen(),
+        // dashboardScreen
         '/dashBoard': (context) => const DashBoard(),
-        '/attendancelist': (context) => const Attendancelist(),
-        // Add other routes here
       },
+
+      // routes: {
+      //   '/': (context) => SplashView(),
+      //   '/loginScreen': (context) => LoginScreen(),
+      //   '/dashBoard': (context) => DashBoardHomePage(),
+      // },
+
+
+     // localizationsDelegates: context.localizationDelegates,
+      //supportedLocales: context.supportedLocales,
+      //locale: context.locale,
       builder: EasyLoading.init(),
      // debugShowCheckedModeBanner: false,
       //onGenerateRoute: RouteGenerator.getRoute,
-    //  initialRoute: Routes.splashRoute,
+       //initialRoute: Routes.splashRoute,
+       //onGenerateRoute: RouteGenerator.getRoute,
       theme: getApplicationTheme(),
     );
   }

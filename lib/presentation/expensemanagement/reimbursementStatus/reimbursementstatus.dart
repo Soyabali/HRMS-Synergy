@@ -294,144 +294,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     _addressfocus.dispose();
   }
 
-  // Todo bind sector code
-  Widget _bindSector() {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 50,
-        height: 42,
-        color: Color(0xFFf2f3f5),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButton(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              hint: RichText(
-                text: const TextSpan(
-                  text: "Select Project",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              // Not necessary for Option 1
-              value: _dropDownSector,
-              key: sectorFocus,
-              onChanged: (newValue) {
-                setState(() {
-                  _dropDownSector = newValue;
-                  print('---187---$_dropDownSector');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
-                  distList.forEach((element) {
-                    if (element["sSectorName"] == _dropDownSector) {
-                      _selectedSectorId = element['iSectorCode'];
-                      setState(() {});
-                      print('-----286-----sector id---$_selectedSectorId');
-                    }
-                  });
-                });
-              },
-              items: distList.map((dynamic item) {
-                return DropdownMenuItem(
-                  child: Text(item['sSectorName'].toString()),
-                  value: item["sSectorName"].toString(),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Todo same way you should bind point Type data.
-  Widget _bindShopType() {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 50,
-        height: 42,
-        color: Color(0xFFf2f3f5),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButton(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              hint: RichText(
-                text: const TextSpan(
-                  text: "Select Expense Category",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              // Not necessary for Option 1
-              value: _dropDownValueShopeType,
-              // key: distDropdownFocus,
-              onChanged: (newValue) {
-                setState(() {
-                  _dropDownValueShopeType = newValue;
-                  print('---333-------$_dropDownValueShopeType');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
-                  shopTypeList.forEach((element) {
-                    if (element["sShopType"] == _dropDownValueShopeType) {
-                      setState(() {
-                        _selectedShopId = element['iTranId'];
-                        print('----349--shoptype id ------$_selectedShopId');
-                      });
-                      print('-----Point id----241---$_selectedShopId');
-                      if (_selectedShopId != null) {
-                        // updatedBlock();
-                      } else {
-                        print('-------');
-                      }
-                      // print("Distic Id value xxxxx.... $_selectedDisticId");
-                      print("Distic Name xxxxxxx.... $_dropDownValueDistric");
-                      print("Block list Ali xxxxxxxxx.... $blockList");
-                    }
-                  });
-                });
-              },
-              items: shopTypeList.map((dynamic item) {
-                return DropdownMenuItem(
-                  child: Text(item['sShopType'].toString()),
-                  value: item["sShopType"].toString(),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -543,7 +405,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         color: Colors.white, // Change this to your preferred color
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           '01/Aug/2024',
                           style: TextStyle(
@@ -553,7 +415,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
