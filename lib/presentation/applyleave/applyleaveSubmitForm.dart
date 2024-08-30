@@ -53,15 +53,12 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   var stateblank;
   final stateDropdownFocus = GlobalKey();
 
-  TextEditingController _amountController = TextEditingController();
-  TextEditingController _expenseController = TextEditingController();
+  TextEditingController _reasonController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
 
   // focus
   // FocusNode locationfocus = FocusNode();
-  FocusNode _shopfocus = FocusNode();
-  FocusNode _owenerfocus = FocusNode();
-  FocusNode _contactfocus = FocusNode();
-  FocusNode _landMarkfocus = FocusNode();
+  FocusNode _reasonfocus = FocusNode();
   FocusNode _addressfocus = FocusNode();
 
   // FocusNode descriptionfocus = FocusNode();
@@ -106,10 +103,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     // TODO: implement initState
     getACurrentDate();
     super.initState();
-    _shopfocus = FocusNode();
-    _owenerfocus = FocusNode();
-    _contactfocus = FocusNode();
-    _landMarkfocus = FocusNode();
+     _reasonfocus = FocusNode();
     _addressfocus = FocusNode();
   }
 
@@ -117,13 +111,10 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _shopfocus.dispose();
-    _owenerfocus.dispose();
-    _contactfocus.dispose();
-    _landMarkfocus.dispose();
+     _reasonfocus.dispose();
     _addressfocus.dispose();
-    _amountController.dispose();
-    _expenseController.dispose();
+    _reasonController.dispose();
+    _addressController.dispose();
   }
 
   getACurrentDate(){
@@ -367,35 +358,35 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             Container(
                               height: 55,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
                                 children: [
-                                  // First widget: Text widget
-                                  Text(
-                                    'Reason :',
-                                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                  // First widget: Text widget with fixed width
+                                  Flexible(
+                                    flex: 2, // Adjust the flex value as per your design
+                                    child: Text(
+                                      'Reason :',
+                                      style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                      overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
+                                    ),
                                   ),
                                   SizedBox(width: 10),
 
-                                  // Second widget: Container with light gray background
-                                  Expanded(
+                                  // Second widget: Container with the TextFormField
+                                  Flexible(
+                                    flex: 9, // Adjust the flex value as per your design
                                     child: Container(
-                                      //padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                       // color: Color(0xFFD3D3D3), // Light gray background color
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
                                       ),
                                       child: TextFormField(
-                                        focusNode: _owenerfocus,
-                                        controller: _amountController,
+                                        focusNode: _reasonfocus,
+                                        controller: _reasonController,
                                         textInputAction: TextInputAction.next,
-                                        onEditingComplete: () =>
-                                            FocusScope.of(context).nextFocus(),
+                                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
-                                         // contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                                           filled: true, // Enable background color
-                                          fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                         ),
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
                                         maxLines: null, // Allows the TextFormField to grow vertically
@@ -408,40 +399,42 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 ],
                               ),
                             ),
+
                             SizedBox(height: 15),
                             Container(
                               height: 55,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
                                 children: [
-                                  // First widget: Text widget
-                                  Text(
-                                    'Address:',
-                                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
+                                  // First widget: Text widget with fixed width
+                                  Flexible(
+                                    flex: 2, // Adjust the flex value as per your design
+                                    child: Text(
+                                      'Address:',
+                                      style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                      overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
+                                    ),
                                   ),
                                   SizedBox(width: 10),
-                                  // Second widget: Container with light gray background
-                                  Expanded(
+
+                                  // Second widget: Container with the TextFormField
+                                  Flexible(
+                                    flex: 9, // Adjust the flex value as per your design
                                     child: Container(
-                                      //padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
                                       decoration: BoxDecoration(
-                                        color: Colors.white, // Light gray background color
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
                                       ),
                                       child: TextFormField(
-                                        focusNode: _owenerfocus,
-                                        controller: _expenseController,
-                                        // textInputAction: TextInputAction.next,
-                                        // onEditingComplete: () =>
-                                        //     FocusScope.of(context).nextFocus(),
+                                        focusNode: _addressfocus,
+                                        controller: _addressController,
+                                        textInputAction: TextInputAction.next,
+                                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                         decoration: const InputDecoration(
                                           border: OutlineInputBorder(),
-                                          // contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                                           filled: true, // Enable background color
-                                          fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                         ),
-                                        autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
                                         maxLines: null, // Allows the TextFormField to grow vertically
                                         minLines: 1, // Ensures the field starts with a single line
                                         keyboardType: TextInputType.multiline, // Enables multi-line input
@@ -452,6 +445,49 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 ],
                               ),
                             ),
+                            // Container(
+                            //   height: 55,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
+                            //     children: [
+                            //       // First widget: Text widget
+                            //       Text(
+                            //         'Address:',
+                            //       style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
+                            //       ),
+                            //       SizedBox(width: 10),
+                            //       // Second widget: Container with light gray background
+                            //       Expanded(
+                            //         child: Container(
+                            //           //padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
+                            //           decoration: BoxDecoration(
+                            //             color: Colors.white, // Light gray background color
+                            //             borderRadius: BorderRadius.circular(8), // Rounded corners
+                            //           ),
+                            //           child: TextFormField(
+                            //             focusNode: _owenerfocus,
+                            //             controller: _expenseController,
+                            //             // textInputAction: TextInputAction.next,
+                            //             // onEditingComplete: () =>
+                            //             //     FocusScope.of(context).nextFocus(),
+                            //             decoration: const InputDecoration(
+                            //               border: OutlineInputBorder(),
+                            //               // contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                            //               filled: true, // Enable background color
+                            //               fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                            //             ),
+                            //             autovalidateMode:
+                            //             AutovalidateMode.onUserInteraction,
+                            //             maxLines: null, // Allows the TextFormField to grow vertically
+                            //             minLines: 1, // Ensures the field starts with a single line
+                            //             keyboardType: TextInputType.multiline, // Enables multi-line input
+                            //             showCursor: false,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
                             SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
@@ -550,70 +586,42 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             SizedBox(height: 15),
                             InkWell(
                               onTap: () async {
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                var sEmpCode = prefs.getString('sEmpCode');
-                                // print('-----Form---all Values--');
-                                // print('-----sEmpCode-----$sEmpCode');
-                                 var reason = _amountController.text;
-                                 var address = _expenseController.text;
-                                print('-----sLvTypeCode-----${widget.sLvTypeCode}');
-                                print('-----sEmpCode-----${sEmpCode}');
-                                print('-----dFromDate-----${formDate}');
-                                print('-----dToDate-----${toDate}');
-                                print('-----Reason-----${reason}');
-                                print('-----Address-----${address}'); // _selectedValue
-                                print('-----AppliedFor-----${_selectedValue}');
 
-                                if(_formKey.currentState!.validate() && formDate!=null && toDate!=null
-                                && reason!=null && address!=null && _selectedValue!=null
-                                ){
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  var sEmpCode = prefs.getString('sEmpCode');
+                                  var reason = _reasonController.text;
+                                  var address = _addressController.text;
+
+                                  if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
                                   // Call Api
                                   print('---call Api---');
-                                  var  hrmsPopWarning = await HrmsLeaveApplicationRepo().hrmsleave(context,formDate,toDate,reason,address,_selectedValue,'${widget.sFirstName}','${widget.sLvDesc}');
-                                  print('---975--$hrmsPopWarning');
-                                  msg = "${hrmsPopWarning[0]['Msg']}";
-                                  displayToast(msg);
+                                      var hrmsPopWarning = await HrmsLeaveApplicationRepo()
+                                          .hrmsleave(
+                                          context,
+                                          formDate,
+                                          toDate,
+                                          reason,
+                                          address,
+                                          _selectedValue,
+                                          '${widget.sFirstName}',
+                                          '${widget.sLvDesc}');
+
+                                      print('---975--$hrmsPopWarning');
+                                      msg = "${hrmsPopWarning[0]['Msg']}";
+                                      displayToast(msg);
 
                                 }else{
-                                  // if(sTranCode==null){
-                                  //   displayToast('Genrate Random Number');
-                                  // }else if(sEmpCode==null){
-                                  //   displayToast('Enter sEmpCode');
-                                  // }else if(_selectedSectorId==null){
-                                  //   displayToast('Please Select Project');
-                                  // }else if(_selectedShopId==null){
-                                  //   displayToast('Please Select Expense Category');
-                                  // }else if(dExpDate==null){
-                                  //   displayToast('Select Expense Date');
-                                  // }else if(amount==null || amount==''){
-                                  //   displayToast('Please Enter Amount');
-                                  // }
-                                  // else if(expenseDetails==null || expenseDetails==''){
-                                  //   displayToast('Please Enter Expense Details');
-                                  // }else if(uplodedImage==null){
-                                  //   displayToast('Please pick a photo');
-                                  // }else if(sContactNo==null){
-                                  //   displayToast('Please get a contact number');
-                                  // }
+                                   print('---Api not call-----');
+                                  if(reason.isEmpty || reason==null){
+                                    displayToast('Please Enter Reason');
+                                  }else if(address.isEmpty || address==null){
+                                    displayToast('Please Enter Address');
+                                  }else if(address==null) {
+                                    displayToast('Please Address');
+                                  }
                                 } // condition to fetch a response form a api
-                                if(result=="0"){
 
-                                  // CALL API HRMS Reimbursement
-                                  // var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                                  //     _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
-                                  // );
-                                  // print('---1050--$hrmsPostReimbursement');
-                                  // result = "${hrmsPostReimbursement[0]['Result']}";
-                                  // msg = "${hrmsPostReimbursement[0]['Msg']}";
-                                  // displayToast(msg);
-
-                                }else{
-                                //  showCustomDialog(context,msg);
-                                  //displayToast(msg);
-                                  print('---diaplay dialog --');
-                                }
                               },
-
                               child: Container(
                                 width: double.infinity,
                                 // Make container fill the width of its parent
