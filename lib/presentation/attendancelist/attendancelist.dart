@@ -187,7 +187,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
               Padding(
                  padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                  child: Container(
-                   height: MediaQuery.of(context).size.height-50,
+                  height: MediaQuery.of(context).size.height-50,
                   color: Colors.white,
                    child:
                      Padding(

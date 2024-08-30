@@ -85,6 +85,10 @@ class AppTextStyle {
       color: AppColors.white, fontSize: 16, fontWeight: FontWeight.w400);
   static TextStyle font16OpenSansRegularBlack45TextStyle = GoogleFonts.openSans(
       color: AppColors.black45, fontSize: 16, fontWeight: FontWeight.w400);
+  static TextStyle font14OpenSansRegularBlack45TextStyle = GoogleFonts.openSans(
+      color: AppColors.black45, fontSize: 14, fontWeight: FontWeight.w400);
+  static TextStyle font10OpenSansRegularBlack45TextStyle = GoogleFonts.openSans(
+      color: AppColors.black45, fontSize: 10, fontWeight: FontWeight.w400);
   static TextStyle font15OpenSansRegularBlackTextStyle = GoogleFonts.openSans(
       color: AppColors.black, fontSize: 15, fontWeight: FontWeight.w400);
 
