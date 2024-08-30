@@ -39,7 +39,7 @@ class HrmsAttendanceRepo {
       request.body = json.encode({
         "sEmpCode": sEmpCode,
         "fLatitude": lat ?? 0,
-        "fLongitude": lat ?? 0,
+        "fLongitude": long ?? 0,
         "sLocation": sLocation,
       });
       request.headers.addAll(headers);

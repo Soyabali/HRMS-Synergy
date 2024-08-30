@@ -82,10 +82,11 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     if(lat!=null && long !=null){
        var location = '{$lat$long}';
        displayToast(location);
-       attendaceapi();
+       attendaceapi(lat,long);
       print('---call Api---xxxxxxxxx--');
-
       hideLoader();
+    }else{
+      displayToast("Please pick location");
     }
 
 
@@ -97,9 +98,12 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     debugPrint(position.toString());
   }
 
-   attendaceapi() async{
-     var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
-      print('-----99---$attendance');
+   attendaceapi(double? lat, double? long) async{
+    print('----lat--102--$lat');
+    print('----long----103--$long');
+
+    var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
+    print('-----99---$attendance');
     var result = "${attendance[0]['Result']}";
      var msg = "${attendance[0]['Msg']}";
     if(result!=null){
@@ -110,6 +114,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       displayToast("$msg");
     }
   }
+
   // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(

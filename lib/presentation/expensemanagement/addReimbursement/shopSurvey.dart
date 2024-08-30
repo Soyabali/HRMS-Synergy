@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/baseurl.dart';
 import '../../../data/district_repo.dart';
 import '../../../data/expensecategory_repo.dart';
 import '../../../data/hrmsPopUpWarning_repo.dart';
@@ -193,13 +194,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> uploadImage(String token, File imageFile) async {
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "UploadTrackingImage/UploadTrackingImage";
+    var uplodeImageApi = "$baseURL$endPoint";
     try {
       print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
       var request = http.MultipartRequest(
         'POST',
-        Uri.parse('http://49.50.76.136/hrmsapis/api/UploadTrackingImage/UploadTrackingImage'),
+        Uri.parse('$uplodeImageApi'),
       );
 
       // Add headers
@@ -696,25 +700,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     return null;
                                   },
                                 ),
-
-                                // child: TextFormField(
-                                //   focusNode: _shopfocus,
-                                //   controller: _amountController,
-                                //   textInputAction: TextInputAction.next,
-                                //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                //   keyboardType: TextInputType.number,
-                                //   inputFormatters: [
-                                //     FilteringTextInputFormatter.digitsOnly, // Only allows digits
-                                //   ],
-                                //   decoration: const InputDecoration(
-                                //     border: OutlineInputBorder(),
-                                //       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                //     filled: true, // Enable background color
-                                //     fillColor: Color(0xFFf2f3f5)// Set your desired background color here
-                                //   ),
-                                //   autovalidateMode: AutovalidateMode.onUserInteraction,
-                                //
-                                // ),
                               ),
                             ),
                           ),

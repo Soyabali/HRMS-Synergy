@@ -1,29 +1,19 @@
 import 'dart:io';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../data/district_repo.dart';
-import '../../../data/expensecategory_repo.dart';
-import '../../../data/loader_helper.dart';
-import '../../../data/postimagerepo.dart';
-import '../../../data/shopTypeRepo.dart';
-import 'dart:math';
-import '../../data/hrmsPopUpWarning_repo.dart';
+
 import '../../data/hrmsleaveapplication.dart';
-import '../../data/hrmspostreimbursement.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 import 'applyLeave.dart';
+import 'package:intl/intl.dart';
+
 
 
 class ApplyLeaveSubmitFormHome extends StatefulWidget {
@@ -123,7 +113,52 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     //
     DateTime now2 = DateTime.now();
     toDate = DateFormat('dd/MMM/yyyy').format(now2);
+  }
 
+    toDateSelectLogic(){
+      DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+      // Parse the date strings to DateTime objects
+      DateTime? fromDate2 = dateFormat.parse(formDate!);
+      DateTime? toDate2 = dateFormat.parse(toDate!);
+      if (toDate2.isAfter(fromDate2)) {
+        print('toDate is greater than fromDate');
+        // Perform your action here
+      } else if (toDate2.isBefore(fromDate2)) {
+        /// TODO GIVE A NOTIFICATION
+        print('toDate is less than fromDate');
+        /// TODO HERE YOU SHOULD TAKE A CUTTERN DATE AGAIN
+        DateTime currentDate = DateTime.now();
+        String formattedDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+        setState(() {
+          toDate = formattedDate;
+        });
+        displayToast("ToDate can not be less than FromDate");
+
+      } else {
+        print('toDate can not be less than fromDate');
+      }
+    }
+
+  //
+  void compareDates(String fromDate,String toDate) {
+    String fromDateString = "29/Aug/2024";
+    String toDateString = "30/Aug/2024";
+
+    // Define the date format
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    // Parse the date strings to DateTime objects
+    DateTime? fromDate = dateFormat.parse(fromDateString);
+    DateTime? toDate = dateFormat.parse(toDateString);
+
+    // Compare the dates
+    if (toDate.isAfter(fromDate)) {
+      print('toDate is greater than fromDate');
+      // Perform your action here
+    } else if (toDate.isBefore(fromDate)) {
+      print('toDate is less than fromDate');
+    } else {
+      print('toDate is the same as fromDate');
+    }
   }
 
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
@@ -259,6 +294,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   setState(() {
                                     formDate = formattedDate;
                                   });
+                                  print('-----262---$formDate');
                                   // Display the selected date as a toast
                                   //displayToast(dExpDate.toString());
                                 } else {
@@ -308,17 +344,22 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 if (pickedDate != null) {
                                   // Format the picked date
                                   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                                  // Update the state with the picked date
+
                                   setState(() {
                                     toDate = formattedDate;
                                   });
-                                  // Display the selected date as a toast
-                                  //displayToast(dExpDate.toString());
+                                  print('---316----$toDate');
+                                  /// TODO HERE YOU SHOULD COMPARE DATE AND APPLY LOGIC
+                                  toDateSelectLogic();
+
                                 } else {
                                   // Handle case where no date was selected
                                   //displayToast("No date selected");
                                 }
-                              },
+                                // compare the date
+
+                                },
+
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
                                 children: [

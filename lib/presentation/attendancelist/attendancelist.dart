@@ -184,6 +184,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                 ),
               ),
               SizedBox(height: 15),
+
               Padding(
                  padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                  child: Container(
@@ -300,7 +301,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                          ),
                                        ),
                                        SizedBox(height: 10),
-
                                        Visibility(
                                          visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off',
                                          child: Column(
@@ -329,20 +329,23 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                              ),
                                              SizedBox(height: 10),
                                              Padding(
-                                               padding: const EdgeInsets.only(bottom: 15),
+                                               padding: const EdgeInsets.only(bottom: 5),
                                                child: Row(
                                                  mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                                                  children: [
                                                    Container(
-                                                     height: 35, // Height of the first container
-                                                     width: 35, // Width of the first container
+                                                     height: 25, // Height of the first container
+                                                     width: 20, // Width of the first container
                                                      decoration: BoxDecoration(
                                                        color: Colors.white, // Background color of the first container
                                                        borderRadius: BorderRadius.circular(20), // Border radius
                                                      ),
                                                      alignment: Alignment.center, // Center the text within the container
-                                                     child: Image.asset('assets/images/attendenclisticon_1.jpeg',height: 20,width: 20,
-                                                       fit: BoxFit.cover,),
+                                                     child: 
+                                                       Icon(Icons.watch_later_rounded,size: 25,color: Color(0xFFD3D3D3)),
+                                                     // Image.asset('assets/images/attendenclisticon_1.jpeg',
+                                                     //   height: 20,width: 20,
+                                                     //   fit: BoxFit.cover,),
 
                                                    ),
                                                    SizedBox(width: 15), // Spacing between the two containers
@@ -352,7 +355,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                    ),
                                                    Spacer(),
                                                    Container(
-                                                     height: 40, // Height of the container
+                                                     height: 25, // Height of the container
                                                      width: 150, // Width of the container
                                                      decoration: BoxDecoration(// Background color of the container
                                                        borderRadius: BorderRadius.circular(20), // Border radius
@@ -381,15 +384,15 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                  mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                                                  children: [
                                                    Container(
-                                                     height: 35, // Height of the first container
+                                                     height: 25, // Height of the first container
                                                      width: 35, // Width of the first container
                                                      decoration: BoxDecoration(
                                                        color: Colors.white, // Background color of the first container
                                                        borderRadius: BorderRadius.circular(20), // Border radius
                                                      ),
                                                      alignment: Alignment.center, // Center the text within the container
-                                                     child: Image.asset('assets/images/attendenclisticon_1.jpeg',height: 20,width: 20,
-                                                       fit: BoxFit.cover,),
+                                                     child:
+                                                     Icon(Icons.watch_later_rounded,size: 25,color: Color(0xFFD3D3D3)),
 
                                                    ),
                                                    SizedBox(width: 15), // Spacing between the two containers
@@ -399,7 +402,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                    ),
                                                    Spacer(),
                                                    Container(
-                                                     height: 40, // Height of the container
+                                                     height: 25, // Height of the container
                                                      width: 150, // Width of the container
                                                      decoration: BoxDecoration(// Background color of the container
                                                        borderRadius: BorderRadius.circular(20), // Border radius
