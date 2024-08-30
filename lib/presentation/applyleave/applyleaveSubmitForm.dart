@@ -138,6 +138,31 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         print('toDate can not be less than fromDate');
       }
     }
+    fromDateSelectLogic(){
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    // Parse the date strings to DateTime objects
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+    if (fromDate2.isAfter(toDate2)) {
+      print('FromDate is greater than to Date');
+
+      DateTime currentDate = DateTime.now();
+      String formattedDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+      setState(() {
+        formDate = formattedDate;
+      });
+
+      displayToast("FromDate can not be greater than Todate");
+      // Perform your action here
+    } else if (fromDate2.isBefore(toDate2)) {
+      /// TODO GIVE A NOTIFICATION
+      print('fromDate is less than toDate');
+      /// TODO HERE YOU SHOULD TAKE A CUTTERN DATE AGAIN
+
+    } else {
+      print('FromDate can not be less than toDate');
+    }
+  }
 
   //
   void compareDates(String fromDate,String toDate) {
@@ -295,6 +320,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                     formDate = formattedDate;
                                   });
                                   print('-----262---$formDate');
+                                  fromDateSelectLogic();
                                   // Display the selected date as a toast
                                   //displayToast(dExpDate.toString());
                                 } else {
