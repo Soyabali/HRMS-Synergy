@@ -44,7 +44,7 @@ class GetYtdMonthRepo
         // Map<String, dynamic> parsedJson = jsonDecode(data);
         //distList = parsedJson['Data'];
         // distList = jsonDecode(data);
-        List<dynamic> ytdMonthList = jsonDecode(data);
+         ytdMonthList = jsonDecode(data);
         return ytdMonthList;
       } else
       {

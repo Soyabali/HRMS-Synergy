@@ -16,12 +16,12 @@ class HrmsAttendanceRepo {
       // get a local database value
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
-      String? sEmpCode = prefs.getString('sEmpCode');
+      String? sCompEmpCode = prefs.getString('sCompEmpCode');
       String? sLocation = prefs.getString('sLocation');
       print('----sToken--19---$sToken');
       print('----lat--20---$lat');
       print('----long--21---$long');
-      print('----sEmpCode--24---xxx---$sEmpCode');
+      print('----sCompEmpCode--24---xxx---$sCompEmpCode');
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsOnSiteAttendance/hrmsOnSiteAttendance";
@@ -37,7 +37,7 @@ class HrmsAttendanceRepo {
 
       var request = http.Request('POST', Uri.parse('$attendanceApi'));
       request.body = json.encode({
-        "sEmpCode": sEmpCode,
+        "sEmpCode": sCompEmpCode,
         "fLatitude": lat ?? 0,
         "fLongitude": long ?? 0,
         "sLocation": sLocation,

@@ -43,16 +43,12 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   TextEditingController _reasonController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
 
-  // focus
-  // FocusNode locationfocus = FocusNode();
   FocusNode _reasonfocus = FocusNode();
   FocusNode _addressfocus = FocusNode();
-
   // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
 
   List? data;
-  var _dropDownValue;
   var sectorresponse;
   String? sec;
   final distDropdownFocus = GlobalKey();
@@ -424,7 +420,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                       overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
                                     ),
                                   ),
-                                  SizedBox(width: 5),
+                                  SizedBox(width: 10),
                                   // Second widget: Container with the TextFormField
                                   Flexible(
                                     flex: 8, // Adjust the flex value as per your design
@@ -434,21 +430,24 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
                                       ),
-                                      child: TextFormField(
-                                        focusNode: _reasonfocus,
-                                        controller: _reasonController,
-                                        textInputAction: TextInputAction.next,
-                                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                        decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
-                                          border: OutlineInputBorder(),
-                                          filled: true, // Enable background color
-                                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: TextFormField(
+                                          focusNode: _reasonfocus,
+                                          controller: _reasonController,
+                                          textInputAction: TextInputAction.next,
+                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
+                                            border: OutlineInputBorder(),
+                                            filled: true, // Enable background color
+                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                          ),
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          maxLines: 1, // Keeps the TextFormField to a single line
+                                          keyboardType: TextInputType.text,
+                                          showCursor: true,
                                         ),
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        maxLines: 1, // Keeps the TextFormField to a single line
-                                        keyboardType: TextInputType.text,
-                                        showCursor: true,
                                       ),
                                     ),
                                   ),
@@ -481,21 +480,24 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
                                       ),
-                                      child: TextFormField(
-                                        focusNode: _addressfocus,
-                                        controller: _addressController,
-                                        textInputAction: TextInputAction.next,
-                                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                        decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
-                                          border: OutlineInputBorder(),
-                                          filled: true, // Enable background color
-                                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                      child: Container(
+                                        color: Colors.white,
+                                        child: TextFormField(
+                                          focusNode: _addressfocus,
+                                          controller: _addressController,
+                                          textInputAction: TextInputAction.next,
+                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                          decoration: const InputDecoration(
+                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
+                                            border: OutlineInputBorder(),
+                                            filled: true, // Enable background color
+                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                          ),
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          maxLines: 1, // Keeps the TextFormField to a single line
+                                          keyboardType: TextInputType.text,
+                                          showCursor: true,
                                         ),
-                                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        maxLines: 1, // Keeps the TextFormField to a single line
-                                        keyboardType: TextInputType.text,
-                                        showCursor: true,
                                       ),
                                     ),
                                   ),
@@ -514,9 +516,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                               ],
                             ),
                             SizedBox(height: 15),
-
                             Visibility(
                               visible: totalDays <= 1,
+                              replacement: SizedBox.shrink(),
                               child: Container(
                               height: 50,
                               color: Colors.grey[200], // Light gray color

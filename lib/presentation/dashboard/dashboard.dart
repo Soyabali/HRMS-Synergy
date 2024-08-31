@@ -81,7 +81,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     });
     if(lat!=null && long !=null){
        var location = '{$lat$long}';
-       displayToast(location);
+     //  displayToast(location);
        attendaceapi(lat,long);
       print('---call Api---xxxxxxxxx--');
       hideLoader();
