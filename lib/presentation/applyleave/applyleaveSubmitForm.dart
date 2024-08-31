@@ -24,7 +24,7 @@ class ApplyLeaveSubmitFormHome extends StatefulWidget {
 
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
-  String _selectedValue = "Full Day";
+  String _selectedValue = "Full";
 
   List stateList = [];
   List<dynamic> distList = [];
@@ -71,6 +71,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   String? toDate;
   String? tempDate;
   String? sFirstName;
+  int totalDays = 0;
+  String displayText = "";
 
   // Uplode Id Proof with gallary
 
@@ -94,9 +96,30 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     DateTime currentDate = DateTime.now();
     formDate = DateFormat('dd/MMM/yyyy').format(currentDate);
     toDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+    calculateTotalDays();
     super.initState();
      _reasonfocus = FocusNode();
     _addressfocus = FocusNode();
+  }
+  // clculateTotalDays
+
+  void calculateTotalDays() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    setState(() {
+      totalDays = toDate2.difference(fromDate2).inDays + 1; // Adding 1 to include both start and end dates
+    });
+    setState(() {
+      if (totalDays <= 1) {
+        displayText = _selectedValue; // Set your specific value
+      } else {
+        displayText = totalDays.toString(); // Display total days
+      }
+    });
+
+    print('Total days:----114---: $displayText');
   }
 
   @override
@@ -139,6 +162,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       setState(() {
         formDate = tempDate;
       });
+      calculateTotalDays();
       displayToast("FromDate should not be greater than ToDate");
     }
   }
@@ -294,8 +318,10 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   setState(() {
                                     tempDate = formDate; // Save the current formDate before updating
                                     formDate = formattedDate;
+                                    calculateTotalDays();
                                   });
                                   fromDateSelectLogic();
+
                                 }
                                 },
 
@@ -343,11 +369,11 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   setState(() {
                                     tempDate = toDate; // Save the current toDate before updating
                                     toDate = formattedDate;
+                                    calculateTotalDays();
                                   });
                                   toDateSelectLogic();
                                 }
                                 },
-
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
                                 children: [
@@ -488,87 +514,107 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                               ],
                             ),
                             SizedBox(height: 15),
-                            Container(
-                            height: 50,
-                            color: Colors.grey[200], // Light gray color
-                            child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Radio<String>(
-                                      value: "Full Day",
-                                      groupValue: _selectedValue,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedValue = value!;
-                                        });
-                                      },
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        "Full Day",
-                                        style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                        overflow: TextOverflow.ellipsis, // Handle overflow
-                                        softWrap: false,
+
+                            Visibility(
+                              visible: totalDays <= 1,
+                              child: Container(
+                              height: 50,
+                              color: Colors.grey[200], // Light gray color
+                              child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Expanded(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Radio<String>(
+                                        value: "Full Day",
+                                        groupValue: _selectedValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedValue = value!;
+                                          });
+                                          if (_selectedValue != null) {
+                                            print("Selected Radio Value: $_selectedValue");
+                                            // You can also set this value to a Text widget
+                                            displayText = _selectedValue;
+                                          }
+                                          },
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Radio<String>(
-                                      value: "First Half",
-                                      groupValue: _selectedValue,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedValue = value!;
-                                        });
-                                      },
-                                    ),
-                                     Flexible(
-                                      child: Text(
-                                        "First Half",
-                                        style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                        overflow: TextOverflow.ellipsis, // Handle overflow
-                                        softWrap: false,
+                                      Flexible(
+                                        child: Text(
+                                          "Full Day",
+                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                          overflow: TextOverflow.ellipsis, // Handle overflow
+                                          softWrap: false,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Row(
-                                  children: <Widget>[
-                                    Radio<String>(
-                                      value: "Second Half",
-                                      groupValue: _selectedValue,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _selectedValue = value!;
-                                        });
-                                      },
-                                    ),
-                                    Flexible(
-                                      child: Text(
-                                        "Second Half",
-                                        style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                        overflow: TextOverflow.ellipsis, // Handle overflow
-                                        softWrap: false,
+                                Expanded(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Radio<String>(
+                                        value: "First Half",
+                                        groupValue: _selectedValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedValue = value!;
+                                          });
+                                          if (_selectedValue != null) {
+                                            print("Selected Radio Value: $_selectedValue");
+                                            // You can also set this value to a Text widget
+                                            displayText = _selectedValue;
+                                          }
+                                        },
                                       ),
-                                    ),
-                                  ],
+                                       Flexible(
+                                        child: Text(
+                                          "First Half",
+                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                          overflow: TextOverflow.ellipsis, // Handle overflow
+                                          softWrap: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                                Expanded(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Radio<String>(
+                                        value: "Second Half",
+                                        groupValue: _selectedValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _selectedValue = value!;
+                                          });
+                                          if (_selectedValue != null) {
+                                            print("Selected Radio Value: $_selectedValue");
+                                            // You can also set this value to a Text widget
+                                            displayText = _selectedValue;
+                                          }
+                                        },
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          "Second Half",
+                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                          overflow: TextOverflow.ellipsis, // Handle overflow
+                                          softWrap: false,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                                                        ),
+                                                      ),
+                            ),
+
                             SizedBox(height: 25),
                             Center(
-                              child: Text('You are going to apply for a leave of 0 day',style: AppTextStyle
+                              child: Text('You are going to apply for a leave of $displayText',style: AppTextStyle
                                   .font14OpenSansRegularBlack45TextStyle),
                             ),
                             SizedBox(height: 15),
@@ -581,7 +627,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
                                   if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
                                   // Call Api
-
                                     print('---call Api---');
                                       var hrmsPopWarning = await HrmsLeaveApplicationRepo()
                                           .hrmsleave(
@@ -602,7 +647,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         msg = "${hrmsPopWarning[0]['Msg']}";
                                         displayToast(msg);
                                       }
-
                                   }else{
                                    print('---Api not call-----');
                                   if(reason.isEmpty || reason==null){
