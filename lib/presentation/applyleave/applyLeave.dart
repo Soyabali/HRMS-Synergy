@@ -508,12 +508,14 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                               padding: const EdgeInsets.only(bottom: 10,right: 10),
                                               child: GestureDetector(
                                                 onTap: () async{
+                                                var sLvTypeCode = '${hrmsLeaveBalaceV2List?[index]['sLvTypeCode']}';
                                                   sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
                                                  // print('---511---${sLvDesc}');
                                                   SharedPreferences prefs = await SharedPreferences.getInstance();
                                                  var sFirstName = prefs.getString('sFirstName');// sLvTypeCode
-                                                  var sLvTypeCode = prefs.getString('sLvTypeCode');
-                                                print('----515--${sFirstName}');
+                                                 // var sLvTypeCode = prefs.getString('sLvTypeCode');
+                                                  print('----517--${sFirstName}');
+                                                  print('----518--${sLvTypeCode}');
 
                                                   Navigator.push(
                                                     context,

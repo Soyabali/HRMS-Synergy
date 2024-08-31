@@ -15,26 +15,31 @@ import 'loader_helper.dart';
 class HrmsLeaveApplicationRepo
 {
   List<dynamic>  hrmsleaveapplication = [];
-  Future<List> hrmsleave(BuildContext context, String? formDate, String? toDate, String reason, String address, String selectedValue, String sFirstName, String sLvDesc) async
-  {
-       print('-------20-------$formDate');
-       print('-------21-------$toDate');
-       print('-------22-------$reason');
-       print('-------23-------$address');
-       print('-------24-------$selectedValue');
-       print('-------25-------$sFirstName');
-       print('-------26-------$sLvDesc');
 
-    //showLoader();
+
+  Future<List> hrmsleave(BuildContext context, String? formDate, String? toDate, String reason, String address, String selectedValue, String sFirstName, String sLvDesc, String sLvTypeCode) async
+  {
+
+
+       //showLoader();
     int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');
+       print('----29---sEmpCode----$sEmpCode');
+    print('-------30----sLvType---$sLvTypeCode');
+    print('-------31---dFromDate----$formDate');
+    print('-------32----dToDate---$toDate');
+    print('-------33----sLeaveReason---$reason');
+    print('-------34----sContactableAddress---$address');
+    print('-------35---sLeaveAppBy----$sFirstName');
+    print('-------35----sFullHalfDay---$selectedValue');
+    print('-------36----iLeaveYear---$currentYear');
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsLeaveApplication/hrmsLeaveApplication";
-    var hrmsLeave = "$baseURL$endPoint";
-    print('------------30---hrmsLeave---$hrmsLeave');
+    var hrmsLeaveApplication = "$baseURL$endPoint";
+    print('------------30---hrmsLeaveApplication---$hrmsLeaveApplication');
 
     showLoader();
 
@@ -44,10 +49,10 @@ class HrmsLeaveApplicationRepo
         'token': '$sToken',
         'Content-Type': 'application/json'
       };
-      var request = http.Request('POST', Uri.parse('$hrmsLeave'));
+      var request = http.Request('POST', Uri.parse('$hrmsLeaveApplication'));
       request.body = json.encode({
         "sEmpCode": sEmpCode,
-        "sLvType": sLvDesc,
+        "sLvType": sLvTypeCode,
         "dFromDate": formDate,
         "dToDate": toDate,
         "sLeaveReason": reason,

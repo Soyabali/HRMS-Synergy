@@ -6,14 +6,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../data/hrmsleaveapplication.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 import 'applyLeave.dart';
-import 'package:intl/intl.dart';
-
 
 
 class ApplyLeaveSubmitFormHome extends StatefulWidget {
@@ -72,7 +69,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   var dExpDate;
   String? formDate;
   String? toDate;
+  String? tempDate;
   String? sFirstName;
+
   // Uplode Id Proof with gallary
 
   // multifilepath
@@ -92,6 +91,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   void initState() {
     // TODO: implement initState
     getACurrentDate();
+    DateTime currentDate = DateTime.now();
+    formDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+    toDate = DateFormat('dd/MMM/yyyy').format(currentDate);
     super.initState();
      _reasonfocus = FocusNode();
     _addressfocus = FocusNode();
@@ -114,56 +116,32 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     DateTime now2 = DateTime.now();
     toDate = DateFormat('dd/MMM/yyyy').format(now2);
   }
-
-    toDateSelectLogic(){
-      DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
-      // Parse the date strings to DateTime objects
-      DateTime? fromDate2 = dateFormat.parse(formDate!);
-      DateTime? toDate2 = dateFormat.parse(toDate!);
-      if (toDate2.isAfter(fromDate2)) {
-        print('toDate is greater than fromDate');
-        // Perform your action here
-      } else if (toDate2.isBefore(fromDate2)) {
-        /// TODO GIVE A NOTIFICATION
-        print('toDate is less than fromDate');
-        /// TODO HERE YOU SHOULD TAKE A CUTTERN DATE AGAIN
-        DateTime currentDate = DateTime.now();
-        String formattedDate = DateFormat('dd/MMM/yyyy').format(currentDate);
-        setState(() {
-          toDate = formattedDate;
-        });
-        displayToast("ToDate can not be less than FromDate");
-
-      } else {
-        print('toDate can not be less than fromDate');
-      }
-    }
-    fromDateSelectLogic(){
+     // to Date SelectedLogic
+  void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
-    // Parse the date strings to DateTime objects
     DateTime? fromDate2 = dateFormat.parse(formDate!);
     DateTime? toDate2 = dateFormat.parse(toDate!);
-    if (fromDate2.isAfter(toDate2)) {
-      print('FromDate is greater than to Date');
 
-      DateTime currentDate = DateTime.now();
-      String formattedDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+    if (toDate2.isBefore(fromDate2)) {
       setState(() {
-        formDate = formattedDate;
+        toDate = tempDate;
       });
-
-      displayToast("FromDate can not be greater than Todate");
-      // Perform your action here
-    } else if (fromDate2.isBefore(toDate2)) {
-      /// TODO GIVE A NOTIFICATION
-      print('fromDate is less than toDate');
-      /// TODO HERE YOU SHOULD TAKE A CUTTERN DATE AGAIN
-
-    } else {
-      print('FromDate can not be less than toDate');
+      displayToast("ToDate should not be less than FromDate");
     }
   }
 
+  void fromDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        formDate = tempDate;
+      });
+      displayToast("FromDate should not be greater than ToDate");
+    }
+  }
   //
   void compareDates(String fromDate,String toDate) {
     String fromDateString = "29/Aug/2024";
@@ -234,6 +212,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
           ),
         ), // Removes shadow under the AppBar
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -263,8 +242,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color:
-                            Colors.grey.withOpacity(0.5), // Color of the shadow
+                        color: Colors.grey.withOpacity(0.5), // Color of the shadow
                         spreadRadius: 5, // Spread radius
                         blurRadius: 7, // Blur radius
                         offset: Offset(0, 3), // Offset of the shadow
@@ -311,23 +289,16 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   firstDate: DateTime(2000),
                                   lastDate: DateTime(2100),
                                 );
-                                // Check if a date was picked
                                 if (pickedDate != null) {
-                                  // Format the picked date
                                   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                                  // Update the state with the picked date
                                   setState(() {
+                                    tempDate = formDate; // Save the current formDate before updating
                                     formDate = formattedDate;
                                   });
-                                  print('-----262---$formDate');
                                   fromDateSelectLogic();
-                                  // Display the selected date as a toast
-                                  //displayToast(dExpDate.toString());
-                                } else {
-                                  // Handle case where no date was selected
-                                  //displayToast("No date selected");
                                 }
-                              },
+                                },
+
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
                                 children: [
@@ -360,30 +331,21 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             SizedBox(height: 15),
                             GestureDetector(
                               onTap: ()async{
+
                                 DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
                                   firstDate: DateTime(2000),
                                   lastDate: DateTime(2100),
                                 );
-                                // Check if a date was picked
                                 if (pickedDate != null) {
-                                  // Format the picked date
                                   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-
                                   setState(() {
+                                    tempDate = toDate; // Save the current toDate before updating
                                     toDate = formattedDate;
                                   });
-                                  print('---316----$toDate');
-                                  /// TODO HERE YOU SHOULD COMPARE DATE AND APPLY LOGIC
                                   toDateSelectLogic();
-
-                                } else {
-                                  // Handle case where no date was selected
-                                  //displayToast("No date selected");
                                 }
-                                // compare the date
-
                                 },
 
                               child: Row(
@@ -423,24 +385,25 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             ),
                             SizedBox(height: 15),
                             Container(
-                              height: 55,
+                              height: 45, // Reduced height
+                              color: Colors.white,
                               child: Row(
                                 children: [
                                   // First widget: Text widget with fixed width
                                   Flexible(
                                     flex: 2, // Adjust the flex value as per your design
                                     child: Text(
-                                      'Reason :',
+                                      'Reason',
                                       style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
                                       overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
                                     ),
                                   ),
-                                  SizedBox(width: 10),
-
+                                  SizedBox(width: 5),
                                   // Second widget: Container with the TextFormField
                                   Flexible(
-                                    flex: 9, // Adjust the flex value as per your design
+                                    flex: 8, // Adjust the flex value as per your design
                                     child: Container(
+                                      height: 40, // Adjust the height to fit within the parent container
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
@@ -451,42 +414,43 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         textInputAction: TextInputAction.next,
                                         onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                         decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
                                           border: OutlineInputBorder(),
                                           filled: true, // Enable background color
                                           fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                         ),
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        maxLines: null, // Allows the TextFormField to grow vertically
-                                        minLines: 1, // Ensures the field starts with a single line
-                                        keyboardType: TextInputType.multiline, // Enables multi-line input
-                                        showCursor: false,
+                                        maxLines: 1, // Keeps the TextFormField to a single line
+                                        keyboardType: TextInputType.text,
+                                        showCursor: true,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-
                             SizedBox(height: 15),
                             Container(
-                              height: 55,
+                              height: 45, // Reduced height
+                              color: Colors.white,
                               child: Row(
                                 children: [
                                   // First widget: Text widget with fixed width
                                   Flexible(
                                     flex: 2, // Adjust the flex value as per your design
                                     child: Text(
-                                      'Address:',
+                                      'Address',
                                       style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
                                       overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
                                     ),
                                   ),
-                                  SizedBox(width: 10),
+                                  SizedBox(width: 5),
 
                                   // Second widget: Container with the TextFormField
                                   Flexible(
-                                    flex: 9, // Adjust the flex value as per your design
+                                    flex: 8, // Adjust the flex value as per your design
                                     child: Container(
+                                      height: 40, // Adjust the height to fit within the parent container
                                       decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(8), // Rounded corners
@@ -497,64 +461,21 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         textInputAction: TextInputAction.next,
                                         onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                         decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
                                           border: OutlineInputBorder(),
                                           filled: true, // Enable background color
                                           fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                         ),
                                         autovalidateMode: AutovalidateMode.onUserInteraction,
-                                        maxLines: null, // Allows the TextFormField to grow vertically
-                                        minLines: 1, // Ensures the field starts with a single line
-                                        keyboardType: TextInputType.multiline, // Enables multi-line input
-                                        showCursor: false,
+                                        maxLines: 1, // Keeps the TextFormField to a single line
+                                        keyboardType: TextInputType.text,
+                                        showCursor: true,
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            // Container(
-                            //   height: 55,
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
-                            //     children: [
-                            //       // First widget: Text widget
-                            //       Text(
-                            //         'Address:',
-                            //       style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
-                            //       ),
-                            //       SizedBox(width: 10),
-                            //       // Second widget: Container with light gray background
-                            //       Expanded(
-                            //         child: Container(
-                            //           //padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
-                            //           decoration: BoxDecoration(
-                            //             color: Colors.white, // Light gray background color
-                            //             borderRadius: BorderRadius.circular(8), // Rounded corners
-                            //           ),
-                            //           child: TextFormField(
-                            //             focusNode: _owenerfocus,
-                            //             controller: _expenseController,
-                            //             // textInputAction: TextInputAction.next,
-                            //             // onEditingComplete: () =>
-                            //             //     FocusScope.of(context).nextFocus(),
-                            //             decoration: const InputDecoration(
-                            //               border: OutlineInputBorder(),
-                            //               // contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                            //               filled: true, // Enable background color
-                            //               fillColor: Color(0xFFf2f3f5),// Set your desired background color here
-                            //             ),
-                            //             autovalidateMode:
-                            //             AutovalidateMode.onUserInteraction,
-                            //             maxLines: null, // Allows the TextFormField to grow vertically
-                            //             minLines: 1, // Ensures the field starts with a single line
-                            //             keyboardType: TextInputType.multiline, // Enables multi-line input
-                            //             showCursor: false,
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                             SizedBox(height: 15),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
@@ -653,7 +574,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             SizedBox(height: 15),
                             InkWell(
                               onTap: () async {
-
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                   var sEmpCode = prefs.getString('sEmpCode');
                                   var reason = _reasonController.text;
@@ -661,7 +581,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
                                   if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
                                   // Call Api
-                                  print('---call Api---');
+
+                                    print('---call Api---');
                                       var hrmsPopWarning = await HrmsLeaveApplicationRepo()
                                           .hrmsleave(
                                           context,
@@ -671,13 +592,18 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           address,
                                           _selectedValue,
                                           '${widget.sFirstName}',
-                                          '${widget.sLvDesc}');
-
+                                          '${widget.sLvDesc}',
+                                           '${widget.sLvTypeCode}'
+                                      );
                                       print('---975--$hrmsPopWarning');
-                                      msg = "${hrmsPopWarning[0]['Msg']}";
-                                      displayToast(msg);
+                                      if(hrmsPopWarning==null){
+                                        displayToast("Response is Null");
+                                      }else{
+                                        msg = "${hrmsPopWarning[0]['Msg']}";
+                                        displayToast(msg);
+                                      }
 
-                                }else{
+                                  }else{
                                    print('---Api not call-----');
                                   if(reason.isEmpty || reason==null){
                                     displayToast('Please Enter Reason');
