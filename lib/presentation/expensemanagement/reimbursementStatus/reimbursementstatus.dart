@@ -8,13 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementlog.dart';
 import '../../../app/generalFunction.dart';
-import '../../../data/district_repo.dart';
+import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 
@@ -46,8 +46,9 @@ class ReimbursementstatusPage extends StatefulWidget {
 
 class _MyHomePageState extends State<ReimbursementstatusPage> {
 
-  List<Map<String, dynamic>>? pendingSchedulepointList;
+  List<Map<String, dynamic>>? reimbursementStatusList;
   List<Map<String, dynamic>> _filteredData = [];
+  ///List<dynamic>  hrmsReimbursementList;
   TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
@@ -72,22 +73,32 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   }
 
   List stateList = [];
-  List distList = [];
+  List hrmsReimbursementList = [];
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
 
   // Distic List
-  updatedSector() async {
-    distList = await ProjectRepo().projectList();
-    print(" -----xxxxx-  list Data--65---> $distList");
-    setState(() {});
+  hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
+    reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth);
+    _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
+    print(" -----xxxxx-  reimbursementStatusList--86-----> $reimbursementStatusList");
+    // setState(() {});
   }
 
-  shopType() async {
-    shopTypeList = await ShopTypeRepo().getShopType();
-    print(" -----xxxxx-  shopTypeList--- Data--65---> $shopTypeList");
-    setState(() {});
+  void _search() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      _filteredData = reimbursementStatusList?.where((item) {
+        String location = item['sProjectName'].toLowerCase();
+        String pointType = item['sEmpCode'].toLowerCase();
+        String sector = item['sExpDetails'].toLowerCase();
+        return location.contains(query) ||
+            pointType.contains(query) ||
+            sector.contains(query);
+      }).toList() ??
+          [];
+    });
   }
 
   // postImage
@@ -117,27 +128,21 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   String? todayDate;
 
   List? data;
-  var _dropDownValueDistric;
-  var _dropDownValueShopeType;
-  var _dropDownSector;
-  var _dropDownSector2gi;
-
-  var _dropDownValue;
   var sectorresponse;
   String? sec;
   final distDropdownFocus = GlobalKey();
   final sectorFocus = GlobalKey();
   File? _imageFile;
-  var _selectedShopId;
-  var _selectedBlockId;
-  var _selectedSectorId;
-  final _formKey = GlobalKey<FormState>();
   var iUserTypeCode;
   var userId;
   var slat;
   var slong;
   File? image;
   var uplodedImage;
+  String? firstOfMonthDay;
+  String? lastDayOfCurrentMonth;
+  var fromPicker;
+  var toPicker;
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -229,14 +234,24 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     print('---155----$responseData');
   }
 
-  // datepicker
+  getCurrentdate(){
+    DateTime now = DateTime.now();
+    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+    firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    // last day of the current month
+    DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    lastDayOfCurrentMonth = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+  }
+
   // InitState
   @override
   void initState() {
     // TODO: implement initState
-    updatedSector();
-    shopType();
     getLocation();
+    getCurrentdate();
+    hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+    _searchController.addListener(_search);
     super.initState();
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -293,7 +308,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     _landMarkfocus.dispose();
     _addressfocus.dispose();
   }
-
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -353,32 +367,65 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     const Text('From',style: TextStyle(
                     color: Colors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.normal
                     ),),
                     SizedBox(width: 4),
-                    Container(
-                      height: 35,
-                      padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Change this to your preferred color
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '01/Aug/2024',
-                          style: TextStyle(
-                            color: Colors.grey, // Change this to your preferred text color
-                            fontSize: 12.0, // Adjust font size as needed
+
+                    GestureDetector(
+                      onTap: () async{
+                        /// TODO Open Date picke and get a date
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        // Check if a date was picked
+                        if (pickedDate != null) {
+                          // Format the picked date
+                          String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                          // Update the state with the picked date
+                          setState(() {
+                            firstOfMonthDay = formattedDate;
+                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          });
+                           print('---formPicker--$firstOfMonthDay');
+                          // Call API
+                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                         // print('---formPicker--$firstOfMonthDay');
+
+                          // Display the selected date as a toast
+                          //displayToast(dExpDate.toString());
+                        } else {
+                          // Handle case where no date was selected
+                          //displayToast("No date selected");
+                        }
+                      },
+                      child: Container(
+                        height: 35,
+                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        decoration: BoxDecoration(
+                          color: Colors.white, // Change this to your preferred color
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$firstOfMonthDay',
+                            style: TextStyle(
+                              color: Colors.grey, // Change this to your preferred text color
+                              fontSize: 12.0, // Adjust font size as needed
+                            ),
                           ),
                         ),
                       ),
                     ),
+
                     SizedBox(width: 10),
                     Container(
                       height: 32,
@@ -392,25 +439,52 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     SizedBox(width: 10),
                     Icon(Icons.calendar_month,size: 16,color: Colors.white),
                     SizedBox(width: 4),
-                    Text('To',style: TextStyle(
+                    const Text('To',style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.normal
                     ),),
                     SizedBox(width: 4),
-                    Container(
-                      height: 35,
-                      padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Change this to your preferred color
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '01/Aug/2024',
-                          style: TextStyle(
-                            color: Colors.grey, // Change this to your preferred text color
-                            fontSize: 12.0, // Adjust font size as needed
+                    GestureDetector(
+                      onTap: ()async{
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2100),
+                        );
+                        // Check if a date was picked
+                        if (pickedDate != null) {
+                          // Format the picked date
+                          String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                          // Update the state with the picked date
+                          setState(() {
+                            lastDayOfCurrentMonth = formattedDate;
+                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          });
+                          print('---465--$lastDayOfCurrentMonth');
+                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          // Display the selected date as a toast
+                          //displayToast(dExpDate.toString());
+                        } else {
+                          // Handle case where no date was selected
+                          //displayToast("No date selected");
+                        }
+                      },
+                      child: Container(
+                        height: 35,
+                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        decoration: BoxDecoration(
+                          color: Colors.white, // Change this to your preferred color
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Text(
+                            '$lastDayOfCurrentMonth',
+                            style: TextStyle(
+                              color: Colors.grey, // Change this to your preferred text color
+                              fontSize: 12.0, // Adjust font size as needed
+                            ),
                           ),
                         ),
                       ),
@@ -462,679 +536,349 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                   ),
                 ),
               ),
-              // scroll item after search bar
-              Padding(
-                padding: const EdgeInsets.only(left: 10,right: 10),
-                child: Card(
-                  elevation: 1,
-                  color: Colors.white,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-                        color: Colors.grey, // Outline border color
-                        width: 0.2, // Outline border width
-                      ),
-                    ),
-                    child: Padding(
-                      padding:
-                      const EdgeInsets.only(left: 8, right: 8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(15.0),
-                                    border: Border.all(
-                                      color: Color(0xFF255899),
-                                      // Outline border color
-                                      width:
-                                      0.5, // Outline border width
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "${1}",
-                                        style: AppTextStyle.font14OpenSansRegularBlackTextStyle
-                                    ),
-                                  )),
-                              SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    'Fright Inward / Outward',
-                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                  ),
-                                  Text(
-                                    'Project Name : ATPL-Chandigarh Drone (SDPC_IOS)',
-                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 15, right: 15),
-                            child: Container(
-                              height: 0.5,
-                              color: Color(0xff3f617d),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                height: 10.0,
-                                width: 10.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.black, // Change this to your preferred color
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              //  '‣ Sector',
-                              Text(
-                                'Bill Date',
-                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text(
-                              '21/Aug/2024',
-                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                height: 10.0,
-                                width: 10.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.black, // Change this to your preferred color
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Entry At',
-                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text(
-                              '21/Aug/2024 14:11',
-                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                height: 10.0,
-                                width: 10.0,
-                                decoration: BoxDecoration(
-                                  color: Colors.black, // Change this to your preferred color
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                'Expense Details',
-                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                              )
-                            ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15),
-                            child: Text(
-                              'Testing',
-                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
-                            ),
-                          ),
-                          SizedBox(height: 10),
+              SizedBox(height: 10),
+              _filteredData == null || _filteredData!.isEmpty
+                  ? const Center(
+                child: Text(
+                  'No reimbursement found',
+                  style: TextStyle(fontSize: 18),
+                ),
+              )
+              :
+               Expanded(
+      child: ListView.builder(
+      itemCount: _filteredData.length ?? 0,
+      itemBuilder: (context, index) {
+        Map<String, dynamic> item = _filteredData[index];
+        return
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Card(
+              elevation: 1,
+              color: Colors.white,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  border: Border.all(
+                    color: Colors.grey, // Outline border color
+                    width: 0.2, // Outline border width
+                  ),
+                ),
+                child: Padding(
+                  padding:
+                  const EdgeInsets.only(left: 8, right: 8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.start,
+                        children: <Widget>[
                           Container(
-                            height: 1,
-                            width: MediaQuery.of(context).size.width-40,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(Icons.speaker_notes,size: 20,color: Colors.black,),
-                                SizedBox(width: 10),
-                                const Text('Status',style: TextStyle(
-                                  color: Color(0xFF0098a6),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal
-                                ),),
-                                SizedBox(width: 5),
-                                const Text(':',style: TextStyle(
-                                    color: Color(0xFF0098a6),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal
-                                ),),
-                                SizedBox(width: 5),
-                                const Text('Pending At Manager',style: TextStyle(
-                                    color: Color(0xFF0098a6),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal
-                                ),),
-                                Spacer(),
-                                Container(
-                                  height: 30,
-                                  padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF0098a6), // Change this to your preferred color
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '₹ 1',
-                                      style: TextStyle(
-                                        color: Colors.white, // Change this to your preferred text color
-                                        fontSize: 14.0, // Adjust font size as needed
-                                      ),
-                                    ),
-                                  ),
+                              width: 30.0,
+                              height: 30.0,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                BorderRadius.circular(15.0),
+                                border: Border.all(
+                                  color: Color(0xFF255899),
+                                  // Outline border color
+                                  width:
+                                  0.5, // Outline border width
                                 ),
-
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Space between the two columns
-                              children: [
-                                // First Column
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                        height: 40, // Adjust the height as needed
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF0098a6), // Change this to your preferred color
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Center(
-                                              child: Text(
-                                                'View Image',
-                                                  style: AppTextStyle.font14OpenSansRegularWhiteTextStyle
-                                              ),
-                                            ),
-                                            const Icon(
-                                              Icons.arrow_forward,
-                                              color: Colors.white,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                color: Colors.white,
+                              ),
+                              child: Center(
+                                child: Text(
+                                    "${1}",
+                                    style: AppTextStyle
+                                        .font14OpenSansRegularBlackTextStyle
                                 ),
-                                // Second Column
-                                SizedBox(width: 5.0),
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                        height: 40, // Adjust the height as needed
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF2a697b), // Change this to your preferred color
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: GestureDetector(
-                                          onTap: (){
-                                            print('---TAKE ACTION---');
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(builder: (context) => ReimbursementLog()),
-                                            );
-                                          },
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Center(
-                                                child: Text(
-                                                  'Take Action',
-                                                    style: AppTextStyle.font16OpenSansRegularWhiteTextStyle
-                                                ),
-                                              ),
-                                              const Icon(
-                                                Icons.arrow_forward,
-                                                color: Colors.white,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-
+                              )),
+                          SizedBox(width: 10),
+                          Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                  'Fright Inward / Outward',
+                                  style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle
+                              ),
+                              Text(
+                                  item['sProjectName'] ?? '',
+                                  style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle
+                              ),
+                            ],
+                          )
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15, right: 15),
+                        child: Container(
+                          height: 0.5,
+                          color: Color(0xff3f617d),
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 10.0,
+                            width: 10.0,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          //  '‣ Sector',
+                          Text(
+                              'Bill Date',
+                              style: AppTextStyle
+                                  .font12OpenSansRegularBlackTextStyle
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                            item['dExpDate'] ??'',
+                            style: AppTextStyle
+                                .font12OpenSansRegularBlack45TextStyle
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 10.0,
+                            width: 10.0,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                              'Entry At',
+                              style: AppTextStyle
+                                  .font12OpenSansRegularBlackTextStyle
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                            item['dEntryAt'] ?? '',
+                            style: AppTextStyle
+                                .font12OpenSansRegularBlack45TextStyle
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment:
+                        MainAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            height: 10.0,
+                            width: 10.0,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                              'Expense Details',
+                              style: AppTextStyle
+                                  .font12OpenSansRegularBlackTextStyle
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 15),
+                        child: Text(
+                            item['sExpDetails'] ?? '',
+                            style: AppTextStyle
+                                .font12OpenSansRegularBlack45TextStyle
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 1,
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width - 40,
+                        color: Colors.grey,
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Icon(Icons.speaker_notes, size: 20,
+                              color: Colors.black,),
+                            SizedBox(width: 10),
+                            const Text('Status', style: TextStyle(
+                                color: Color(0xFF0098a6),
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal
+                            ),),
+                            SizedBox(width: 5),
+                            const Text(':', style: TextStyle(
+                                color: Color(0xFF0098a6),
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal
+                            ),),
+                            SizedBox(width: 5),
+                            const Text('Pending At Manager', style: TextStyle(
+                                color: Color(0xFF0098a6),
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal
+                            ),),
+                            Spacer(),
+                            Container(
+                              height: 30,
+                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                              // Optional: Adjust padding for horizontal space
+                              decoration: BoxDecoration(
+                                color: Color(0xFF0098a6),
+                                // Change this to your preferred color
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  item['fAmount'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    // Change this to your preferred text color
+                                    fontSize: 14.0, // Adjust font size as needed
+                                  ),
+                                ),
+                              ),
+                            ),
+      
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          // Space between the two columns
+                          children: [
+                            // First Column
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    height: 40, // Adjust the height as needed
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF0098a6),
+                                      // Change this to your preferred color
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceBetween,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                              'View Image',
+                                              style: AppTextStyle
+                                                  .font14OpenSansRegularWhiteTextStyle
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_forward,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Second Column
+                            SizedBox(width: 5.0),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    height: 40, // Adjust the height as needed
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF2a697b),
+                                      // Change this to your preferred color
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        print('---TAKE ACTION---');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              ReimbursementLog()),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Center(
+                                            child: Text(
+                                                'Take Action',
+                                                style: AppTextStyle
+                                                    .font16OpenSansRegularWhiteTextStyle
+                                            ),
+                                          ),
+                                          const Icon(
+                                            Icons.arrow_forward,
+                                            color: Colors.white,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+      
+                    ],
                   ),
                 ),
               ),
-
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: _filteredData.length ?? 0,
-              //     itemBuilder: (context, index) {
-              //       Map<String, dynamic> item = _filteredData[index];
-              //       return Padding(
-              //         padding: const EdgeInsets.only(left: 8, top: 8, right: 8),
-              //         child: Container(
-              //           child: Column(
-              //             children: [
-              //               Card(
-              //                 elevation: 1,
-              //                 child: Container(
-              //                   decoration: BoxDecoration(
-              //                     borderRadius: BorderRadius.circular(5.0),
-              //                     border: Border.all(
-              //                       color: Colors.grey, // Outline border color
-              //                       width: 0.2, // Outline border width
-              //                     ),
-              //                   ),
-              //                   child: Padding(
-              //                     padding:
-              //                         const EdgeInsets.only(left: 8, right: 8),
-              //                     child: Column(
-              //                       mainAxisAlignment: MainAxisAlignment.start,
-              //                       crossAxisAlignment:
-              //                           CrossAxisAlignment.start,
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.start,
-              //                           children: <Widget>[
-              //                             Container(
-              //                                 width: 30.0,
-              //                                 height: 30.0,
-              //                                 decoration: BoxDecoration(
-              //                                   borderRadius:
-              //                                       BorderRadius.circular(15.0),
-              //                                   border: Border.all(
-              //                                     color: Color(0xFF255899),
-              //                                     // Outline border color
-              //                                     width:
-              //                                         0.5, // Outline border width
-              //                                   ),
-              //                                   color: Colors.white,
-              //                                 ),
-              //                                 child: Center(
-              //                                   child: Text(
-              //                                     "${index + 1}",
-              //                                     style: const TextStyle(
-              //                                         fontFamily: 'Montserrat',
-              //                                         color: Color(0xFF255899),
-              //                                         fontSize: 14.0,
-              //                                         fontWeight:
-              //                                             FontWeight.bold),
-              //                                   ),
-              //                                 )),
-              //                             SizedBox(width: 5),
-              //                             Column(
-              //                               mainAxisAlignment:
-              //                                   MainAxisAlignment.start,
-              //                               crossAxisAlignment:
-              //                                   CrossAxisAlignment.start,
-              //                               children: <Widget>[
-              //                                 Text(
-              //                                   item['sPointTypeName'] ?? '',
-              //                                   style: const TextStyle(
-              //                                       fontFamily: 'Montserrat',
-              //                                       color: Color(0xff3f617d),
-              //                                       fontSize: 14.0,
-              //                                       fontWeight:
-              //                                           FontWeight.bold),
-              //                                 ),
-              //                                 const Text(
-              //                                   'Point Name',
-              //                                   style: TextStyle(
-              //                                       fontFamily: 'Montserrat',
-              //                                       color: Color(0xff3f617d),
-              //                                       fontSize: 12.0,
-              //                                       fontWeight:
-              //                                           FontWeight.bold),
-              //                                 ),
-              //                               ],
-              //                             )
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 10),
-              //                         Padding(
-              //                           padding: const EdgeInsets.only(
-              //                               left: 15, right: 15),
-              //                           child: Container(
-              //                             height: 0.5,
-              //                             color: Color(0xff3f617d),
-              //                           ),
-              //                         ),
-              //                         SizedBox(height: 5),
-              //                         const Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.start,
-              //                           children: <Widget>[
-              //                             Icon(
-              //                               Icons.forward,
-              //                               size: 10,
-              //                               color: Color(0xff3f617d),
-              //                             ),
-              //                             SizedBox(width: 5),
-              //                             //  '‣ Sector',
-              //                             Text(
-              //                               'Sector',
-              //                               style: TextStyle(
-              //                                   fontFamily: 'Montserrat',
-              //                                   color: Color(0xFF255899),
-              //                                   fontSize: 14.0,
-              //                                   fontWeight: FontWeight.bold),
-              //                             )
-              //                           ],
-              //                         ),
-              //                         Padding(
-              //                           padding: EdgeInsets.only(left: 15),
-              //                           child: Text(
-              //                             item['sSectorName'] ?? '',
-              //                             style: const TextStyle(
-              //                                 fontFamily: 'Montserrat',
-              //                                 color: Color(0xff3f617d),
-              //                                 fontSize: 14.0,
-              //                                 fontWeight: FontWeight.bold),
-              //                           ),
-              //                         ),
-              //                         const Row(
-              //                           mainAxisAlignment:
-              //                               MainAxisAlignment.start,
-              //                           children: <Widget>[
-              //                             Icon(Icons.forward,
-              //                                 size: 10,
-              //                                 color: Color(0xff3f617d)),
-              //                             SizedBox(width: 5),
-              //                             Text(
-              //                               'Location',
-              //                               style: TextStyle(
-              //                                   fontFamily: 'Montserrat',
-              //                                   color: Color(0xFF255899),
-              //                                   fontSize: 14.0,
-              //                                   fontWeight: FontWeight.bold),
-              //                             )
-              //                           ],
-              //                         ),
-              //                         Padding(
-              //                           padding: EdgeInsets.only(left: 15),
-              //                           child: Text(
-              //                             item['sLocation'] ?? '',
-              //                             style: const TextStyle(
-              //                                 fontFamily: 'Montserrat',
-              //                                 color: Color(0xff3f617d),
-              //                                 fontSize: 14.0,
-              //                                 fontWeight: FontWeight.bold),
-              //                           ),
-              //                         ),
-              //                         SizedBox(height: 10),
-              //                         Container(
-              //                           color: Color(0xffe4e4e4),
-              //                           height: 40,
-              //                           child: Padding(
-              //                             padding: const EdgeInsets.only(
-              //                                 left: 10, right: 10),
-              //                             child: Row(
-              //                               mainAxisAlignment:
-              //                                   MainAxisAlignment.spaceBetween,
-              //                               children: <Widget>[
-              //                                 Row(
-              //                                   mainAxisAlignment:
-              //                                       MainAxisAlignment.start,
-              //                                   children: [
-              //                                     InkWell(
-              //                                       onTap: () {
-              //                                         print('00000000----');
-              //                                         var sBeforePhoto =
-              //                                             "${item['sBeforePhoto']}";
-              //                                         print('---$sBeforePhoto');
-              //
-              //                                         if (sBeforePhoto !=
-              //                                             null) {
-              //                                           // Navigator.push(
-              //                                           //     context,
-              //                                           //     MaterialPageRoute(
-              //                                           //         builder: (context) =>
-              //                                           //             ImageScreen(
-              //                                           //                 sBeforePhoto:
-              //                                           //                     sBeforePhoto)));
-              //                                         } else {
-              //                                           // toast
-              //                                         }
-              //                                       },
-              //                                       child: const Text(
-              //                                         'View Image',
-              //                                         style: TextStyle(
-              //                                             fontFamily:
-              //                                                 'Montserrat',
-              //                                             color:
-              //                                                 Color(0xFF255899),
-              //                                             fontSize: 14.0,
-              //                                             fontWeight:
-              //                                                 FontWeight.bold),
-              //                                       ),
-              //                                     ),
-              //                                     const SizedBox(width: 5),
-              //                                     const Icon(
-              //                                       Icons.forward_sharp,
-              //                                       color: Color(0xFF255899),
-              //                                     )
-              //                                   ],
-              //                                 ),
-              //                                 Container(
-              //                                     height: 10,
-              //                                     width: 1,
-              //                                     color: Colors.grey),
-              //                                 GestureDetector(
-              //                                   onTap: () {
-              //                                     print('---406--$lat');
-              //                                     print('---407--$long');
-              //                                     var sBeforePhoto =
-              //                                         "${item['sBeforePhoto']}";
-              //                                     var iTaskCode =
-              //                                         "${item['iTaskCode']}";
-              //                                     print(
-              //                                         '---410----$sBeforePhoto');
-              //                                     print('---411----$iTaskCode');
-              //
-              //                                     // create an instance of the class
-              //
-              //                                     // Navigator.push(
-              //                                     //   context,
-              //                                     //   MaterialPageRoute(
-              //                                     //       builder: (context) =>
-              //                                     //           ActionOnSchedultPointScreen(
-              //                                     //               sBeforePhoto:
-              //                                     //                   sBeforePhoto,
-              //                                     //               iTaskCode:
-              //                                     //                   iTaskCode,
-              //                                     //               lat: lat,
-              //                                     //               long: long)),
-              //                                     // );
-              //
-              //                                   },
-              //                                   child: Padding(
-              //                                     padding:
-              //                                         const EdgeInsets.all(8.0),
-              //                                     child: Container(
-              //                                       child: const Row(
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .start,
-              //                                         children: [
-              //                                           Text(
-              //                                             'Action',
-              //                                             style: TextStyle(
-              //                                                 fontFamily:
-              //                                                     'Montserrat',
-              //                                                 color: Color(
-              //                                                     0xFF255899),
-              //                                                 fontSize: 14.0,
-              //                                                 fontWeight:
-              //                                                     FontWeight
-              //                                                         .bold),
-              //                                           ),
-              //                                           SizedBox(width: 5),
-              //                                           Icon(
-              //                                             Icons.forward_sharp,
-              //                                             color:
-              //                                                 Color(0xFF255899),
-              //                                           ),
-              //                                         ],
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                                 Container(
-              //                                     height: 10,
-              //                                     width: 1,
-              //                                     color: Colors.grey),
-              //                                 GestureDetector(
-              //                                   onTap: () {
-              //                                     print('-----458--');
-              //                                     // getLocation();
-              //                                     var fLatitude =
-              //                                         item['fLatitude'] ?? '';
-              //                                     var fLongitude =
-              //                                         item['fLongitude'] ?? '';
-              //                                     print(
-              //                                         '----462----${fLatitude}');
-              //                                     print(
-              //                                         '-----463---${fLongitude}');
-              //
-              //                                     if (fLatitude != null &&
-              //                                         fLongitude != null) {
-              //                                       //launchGoogleMaps()
-              //                                       print(
-              //                                           '---472----$fLatitude');
-              //                                       print(
-              //                                           '---473----$fLongitude');
-              //                                       generalfunction
-              //                                           .launchGoogleMaps(
-              //                                               fLatitude,
-              //                                               fLongitude);
-              //                                     } else {
-              //                                       displayToast(
-              //                                           "Please check the location.");
-              //                                     }
-              //                                   },
-              //                                   child: Padding(
-              //                                     padding: EdgeInsets.all(6.0),
-              //                                     child: InkWell(
-              //                                       onTap: () {
-              //                                         var fLatitude =
-              //                                             item['fLatitude'] ??
-              //                                                 '';
-              //                                         var fLongitude =
-              //                                             item['fLongitude'] ??
-              //                                                 '';
-              //                                         print(
-              //                                             '----462----${fLatitude}');
-              //                                         print(
-              //                                             '-----463---${fLongitude}');
-              //
-              //                                         if (fLatitude != null &&
-              //                                             fLongitude != null) {
-              //                                           //launchGoogleMaps()
-              //                                           print(
-              //                                               '---472----$fLatitude');
-              //                                           print(
-              //                                               '---473----$fLongitude');
-              //                                           generalfunction
-              //                                               .launchGoogleMaps(
-              //                                                   fLatitude,
-              //                                                   fLongitude);
-              //                                         } else {
-              //                                           displayToast(
-              //                                               "Please check the location.");
-              //                                         }
-              //                                       },
-              //                                       child: const Row(
-              //                                         mainAxisAlignment:
-              //                                             MainAxisAlignment
-              //                                                 .start,
-              //                                         children: [
-              //                                           Text('Navigate',
-              //                                               style: TextStyle(
-              //                                                   fontFamily:
-              //                                                       'Montserrat',
-              //                                                   color: Color(
-              //                                                       0xFF255899),
-              //                                                   fontSize: 14.0,
-              //                                                   fontWeight:
-              //                                                       FontWeight
-              //                                                           .bold)),
-              //                                           // SizedBox(width: 5),
-              //                                           //Icon(Icons.forward_sharp,color: Color(0xFF255899))
-              //                                         ],
-              //                                       ),
-              //                                     ),
-              //                                   ),
-              //                                 ),
-              //                               ],
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   ),
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       );
-              //     },
-              //   ),
-              // )
-            ]));
+            ),
+          );
+      }
+      
+      ),
+    )
+            ]
+        ));
   }
 }

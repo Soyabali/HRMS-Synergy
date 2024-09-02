@@ -273,7 +273,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 5),
+                           // SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -924,7 +924,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                     textColor = Colors.black;
                   }
                   return  Padding(
-                    padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                   // padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                     child:Card(
                         color: Colors.white,
                         elevation: 5.0, // Elevation of the card
@@ -935,7 +936,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 10),
+                          //  SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -949,7 +950,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                     border: const Border(
                                       left: BorderSide(
                                         color: Colors.green, // Color of the left border
-                                        width: 5.0, // Width of the left border
+                                        width: 4.0, // Width of the left border
                                       ),
                                     ),
                                   ),
