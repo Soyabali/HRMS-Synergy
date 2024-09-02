@@ -240,9 +240,10 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
         /// TODO WAP THIS CONTAINER INTO THE LIST
         ///
         Padding(
-          padding: const EdgeInsets.only(left: 0.0, right: 0.0,bottom: 85), // Left and right padding of 5
+          padding: const EdgeInsets.only(left: 0.0, right: 0.0,bottom: 150), // Left and right padding of 5
           child: Container(
-              height: MediaQuery.of(context).size.height-50,
+             // height: MediaQuery.of(context).size.height-50,
+              height: MediaQuery.of(context).size.height-200,
               child: ListView.builder(
                 itemCount: hrmsLeaveBalaceV2List?.length ?? 0,
                 itemBuilder: (context,index){
@@ -260,18 +261,19 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                     textColor = Colors.black;
                   }
                   return  Padding(
-                    padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    //padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5,top: 5),
                     child:Card(
                         color: Colors.white,
                         elevation: 5.0, // Elevation of the card
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0), // Border radius of the card
+                          borderRadius: BorderRadius.circular(5.0), // Border radius of the card
                         ),
                         child:Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: 10),
+                            SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,39 +322,42 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                           ],
                                         ),
                                         Spacer(),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 12,right: 15),
-                                          child: Container(
-                                            height: 30, // Height of the container
-                                            width: 110, // Width of the container
-                                            //color: Colors.white, // Background color of the container
-                                            decoration: BoxDecoration(
-                                              color: Colors.white, // Background color of the container
-                                              borderRadius: BorderRadius.circular(15), // Border radius
-                                            ),
-                                            alignment: Alignment.center, // Center the text within the container
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.only(left: 10,top: 2),
-                                                  child: Text(
-                                                    'YTD : ', // The text to display
-                                                    style: TextStyle(
+                                        Visibility(
+                                          visible: '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}' != "Leave Without Pay",
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 12,right: 15),
+                                            child: Container(
+                                              height: 30, // Height of the container
+                                              width: 110, // Width of the container
+                                              //color: Colors.white, // Background color of the container
+                                              decoration: BoxDecoration(
+                                                color: Colors.white, // Background color of the container
+                                                borderRadius: BorderRadius.circular(15), // Border radius
+                                              ),
+                                              alignment: Alignment.center, // Center the text within the container
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(left: 10,top: 2),
+                                                    child: Text(
+                                                      'YTD : ', // The text to display
+                                                      style: TextStyle(
+                                                        color: Colors.black, // Text color
+                                                        fontSize: 16, // Text size
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
+                                                    style: const TextStyle(
                                                       color: Colors.black, // Text color
                                                       fontSize: 16, // Text size
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
-                                                  style: const TextStyle(
-                                                    color: Colors.black, // Text color
-                                                    fontSize: 16, // Text size
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         )
@@ -362,7 +367,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -500,7 +505,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 10),
+                            SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -900,7 +905,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
         Padding(
           padding: const EdgeInsets.only(left: 0.0, right: 0.0,bottom: 85), // Left and right padding of 5
           child: Container(
-              height: MediaQuery.of(context).size.height-50,
+              height: MediaQuery.of(context).size.height-150,
               child: ListView.builder(
                 itemCount: hrmsLeaveBalaceV2List?.length ?? 0,
                 itemBuilder: (context,index){
@@ -924,7 +929,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                         color: Colors.white,
                         elevation: 5.0, // Elevation of the card
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0), // Border radius of the card
+                          borderRadius: BorderRadius.circular(5.0), // Border radius of the card
                         ),
                         child:Column(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -979,39 +984,42 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                           ],
                                         ),
                                         Spacer(),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 12,right: 15),
-                                          child: Container(
-                                            height: 30, // Height of the container
-                                            width: 110, // Width of the container
-                                            //color: Colors.white, // Background color of the container
-                                            decoration: BoxDecoration(
-                                              color: Colors.white, // Background color of the container
-                                              borderRadius: BorderRadius.circular(15), // Border radius
-                                            ),
-                                            alignment: Alignment.center, // Center the text within the container
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                const Padding(
-                                                  padding: EdgeInsets.only(left: 10,top: 2),
-                                                  child: Text(
-                                                    'YTD : ', // The text to display
-                                                    style: TextStyle(
+                                        Visibility(
+                                          visible: '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}' != "Leave Without Pay",
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(top: 12,right: 15),
+                                            child: Container(
+                                              height: 30, // Height of the container
+                                              width: 110, // Width of the container
+                                              //color: Colors.white, // Background color of the container
+                                              decoration: BoxDecoration(
+                                                color: Colors.white, // Background color of the container
+                                                borderRadius: BorderRadius.circular(15), // Border radius
+                                              ),
+                                              alignment: Alignment.center, // Center the text within the container
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: [
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(left: 10,top: 2),
+                                                    child: Text(
+                                                      'YTD : ', // The text to display
+                                                      style: TextStyle(
+                                                        color: Colors.black, // Text color
+                                                        fontSize: 16, // Text size
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
+                                                    style: const TextStyle(
                                                       color: Colors.black, // Text color
                                                       fontSize: 16, // Text size
                                                     ),
                                                   ),
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text(
-                                                  '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
-                                                  style: const TextStyle(
-                                                    color: Colors.black, // Text color
-                                                    fontSize: 16, // Text size
-                                                  ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         )

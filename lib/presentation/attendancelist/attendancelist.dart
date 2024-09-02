@@ -197,7 +197,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                            child: ListView.builder(
                                itemCount: monthlyAttendance?.length ?? 0,
                                itemBuilder: (context,index){
-
                                  status = '${monthlyAttendance?[index]['sStatus']}';
                                   // Determine the color based on the country
                                   containerColor;
@@ -342,13 +341,16 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                      ),
                                                      alignment: Alignment.center, // Center the text within the container
                                                      child: 
-                                                       Icon(Icons.watch_later_rounded,size: 25,color: Color(0xFFD3D3D3)),
+                                                       Padding(
+                                                         padding: const EdgeInsets.only(left: 4),
+                                                         child: Icon(Icons.watch_later_rounded,size: 25,color: Color(0xFFD3D3D3)),
+                                                       ),
                                                      // Image.asset('assets/images/attendenclisticon_1.jpeg',
                                                      //   height: 20,width: 20,
                                                      //   fit: BoxFit.cover,),
 
                                                    ),
-                                                   SizedBox(width: 15), // Spacing between the two containers
+                                                   SizedBox(width: 19), // Spacing between the two containers
                                                    Text(
                                                        'In Time', // The text to display
                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle
@@ -395,7 +397,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                      Icon(Icons.watch_later_rounded,size: 25,color: Color(0xFFD3D3D3)),
 
                                                    ),
-                                                   SizedBox(width: 15), // Spacing between the two containers
+                                                   SizedBox(width: 5), // Spacing between the two containers
                                                    Text(
                                                        'Out Time', // The text to display
                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle
