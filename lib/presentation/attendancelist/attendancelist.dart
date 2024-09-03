@@ -487,9 +487,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                    )
                                                  ],
                                                ),
-
-
-
                                              ],
                                            ),
                                          )

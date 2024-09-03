@@ -66,6 +66,66 @@ class GeneralFunction {
     goNext(context);
   }
 
+  // logout dialogbBOX
+  void _showlogoutDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            title: const Column(
+              children: [
+                Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                  size: 50.0,
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            content: const Text(
+              "Do you want to log out?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  logout(context);
+                  Navigator.of(context).pop(); // Dismiss the dialog after action
+                  // You can call a function or perform any action you need here
+                },
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          );
+        }
+    );
+  }
+
   goNext(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
@@ -96,10 +156,7 @@ class GeneralFunction {
           DrawerHeader(
             decoration: const BoxDecoration(
               color: Color(0xFF0098a6),
-              // image: DecorationImage(
-              //   image: AssetImage('assets/images/splash_logo.png'), // Replace with your asset image path
-              //   fit: BoxFit.fill,
-              // ),
+
             ),
             child: Center(
               child: Column(
@@ -156,7 +213,9 @@ class GeneralFunction {
                 InkWell(
                     onTap: (){
                       print('---Logout---');
-                      logout(context);
+                      _showlogoutDialog(context);
+                     // logout(context);
+
                     },
                     child: drawerItem('assets/images/logout.jpeg', "Logout")),
                 // drawerItem('assets/images/tripdetails.jpeg', "Trip List"),

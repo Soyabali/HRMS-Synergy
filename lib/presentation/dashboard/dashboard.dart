@@ -46,6 +46,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   double? lat, long;
   var sFirstName,sCompEmailId;
    // DialogBox
+
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -57,13 +58,13 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
             title: const Column(
               children: [
                 Icon(
-                  Icons.check_circle,
-                  color: Colors.green,
+                  Icons.question_mark_rounded,
+                  color: Colors.red,
                   size: 50.0,
                 ),
                 SizedBox(height: 10.0),
                 Text(
-                  'Attendance',
+                  'Attendance Confirmation',
                   style: TextStyle(
                     fontSize: 22.0,
                     fontWeight: FontWeight.bold,
@@ -72,7 +73,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               ],
             ),
             content: const Text(
-              'Are you sure you want to confirm attendance?',
+              "Are you sure you want to mark today's attendance?",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16.0,
@@ -92,6 +93,64 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                 onPressed: () {
                   // Perform the "Yes" action here
                   getLocation();
+                  Navigator.of(context).pop(); // Dismiss the dialog after action
+                  // You can call a function or perform any action you need here
+                },
+                child: Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          );
+        }
+    );
+  }
+  void _showlogoutDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            title: const Column(
+              children: [
+                Icon(
+                  Icons.logout,
+                  color: Colors.red,
+                  size: 50.0,
+                ),
+                SizedBox(height: 10.0),
+                Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            content: const Text(
+              "Do you want to log out?",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16.0,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Dismiss the dialog
+                },
+                child: Text(
+                  'No',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  generalFunction.logout(context);
                   Navigator.of(context).pop(); // Dismiss the dialog after action
                   // You can call a function or perform any action you need here
                 },
@@ -227,27 +286,28 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
          // backgroundColor: Colors.blu
           backgroundColor: Color(0xFF0098a6),
          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 5),
             child: Text(
               'Welcome, Have a nice day!',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 16,
                 fontWeight: FontWeight.normal,
                 fontFamily: 'Montserrat',
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          centerTitle: true,
+          //centerTitle: true,
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
              // child: Icon(Icons.logout, size: 24,color: Colors.white),
               child:  InkWell(
                 onTap: (){
-                  generalFunction.logout(context);
-                },
+                  // logout function
+                  _showlogoutDialog(context);
+                  },
                 child: Container(
                   margin: EdgeInsets.all(8.0), // Apply margin around the image
                   child: Image.asset(

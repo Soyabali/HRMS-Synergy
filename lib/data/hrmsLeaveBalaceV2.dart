@@ -17,6 +17,8 @@ class Hrmsleavebalacev2Repo
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');
 
+    print('------------20---sEmpCode---$sEmpCode');
+
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsLeaveBalanceV2/hrmsLeaveBalanceV2";
     var hrmsLeaveBalanceApi = "$baseURL$endPoint";
