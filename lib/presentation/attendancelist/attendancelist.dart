@@ -169,7 +169,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                             child: Padding(
                               padding: EdgeInsets.only(left: isMarked ? 35 : 0), // Adjust left padding when icon is present
                               child:  Text('${reversedList?[index]['sMonthName']}', // Example month text
-                                 style: TextStyle(color: Colors.white, fontSize: 20),
+                              style: TextStyle(color: Colors.white, fontSize: 20),
                                ),
                             ),
                           ),

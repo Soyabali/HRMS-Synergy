@@ -779,84 +779,62 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         ),
                       ),
                       SizedBox(height: 10),
+
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // Space between the two columns
                           children: [
                             // First Column
                             Expanded(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    height: 40, // Adjust the height as needed
+                                    height: 40,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF0098a6),
-                                      // Change this to your preferred color
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
+                                              color: Color(0xFF0098a6),
+                                              // Change this to your preferred color
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Center(
-                                          child: Text(
-                                              'View Image',
-                                              style: AppTextStyle
-                                                  .font14OpenSansRegularWhiteTextStyle
-                                          ),
-                                        ),
-                                        const Icon(
-                                          Icons.arrow_forward,
-                                          color: Colors.white,
-                                        ),
+                                        Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                        Icon(Icons.arrow_forward ,color: Colors.white,),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            // Second Column
-                            SizedBox(width: 5.0),
+                            SizedBox(width: 2),
                             Expanded(
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16.0),
-                                    height: 40, // Adjust the height as needed
+                                    height: 40,
                                     decoration: BoxDecoration(
-                                      color: Color(0xFF2a697b),
+                                      color: Color(0xFF0098a6),
                                       // Change this to your preferred color
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: GestureDetector(
-                                      onTap: () {
-                                        print('---TAKE ACTION---');
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) =>
-                                              ReimbursementLog()),
-                                        );
+                                      onTap: (){
+                                                    // Navigator.push(
+                                                    //   context,
+                                                    //   MaterialPageRoute(builder: (context) =>
+                                                    //       ReimbursementLog()),
+                                                    // );
                                       },
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Center(
-                                            child: Text(
-                                                'Take Action',
-                                                style: AppTextStyle
-                                                    .font16OpenSansRegularWhiteTextStyle
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.arrow_forward,
-                                            color: Colors.white,
-                                          ),
+                                          Text('Take Action',style: AppTextStyle
+                                              .font14OpenSansRegularWhiteTextStyle),
+                                          Icon(Icons.arrow_forward,color: Colors.white),
                                         ],
                                       ),
                                     ),
@@ -864,6 +842,40 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 ],
                               ),
                             ),
+                            SizedBox(width: 2),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF0098a6),
+                                      // Change this to your preferred color
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: GestureDetector(
+                                      onTap: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              ReimbursementLog()),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                          Icon(Icons.arrow_forward,color: Colors.white),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+
                           ],
                         ),
                       ),
