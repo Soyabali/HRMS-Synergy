@@ -82,7 +82,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
     reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth);
     _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-    print(" -----xxxxx-  reimbursementStatusList--86-----> $reimbursementStatusList");
+    print(" -----xxxxx-  reimbursementStatusList--85-----> $reimbursementStatusList");
     // setState(() {});
   }
 
@@ -91,8 +91,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     setState(() {
       _filteredData = reimbursementStatusList?.where((item) {
         String location = item['sProjectName'].toLowerCase();
-        String pointType = item['sEmpCode'].toLowerCase();
-        String sector = item['sExpDetails'].toLowerCase();
+        String pointType = item['sStatusName'].toLowerCase();
+        String sector = item['sExpHeadName'].toLowerCase();
         return location.contains(query) ||
             pointType.contains(query) ||
             sector.contains(query);
@@ -605,14 +605,20 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                             CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                  'Fright Inward / Outward',
+                                  item['sExpHeadName'] ?? '',
                                   style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle
+                                      .font12OpenSansRegularBlackTextStyle,
+                                maxLines: 2, // Limits the text to 2 lines
+                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                softWrap: true,
                               ),
                               Text(
                                   item['sProjectName'] ?? '',
                                   style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle
+                                      .font12OpenSansRegularBlackTextStyle,
+                                maxLines: 2, // Limits the text to 2 lines
+                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                softWrap: true,
                               ),
                             ],
                           )
@@ -733,34 +739,44 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Icon(Icons.speaker_notes, size: 20,
-                              color: Colors.black,),
+                            Icon(Icons.speaker_notes, size: 20, color: Colors.black),
                             SizedBox(width: 10),
-                            const Text('Status', style: TextStyle(
+                            const Text(
+                              'Status',
+                              style: TextStyle(
                                 color: Color(0xFF0098a6),
                                 fontSize: 14,
-                                fontWeight: FontWeight.normal
-                            ),),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                             SizedBox(width: 5),
-                            const Text(':', style: TextStyle(
+                            const Text(
+                              ':',
+                              style: TextStyle(
                                 color: Color(0xFF0098a6),
                                 fontSize: 14,
-                                fontWeight: FontWeight.normal
-                            ),),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
                             SizedBox(width: 5),
-                            const Text('Pending At Manager', style: TextStyle(
-                                color: Color(0xFF0098a6),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal
-                            ),),
-                            Spacer(),
+                            Expanded(
+                              child: Text(
+                                item['sStatusName'] ?? '',
+                                style: TextStyle(
+                                  color: Color(0xFF0098a6),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.normal,
+                                ),
+                                maxLines: 2, // Allows up to 2 lines for the text
+                                overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
+                              ),
+                            ),
+                           // Spacer(),
                             Container(
                               height: 30,
                               padding: EdgeInsets.symmetric(horizontal: 16.0),
-                              // Optional: Adjust padding for horizontal space
                               decoration: BoxDecoration(
                                 color: Color(0xFF0098a6),
-                                // Change this to your preferred color
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Center(
@@ -768,15 +784,61 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                   item['fAmount'] ?? '',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    // Change this to your preferred text color
-                                    fontSize: 14.0, // Adjust font size as needed
+                                    fontSize: 14.0,
                                   ),
                                 ),
                               ),
                             ),
-      
                           ],
                         ),
+                        // child: Row(
+                        //   mainAxisAlignment: MainAxisAlignment.start,
+                        //   children: [
+                        //     Icon(Icons.speaker_notes, size: 20,
+                        //       color: Colors.black,),
+                        //     SizedBox(width: 10),
+                        //     const Text('Status', style: TextStyle(
+                        //         color: Color(0xFF0098a6),
+                        //         fontSize: 14,
+                        //         fontWeight: FontWeight.normal
+                        //     ),),
+                        //     SizedBox(width: 5),
+                        //     const Text(':', style: TextStyle(
+                        //         color: Color(0xFF0098a6),
+                        //         fontSize: 14,
+                        //         fontWeight: FontWeight.normal
+                        //     ),),
+                        //     SizedBox(width: 5),
+                        //     Text(item['sStatusName'] ?? '', style: TextStyle(
+                        //         color: Color(0xFF0098a6),
+                        //         fontSize: 14,
+                        //         fontWeight: FontWeight.normal
+                        //     ),
+                        //     ),
+                        //     Spacer(),
+                        //     Container(
+                        //       height: 30,
+                        //       padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        //       // Optional: Adjust padding for horizontal space
+                        //       decoration: BoxDecoration(
+                        //         color: Color(0xFF0098a6),
+                        //         // Change this to your preferred color
+                        //         borderRadius: BorderRadius.circular(15),
+                        //       ),
+                        //       child: Center(
+                        //         child: Text(
+                        //           item['fAmount'] ?? '',
+                        //           style: TextStyle(
+                        //             color: Colors.white,
+                        //             // Change this to your preferred text color
+                        //             fontSize: 14.0, // Adjust font size as needed
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //
+                        //   ],
+                        // ),
                       ),
                       SizedBox(height: 10),
 
@@ -802,7 +864,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                        Icon(Icons.arrow_forward ,color: Colors.white,),
+                                        Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
                                       ],
                                     ),
                                   ),
@@ -834,7 +896,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                         children: [
                                           Text('Take Action',style: AppTextStyle
                                               .font14OpenSansRegularWhiteTextStyle),
-                                          Icon(Icons.arrow_forward,color: Colors.white),
+                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
                                         ],
                                       ),
                                     ),
@@ -866,7 +928,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                          Icon(Icons.arrow_forward,color: Colors.white),
+                                          SizedBox(width: 10),
+                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
                                         ],
                                       ),
                                     ),

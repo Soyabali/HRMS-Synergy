@@ -5,12 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/getTdMonthRepo.dart';
 import '../../data/hrmsLeaveBalaceV2.dart';
+import '../../domain/hrmsLeavebalanceV2.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 import 'applyleaveSubmitForm.dart';
 
 
 class Applyleave extends StatelessWidget {
+
   const Applyleave({super.key});
 
   @override
@@ -36,16 +38,18 @@ class ApplyLeaveHome extends StatefulWidget {
 }
 
 class _AttendaceListHomeState extends State<ApplyLeaveHome> {
+
   bool _isSwitchOn = false;
   bool isMarked = false;
   int? markedIndex=0;
   Color? containerColor;
   Color? textColor;
   List<dynamic>?  getgetYtdMonth;
-  List<dynamic>?  hrmsLeaveBalaceV2List;
+  List<dynamic>?  hrmsLeaveBalanceV2;
   var sLvDescTitle;
   var dDate;
   var sLvDesc;
+  List<Hrmsleavebalancev2Model>? hrmsLeaveBalaceV2List;
 
   // month api call
   getYtdMonth() async {
@@ -53,19 +57,15 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
     dDate =  '${getgetYtdMonth?[0]['dDate']}';
     print('------54---$dDate');
     if(dDate!=null){
-       /// TODO REMOVE COMMENT AND CALL API
-      print('---call the api---');
       hrmsLeaveBalaceV2(dDate);
     }
-
+    hrmsLeaveBalaceV2(dDate);
   }
   // leave balance api
 
   hrmsLeaveBalaceV2(String dDate) async {
     hrmsLeaveBalaceV2List = await Hrmsleavebalacev2Repo().getHrmsleavebalacev2(dDate);
-    print(" -----xxxxx-  hrmsLeaveBalaceV2List--63---> $hrmsLeaveBalaceV2List");
-    if(hrmsLeaveBalaceV2List!=null){
-    }
+    print(" -----xxxxx-  hrmsLeaveBalaceV2List--69---> $hrmsLeaveBalaceV2List");
   }
 
   @override
@@ -122,46 +122,46 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-             SizedBox(height: 15),
-             Padding(
-               padding: const EdgeInsets.only(left: 5.0,right: 5.0),
-               child: Row(
-                         mainAxisAlignment: MainAxisAlignment.start, // Aligns items to the start
-                         children: [
-                           // AssetImage inside an Image widget
-                           Image.asset(
-                'assets/images/ic_expense.png', // Replace with your asset image path
-                width: 25, // Set the width of the image
-                height: 25, // Set the height of the image
+              SizedBox(height: 15),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start, // Aligns items to the start
+                  children: [
+                    // AssetImage inside an Image widget
+                    Image.asset(
+                      'assets/images/ic_expense.png', // Replace with your asset image path
+                      width: 25, // Set the width of the image
+                      height: 25, // Set the height of the image
+                    ),
+                    SizedBox(width: 10), // Adds spacing between the image and the text
+                    // Text Widget
+                    Text(
+                        'Check Your YTD Entitlement',
+                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                    ),
+                    SizedBox(width: 10), // Adds spacing between the text and the checkbox
+                    // Checkbox Widget
+                    Switch(
+                      value: _isSwitchOn,
+                      onChanged: (value) {
+                        setState(() {
+                          _isSwitchOn = value; // Update the switch state
+                        });
+                      },
+                    ),
+                    // Display the state of the switch
+                    Text(
+                        _isSwitchOn
+                            ? 'ON' : 'OFF',
+                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                    ),
+                  ],
                 ),
-                           SizedBox(width: 10), // Adds spacing between the image and the text
-                           // Text Widget
-                           Text(
-                'Check Your YTD Entitlement',
-                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                           ),
-                           SizedBox(width: 10), // Adds spacing between the text and the checkbox
-                           // Checkbox Widget
-                           Switch(
-                value: _isSwitchOn,
-                onChanged: (value) {
-                  setState(() {
-                    _isSwitchOn = value; // Update the switch state
-                  });
-                },
-                 ),
-                           // Display the state of the switch
-                           Text(
-                _isSwitchOn
-                    ? 'ON' : 'OFF',
-                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                           ),
-                         ],
-                       ),
-             ),
+              ),
               _isSwitchOn
-              ? appleaveSwitchOnCode() //appleaveSwitchOnCode_2()
-             :
+                  ? appleaveSwitchOnCode() //appleaveSwitchOnCode_2()
+                  :
               //appleaveSwithOffCode_3(),
               appleaveSwithOffCode_2()
             ],
@@ -187,13 +187,14 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                 return GestureDetector(
                   onTap: (){
                     markedIndex = isMarked ? null : index;
-                    var dDate = '${getgetYtdMonth?[index]['dDate']}';
-                    print('----150----xxx---$dDate');
-                    setState(() {
+                    var date = '${getgetYtdMonth?[index]['dDate']}';
+                    print('----191----xxx---$date');
 
+                    setState(() {
+                      hrmsLeaveBalaceV2(date);
                     });
+                   // hrmsLeaveBalaceV2(date2);
                     /// TODO CALL A NEXT API
-                    hrmsLeaveBalaceV2(dDate);
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(horizontal: 8), // Add spacing between items
@@ -242,12 +243,15 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
         Padding(
           padding: const EdgeInsets.only(left: 0.0, right: 0.0,bottom: 150), // Left and right padding of 5
           child: Container(
-             // height: MediaQuery.of(context).size.height-50,
+            // height: MediaQuery.of(context).size.height-50,
               height: MediaQuery.of(context).size.height-200,
               child: ListView.builder(
                 itemCount: hrmsLeaveBalaceV2List?.length ?? 0,
                 itemBuilder: (context,index){
-                  sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                  Hrmsleavebalancev2Model temple = hrmsLeaveBalaceV2List![index];
+
+                  // sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
+                  sLvDesc = temple.sLvDesc;
                   sLvDescTitle = (sLvDesc=="Leave Without Pay")? "Note:-Salary will be deducated for this leave.":"";
                   containerColor;
                   textColor;
@@ -273,7 +277,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                           // SizedBox(height: 5),
+                            // SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,7 +316,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                             ),
                                             SizedBox(height: 5),
                                             Text(
-                                              '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}',
+                                              temple.sLvDesc,
+                                              //'${hrmsLeaveBalaceV2List?[index].sLvDesc}',
                                               style: TextStyle(
                                                   color: textColor,
                                                   fontSize: 16,
@@ -323,7 +328,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         Spacer(),
                                         Visibility(
-                                          visible: '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}' != "Leave Without Pay",
+                                          visible: temple.sLvDesc !="Leave Without Pay",
+                                          // visible: '${hrmsLeaveBalaceV2List?[index].sLvDesc}' != "Leave Without Pay",
                                           child: Padding(
                                             padding: const EdgeInsets.only(top: 12,right: 15),
                                             child: Container(
@@ -349,8 +355,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                                     ),
                                                   ),
                                                   SizedBox(width: 5),
-                                                  Text(
-                                                    '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
+                                                  Text('${hrmsLeaveBalaceV2List?[index].fYTD}', // The text to display
                                                     style: const TextStyle(
                                                       color: Colors.black, // Text color
                                                       fontSize: 16, // Text size
@@ -386,7 +391,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child:Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fOpeningBal']}', // The text to display
+                                          '${hrmsLeaveBalaceV2List?[index].fOpeningBal}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -419,7 +424,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fEntitlement']}', // The text to display
+                                          temple.fEntitlement, // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -452,7 +457,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fAvailed']}', // The text to display
+                                          temple.fAvailed, // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -485,7 +490,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fClosingBalance']}', // The text to display
+                                          temple.fClosingBalance,
+                                          //  '${hrmsLeaveBalaceV2List?[index].fClosingBalance}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -522,8 +528,10 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                     padding: const EdgeInsets.only(bottom: 10,right: 10),
                                     child: GestureDetector(
                                       onTap: () async{
-                                        var sLvTypeCode = '${hrmsLeaveBalaceV2List?[index]['sLvTypeCode']}';
-                                        sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                                        var sLvTypeCode = temple.sLvTypeCode;
+                                        // var sLvTypeCode = '${hrmsLeaveBalaceV2List?[index].sLvTypeCode}';
+                                        //sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
+                                        sLvDesc = temple.sLvDesc;
                                         // print('---511---${sLvDesc}');
                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var sFirstName = prefs.getString('sFirstName');// sLvTypeCode
@@ -577,9 +585,9 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
               child: ListView.builder(
                 itemCount: hrmsLeaveBalaceV2List?.length ?? 0,
                 itemBuilder: (context,index){
-                  sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                  sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
+                  // sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
                   sLvDescTitle = (sLvDesc=="Leave Without Pay")? "Note:-Salary will be deducated for this leave.":"";
-
                   containerColor;
                   textColor;
                   var note;
@@ -642,7 +650,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                             ),
                                             SizedBox(height: 5),
                                             Text(
-                                              '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}',
+                                              '${hrmsLeaveBalaceV2List?[index].sLvDesc}',
                                               style: TextStyle(
                                                   color: textColor,
                                                   fontSize: 16,
@@ -678,7 +686,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                                 ),
                                                 SizedBox(width: 5),
                                                 Text(
-                                                  '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
+                                                  '${hrmsLeaveBalaceV2List?[index].fYTD}', // The text to display
                                                   style: const TextStyle(
                                                     color: Colors.black, // Text color
                                                     fontSize: 16, // Text size
@@ -713,7 +721,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child:Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fOpeningBal']}', // The text to display
+                                          '${hrmsLeaveBalaceV2List?[index].fOpeningBal}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -746,7 +754,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fEntitlement']}', // The text to display
+                                          '${hrmsLeaveBalaceV2List?[index].fEntitlement}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -779,7 +787,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fAvailed']}', // The text to display
+                                          '${hrmsLeaveBalaceV2List?[index].fAvailed}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -812,7 +820,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fClosingBalance']}', // The text to display
+                                          '${hrmsLeaveBalaceV2List?[index].fClosingBalance}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -849,7 +857,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                     padding: const EdgeInsets.only(bottom: 10,right: 10),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                                        sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
                                         // print('---511---${sLvDesc}');
                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var sFirstName = prefs.getString('sFirstName');// sLvTypeCode
@@ -892,7 +900,6 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
       ],
     );
   }
-
   Widget appleaveSwitchOnCode_2() {
     return Text("Switch is ON - Display this layout");
   }
@@ -909,7 +916,9 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
               child: ListView.builder(
                 itemCount: hrmsLeaveBalaceV2List?.length ?? 0,
                 itemBuilder: (context,index){
-                  sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                  // hrmsLeaveBalaceV2List
+                  Hrmsleavebalancev2Model temple = hrmsLeaveBalaceV2List![index];
+                  sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
                   sLvDescTitle = (sLvDesc=="Leave Without Pay")? "Note:-Salary will be deducated for this leave.":"";
 
                   containerColor;
@@ -925,7 +934,6 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                   }
                   return  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                   // padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
                     child:Card(
                         color: Colors.white,
                         elevation: 5.0, // Elevation of the card
@@ -936,7 +944,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                          //  SizedBox(height: 10),
+                            //  SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -975,7 +983,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                             ),
                                             SizedBox(height: 5),
                                             Text(
-                                              '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}',
+                                              temple.sLvDesc,
+                                              //'${hrmsLeaveBalaceV2List?[index].sLvDesc},
                                               style: TextStyle(
                                                   color: textColor,
                                                   fontSize: 16,
@@ -986,7 +995,9 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         Spacer(),
                                         Visibility(
-                                          visible: '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}' != "Leave Without Pay",
+                                          // visible: '${hrmsLeaveBalaceV2List?[index].sLvDesc}' != "Leave Without Pay",
+                                          visible: temple.sLvDesc != "Leave Without Pay",
+
                                           child: Padding(
                                             padding: const EdgeInsets.only(top: 12,right: 15),
                                             child: Container(
@@ -1013,7 +1024,7 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                                   ),
                                                   SizedBox(width: 5),
                                                   Text(
-                                                    '${hrmsLeaveBalaceV2List?[index]['fYTD']}', // The text to display
+                                                    temple.fYTD, // The text to display
                                                     style: const TextStyle(
                                                       color: Colors.black, // Text color
                                                       fontSize: 16, // Text size
@@ -1049,7 +1060,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child:Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fOpeningBal']}', // The text to display
+                                          temple.fOpeningBal,
+                                          //  '${hrmsLeaveBalaceV2List?[index].fOpeningBal}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -1082,7 +1094,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fEntitlement']}', // The text to display
+                                          temple.fEntitlement,
+                                          //'${hrmsLeaveBalaceV2List?[index].fEntitlement}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -1115,7 +1128,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fAvailed']}', // The text to display
+                                          temple.fAvailed,
+                                          // '${hrmsLeaveBalaceV2List?[index].fAvailed}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -1148,7 +1162,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                         ),
                                         alignment: Alignment.center, // Center the text within the container
                                         child: Text(
-                                          '${hrmsLeaveBalaceV2List?[index]['fClosingBalance']}', // The text to display
+                                          temple.fClosingBalance,
+                                          // '${hrmsLeaveBalaceV2List?[index].fClosingBalance}', // The text to display
                                           style: TextStyle(
                                             color: Colors.grey, // Text color
                                             fontSize: 16, // Text size
@@ -1185,7 +1200,8 @@ class _AttendaceListHomeState extends State<ApplyLeaveHome> {
                                     padding: const EdgeInsets.only(bottom: 10,right: 10),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        sLvDesc = '${hrmsLeaveBalaceV2List?[index]['sLvDesc']}';
+                                        sLvDesc = temple.sLvDesc;
+                                        // sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
                                         // print('---511---${sLvDesc}');
                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var sFirstName = prefs.getString('sFirstName');// sLvTypeCode

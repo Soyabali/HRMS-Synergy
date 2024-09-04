@@ -332,7 +332,9 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                          ),
                                          SizedBox(height: 10),
                                          Visibility(
-                                           visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off',
+                                           visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off'
+                                               && '${monthlyAttendance?[index]['sStatus']}' != 'On Leave'  && '${monthlyAttendance?[index]['sStatus']}' != 'Work From Home',
+
                                            child: Column(
                                              mainAxisAlignment: MainAxisAlignment.start,
                                              children: [
@@ -340,10 +342,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                  children: [
                                                    Container(
                                                      child:
-                                                     monthlyAttendance?[index]['sInTime'] == null || monthlyAttendance?[index]['sInTime'].isEmpty
-                                                     && monthlyAttendance?[index]['sOutTime'] == null || monthlyAttendance?[index]['sOutTime'].isEmpty
-                                                         ? SizedBox.shrink()
-                                                     :
                                                      Column(
                                                           children: [
                                                             Padding(

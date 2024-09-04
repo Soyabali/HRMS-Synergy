@@ -15,13 +15,14 @@ class Hrmsreimbursementstatusv3Repo {
     print('--15 --firstOfMonthDay--$firstOfMonthDay');
     print('--16 --lastDayOfCurrentMonth--$lastDayOfCurrentMonth');
     print('--17 --contactNo--$contactNo');
+    showLoader();
 
     try {
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsreimbursementstatusV3/hrmsreimbursementstatusV3";
       var bindsectorApi = "$baseURL$endPoint";
 
-      showLoader();
+     // showLoader();
       var headers = {
         'token': '$sToken',
         'Content-Type': 'application/json'

@@ -24,7 +24,8 @@ class ApplyLeaveSubmitFormHome extends StatefulWidget {
 
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
-  String _selectedValue = "Full";
+  String _selectedValue = "Full Day";
+  String _selectedValue2 = "Full";
 
   List stateList = [];
   List<dynamic> distList = [];
@@ -137,6 +138,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   }
      // to Date SelectedLogic
   void toDateSelectLogic() {
+
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
     DateTime? toDate2 = dateFormat.parse(toDate!);
@@ -203,11 +205,11 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         backgroundColor: Color(0xFF0098a6),
         leading: InkWell(
           onTap: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Applyleave()),
-            );
+             Navigator.pop(context);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => const Applyleave()),
+            // );
           },
           child: const Padding(
             padding: EdgeInsets.only(left: 5.0),
@@ -221,7 +223,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'Leave Application',
+            'Leave Application xxx',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -470,7 +472,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                     ),
                                   ),
                                   SizedBox(width: 5),
-
                                   // Second widget: Container with the TextFormField
                                   Flexible(
                                     flex: 8, // Adjust the flex value as per your design
@@ -540,7 +541,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                             // You can also set this value to a Text widget
                                             displayText = _selectedValue;
                                           }
-                                          },
+                                        },
                                       ),
                                       Flexible(
                                         child: Text(
@@ -610,8 +611,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   ),
                                 ),
                               ],
-                                                        ),
-                                                      ),
+                              ),
+                              ),
                             ),
 
                             SizedBox(height: 25),
@@ -620,6 +621,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   .font14OpenSansRegularBlack45TextStyle),
                             ),
                             SizedBox(height: 15),
+
                             InkWell(
                               onTap: () async {
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -630,6 +632,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
                                   // Call Api
                                     print('---call Api---');
+
                                       var hrmsPopWarning = await HrmsLeaveApplicationRepo()
                                           .hrmsleave(
                                           context,
@@ -642,6 +645,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           '${widget.sLvDesc}',
                                            '${widget.sLvTypeCode}'
                                       );
+
+
                                       print('---975--$hrmsPopWarning');
                                       if(hrmsPopWarning==null){
                                         displayToast("Response is Null");

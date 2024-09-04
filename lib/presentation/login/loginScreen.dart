@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,7 +37,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   TextEditingController _phoneNumberController = TextEditingController(text: "9871950881");
-  TextEditingController passwordController = TextEditingController(text: "2345");
+  TextEditingController passwordController = TextEditingController(text: "123");
 
   final _formKey = GlobalKey<FormState>();
   bool _isObscured = true;

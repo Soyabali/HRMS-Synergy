@@ -66,12 +66,14 @@ class HrmsLeaveApplicationRepo
       if (response.statusCode == 200)
       {
         hideLoader();
+        print('----${response.statusCode}');
         var data = await response.stream.bytesToString();
         //print('--74---xxx---${jsonDecode(data)}');
         // Map<String, dynamic> parsedJson = jsonDecode(data);
         //distList = parsedJson['Data'];
         // distList = jsonDecode(data);
         List<dynamic> hrmsleavebalacev2List = jsonDecode(data);
+        print('----75---$hrmsleavebalacev2List');
         return hrmsleavebalacev2List;
       } else
       {
