@@ -12,18 +12,17 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 import 'applyLeave.dart';
 
-
 class ApplyLeaveSubmitFormHome extends StatefulWidget {
-
-  final sLvDesc,sFirstName,sLvTypeCode;
-  const ApplyLeaveSubmitFormHome(this.sLvDesc, this.sFirstName, this.sLvTypeCode, {super.key});
+  final sLvDesc, sFirstName, sLvTypeCode;
+  const ApplyLeaveSubmitFormHome(
+      this.sLvDesc, this.sFirstName, this.sLvTypeCode,
+      {super.key});
 
   @override
   State<ApplyLeaveSubmitFormHome> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
-
   String _selectedValue = "Full Day";
   String _selectedValue2 = "Full";
 
@@ -70,6 +69,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   String? sFirstName;
   int totalDays = 0;
   String displayText = "";
+  var hrmsPopWarning;
 
   // Uplode Id Proof with gallary
 
@@ -86,6 +86,93 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         fontSize: 16.0);
   }
 
+  // dialogBox
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     getLocation();
+                    //     Navigator.of(context).pop();
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.white, // Set the background color to white
+                    //     foregroundColor: Colors.black, // Set the text color to black
+                    //   ),
+                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    // )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -95,7 +182,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     toDate = DateFormat('dd/MMM/yyyy').format(currentDate);
     calculateTotalDays();
     super.initState();
-     _reasonfocus = FocusNode();
+    _reasonfocus = FocusNode();
     _addressfocus = FocusNode();
   }
   // clculateTotalDays
@@ -106,14 +193,14 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     DateTime? toDate2 = dateFormat.parse(toDate!);
 
     setState(() {
-      totalDays = toDate2.difference(fromDate2).inDays + 1; // Adding 1 to include both start and end dates
+      totalDays = toDate2.difference(fromDate2).inDays +
+          1; // Adding 1 to include both start and end dates
     });
     setState(() {
       if (totalDays <= 1) {
         displayText = _selectedValue; // Set your specific value
       } else {
-        displayText = totalDays.toString()+' Days'; // Display total days
-
+        displayText = totalDays.toString() + ' Days'; // Display total days
       }
     });
     print('Total days:----114---: $displayText');
@@ -123,22 +210,22 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-     _reasonfocus.dispose();
+    _reasonfocus.dispose();
     _addressfocus.dispose();
     _reasonController.dispose();
     _addressController.dispose();
   }
 
-  getACurrentDate(){
+  getACurrentDate() {
     DateTime now = DateTime.now();
     formDate = DateFormat('dd/MMM/yyyy').format(now);
     //
     DateTime now2 = DateTime.now();
     toDate = DateFormat('dd/MMM/yyyy').format(now2);
   }
-     // to Date SelectedLogic
-  void toDateSelectLogic() {
 
+  // to Date SelectedLogic
+  void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
     DateTime? toDate2 = dateFormat.parse(toDate!);
@@ -164,8 +251,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       displayToast("From date can not be greater than To Date");
     }
   }
+
   //
-  void compareDates(String fromDate,String toDate) {
+  void compareDates(String fromDate, String toDate) {
     String fromDateString = "29/Aug/2024";
     String toDateString = "30/Aug/2024";
 
@@ -205,7 +293,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         backgroundColor: Color(0xFF0098a6),
         leading: InkWell(
           onTap: () {
-             Navigator.pop(context);
+            Navigator.pop(context);
             // Navigator.push(
             //   context,
             //   MaterialPageRoute(builder: (context) => const Applyleave()),
@@ -241,15 +329,15 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: SizedBox(
                 height: 150, // Height of the container
-               // width: 200, // Width of the container
-                width: MediaQuery.of(context).size.width,
+                width: 200, // Width of the container
                 child: Opacity(
                   opacity: 0.9,
                   //step3.jpg
                   child: Image.asset(
                     'assets/images/leave.jpeg',
                     // Replace 'image_name.png' with your asset image path
-                    fit: BoxFit.cover, // Adjust the image fit to cover the container
+                    fit: BoxFit
+                        .cover, // Adjust the image fit to cover the container
                   ),
                 ),
               ),
@@ -263,7 +351,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.5), // Color of the shadow
+                        color:
+                            Colors.grey.withOpacity(0.5), // Color of the shadow
                         spreadRadius: 5, // Spread radius
                         blurRadius: 7, // Blur radius
                         offset: Offset(0, 3), // Offset of the shadow
@@ -284,7 +373,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                               children: <Widget>[
                                 // 'assets/images/favicon.png',
                                 Container(
-                                    margin: const EdgeInsets.only(left: 0, right: 10, top: 10),
+                                    margin: const EdgeInsets.only(
+                                        left: 0, right: 10, top: 10),
                                     child: const Icon(
                                       Icons.person,
                                       size: 24,
@@ -298,7 +388,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 ),
                                 Spacer(),
                                 Text('${widget.sLvDesc}',
-                                    style: AppTextStyle.font14OpenSansRegularBlack45TextStyle)
+                                    style: AppTextStyle
+                                        .font14OpenSansRegularBlack45TextStyle)
                               ],
                             ),
                             SizedBox(height: 15),
@@ -311,40 +402,53 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   lastDate: DateTime(2100),
                                 );
                                 if (pickedDate != null) {
-                                  String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                                  String formattedDate =
+                                      DateFormat('dd/MMM/yyyy')
+                                          .format(pickedDate);
                                   setState(() {
-                                    tempDate = formDate; // Save the current formDate before updating
+                                    tempDate =
+                                        formDate; // Save the current formDate before updating
                                     formDate = formattedDate;
                                     calculateTotalDays();
                                   });
                                   fromDateSelectLogic();
-
                                 }
-                                },
-
+                              },
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween, // Space between widgets
                                 children: [
                                   // First widget: Text widget
                                   Text('From Date :',
-                                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                      style: AppTextStyle
+                                          .font14OpenSansRegularBlack45TextStyle),
                                   // Second widget: Container with light gray background
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical:
+                                            8), // Padding inside the Container
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFD3D3D3), // Light gray background color
-                                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                                      color: Color(
+                                          0xFFD3D3D3), // Light gray background color
+                                      borderRadius: BorderRadius.circular(
+                                          8), // Rounded corners
                                     ),
                                     child: Row(
                                       children: [
                                         // First widget inside the Container: Icon
                                         const Icon(
                                           Icons.calendar_month, // Example icon
-                                          color: Color(0xFF0098a6), // Icon color
+                                          color:
+                                              Color(0xFF0098a6), // Icon color
                                         ),
-                                        SizedBox(width: 8), // Spacing between Icon and Text
+                                        SizedBox(
+                                            width:
+                                                8), // Spacing between Icon and Text
                                         // Second widget inside the Container: Text widget
-                                        Text('$formDate', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                        Text('$formDate',
+                                            style: AppTextStyle
+                                                .font14OpenSansRegularBlack45TextStyle),
                                       ],
                                     ),
                                   ),
@@ -353,8 +457,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             ),
                             SizedBox(height: 15),
                             GestureDetector(
-                              onTap: ()async{
-
+                              onTap: () async {
                                 DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
@@ -362,44 +465,54 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   lastDate: DateTime(2100),
                                 );
                                 if (pickedDate != null) {
-                                  String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                                  String formattedDate =
+                                      DateFormat('dd/MMM/yyyy')
+                                          .format(pickedDate);
                                   setState(() {
-                                    tempDate = toDate; // Save the current toDate before updating
+                                    tempDate =
+                                        toDate; // Save the current toDate before updating
                                     toDate = formattedDate;
                                     calculateTotalDays();
                                   });
                                   toDateSelectLogic();
                                 }
-                                },
+                              },
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween, // Space between widgets
                                 children: [
                                   // First widget: Text widget
-                                  Text(
-                                    'To Date :',
-                                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
-                                  ),
+                                  Text('To Date :',
+                                      style: AppTextStyle
+                                          .font14OpenSansRegularBlack45TextStyle),
                                   // Second widget: Container with light gray background
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8), // Padding inside the Container
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical:
+                                            8), // Padding inside the Container
                                     decoration: BoxDecoration(
-                                      color: Color(0xFFD3D3D3), // Light gray background color
-                                      borderRadius: BorderRadius.circular(8), // Rounded corners
+                                      color: Color(
+                                          0xFFD3D3D3), // Light gray background color
+                                      borderRadius: BorderRadius.circular(
+                                          8), // Rounded corners
                                     ),
                                     child: Row(
                                       children: [
                                         // First widget inside the Container: Icon
                                         const Icon(
                                           Icons.calendar_month, // Example icon
-                                          color: Color(0xFF0098a6), // Icon color
+                                          color:
+                                              Color(0xFF0098a6), // Icon color
                                         ),
-                                        SizedBox(width: 8), // Spacing between Icon and Text
+                                        SizedBox(
+                                            width:
+                                                8), // Spacing between Icon and Text
 
                                         // Second widget inside the Container: Text widget
-                                        Text(
-                                          '$toDate',
-                                            style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
-                                        ),
+                                        Text('$toDate',
+                                            style: AppTextStyle
+                                                .font14OpenSansRegularBlack45TextStyle),
                                       ],
                                     ),
                                   ),
@@ -414,22 +527,28 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 children: [
                                   // First widget: Text widget with fixed width
                                   Flexible(
-                                    flex: 2, // Adjust the flex value as per your design
+                                    flex:
+                                        2, // Adjust the flex value as per your design
                                     child: Text(
                                       'Reason',
-                                      style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                      overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
+                                      style: AppTextStyle
+                                          .font14OpenSansRegularBlack45TextStyle,
+                                      overflow: TextOverflow
+                                          .ellipsis, // Add ellipsis if the text is too long
                                     ),
                                   ),
                                   SizedBox(width: 10),
                                   // Second widget: Container with the TextFormField
                                   Flexible(
-                                    flex: 8, // Adjust the flex value as per your design
+                                    flex:
+                                        8, // Adjust the flex value as per your design
                                     child: Container(
-                                      height: 40, // Adjust the height to fit within the parent container
+                                      height:
+                                          40, // Adjust the height to fit within the parent container
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Rounded corners
                                       ),
                                       child: Container(
                                         color: Colors.white,
@@ -437,16 +556,26 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           focusNode: _reasonfocus,
                                           controller: _reasonController,
                                           textInputAction: TextInputAction.next,
-                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                          onEditingComplete: () =>
+                                              FocusScope.of(context)
+                                                  .nextFocus(),
                                           decoration: const InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                    horizontal:
+                                                        10), // Adjust padding
                                             border: OutlineInputBorder(),
-                                            filled: true, // Enable background color
-                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                            filled:
+                                                true, // Enable background color
+                                            fillColor: Color(
+                                                0xFFf2f3f5), // Set your desired background color here
                                           ),
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          maxLines: 1, // Keeps the TextFormField to a single line
-                                         // keyboardType: TextInputType.text,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          maxLines:
+                                              1, // Keeps the TextFormField to a single line
+                                          // keyboardType: TextInputType.text,
                                           showCursor: true,
                                           // validator: (value) {
                                           //   if (value == null || value.isEmpty) {
@@ -458,7 +587,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                       ),
                                     ),
                                   ),
-
                                 ],
                               ),
                             ),
@@ -470,22 +598,28 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 children: [
                                   // First widget: Text widget with fixed width
                                   Flexible(
-                                    flex: 2, // Adjust the flex value as per your design
+                                    flex:
+                                        2, // Adjust the flex value as per your design
                                     child: Text(
                                       'Address',
-                                      style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                      overflow: TextOverflow.ellipsis, // Add ellipsis if the text is too long
+                                      style: AppTextStyle
+                                          .font14OpenSansRegularBlack45TextStyle,
+                                      overflow: TextOverflow
+                                          .ellipsis, // Add ellipsis if the text is too long
                                     ),
                                   ),
                                   SizedBox(width: 5),
                                   // Second widget: Container with the TextFormField
                                   Flexible(
-                                    flex: 8, // Adjust the flex value as per your design
+                                    flex:
+                                        8, // Adjust the flex value as per your design
                                     child: Container(
-                                      height: 40, // Adjust the height to fit within the parent container
+                                      height:
+                                          40, // Adjust the height to fit within the parent container
                                       decoration: BoxDecoration(
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(8), // Rounded corners
+                                        borderRadius: BorderRadius.circular(
+                                            8), // Rounded corners
                                       ),
                                       child: Container(
                                         color: Colors.white,
@@ -493,15 +627,25 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           focusNode: _addressfocus,
                                           controller: _addressController,
                                           textInputAction: TextInputAction.next,
-                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                          onEditingComplete: () =>
+                                              FocusScope.of(context)
+                                                  .nextFocus(),
                                           decoration: const InputDecoration(
-                                            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10), // Adjust padding
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 10,
+                                                    horizontal:
+                                                        10), // Adjust padding
                                             border: OutlineInputBorder(),
-                                            filled: true, // Enable background color
-                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                            filled:
+                                                true, // Enable background color
+                                            fillColor: Color(
+                                                0xFFf2f3f5), // Set your desired background color here
                                           ),
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                                          maxLines: 1, // Keeps the TextFormField to a single line
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
+                                          maxLines:
+                                              1, // Keeps the TextFormField to a single line
                                           keyboardType: TextInputType.text,
                                           showCursor: true,
                                         ),
@@ -513,13 +657,13 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             ),
                             SizedBox(height: 15),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between widgets
+                              mainAxisAlignment: MainAxisAlignment
+                                  .spaceBetween, // Space between widgets
                               children: [
                                 // First widget: Text widget
-                                Text(
-                                  'Applied For :',
-                                style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
-                                ),
+                                Text('Applied For :',
+                                    style: AppTextStyle
+                                        .font14OpenSansRegularBlack45TextStyle),
                               ],
                             ),
                             SizedBox(height: 15),
@@ -527,170 +671,239 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                               visible: totalDays <= 1,
                               replacement: SizedBox.shrink(),
                               child: Container(
-                              height: 50,
-                              color: Colors.grey[200], // Light gray color
-                              child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Row(
-                                    children: <Widget>[
-                                      Radio<String>(
-                                        value: "Full Day",
-                                        groupValue: _selectedValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedValue = value!;
-                                          });
-                                          if (_selectedValue != null) {
-                                            print("Selected Radio Value: $_selectedValue");
-                                            // You can also set this value to a Text widget
-                                            displayText = _selectedValue;
-                                          }
-                                        },
+                                height: 50,
+                                color: Colors.grey[200], // Light gray color
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Radio<String>(
+                                            value: "Full Day",
+                                            groupValue: _selectedValue,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedValue = value!;
+                                              });
+                                              if (_selectedValue != null) {
+                                                print(
+                                                    "Selected Radio Value: $_selectedValue");
+                                                // You can also set this value to a Text widget
+                                                displayText = _selectedValue;
+                                              }
+                                            },
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              "Full Day",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Flexible(
-                                        child: Text(
-                                          "Full Day",
-                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                          overflow: TextOverflow.ellipsis, // Handle overflow
-                                          softWrap: false,
-                                        ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Radio<String>(
+                                            value: "First Half",
+                                            groupValue: _selectedValue,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedValue = value!;
+                                              });
+                                              if (_selectedValue != null) {
+                                                print(
+                                                    "Selected Radio Value: $_selectedValue");
+                                                // You can also set this value to a Text widget
+                                                displayText = _selectedValue;
+                                              }
+                                            },
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              "First Half",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                    Expanded(
+                                      child: Row(
+                                        children: <Widget>[
+                                          Radio<String>(
+                                            value: "Second Half",
+                                            groupValue: _selectedValue,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedValue = value!;
+                                              });
+                                              if (_selectedValue != null) {
+                                                print(
+                                                    "Selected Radio Value: $_selectedValue");
+                                                // You can also set this value to a Text widget
+                                                displayText = _selectedValue;
+                                              }
+                                            },
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              "Second Half",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Expanded(
-                                  child: Row(
-                                    children: <Widget>[
-                                      Radio<String>(
-                                        value: "First Half",
-                                        groupValue: _selectedValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedValue = value!;
-                                          });
-                                          if (_selectedValue != null) {
-                                            print("Selected Radio Value: $_selectedValue");
-                                            // You can also set this value to a Text widget
-                                            displayText = _selectedValue;
-                                          }
-                                        },
-                                      ),
-                                       Flexible(
-                                        child: Text(
-                                          "First Half",
-                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                          overflow: TextOverflow.ellipsis, // Handle overflow
-                                          softWrap: false,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Row(
-                                    children: <Widget>[
-                                      Radio<String>(
-                                        value: "Second Half",
-                                        groupValue: _selectedValue,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _selectedValue = value!;
-                                          });
-                                          if (_selectedValue != null) {
-                                            print("Selected Radio Value: $_selectedValue");
-                                            // You can also set this value to a Text widget
-                                            displayText = _selectedValue;
-                                          }
-                                        },
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          "Second Half",
-                                          style: AppTextStyle.font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                          overflow: TextOverflow.ellipsis, // Handle overflow
-                                          softWrap: false,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              ),
                               ),
                             ),
                             SizedBox(height: 25),
                             Center(
-                              child: Text('You are going to apply for a leave of $displayText',style: AppTextStyle
-                                  .font14OpenSansRegularBlack45TextStyle),
+                              child: Text(
+                                  'You are going to apply for a leave of $displayText',
+                                  style: AppTextStyle
+                                      .font14OpenSansRegularBlack45TextStyle),
                             ),
                             SizedBox(height: 15),
-
                             InkWell(
                               onTap: () async {
+                                var reason = _reasonController.text.trim();
+                                var address = _addressController.text.trim();
 
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                     var reason = _reasonController.text;
-                                     var address = _addressController.text;
+                                // Ensure form validation and non-empty fields
+                                if (_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty) {
+                                  try {
+                                    /// Call the API
+                                    hrmsPopWarning = await HrmsLeaveApplicationRepo().hrmsleave(
+                                      context,
+                                      formDate,
+                                      toDate,
+                                      reason,
+                                      address,
+                                      _selectedValue,
+                                      '${widget.sFirstName}',
+                                      '${widget.sLvDesc}',
+                                      '${widget.sLvTypeCode}',
+                                    );
 
-                                if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
-                                  // Call Api
-                                  // _buildDialog(context);
-                                        var hrmsPopWarning = await HrmsLeaveApplicationRepo()
-                                              .hrmsleave(
-                                              context,
-                                              formDate,
-                                              toDate,
-                                              reason,
-                                              address,
-                                              _selectedValue,
-                                              '${widget.sFirstName}',
-                                              '${widget.sLvDesc}',
-                                               '${widget.sLvTypeCode}');
-                                      //  _reasonController.clear();
-                                       // _addressController.clear();
+                                    if (hrmsPopWarning.isNotEmpty) {
+                                      result = "${hrmsPopWarning[0]['Result']}";
+                                      msg = "${hrmsPopWarning[0]['Msg']}";
 
-                                        print('---418----$hrmsPopWarning');
-                                        result = "${hrmsPopWarning[0]['Result']}";
-                                        msg = "${hrmsPopWarning[0]['Msg']}";
-                                        print('---421----$result');
-                                        print('---422----$msg');
-                                        // dialog box
-
-                                }else{
-                                  if(reason.isEmpty || reason==null){
-                                    _reasonfocus.requestFocus();
-                                    displayToast('Please Enter Reason');
-                                  }else if(address.isEmpty || address==null){
-                                    //_addressfocus.requestFocus();
-                                    displayToast('Please Enter Address');
+                                      // Check if API result is successful
+                                      if (result == '1') {
+                                        print('-----result--811---$result');
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                              return _buildDialogSucces2(context,msg);
+                                            },
+                                            );
+                                      //  _showSuccessDialog(context, msg);
+                                      } else {
+                                        print('-----result--814---$result');
+                                            showDialog(
+                                                context: context,
+                                                builder: (BuildContext context) {
+                                              return _buildDialogSucces2(context,msg);
+                                            },
+                                            );
+                                        //_showErrorDialog(context, msg);
+                                      }
+                                    } else {
+                                      displayToast('Unexpected API response');
+                                    }
+                                  } catch (e) {
+                                    displayToast('Error during API call: ${e.toString()}');
                                   }
-
-                                } // condition to fetch a response form a api
-                                if(result=="1"){
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return _buildDialogSucces(context,msg);
-                                    },
-
-                                  );
-                                 // displayToast(msg);
-                                  print('--data----$msg');
-
-                                }else{
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return _buildDialog(context,msg);
-                                    },
-                                  );
-                                 // displayToast(msg);
-                                  print('--data----$msg');
-                                  print('---Value is not store in a local data-----508--');
+                                } else {
+                                  // Validation failure
+                                  if (reason.isEmpty) {
+                                    displayToast('Please enter Reason');
+                                  } else if (address.isEmpty) {
+                                    displayToast('Please enter Address');
+                                  }
                                 }
                               },
+
+
+                              // onTap: () async {
+                              //   var reason = _reasonController.text;
+                              //   var address = _addressController.text;
+                              //   if (_formKey.currentState!.validate() &&
+                              //       reason.isNotEmpty &&
+                              //       address.isNotEmpty) {
+                              //     /// todo call an Api
+                              //      hrmsPopWarning =
+                              //         await HrmsLeaveApplicationRepo()
+                              //             .hrmsleave(
+                              //                 context,
+                              //                 formDate,
+                              //                 toDate,
+                              //                 reason,
+                              //                 address,
+                              //                 _selectedValue,
+                              //                 '${widget.sFirstName}',
+                              //                 '${widget.sLvDesc}',
+                              //                 '${widget.sLvTypeCode}');
+                              //
+                              //     print('------respone--$hrmsPopWarning');
+                              //
+                              //     print('---418----$hrmsPopWarning');
+                              //      result = "${hrmsPopWarning[0]['Result']}";
+                              //      msg = "${hrmsPopWarning[0]['Msg']}";
+                              //      print('---421----$result');
+                              //      print('---422----$msg');
+                              //
+                              //     // dialog box
+                              //   } else {
+                              //     /// todo here applied iner condition
+                              //     if (reason == null || reason.isEmpty) {
+                              //       displayToast('Please Enter Reason');
+                              //     } else if (address == null || address.isEmpty) {
+                              //       displayToast('Please Enter Address');
+                              //     }
+                              //   }
+                              //   if(result=='1'){
+                              //     print('----result-737--$result');
+                              //
+                              //     //displayToast(msg);
+                              //
+                              //     showDialog(
+                              //         context: context,
+                              //         builder: (BuildContext context) {
+                              //       return _buildDialogSucces2(context,msg);
+                              //     },
+                              //     );
+                              //
+                              //   }else{
+                              //    // displayToast(msg);
+                              //     showDialog(
+                              //       context: context,
+                              //       builder: (BuildContext context) {
+                              //         return _buildDialogSucces2(context,msg);
+                              //       },
+                              //     );
+                              //     print('----result---739--$result');
+                              //   }
+                              //
+                              // },
 
                               child: Container(
                                 width: double.infinity,
@@ -700,18 +913,19 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 decoration: BoxDecoration(
                                   color: AppColors.loginbutton,
                                   // Background color using HEX value
-                                  borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                                  borderRadius: BorderRadius.circular(
+                                      AppMargin.m10), // Rounded corners
                                 ),
                                 //  #00b3c7
                                 child: Center(
                                   child: Text(
                                     "Apply",
-                                    style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
+                                    style: AppTextStyle
+                                        .font14OpenSansRegularWhiteTextStyle,
                                   ),
                                 ),
                               ),
                             ),
-
                           ],
                         )),
                   ),
@@ -723,8 +937,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       ),
     );
   }
+
   // dialogbox
-  Widget _buildDialog(BuildContext context,String msg) {
+  Widget _buildDialog(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -762,10 +977,13 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // Set the background color to white
-                    foregroundColor: Colors.black, // Set the text color to black
+                    backgroundColor:
+                        Colors.white, // Set the background color to white
+                    foregroundColor:
+                        Colors.black, // Set the text color to black
                   ),
-                  child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                  child: Text('OK',
+                      style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 )
               ],
             ),
@@ -789,8 +1007,9 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       ),
     );
   }
+
   // buildDialogbox
-  Widget _buildDialogSucces(BuildContext context,String msg) {
+  Widget _buildDialogSucces(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -812,10 +1031,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                  'Successful',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Successful',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 0),
                 Text(
                   msg,
@@ -834,10 +1051,13 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white, // Set the background color to white
-                    foregroundColor: Colors.black, // Set the text color to black
+                    backgroundColor:
+                        Colors.white, // Set the background color to white
+                    foregroundColor:
+                        Colors.black, // Set the text color to black
                   ),
-                  child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                  child: Text('OK',
+                      style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 )
               ],
             ),
@@ -861,6 +1081,4 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       ),
     );
   }
-
-
 }
