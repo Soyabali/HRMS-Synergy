@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/applyleave/applyLeave.dart';
 import '../../app/generalFunction.dart';
@@ -9,6 +10,7 @@ import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
+import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
@@ -60,6 +62,134 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         children: [
           Container(
             height: 205,
+            padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+               // Space for the image
+                Row(
+                  children: [
+                    Icon(
+                      Icons.error_outline, // Exclamation icon
+                      color: Colors.red, // Color of the icon
+                      size: 22, // Size of the icon
+                    ),
+                    SizedBox(width: 8), // Spacing between the icon and text
+                    Text(
+                      'Attendance Confirmation',
+                      style: TextStyle(
+                        fontSize: 16, // Adjust font size
+                        fontWeight: FontWeight.bold, // Make the text bold
+                        color: Colors.black, // Text color
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Expanded( // Wrap the text in Expanded to allow it to take available space and wrap
+                  child: Text(
+                    "Are you sure you want to mark today's attendance?",
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.left, // Align the text to the left
+                    softWrap: true, // Allow text to wrap
+                    maxLines: 2, // Set the maximum number of lines the text can take
+                    overflow: TextOverflow.ellipsis, // Add ellipsis if the text exceeds the available space
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40,right: 40),
+                  child: Container(
+                    height: 35,
+                    padding: EdgeInsets.all(5), // Adjust padding as needed
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Container background color
+                      borderRadius: BorderRadius.circular(15), // Rounded corners
+                      border: Border.all(color: Colors.grey), // Border color
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              //Navigator.of(context).pop();
+                              Navigator.of(context).pop();
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // Button border radius
+                              ),
+                            ),
+                            child: Text(
+                                'No',
+                                style: GoogleFonts.openSans(
+                                    color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          color: Colors.grey, // Divider color
+                          width: 20, // Space between buttons
+                          thickness: 1, // Thickness of the divider
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              getLocation();
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // Button border radius
+                              ),
+                            ),
+                            child: Text(
+                                'Yes',
+                                style: GoogleFonts.openSans(
+                                    color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+  // logoutdialog
+  Widget _logoutDialog(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 205,
             padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -70,45 +200,109 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               children: [
                 SizedBox(height: 0), // Space for the image
                 Text(
-                    'Attendance Confirmation',
+                    'Logout',
                     style: AppTextStyle.font16OpenSansRegularBlackTextStyle
                 ),
-                SizedBox(height: 0),
+                SizedBox(height: 10),
                 Text(
-                  "Are you sure you want to mark today's attendance?",
+                  "Do you want to Logout ?",
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey[600],
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
-                      ),
-                      child: Text('No',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                SizedBox(height: 15),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40,right: 40),
+                  child: Container(
+                    height: 35,
+                    padding: EdgeInsets.all(5), // Adjust padding as needed
+                    decoration: BoxDecoration(
+                      color: Colors.white, // Container background color
+                      borderRadius: BorderRadius.circular(15), // Rounded corners
+                      border: Border.all(color: Colors.grey), // Border color
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        getLocation();
-                        Navigator.of(context).pop();
-                        },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
-                      ),
-                      child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                    )
-                  ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              //Navigator.of(context).pop();
+                              generalFunction.logout(context);
+                              Navigator.of(context).pop();
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // Button border radius
+                              ),
+                            ),
+                            child: Text(
+                              'Yes',
+                              style: GoogleFonts.openSans(
+                                  color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
+                          ),
+                        ),
+                        VerticalDivider(
+                          color: Colors.grey, // Divider color
+                          width: 20, // Space between buttons
+                          thickness: 1, // Thickness of the divider
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // Button border radius
+                              ),
+                            ),
+                            child: Text(
+                              'No',
+                                style: GoogleFonts.openSans(
+                                    color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400)
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 )
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: () {
+                //         Navigator.of(context).pop();
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Colors.white, // Set the background color to white
+                //         foregroundColor: Colors.black, // Set the text color to black
+                //       ),
+                //       child: Text('Yes',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () {
+                //         getLocation();
+                //         Navigator.of(context).pop();
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Colors.white, // Set the background color to white
+                //         foregroundColor: Colors.black, // Set the text color to black
+                //       ),
+                //       child: Text('No',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                //     )
+                //   ],
+                // )
               ],
             ),
           ),
@@ -119,7 +313,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  'assets/images/logoutnew.jpeg', // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -249,6 +443,91 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         }
     );
   }
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     getLocation();
+                    //     Navigator.of(context).pop();
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.white, // Set the background color to white
+                    //     foregroundColor: Colors.black, // Set the text color to black
+                    //   ),
+                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    // )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   // get a location :
   void getLocation() async {
@@ -293,7 +572,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       displayToast("Please pick location");
     }
 
-
     print('-----------105----$lat');
     print('-----------106----$long');
     // setState(() {
@@ -313,14 +591,23 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       var result = "${attendance[0]['Result']}";
       var msg = "${attendance[0]['Msg']}";
      // displayToast(msg);
-      Fluttertoast.showToast(
-          msg: msg,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0);
+     // _buildDialogSucces2(context,msg);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return _buildDialogSucces2(context,msg);
+        },
+      );
+      /// todo mark Attendance Success Dialog
+      ///
+      // Fluttertoast.showToast(
+      //     msg: msg,
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.green,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
     }else{
       displayToast("Attendance not confirmed.");
     }
@@ -391,15 +678,22 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               child:  InkWell(
                 onTap: (){
                   // logout function
-                  _showlogoutDialog(context);
+                 // _showlogoutDialog(context);
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return _logoutDialog(context);
+                    },
+                  );
                   },
                 child: Container(
-                  margin: EdgeInsets.all(8.0), // Apply margin around the image
+                  color: Colors.white,
+                  margin: EdgeInsets.all(12.0), // Apply margin around the image
                   child: Image.asset(
-                    'assets/images/logout.jpeg',
+                    'assets/images/logoutnew.jpeg',
                     width: 25,
                     height: 25,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fill,
                   ),
                 ),
               )

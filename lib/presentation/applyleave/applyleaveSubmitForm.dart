@@ -241,15 +241,15 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: SizedBox(
                 height: 150, // Height of the container
-                width: 200, // Width of the container
+               // width: 200, // Width of the container
+                width: MediaQuery.of(context).size.width,
                 child: Opacity(
                   opacity: 0.9,
                   //step3.jpg
                   child: Image.asset(
                     'assets/images/leave.jpeg',
                     // Replace 'image_name.png' with your asset image path
-                    fit: BoxFit
-                        .cover, // Adjust the image fit to cover the container
+                    fit: BoxFit.cover, // Adjust the image fit to cover the container
                   ),
                 ),
               ),
@@ -628,10 +628,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             SizedBox(height: 15),
 
                             InkWell(
-
                               onTap: () async {
-
-
 
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                      var reason = _reasonController.text;
@@ -660,8 +657,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                         print('---421----$result');
                                         print('---422----$msg');
                                         // dialog box
-
-
 
                                 }else{
                                   if(reason.isEmpty || reason==null){

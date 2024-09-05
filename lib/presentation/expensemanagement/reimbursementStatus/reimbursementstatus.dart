@@ -780,16 +780,14 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Center(
-                                child: Expanded(
-                                  child: Text(
-                                    item['fAmount'] ?? '',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.0,
-                                    ),
-                                    maxLines: 2, // Allows up to 2 lines for the text
-                                    overflow: TextOverflow.ellipsis,
+                                child: Text(
+                                  item['fAmount'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
                                   ),
+                                  maxLines: 1, // Allows up to 2 lines for the text
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),

@@ -122,7 +122,7 @@ class _LeaveScreenState extends State<Applyleave> {
                           children: [
                             Expanded(
                               child: Container(
-                                height: 56, // Height of the first container
+                                height: 45, // Height of the first container
                                 width: MediaQuery.of(context).size.width-50, // Width of the first container
                                 decoration: BoxDecoration(
                                   color: Color(0xFFD3D3D3), // Background color of the first container
@@ -150,17 +150,17 @@ class _LeaveScreenState extends State<Applyleave> {
                                               'Leave Type',
                                               style: TextStyle(
                                                   color: Color(0xFF607D8B),
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.normal
                                               ),
                                             ),
-                                            SizedBox(height: 5),
+                                            SizedBox(height: 2),
                                             Text(
                                               leaveData.sLvDesc,
                                               //'${hrmsLeaveBalaceV2List?[index].sLvDesc}',
                                               style: TextStyle(
                                                   color: textColor,
-                                                  fontSize: 16,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.normal
                                               ),
                                             ),
@@ -210,7 +210,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                   'Opening', // The text to display
                                   style: TextStyle(
                                     color: Colors.black, // Text color
-                                    fontSize: 16, // Text size
+                                    fontSize: 14, // Text size
                                   ),
                                 ),
                               ],
@@ -244,7 +244,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                   'Entitlement', // The text to display
                                   style: TextStyle(
                                     color: Colors.black, // Text color
-                                    fontSize: 16, // Text size
+                                    fontSize: 14, // Text size
                                   ),
                                 ),
                               ],
@@ -277,7 +277,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                   'Availed', // The text to display
                                   style: TextStyle(
                                     color: Colors.black, // Text color
-                                    fontSize: 16, // Text size
+                                    fontSize: 14, // Text size
                                   ),
                                 ),
                               ],
@@ -310,7 +310,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                   'Balance', // The text to display
                                   style: TextStyle(
                                     color: Colors.black, // Text color
-                                    fontSize: 16, // Text size
+                                    fontSize: 14, // Text size
                                   ),
                                 ),
                               ],

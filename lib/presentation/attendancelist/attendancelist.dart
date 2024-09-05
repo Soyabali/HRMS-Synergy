@@ -378,7 +378,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                                     mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                                                                     children: [
                                                                       Container(
-                                                                        height: 25, // Height of the first container
+                                                                        height: 20, // Height of the first container
                                                                         width: 35, // Width of the first container
                                                                         decoration: BoxDecoration(
                                                                           color: Colors.white, // Background color of the first container
@@ -398,7 +398,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                                       ),
                                                                       Spacer(),
                                                                       Container(
-                                                                        height: 25, // Height of the container
+                                                                        height: 20, // Height of the container
                                                                         width: 150, // Width of the container
                                                                         decoration: BoxDecoration(
                                                                           borderRadius: BorderRadius.circular(20), // Border radius
@@ -439,7 +439,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                                           mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                                                                           children: [
                                                                             Container(
-                                                                              height: 25, // Height of the first container
+                                                                              height: 20, // Height of the first container
                                                                               width: 35, // Width of the first container
                                                                               decoration: BoxDecoration(
                                                                                 color: Colors.white, // Background color of the first container
@@ -459,7 +459,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                                             ),
                                                                             Spacer(),
                                                                             Container(
-                                                                              height: 25, // Height of the container
+                                                                              height: 20, // Height of the container
                                                                               width: 150, // Width of the container
                                                                               decoration: BoxDecoration(
                                                                                 borderRadius: BorderRadius.circular(20), // Border radius
