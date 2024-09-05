@@ -17,6 +17,7 @@ import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
+import '../expense_management.dart';
 
 class Reimbursementstatus extends StatelessWidget {
   const Reimbursementstatus({super.key});
@@ -80,9 +81,13 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   // Distic List
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
+    showLoader();
     reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth);
     _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-    print(" -----xxxxx-  reimbursementStatusList--85-----> $reimbursementStatusList");
+    if(_filteredData!=null){
+      hideLoader();
+    }
+    print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
     // setState(() {});
   }
 
@@ -328,10 +333,10 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
           backgroundColor: Color(0xFF0098a6),
           leading: InkWell(
             onTap: () {
-              // Navigator.pop(context);
+               //Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const DashBoard()),
+                MaterialPageRoute(builder: (context) => const ExpenseManagement()),
               );
             },
             child: const Padding(
@@ -539,9 +544,11 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
               SizedBox(height: 10),
               _filteredData == null || _filteredData!.isEmpty
                   ? const Center(
-                child: Text(
-                  'No reimbursement found',
-                  style: TextStyle(fontSize: 18),
+                child: Center(
+                  child: Text(
+                    'No reimbursement found',
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
               )
               :
@@ -791,54 +798,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                             ),
                           ],
                         ),
-                        // child: Row(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        //   children: [
-                        //     Icon(Icons.speaker_notes, size: 20,
-                        //       color: Colors.black,),
-                        //     SizedBox(width: 10),
-                        //     const Text('Status', style: TextStyle(
-                        //         color: Color(0xFF0098a6),
-                        //         fontSize: 14,
-                        //         fontWeight: FontWeight.normal
-                        //     ),),
-                        //     SizedBox(width: 5),
-                        //     const Text(':', style: TextStyle(
-                        //         color: Color(0xFF0098a6),
-                        //         fontSize: 14,
-                        //         fontWeight: FontWeight.normal
-                        //     ),),
-                        //     SizedBox(width: 5),
-                        //     Text(item['sStatusName'] ?? '', style: TextStyle(
-                        //         color: Color(0xFF0098a6),
-                        //         fontSize: 14,
-                        //         fontWeight: FontWeight.normal
-                        //     ),
-                        //     ),
-                        //     Spacer(),
-                        //     Container(
-                        //       height: 30,
-                        //       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                        //       // Optional: Adjust padding for horizontal space
-                        //       decoration: BoxDecoration(
-                        //         color: Color(0xFF0098a6),
-                        //         // Change this to your preferred color
-                        //         borderRadius: BorderRadius.circular(15),
-                        //       ),
-                        //       child: Center(
-                        //         child: Text(
-                        //           item['fAmount'] ?? '',
-                        //           style: TextStyle(
-                        //             color: Colors.white,
-                        //             // Change this to your preferred text color
-                        //             fontSize: 14.0, // Adjust font size as needed
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //
-                        //   ],
-                        // ),
                       ),
                       SizedBox(height: 10),
 
@@ -917,11 +876,21 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: GestureDetector(
-                                      onTap: (){
+                                      onTap: () {
+
+                                        var projact =  item['sProjectName'] ??'';
+                                        var sTranCode =   item['sTranCode'] ?? '';
+                                        print('--project---$projact');
+                                        print('--sTranCode---$sTranCode');
+
+
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
+                                        // );
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) =>
-                                              ReimbursementLog()),
+                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
                                         );
                                       },
                                       child: Row(

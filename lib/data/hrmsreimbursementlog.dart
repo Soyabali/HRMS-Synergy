@@ -10,7 +10,7 @@ import 'loader_helper.dart';
 
 class HrmsreimbursementLogRepo {
   List<dynamic>  hrmsleavebalacev2List = [];
-  Future<List> hrmsReimbursementLog(BuildContext context) async
+  Future<List> hrmsReimbursementLog(BuildContext context, String sTranCode) async
   {
 
    // print('---date----13---$dDate');
@@ -18,6 +18,7 @@ class HrmsreimbursementLogRepo {
     int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
+
 
 
     var baseURL = BaseRepo().baseurl;
@@ -35,7 +36,7 @@ class HrmsreimbursementLogRepo {
       };
       var request = http.Request('POST', Uri.parse('$hrmsReimbursementLogApi'));
       request.body = json.encode({
-        "sTranCode":"27456559"
+        "sTranCode":sTranCode
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();

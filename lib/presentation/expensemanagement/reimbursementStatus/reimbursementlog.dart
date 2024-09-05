@@ -19,27 +19,30 @@ import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 
-class ReimbursementLog extends StatelessWidget {
-  const ReimbursementLog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(
-            color: Colors.white, // Change the color of the drawer icon here
-          ),
-        ),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: ReimbursementLogPage(),
-    );
-  }
-}
+// class ReimbursementLog extends StatelessWidget {
+//
+//   const ReimbursementLog({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       theme: ThemeData(
+//         appBarTheme: const AppBarTheme(
+//           iconTheme: IconThemeData(
+//             color: Colors.white, // Change the color of the drawer icon here
+//           ),
+//         ),
+//       ),
+//       debugShowCheckedModeBanner: false,
+//       home: ReimbursementLogPage(),
+//     );
+//   }
+// }
 
 class ReimbursementLogPage extends StatefulWidget {
-  const ReimbursementLogPage({super.key});
+  var projact;
+  var sTranCode;
+   ReimbursementLogPage(this.projact, this.sTranCode, {super.key});
 
   @override
   State<ReimbursementLogPage> createState() => _MyHomePageState();
@@ -63,7 +66,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
 
   // Distic List
   hrmsReimbursementLog() async {
-    reimbursementStatusLog = await HrmsreimbursementLogRepo().hrmsReimbursementLog(context);
+    reimbursementStatusLog = await HrmsreimbursementLogRepo().hrmsReimbursementLog(context,'${widget.sTranCode}');
     print(" -----xxxxx-  hrmsReimbursement--67---> $reimbursementStatusLog");
     setState(() {});
   }
@@ -107,6 +110,8 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
   void initState() {
     // TODO: implement initState
     hrmsReimbursementLog();
+    print('----113--${widget.projact}');
+    print('-----114---${widget.sTranCode}');
     super.initState();
 
   }
@@ -225,10 +230,14 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                    '${reimbursementStatusLog?[index]['sActionBy']}',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: Text(
+                                      '${widget.projact}', style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle,
+                                    maxLines: 1, // Allows up to 2 lines for the text
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
 
                               ],
