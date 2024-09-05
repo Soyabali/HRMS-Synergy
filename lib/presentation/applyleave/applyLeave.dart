@@ -297,7 +297,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                     ),
                                     alignment: Alignment.center, // Center the text within the container
                                     child: Text(
-                                      leaveData.fOpeningBal, // The text to display
+                                      leaveData.fClosingBalance, // The text to display
                                       style: TextStyle(
                                         color: Colors.grey, // Text color
                                         fontSize: 16, // Text size

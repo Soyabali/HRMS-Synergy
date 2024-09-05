@@ -246,7 +246,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                   opacity: 0.9,
                   //step3.jpg
                   child: Image.asset(
-                    'assets/images/addreimbursement.jpeg',
+                    'assets/images/leave.jpeg',
                     // Replace 'image_name.png' with your asset image path
                     fit: BoxFit
                         .cover, // Adjust the image fit to cover the container
@@ -446,12 +446,19 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           ),
                                           autovalidateMode: AutovalidateMode.onUserInteraction,
                                           maxLines: 1, // Keeps the TextFormField to a single line
-                                          keyboardType: TextInputType.text,
+                                         // keyboardType: TextInputType.text,
                                           showCursor: true,
+                                          // validator: (value) {
+                                          //   if (value == null || value.isEmpty) {
+                                          //     return 'Enter reason'; // Display message if empty
+                                          //   }
+                                          //   return null; // Return null if validation passes
+                                          // },
                                         ),
                                       ),
                                     ),
                                   ),
+
                                 ],
                               ),
                             ),
@@ -621,49 +628,75 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                             SizedBox(height: 15),
 
                             InkWell(
+
                               onTap: () async {
+
+
+
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  var sEmpCode = prefs.getString('sEmpCode');
-                                  var reason = _reasonController.text;
-                                  var address = _addressController.text;
+                                     var reason = _reasonController.text;
+                                     var address = _addressController.text;
 
-                                  if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
+                                if(_formKey.currentState!.validate() && reason.isNotEmpty && address.isNotEmpty){
                                   // Call Api
-                                    print('---call Api---');
+                                  // _buildDialog(context);
+                                        var hrmsPopWarning = await HrmsLeaveApplicationRepo()
+                                              .hrmsleave(
+                                              context,
+                                              formDate,
+                                              toDate,
+                                              reason,
+                                              address,
+                                              _selectedValue,
+                                              '${widget.sFirstName}',
+                                              '${widget.sLvDesc}',
+                                               '${widget.sLvTypeCode}');
+                                      //  _reasonController.clear();
+                                       // _addressController.clear();
 
-                                      var hrmsPopWarning = await HrmsLeaveApplicationRepo()
-                                          .hrmsleave(
-                                          context,
-                                          formDate,
-                                          toDate,
-                                          reason,
-                                          address,
-                                          _selectedValue,
-                                          '${widget.sFirstName}',
-                                          '${widget.sLvDesc}',
-                                           '${widget.sLvTypeCode}'
-                                      );
-
-
-                                      print('---975--$hrmsPopWarning');
-                                      if(hrmsPopWarning==null){
-                                        displayToast("Response is Null");
-                                      }else{
+                                        print('---418----$hrmsPopWarning');
+                                        result = "${hrmsPopWarning[0]['Result']}";
                                         msg = "${hrmsPopWarning[0]['Msg']}";
-                                        displayToast(msg);
-                                      }
-                                  }else{
-                                   print('---Api not call-----');
+                                        print('---421----$result');
+                                        print('---422----$msg');
+                                        // dialog box
+
+
+
+                                }else{
                                   if(reason.isEmpty || reason==null){
+                                    _reasonfocus.requestFocus();
                                     displayToast('Please Enter Reason');
                                   }else if(address.isEmpty || address==null){
+                                    //_addressfocus.requestFocus();
                                     displayToast('Please Enter Address');
-                                  }else if(address==null) {
-                                    displayToast('Please Address');
                                   }
-                                } // condition to fetch a response form a api
 
+                                } // condition to fetch a response form a api
+                                if(result=="1"){
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildDialogSucces(context,msg);
+                                    },
+
+                                  );
+                                 // displayToast(msg);
+                                  print('--data----$msg');
+
+                                }else{
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildDialog(context,msg);
+                                    },
+                                  );
+                                 // displayToast(msg);
+                                  print('--data----$msg');
+                                  print('---Value is not store in a local data-----508--');
+                                }
                               },
+
                               child: Container(
                                 width: double.infinity,
                                 // Make container fill the width of its parent
@@ -695,5 +728,144 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       ),
     );
   }
+  // dialogbox
+  Widget _buildDialog(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 205,
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                  'Information',
+                  style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Set the background color to white
+                    foregroundColor: Colors.black, // Set the text color to black
+                  ),
+                  child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -40, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/dialogimg.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // buildDialogbox
+  Widget _buildDialogSucces(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 205,
+            padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                  'Successful',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 0),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Applyleave()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white, // Set the background color to white
+                    foregroundColor: Colors.black, // Set the text color to black
+                  ),
+                  child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -40, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 40,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 80,
+                  height: 80,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
 }
