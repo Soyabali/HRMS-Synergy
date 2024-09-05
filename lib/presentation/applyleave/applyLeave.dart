@@ -35,6 +35,7 @@ class _LeaveScreenState extends State<Applyleave> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         // statusBarColore
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -106,10 +107,11 @@ class _LeaveScreenState extends State<Applyleave> {
                   textColor = Colors.black;
                 }
                 return Card(
-                  margin: EdgeInsets.all(2.0),
+                  margin: EdgeInsets.all(4.0),
+                  color: Colors.white,
                   elevation: 4.0,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 10,right: 0,top: 10,bottom: 20),
+                    padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -118,55 +120,59 @@ class _LeaveScreenState extends State<Applyleave> {
                           mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                              height: 56, // Height of the first container
-                              width: MediaQuery.of(context).size.width-50, // Width of the first container
-                              decoration: BoxDecoration(
-                                color: Color(0xFFD3D3D3), // Background color of the first container
-                                borderRadius: BorderRadius.circular(0), // Border radius
-                                border: const Border(
-                                  left: BorderSide(
-                                    color: Colors.green, // Color of the left border
-                                    width: 5.0, // Width of the left border
+                            Expanded(
+                              child: Container(
+                                height: 56, // Height of the first container
+                                width: MediaQuery.of(context).size.width-50, // Width of the first container
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFD3D3D3), // Background color of the first container
+                                  borderRadius: BorderRadius.circular(0), // Border radius
+                                  border: const Border(
+                                    left: BorderSide(
+                                      color: Colors.green, // Color of the left border
+                                      width: 5.0, // Width of the left border
+                                    ),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 10),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Leave Type',
+                                              style: TextStyle(
+                                                  color: Color(0xFF607D8B),
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.normal
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              leaveData.sLvDesc,
+                                              //'${hrmsLeaveBalaceV2List?[index].sLvDesc}',
+                                              style: TextStyle(
+                                                  color: textColor,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.normal
+                                              ),
+                                            ),
+                              
+                              
+                                          ],
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        const Text(
-                                          'Leave Type',
-                                          style: TextStyle(
-                                              color: Color(0xFF0098a6),
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          leaveData.sLvDesc,
-                                          //'${hrmsLeaveBalaceV2List?[index].sLvDesc}',
-                                          style: TextStyle(
-                                              color: textColor,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal
-                                          ),
-                                        ),
-
-
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-
                             )
                           ],
                         ),

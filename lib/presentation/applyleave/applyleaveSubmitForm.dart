@@ -112,10 +112,10 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       if (totalDays <= 1) {
         displayText = _selectedValue; // Set your specific value
       } else {
-        displayText = totalDays.toString(); // Display total days
+        displayText = totalDays.toString()+' Days'; // Display total days
+
       }
     });
-
     print('Total days:----114---: $displayText');
   }
 
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       setState(() {
         toDate = tempDate;
       });
-      displayToast("ToDate should not be less than FromDate");
+      displayToast("To Date can not be less than From Date");
     }
   }
 
@@ -161,7 +161,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         formDate = tempDate;
       });
       calculateTotalDays();
-      displayToast("FromDate should not be greater than ToDate");
+      displayToast("From date can not be greater than To Date");
     }
   }
   //
@@ -223,7 +223,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'Leave Application xxx',
+            'Leave Application',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -234,7 +234,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
           ),
         ), // Removes shadow under the AppBar
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -614,7 +613,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                               ),
                               ),
                             ),
-
                             SizedBox(height: 25),
                             Center(
                               child: Text('You are going to apply for a leave of $displayText',style: AppTextStyle
