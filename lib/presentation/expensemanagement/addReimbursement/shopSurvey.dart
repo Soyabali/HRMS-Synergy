@@ -338,12 +338,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 FocusScope.of(context).unfocus();
               },
               hint: RichText(
-                text: const TextSpan(
+                text:TextSpan(
                   text: "Select Project",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
+                   style: AppTextStyle.font16OpenSansRegularBlack45TextStyle
+                  // style: TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.normal),
                 ),
               ),
               value: _dropDownSector,
@@ -367,10 +368,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Text(
                           item['sProjectName'].toString(),
                           overflow: TextOverflow.ellipsis, // Handles long text
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                          ),
+                    style:AppTextStyle.font16OpenSansRegularBlackTextStyle,
+                          // style: TextStyle(
+                          //   fontSize: 16,
+                          //   fontWeight: FontWeight.normal,
+                          // ),
                         ),
                       ),
                     ],
@@ -402,12 +404,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 FocusScope.of(context).unfocus();
               },
               hint: RichText(
-                text: const TextSpan(
+                text: TextSpan(
                   text: "Select Expense Category",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
+                   style:  AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+                  // style: TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.normal),
                   children: <TextSpan>[
                     TextSpan(
                         text: '',
@@ -449,7 +452,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               items: expenseList.map((dynamic item) {
                 return DropdownMenuItem(
-                  child: Text(item['sExpHeadName'].toString()),
+                  child: Text(item['sExpHeadName'].toString(),style:AppTextStyle.font16OpenSansRegularBlackTextStyle),
                   value: item["sExpHeadName"].toString(),
                 );
               }).toList(),
@@ -497,7 +500,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: const Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Text(
-            'Add Reimbursement...ccc',
+            'Add Reimbursement',
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -508,7 +511,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ), // Removes shadow under the AppBar
       ),
-
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -637,7 +639,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       dExpDate == null
                                           ? 'Select Bill / Expense Date'
                                           : '$dExpDate',
-                                      style: TextStyle(fontSize: 20, color: Colors.black45),
+                                      style: AppTextStyle
+                                          .font16OpenSansRegularBlack45TextStyle,
                                     ),
                                   ],
                                 ),

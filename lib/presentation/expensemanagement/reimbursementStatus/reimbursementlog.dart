@@ -368,10 +368,8 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     // Add some spacing between texts
                                     Text(
                                       '${reimbursementStatusLog?[index]['dActionAt']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
+                                      style: AppTextStyle
+                                          .font12OpenSansRegularBlackTextStyle,
                                     ),
                                   ],
                                 ),
@@ -399,10 +397,10 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     // Add some spacing between texts
                                     Text(
                                       '${reimbursementStatusLog?[index]['sActionBy']}',
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
+                                      style: AppTextStyle
+                                          .font12OpenSansRegularBlackTextStyle,
+                                      maxLines: 1, // Allows up to 2 lines for the text
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),

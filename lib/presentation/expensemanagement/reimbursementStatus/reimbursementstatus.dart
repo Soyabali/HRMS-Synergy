@@ -15,7 +15,6 @@ import '../../../app/generalFunction.dart';
 import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 import '../expense_management.dart';
 
@@ -748,13 +747,10 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                           children: [
                             Icon(Icons.speaker_notes, size: 20, color: Colors.black),
                             SizedBox(width: 10),
-                            const Text(
+                             Text(
                               'Status',
-                              style: TextStyle(
-                                color: Color(0xFF0098a6),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
+                                style: AppTextStyle
+                                    .font12OpenSansRegularBlackTextStyle
                             ),
                             SizedBox(width: 5),
                             const Text(
@@ -769,11 +765,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                             Expanded(
                               child: Text(
                                 item['sStatusName'] ?? '',
-                                style: TextStyle(
-                                  color: Color(0xFF0098a6),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.normal,
-                                ),
+                                style: AppTextStyle
+                                    .font12OpenSansRegularBlackTextStyle,
                                 maxLines: 2, // Allows up to 2 lines for the text
                                 overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
                               ),
@@ -787,11 +780,15 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 borderRadius: BorderRadius.circular(15),
                               ),
                               child: Center(
-                                child: Text(
-                                  item['fAmount'] ?? '',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
+                                child: Expanded(
+                                  child: Text(
+                                    item['fAmount'] ?? '',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.0,
+                                    ),
+                                    maxLines: 2, // Allows up to 2 lines for the text
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),

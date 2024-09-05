@@ -47,6 +47,91 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   var sFirstName,sCompEmailId;
    // DialogBox
 
+  Widget _buildDialogSucces(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 205,
+            padding: EdgeInsets.fromLTRB(20, 60, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Attendance Confirmation',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 0),
+                Text(
+                  "Are you sure you want to mark today's attendance?",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('No',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        getLocation();
+                        Navigator.of(context).pop();
+                        },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -431,7 +516,14 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         onTap: (){
 
                           print('---Mark Attendance----');
-                          _showConfirmationDialog(context);
+                        //  _showConfirmationDialog(context);
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                            return _buildDialogSucces(context);
+                          },
+                          );
+
                           /// TODO TO OPEN DIALOG AND THEN GET A LOCATION
                           //getLocation();
 
