@@ -9,6 +9,7 @@ import 'loader_helper.dart';
 
 class Hrmsleavebalacev2Repo {
   var hrmsleavebalacev2List = [];
+
   Future<List<LeaveData>> getHrmsleavebalacev2(BuildContext context) async
   {
     showLoader();
@@ -18,7 +19,6 @@ class Hrmsleavebalacev2Repo {
     String? sEmpCode = prefs.getString('sEmpCode');
     print('---21--token--$sToken');
     print('---22--sEmpCode--$sEmpCode');
-
 
      var baseURL = BaseRepo().baseurl;
      var endPoint = "hrmsLeaveBalanceV2/hrmsLeaveBalanceV2";

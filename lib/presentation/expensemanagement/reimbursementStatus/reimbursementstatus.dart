@@ -15,6 +15,7 @@ import '../../../app/generalFunction.dart';
 import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
+import '../../../domain/hrmsreimbursementstatusV3Model.dart';
 import '../../resources/app_text_style.dart';
 import '../expense_management.dart';
 
@@ -47,7 +48,7 @@ class ReimbursementstatusPage extends StatefulWidget {
 class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
-  List<Map<String, dynamic>> _filteredData = [];
+ // List<Map<String, dynamic>> _filteredData = [];
   ///List<dynamic>  hrmsReimbursementList;
   TextEditingController _searchController = TextEditingController();
   double? lat;
@@ -77,44 +78,54 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
+  late Future<List<Hrmsreimbursementstatusv3model>> reimbursementStatusV3;
+  List<Hrmsreimbursementstatusv3model> _allData = [];  // Holds original data
+  List<Hrmsreimbursementstatusv3model> _filteredData = [];  // Holds filtered data
 
   // Distic List
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
-    showLoader();
-    reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth);
-    _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-    if(_filteredData!=null){
-      hideLoader();
-    }
+
+    reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
+
+    reimbursementStatusV3.then((data) {
+      setState(() {
+        _allData = data;  // Store the data
+        _filteredData = _allData;  // Initially, no filter applied
+      });
+    });
+     // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
+   // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
+
     print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
     // setState(() {});
   }
-
-  void _search() {
-    String query = _searchController.text.toLowerCase();
+  // filter data
+  void filterData(String query) {
     setState(() {
-      _filteredData = reimbursementStatusList?.where((item) {
-        String location = item['sProjectName'].toLowerCase();
-        String pointType = item['sStatusName'].toLowerCase();
-        String sector = item['sExpHeadName'].toLowerCase();
-        return location.contains(query) ||
-            pointType.contains(query) ||
-            sector.contains(query);
-      }).toList() ??
-          [];
+      if (query.isEmpty) {
+        _filteredData = _allData;  // Show all data if search query is empty
+      } else {
+        _filteredData = _allData.where((item) {
+          return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
+              item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
+              item.sStatusName.toLowerCase().contains(query.toLowerCase());
+
+          // Filter by employee name
+        }).toList();
+      }
     });
   }
 
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
-    var postimageResponse =
-        await PostImageRepo().postImage(context, _imageFile);
+    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
 
   String? _chosenValue;
+
   var msg;
   var result;
   var SectorData;
@@ -238,7 +249,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     print('---155----$responseData');
   }
 
-  getCurrentdate(){
+  getCurrentdate() async{
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
@@ -246,6 +257,18 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
     DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
     lastDayOfCurrentMonth = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    setState(() {
+    });
+    if(firstDayOfNextMonth!=null && lastDayOfCurrentMonth!=null){
+      print('You should call api');
+      //reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!)) as Future<List<Hrmsreimbursementstatusv3model>>;
+      //print('---255--$reimbursementStatusV3');
+     /// reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!);
+     // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
+     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+    }else{
+      print('You should  not call api');
+    }
   }
 
   // InitState
@@ -255,7 +278,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     getLocation();
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-    _searchController.addListener(_search);
+
     super.initState();
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -301,6 +324,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
   }
+  // didUpdateWidget
 
   @override
   void dispose() {
@@ -382,7 +406,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     SizedBox(width: 4),
 
                     GestureDetector(
-                      onTap: () async{
+                      onTap: () async {
                         /// TODO Open Date picke and get a date
                         DateTime? pickedDate = await showDatePicker(
                           context: context,
@@ -397,8 +421,12 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                           // Update the state with the picked date
                           setState(() {
                             firstOfMonthDay = formattedDate;
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                           // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
+                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                         // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                            print('---formPicker--$firstOfMonthDay');
                           // Call API
                           //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
@@ -464,15 +492,14 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                           // Update the state with the picked date
                           setState(() {
                             lastDayOfCurrentMonth = formattedDate;
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                           // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
-                          print('---465--$lastDayOfCurrentMonth');
-                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          // Display the selected date as a toast
-                          //displayToast(dExpDate.toString());
+                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+
                         } else {
-                          // Handle case where no date was selected
-                          //displayToast("No date selected");
+
                         }
                       },
                       child: Container(
@@ -531,6 +558,9 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                       fontWeight: FontWeight.bold),
                                   border: InputBorder.none,
                                 ),
+                                onChanged: (query) {
+                                  filterData(query);  // Call the filter function on text input change
+                                },
                               ),
                             ),
                           ],
@@ -541,382 +571,393 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                 ),
               ),
               SizedBox(height: 10),
-              _filteredData == null || _filteredData!.isEmpty
-                  ? const Center(
-                child: Center(
-                  child: Text(
-                    'No reimbursement found',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              )
-              :
-               Expanded(
-      child: ListView.builder(
-      itemCount: _filteredData.length ?? 0,
-      itemBuilder: (context, index) {
-        Map<String, dynamic> item = _filteredData[index];
-        return
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Card(
-              elevation: 1,
-              color: Colors.white,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  border: Border.all(
-                    color: Colors.grey, // Outline border color
-                    width: 0.2, // Outline border width
-                  ),
-                ),
-                child: Padding(
-                  padding:
-                  const EdgeInsets.only(left: 8, right: 8),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                              width: 30.0,
-                              height: 30.0,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                BorderRadius.circular(15.0),
-                                border: Border.all(
-                                  color: Color(0xFF255899),
-                                  // Outline border color
-                                  width:
-                                  0.5, // Outline border width
-                                ),
-                                color: Colors.white,
-                              ),
-                              child: Center(
-                                child: Text(
-                                    "${1}",
-                                    style: AppTextStyle
-                                        .font14OpenSansRegularBlackTextStyle
-                                ),
-                              )),
-                          SizedBox(width: 10),
-                          Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                  item['sExpHeadName'] ?? '',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle,
-                                maxLines: 2, // Limits the text to 2 lines
-                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                softWrap: true,
-                              ),
-                              Text(
-                                  item['sProjectName'] ?? '',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle,
-                                maxLines: 2, // Limits the text to 2 lines
-                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                softWrap: true,
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15),
-                        child: Container(
-                          height: 0.5,
-                          color: Color(0xff3f617d),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: 10.0,
-                            width: 10.0,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              // Change this to your preferred color
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          //  '‣ Sector',
-                          Text(
-                              'Bill Date',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Text(
-                            item['dExpDate'] ??'',
-                            style: AppTextStyle
-                                .font12OpenSansRegularBlack45TextStyle
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: 10.0,
-                            width: 10.0,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              // Change this to your preferred color
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                              'Entry At',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Text(
-                            item['dEntryAt'] ?? '',
-                            style: AppTextStyle
-                                .font12OpenSansRegularBlack45TextStyle
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            height: 10.0,
-                            width: 10.0,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              // Change this to your preferred color
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                              'Expense Details',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 15),
-                        child: Text(
-                            item['sExpDetails'] ?? '',
-                            style: AppTextStyle
-                                .font12OpenSansRegularBlack45TextStyle
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Container(
-                        height: 1,
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 40,
-                        color: Colors.grey,
-                      ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Icon(Icons.speaker_notes, size: 20, color: Colors.black),
-                            SizedBox(width: 10),
-                             Text(
-                              'Status',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle
-                            ),
-                            SizedBox(width: 5),
-                            const Text(
-                              ':',
-                              style: TextStyle(
-                                color: Color(0xFF0098a6),
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                item['sStatusName'] ?? '',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle,
-                                maxLines: 2, // Allows up to 2 lines for the text
-                                overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
-                              ),
-                            ),
-                           // Spacer(),
-                            Container(
-                              height: 30,
-                              padding: EdgeInsets.symmetric(horizontal: 16.0),
-                              decoration: BoxDecoration(
-                                color: Color(0xFF0098a6),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  item['fAmount'] ?? '',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
+              Expanded(
+                child: Container(
+                  child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
+                      future: reimbursementStatusV3,
+                      builder: (context, snapshot) {
+                        return ListView.builder(
+                            // itemCount: snapshot.data!.length ?? 0,
+                            // itemBuilder: (context, index)
+                            itemCount: _filteredData.length?? 0,
+                            itemBuilder: (context, index)
+                            {
+                              final leaveData = _filteredData[index];
+                             // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            child: Card(
+                              elevation: 1,
+                              color: Colors.white,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border: Border.all(
+                                    color: Colors.grey, // Outline border color
+                                    width: 0.2, // Outline border width
                                   ),
-                                  maxLines: 1, // Allows up to 2 lines for the text
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          // Space between the two columns
-                          children: [
-                            // First Column
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                              color: Color(0xFF0098a6),
-                                              // Change this to your preferred color
-                                              borderRadius: BorderRadius.circular(10),
-                                            ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                        Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 2),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF0098a6),
-                                      // Change this to your preferred color
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: (){
-                                                    // Navigator.push(
-                                                    //   context,
-                                                    //   MaterialPageRoute(builder: (context) =>
-                                                    //       ReimbursementLog()),
-                                                    // );
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text('Take Action',style: AppTextStyle
-                                              .font14OpenSansRegularWhiteTextStyle),
-                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(width: 2),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xFF0098a6),
-                                      // Change this to your preferred color
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () {
-
-                                        var projact =  item['sProjectName'] ??'';
-                                        var sTranCode =   item['sTranCode'] ?? '';
-                                        print('--project---$projact');
-                                        print('--sTranCode---$sTranCode');
-
-
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
-                                        // );
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
-                                        );
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 8, right: 8),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                              width: 30.0,
+                                              height: 30.0,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius.circular(15.0),
+                                                border: Border.all(
+                                                  color: Color(0xFF255899),
+                                                  // Outline border color
+                                                  width:
+                                                  0.5, // Outline border width
+                                                ),
+                                                color: Colors.white,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                    "${1}",
+                                                    style: AppTextStyle
+                                                        .font14OpenSansRegularBlackTextStyle
+                                                ),
+                                              )),
                                           SizedBox(width: 10),
-                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
+                                          Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text(
+                                                leaveData.sExpHeadName,
+                                               // item['sExpHeadName'] ?? '',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlackTextStyle,
+                                                maxLines: 2, // Limits the text to 2 lines
+                                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                softWrap: true,
+                                              ),
+                                              Text(
+                                                leaveData.sProjectName,
+                                                //item['sProjectName'] ?? '',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlackTextStyle,
+                                                maxLines: 2, // Limits the text to 2 lines
+                                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                softWrap: true,
+                                              ),
+                                            ],
+                                          )
                                         ],
                                       ),
-                                    ),
+                                      const SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 15, right: 15),
+                                        child: Container(
+                                          height: 0.5,
+                                          color: Color(0xff3f617d),
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                            height: 10.0,
+                                            width: 10.0,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              // Change this to your preferred color
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          //  '‣ Sector',
+                                          Text(
+                                              'Bill Date',
+                                              style: AppTextStyle
+                                                  .font12OpenSansRegularBlackTextStyle
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                            leaveData.dExpDate,
+                                            //item['dExpDate'] ??'',
+                                            style: AppTextStyle
+                                                .font12OpenSansRegularBlack45TextStyle
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                            height: 10.0,
+                                            width: 10.0,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              // Change this to your preferred color
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                              'Entry At',
+                                              style: AppTextStyle
+                                                  .font12OpenSansRegularBlackTextStyle
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                            leaveData.dEntryAt,
+                                           // item['dEntryAt'] ?? '',
+                                            style: AppTextStyle
+                                                .font12OpenSansRegularBlack45TextStyle
+                                        ),
+                                      ),
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          Container(
+                                            height: 10.0,
+                                            width: 10.0,
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              // Change this to your preferred color
+                                              borderRadius: BorderRadius.circular(5.0),
+                                            ),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                              'Expense Details',
+                                              style: AppTextStyle
+                                                  .font12OpenSansRegularBlackTextStyle
+                                          )
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 15),
+                                        child: Text(
+                                            leaveData.sExpDetails,
+                                           // item['sExpDetails'] ?? '',
+                                            style: AppTextStyle
+                                                .font12OpenSansRegularBlack45TextStyle
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                                      Container(
+                                        height: 1,
+                                        width: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width - 40,
+                                        color: Colors.grey,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Icon(Icons.speaker_notes, size: 20, color: Colors.black),
+                                            SizedBox(width: 10),
+                                            Text(
+                                                'Status',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlackTextStyle
+                                            ),
+                                            SizedBox(width: 5),
+                                            const Text(
+                                              ':',
+                                              style: TextStyle(
+                                                color: Color(0xFF0098a6),
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                leaveData.sStatusName,
+                                               // item['sStatusName'] ?? '',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlackTextStyle,
+                                                maxLines: 2, // Allows up to 2 lines for the text
+                                                overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
+                                              ),
+                                            ),
+                                            // Spacer(),
+                                            Container(
+                                              height: 30,
+                                              padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                              decoration: BoxDecoration(
+                                                color: Color(0xFF0098a6),
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  leaveData.fAmount,
+                                                 // item['fAmount'] ?? '',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14.0,
+                                                  ),
+                                                  maxLines: 1, // Allows up to 2 lines for the text
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 10),
+                
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          // Space between the two columns
+                                          children: [
+                                            // First Column
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF0098a6),
+                                                      // Change this to your preferred color
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                        Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 2),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF0098a6),
+                                                      // Change this to your preferred color
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: GestureDetector(
+                                                      onTap: (){
+                                                        // Navigator.push(
+                                                        //   context,
+                                                        //   MaterialPageRoute(builder: (context) =>
+                                                        //       ReimbursementLog()),
+                                                        // );
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Text('Take Action',style: AppTextStyle
+                                                              .font14OpenSansRegularWhiteTextStyle),
+                                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 2),
+                                            Expanded(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF0098a6),
+                                                      // Change this to your preferred color
+                                                      borderRadius: BorderRadius.circular(10),
+                                                    ),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                
+                                                       // var projact =  item['sProjectName'] ??'';
+                                                         var projact =  leaveData.sProjectName;
+                                                       // var sTranCode =   item['sTranCode'] ?? '';
+                                                         var sTranCode =   leaveData.sTranCode;
+                                                        print('--project---$projact');
+                                                        print('--sTranCode---$sTranCode');
+                
+                
+                                                        // Navigator.push(
+                                                        //   context,
+                                                        //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
+                                                        // );
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
+                                                        );
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                          SizedBox(width: 10),
+                                                          Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                
+                
+                                          ],
+                                        ),
+                                      ),
+                
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
-
-
-                          ],
+                          );
+                
+                        });
+                
+                      }
+                
                         ),
-                      ),
-      
-                    ],
-                  ),
                 ),
               ),
-            ),
-          );
-      }
-      
-      ),
-    )
+
             ]
         ));
   }
