@@ -25,6 +25,8 @@ import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 import 'dart:math';
 
+import '../expense_management.dart';
+
 class ShopSurvey extends StatelessWidget {
   const ShopSurvey({super.key});
 
@@ -250,6 +252,86 @@ class _MyHomePageState extends State<MyHomePage> {
     var responsed = await http.Response.fromStream(response);
     final responseData = json.decode(responsed.body);
     print('---155----$responseData');
+  }
+  // build dialog sucess
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                       // Navigator.of(context).pop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                        );
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // datepicker
@@ -485,7 +567,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const DashBoard()),
+              MaterialPageRoute(builder: (context) => const ExpenseManagement()),
             );
           },
           child: const Padding(
@@ -989,7 +1071,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                 print('---1050--$hrmsPostReimbursement');
                                 result = "${hrmsPostReimbursement[0]['Result']}";
                                 msg = "${hrmsPostReimbursement[0]['Msg']}";
-                                displayToast(msg);
+
+                               // displayToast(msg);
+                                /// todo here to show the dialog sucess
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return _buildDialogSucces2(context,msg);
+                                  },
+                                );
 
                               }else{
                                 showCustomDialog(context,msg);
