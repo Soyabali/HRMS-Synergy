@@ -420,7 +420,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: SizedBox(
                 height: 150, // Height of the container
-                width: 200, // Width of the container
+                width: MediaQuery.of(context).size.width,
+                //width: 200, // Width of the container
                 child: Opacity(
                   opacity: 0.9,
                   //step3.jpg
@@ -428,7 +429,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                     'assets/images/leave.jpeg',
                     // Replace 'image_name.png' with your asset image path
                     fit: BoxFit
-                        .cover, // Adjust the image fit to cover the container
+                        .fill, // Adjust the image fit to cover the container
                   ),
                 ),
               ),

@@ -598,8 +598,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               DateTime? pickedDate = await showDatePicker(
                                 context: context,
                                 initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2100),
+                                firstDate: DateTime(2000),  // Adjust this to your desired start date
+                                lastDate: DateTime.now(),   // Restrict selection to today or past dates
                               );
                               // Check if a date was picked
                               if (pickedDate != null) {
@@ -609,13 +609,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                 setState(() {
                                   dExpDate = formattedDate;
                                 });
-                                // Display the selected date as a toast
+                                print('$dExpDate');
+                                // Display the selected date as a toast (optional)
                                 //displayToast(dExpDate.toString());
                               } else {
+                                print('---no date is selected----');
                                 // Handle case where no date was selected
                                 //displayToast("No date selected");
                               }
                             },
+
                             child: DottedBorder(
                               color: Colors.grey, // Color of the dotted line
                               strokeWidth: 1.0, // Width of the dotted line
@@ -914,14 +917,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                             TextStyle(color: Colors.red[700]),
                                       )
                               ]),
+                            SizedBox(height: 10),
                           InkWell(
                             onTap: () async {
-
                               SharedPreferences prefs = await SharedPreferences.getInstance();
                               String? sEmpCode = prefs.getString('sEmpCode');
                               String? sContactNo = prefs.getString('sContactNo');
                               print('----sEmpCode--15---$sEmpCode');
-
                               /// TODO GET A RANDOM NUMBER
                               Random random = Random();
                               int sTranCode = 10000000 + random.nextInt(90000000);

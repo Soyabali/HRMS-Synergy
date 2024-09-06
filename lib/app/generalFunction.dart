@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../presentation/login/loginScreen.dart';
+import '../presentation/resources/app_text_style.dart';
 import '../presentation/resources/assets_manager.dart';
 import '../presentation/resources/values_manager.dart';
 
@@ -67,65 +69,408 @@ class GeneralFunction {
   }
 
   // logout dialogbBOX
-  void _showlogoutDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+  // void _showlogoutDialog(BuildContext context) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.circular(15.0),
+  //           ),
+  //           title: const Column(
+  //             children: [
+  //               Icon(
+  //                 Icons.logout,
+  //                 color: Colors.red,
+  //                 size: 50.0,
+  //               ),
+  //               SizedBox(height: 10.0),
+  //               Text(
+  //                 'Logout',
+  //                 style: TextStyle(
+  //                   fontSize: 22.0,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //           content: const Text(
+  //             "Do you want to log out?",
+  //             textAlign: TextAlign.center,
+  //             style: TextStyle(
+  //               fontSize: 16.0,
+  //             ),
+  //           ),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.of(context).pop(); // Dismiss the dialog
+  //               },
+  //               child: Text(
+  //                 'No',
+  //                 style: TextStyle(color: Colors.red),
+  //               ),
+  //             ),
+  //             TextButton(
+  //               onPressed: () {
+  //                 logout(context);
+  //                 Navigator.of(context).pop(); // Dismiss the dialog after action
+  //                 // You can call a function or perform any action you need here
+  //               },
+  //               child: Text(
+  //                 'Yes',
+  //                 style: TextStyle(color: Colors.green),
+  //               ),
+  //             ),
+  //           ],
+  //         );
+  //       }
+  //   );
+  // }
+  Widget _logoutDialog(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 160,
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
             ),
-            title: const Column(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.logout,
-                  color: Colors.red,
-                  size: 50.0,
-                ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 0), // Space for the image
                 Text(
-                  'Logout',
+                    'Logout',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  "Do you want to Logout ?",
                   style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15),
+                Container(
+                  height: 35, // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust padding as needed
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Container background color
+                    borderRadius: BorderRadius.circular(15), // Rounded corners
+                    border: Border.all(color: Colors.grey), // Border color
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            logout(context);
+                            //generalFunction.logout(context);
+                            Navigator.of(context).pop();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            minimumSize: Size(0, 0), // Remove minimum size constraints
+                            backgroundColor: Colors.white, // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'Yes',
+                            style: GoogleFonts.openSans(
+                              color: Colors.red, // Text color for "Yes"
+                              fontSize: 12, // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey, // Divider color
+                        width: 20, // Space between buttons
+                        thickness: 1, // Thickness of the divider
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            minimumSize: Size(0, 0), // Remove minimum size constraints
+                            backgroundColor: Colors.white, // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'No',
+                            style: GoogleFonts.openSans(
+                              color: Colors.black, // Text color for "No"
+                              fontSize: 12, // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+
+                // Container(
+                //     height: 50,
+                //     padding: EdgeInsets.all(5), // Adjust padding as needed
+                //     decoration: BoxDecoration(
+                //       color: Colors.white, // Container background color
+                //       borderRadius: BorderRadius.circular(15), // Rounded corners
+                //       border: Border.all(color: Colors.grey), // Border color
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         Expanded(
+                //           child: TextButton(
+                //             onPressed: () {
+                //               generalFunction.logout(context);
+                //               Navigator.of(context).pop();
+                //             },
+                //             style: TextButton.styleFrom(
+                //               backgroundColor: Colors.white, // Button background
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'Yes',
+                //               style: GoogleFonts.openSans(
+                //                 color: Colors.red, // Text color for "Yes"
+                //                 fontSize: 10,
+                //                 fontWeight: FontWeight.w400,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //         VerticalDivider(
+                //           color: Colors.grey, // Divider color
+                //           width: 20, // Space between buttons
+                //           thickness: 1, // Thickness of the divider
+                //         ),
+                //         Expanded(
+                //           child: TextButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //             },
+                //             style: TextButton.styleFrom(
+                //               backgroundColor: Colors.white, // Button background
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'No',
+                //               style: GoogleFonts.openSans(
+                //                 color: Colors.black, // Text color for "No"
+                //                 fontSize: 10,
+                //                 fontWeight: FontWeight.w400,
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+
+
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 40, right: 40),
+                //   child: Container(
+                //     height: 35,
+                //     padding: EdgeInsets.all(5), // Adjust padding as needed
+                //     decoration: BoxDecoration(
+                //       color: Colors.white, // Container background color
+                //       borderRadius: BorderRadius.circular(15), // Rounded corners
+                //       border: Border.all(color: Colors.grey), // Border color
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: [
+                //         Expanded(
+                //           child: TextButton(
+                //             onPressed: () {
+                //               //Navigator.of(context).pop();
+                //               generalFunction.logout(context);
+                //               Navigator.of(context).pop();
+                //             },
+                //             style: TextButton.styleFrom(
+                //               backgroundColor: Colors.white,
+                //               foregroundColor: Colors.black,
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'Yes',
+                //               style: GoogleFonts.openSans(
+                //                   color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400),
+                //             ),
+                //           ),
+                //         ),
+                //         VerticalDivider(
+                //           color: Colors.grey, // Divider color
+                //           width: 20, // Space between buttons
+                //           thickness: 1, // Thickness of the divider
+                //         ),
+                //         Expanded(
+                //           child: TextButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //             },
+                //             style: TextButton.styleFrom(
+                //               backgroundColor: Colors.white,
+                //               foregroundColor: Colors.black,
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'No',
+                //               style: GoogleFonts.openSans(
+                //                   color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400),
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
+
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 40,right: 40),
+                //   child: Container(
+                //     height: 35,
+                //     padding: EdgeInsets.all(5), // Adjust padding as needed
+                //     decoration: BoxDecoration(
+                //       color: Colors.white, // Container background color
+                //       borderRadius: BorderRadius.circular(15), // Rounded corners
+                //       border: Border.all(color: Colors.grey), // Border color
+                //     ),
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.end,
+                //       children: [
+                //         Expanded(
+                //           child: ElevatedButton(
+                //             onPressed: () {
+                //               //Navigator.of(context).pop();
+                //               generalFunction.logout(context);
+                //               Navigator.of(context).pop();
+                //
+                //             },
+                //             style: ElevatedButton.styleFrom(
+                //               backgroundColor: Colors.white,
+                //               foregroundColor: Colors.black,
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'Yes',
+                //               style: GoogleFonts.openSans(
+                //                   color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400)
+                //             ),
+                //           ),
+                //         ),
+                //         VerticalDivider(
+                //           color: Colors.grey, // Divider color
+                //           width: 20, // Space between buttons
+                //           thickness: 1, // Thickness of the divider
+                //         ),
+                //         Expanded(
+                //           child: ElevatedButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //             },
+                //             style: ElevatedButton.styleFrom(
+                //               backgroundColor: Colors.white,
+                //               foregroundColor: Colors.black,
+                //               shape: RoundedRectangleBorder(
+                //                 borderRadius: BorderRadius.circular(15), // Button border radius
+                //               ),
+                //             ),
+                //             child: Text(
+                //               'No',
+                //                 style: GoogleFonts.openSans(
+                //                     color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400)
+                //             ),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children: [
+                //     ElevatedButton(
+                //       onPressed: () {
+                //         Navigator.of(context).pop();
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Colors.white, // Set the background color to white
+                //         foregroundColor: Colors.black, // Set the text color to black
+                //       ),
+                //       child: Text('Yes',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                //     ),
+                //     ElevatedButton(
+                //       onPressed: () {
+                //         getLocation();
+                //         Navigator.of(context).pop();
+                //       },
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor: Colors.white, // Set the background color to white
+                //         foregroundColor: Colors.black, // Set the text color to black
+                //       ),
+                //       child: Text('No',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                //     )
+                //   ],
+                // )
               ],
             ),
-            content: const Text(
-              "Do you want to log out?",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.0,
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/logoutnew.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
               ),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(); // Dismiss the dialog
-                },
-                child: Text(
-                  'No',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  logout(context);
-                  Navigator.of(context).pop(); // Dismiss the dialog after action
-                  // You can call a function or perform any action you need here
-                },
-                child: Text(
-                  'Yes',
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-            ],
-          );
-        }
+          ),
+        ],
+      ),
     );
   }
-
   goNext(BuildContext context) {
     Navigator.pushAndRemoveUntil(
       context,
@@ -213,8 +558,14 @@ class GeneralFunction {
                 InkWell(
                     onTap: (){
                       print('---Logout---');
-                      _showlogoutDialog(context);
-                     // logout(context);
+                     // _showlogoutDialog(context);
+
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return _logoutDialog(context);
+                        },
+                      );
 
                     },
                     child: drawerItem('assets/images/logout.jpeg', "Logout")),
