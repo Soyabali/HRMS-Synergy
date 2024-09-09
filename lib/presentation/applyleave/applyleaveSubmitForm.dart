@@ -13,9 +13,9 @@ import '../resources/values_manager.dart';
 import 'applyLeave.dart';
 
 class ApplyLeaveSubmitFormHome extends StatefulWidget {
-  final sLvDesc, sFirstName, sLvTypeCode;
+  final sLvDesc, sFirstName, sLvTypeCode,sLastName;
   const ApplyLeaveSubmitFormHome(
-      this.sLvDesc, this.sFirstName, this.sLvTypeCode,
+      this.sLvDesc, this.sFirstName, this.sLvTypeCode,this.sLastName,
       {super.key});
 
   @override
@@ -23,6 +23,7 @@ class ApplyLeaveSubmitFormHome extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
+
   String _selectedValue = "Full Day";
   String _selectedValue2 = "Full";
 
@@ -70,6 +71,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
   int totalDays = 0;
   String displayText = "";
   var hrmsPopWarning;
+  var fullName;
 
   // Uplode Id Proof with gallary
 
@@ -85,6 +87,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
 
   // dialogBox
   Widget _buildDialogSucces2(BuildContext context,String msg) {
@@ -272,6 +275,8 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     formDate = DateFormat('dd/MMM/yyyy').format(currentDate);
     toDate = DateFormat('dd/MMM/yyyy').format(currentDate);
     calculateTotalDays();
+     fullName = '${widget.sFirstName} ${''}${widget.sLastName}';
+    print('-------278----$fullName');
     super.initState();
     _reasonfocus = FocusNode();
     _addressfocus = FocusNode();
@@ -413,6 +418,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
           ),
         ), // Removes shadow under the AppBar
       ),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -428,8 +434,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                   child: Image.asset(
                     'assets/images/leave.jpeg',
                     // Replace 'image_name.png' with your asset image path
-                    fit: BoxFit
-                        .fill, // Adjust the image fit to cover the container
+                    fit: BoxFit.cover, // Adjust the image fit to cover the container
                   ),
                 ),
               ),
@@ -474,14 +479,35 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                     )),
                                 Padding(
                                   padding: EdgeInsets.only(top: 10),
-                                  child: Text('${widget.sFirstName}',
+                                  child: Text('$fullName'?? 'No Name',
                                       style: AppTextStyle
                                           .font16OpenSansRegularBlack45TextStyle),
                                 ),
                                 Spacer(),
-                                Text('${widget.sLvDesc}',
-                                    style: AppTextStyle
-                                        .font14OpenSansRegularBlack45TextStyle)
+                                Container(
+                                  height: 40.0, // Set the desired height
+                                  padding: EdgeInsets.symmetric(horizontal: 4.0), // Add padding for horizontal spacing
+                                  decoration: BoxDecoration(
+                                    color: Colors.white, // Set background color to white
+                                    borderRadius: BorderRadius.circular(20.0), // Half of the height for rounded corners
+                                  ),
+                                  child: Center( // Center the text inside the container
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 5),
+                                      child: Text(
+                                        '${widget.sLvDesc}',
+                                        style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                        textAlign: TextAlign.center, // Ensure the text is centered
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                // Container(
+                                //
+                                //   child: Text('${widget.sLvDesc}',
+                                //       style: AppTextStyle
+                                //           .font14OpenSansRegularBlack45TextStyle),
+                                // )
                               ],
                             ),
                             SizedBox(height: 15),
@@ -579,12 +605,12 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           .font14OpenSansRegularBlack45TextStyle),
                                   // Second widget: Container with light gray background
                                   Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 12,
                                         vertical:
                                             8), // Padding inside the Container
                                     decoration: BoxDecoration(
-                                      color: Color(
+                                      color: const Color(
                                           0xFFD3D3D3), // Light gray background color
                                       borderRadius: BorderRadius.circular(
                                           8), // Rounded corners
@@ -768,99 +794,185 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
-                                    Expanded(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Radio<String>(
-                                            value: "Full Day",
-                                            groupValue: _selectedValue,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _selectedValue = value!;
-                                              });
-                                              if (_selectedValue != null) {
-                                                print(
-                                                    "Selected Radio Value: $_selectedValue");
-                                                // You can also set this value to a Text widget
-                                                displayText = _selectedValue;
-                                              }
-                                            },
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              "Full Day",
-                                              style: AppTextStyle
-                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Handle overflow
-                                              softWrap: false,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                              Radio<String>(
+                                                value: "Full Day",
+                                                groupValue: _selectedValue,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _selectedValue = value!;
+                                                  });
+                                                  if (_selectedValue != null) {
+                                                    print(
+                                                        "Selected Radio Value: $_selectedValue");
+                                                    // You can also set this value to a Text widget
+                                                    displayText = _selectedValue;
+                                                  }
+                                                },
+                                              ),
+                                        SizedBox(width: 3), // Adjust the width to reduce the gap
+                                        Text(
+                                                    "Full Day",
+                                                    style: AppTextStyle
+                                                        .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Handle overflow
+                                                    softWrap: false,
+                                                  ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Radio<String>(
-                                            value: "First Half",
-                                            groupValue: _selectedValue,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _selectedValue = value!;
-                                              });
-                                              if (_selectedValue != null) {
-                                                print(
-                                                    "Selected Radio Value: $_selectedValue");
-                                                // You can also set this value to a Text widget
-                                                displayText = _selectedValue;
-                                              }
-                                            },
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              "First Half",
-                                              style: AppTextStyle
-                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Handle overflow
-                                              softWrap: false,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Radio<String>(
+                                          value: "First Half",
+                                          groupValue: _selectedValue,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedValue = value!;
+                                            });
+                                            if (_selectedValue != null) {
+                                              print(
+                                                  "Selected Radio Value: $_selectedValue");
+                                              // You can also set this value to a Text widget
+                                              displayText = _selectedValue;
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(width: 3), // Adjust the width to reduce the gap
+                                        Text(
+                                          "First Half",
+                                          style: AppTextStyle
+                                              .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle overflow
+                                          softWrap: false,
+                                        ),
+                                      ],
                                     ),
-                                    Expanded(
-                                      child: Row(
-                                        children: <Widget>[
-                                          Radio<String>(
-                                            value: "Second Half",
-                                            groupValue: _selectedValue,
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _selectedValue = value!;
-                                              });
-                                              if (_selectedValue != null) {
-                                                print(
-                                                    "Selected Radio Value: $_selectedValue");
-                                                // You can also set this value to a Text widget
-                                                displayText = _selectedValue;
-                                              }
-                                            },
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              "Second Half",
-                                              style: AppTextStyle
-                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Handle overflow
-                                              softWrap: false,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Radio<String>(
+                                          value: "Second Half",
+                                          groupValue: _selectedValue,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              _selectedValue = value!;
+                                            });
+                                            if (_selectedValue != null) {
+                                              print("Selected Radio Value: $_selectedValue");
+                                              // You can also set this value to a Text widget
+                                              displayText = _selectedValue;
+                                            }
+                                          },
+                                        ),
+                                        SizedBox(width: 3), // Adjust the width to reduce the gap
+                                        Text(
+                                          "Second Half",
+                                          style: AppTextStyle
+                                              .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                          overflow: TextOverflow
+                                              .ellipsis, // Handle overflow
+                                          softWrap: false,
+                                        ),
+                                      ],
                                     ),
+
+                                    // Expanded(
+                                    //   child: Row(
+                                    //     children: <Widget>[
+                                    //       Radio<String>(
+                                    //         value: "Full Day",
+                                    //         groupValue: _selectedValue,
+                                    //         onChanged: (value) {
+                                    //           setState(() {
+                                    //             _selectedValue = value!;
+                                    //           });
+                                    //           if (_selectedValue != null) {
+                                    //             print(
+                                    //                 "Selected Radio Value: $_selectedValue");
+                                    //             // You can also set this value to a Text widget
+                                    //             displayText = _selectedValue;
+                                    //           }
+                                    //         },
+                                    //       ),
+                                    //       Flexible(
+                                    //         child: Text(
+                                    //           "Full Day",
+                                    //           style: AppTextStyle
+                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                    //           overflow: TextOverflow
+                                    //               .ellipsis, // Handle overflow
+                                    //           softWrap: false,
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // Expanded(
+                                    //   child: Row(
+                                    //     children: <Widget>[
+                                    //       Radio<String>(
+                                    //         value: "First Half",
+                                    //         groupValue: _selectedValue,
+                                    //         onChanged: (value) {
+                                    //           setState(() {
+                                    //             _selectedValue = value!;
+                                    //           });
+                                    //           if (_selectedValue != null) {
+                                    //             print(
+                                    //                 "Selected Radio Value: $_selectedValue");
+                                    //             // You can also set this value to a Text widget
+                                    //             displayText = _selectedValue;
+                                    //           }
+                                    //         },
+                                    //       ),
+                                    //       Flexible(
+                                    //         child: Text(
+                                    //           "First Half",
+                                    //           style: AppTextStyle
+                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                    //           overflow: TextOverflow
+                                    //               .ellipsis, // Handle overflow
+                                    //           softWrap: false,
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    // Expanded(
+                                    //   child: Row(
+                                    //     children: <Widget>[
+                                    //       Radio<String>(
+                                    //         value: "Second Half",
+                                    //         groupValue: _selectedValue,
+                                    //         onChanged: (value) {
+                                    //           setState(() {
+                                    //             _selectedValue = value!;
+                                    //           });
+                                    //           if (_selectedValue != null) {
+                                    //             print("Selected Radio Value: $_selectedValue");
+                                    //             // You can also set this value to a Text widget
+                                    //             displayText = _selectedValue;
+                                    //           }
+                                    //         },
+                                    //       ),
+                                    //       Flexible(
+                                    //         child: Text(
+                                    //           "Second Half",
+                                    //           style: AppTextStyle
+                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                    //           overflow: TextOverflow
+                                    //               .ellipsis, // Handle overflow
+                                    //           softWrap: false,
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),

@@ -345,13 +345,14 @@ class _LeaveScreenState extends State<Applyleave> {
                                     // print('---511---${sLvDesc}');
                                     SharedPreferences prefs = await SharedPreferences.getInstance();
                                     var sFirstName = prefs.getString('sFirstName');// sLvTypeCode
+                                    var sLastName = prefs.getString('sLastName');
                                     // var sLvTypeCode = prefs.getString('sLvTypeCode');
                                     print('----517--${sFirstName}');
                                     print('----518--${sLvTypeCode}');
 
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => ApplyLeaveSubmitFormHome(sLvDesc,sFirstName,sLvTypeCode)),
+                                      MaterialPageRoute(builder: (context) => ApplyLeaveSubmitFormHome(sLvDesc,sFirstName,sLvTypeCode,sLastName)),
                                     );
                                   },
                                   child: Container(

@@ -399,11 +399,11 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(width: 4),
-                    Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                    Icon(Icons.calendar_month,size: 15,color: Colors.white),
                     const SizedBox(width: 4),
                     const Text('From',style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.normal
                     ),),
                     SizedBox(width: 4),
@@ -444,7 +444,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                       },
                       child: Container(
                         height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
                         decoration: BoxDecoration(
                           color: Colors.white, // Change this to your preferred color
                           borderRadius: BorderRadius.circular(15),
@@ -461,7 +461,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                       ),
                     ),
 
-                    SizedBox(width: 10),
+                    SizedBox(width: 6),
                     Container(
                       height: 32,
                       width: 32,
@@ -471,15 +471,15 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                       ),
                     ),
                     //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                    SizedBox(width: 10),
+                    SizedBox(width: 8),
                     Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                    SizedBox(width: 4),
+                    SizedBox(width: 5),
                     const Text('To',style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.normal
                     ),),
-                    SizedBox(width: 4),
+                    SizedBox(width: 5),
                     GestureDetector(
                       onTap: ()async{
                         DateTime? pickedDate = await showDatePicker(
@@ -507,7 +507,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                       },
                       child: Container(
                         height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
                         decoration: BoxDecoration(
                           color: Colors.white, // Change this to your preferred color
                           borderRadius: BorderRadius.circular(15),
@@ -526,6 +526,141 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                   ],
                 ),
               ),
+              // Container(
+              //   height: 45,
+              //   color: Color(0xFF2a697b),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       const SizedBox(width: 4),
+              //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
+              //       const SizedBox(width: 4),
+              //       const Text('From',style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 14,
+              //           fontWeight: FontWeight.normal
+              //       ),),
+              //       SizedBox(width: 4),
+              //
+              //       GestureDetector(
+              //         onTap: () async {
+              //           /// TODO Open Date picke and get a date
+              //           DateTime? pickedDate = await showDatePicker(
+              //             context: context,
+              //             initialDate: DateTime.now(),
+              //             firstDate: DateTime(2000),
+              //             lastDate: DateTime(2100),
+              //           );
+              //           // Check if a date was picked
+              //           if (pickedDate != null) {
+              //             // Format the picked date
+              //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+              //             // Update the state with the picked date
+              //             setState(() {
+              //               firstOfMonthDay = formattedDate;
+              //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             });
+              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+              //             print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             print('---formPicker--$firstOfMonthDay');
+              //             // Call API
+              //             //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             // print('---formPicker--$firstOfMonthDay');
+              //
+              //             // Display the selected date as a toast
+              //             //displayToast(dExpDate.toString());
+              //           } else {
+              //             // Handle case where no date was selected
+              //             //displayToast("No date selected");
+              //           }
+              //         },
+              //         child: Container(
+              //           height: 35,
+              //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+              //           decoration: BoxDecoration(
+              //             color: Colors.white, // Change this to your preferred color
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Center(
+              //             child: Text(
+              //               '$firstOfMonthDay',
+              //               style: TextStyle(
+              //                 color: Colors.grey, // Change this to your preferred text color
+              //                 fontSize: 12.0, // Adjust font size as needed
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //
+              //       SizedBox(width: 10),
+              //       Container(
+              //         height: 32,
+              //         width: 32,
+              //         child: Image.asset(
+              //           "assets/images/reimicon_2.png",
+              //           fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+              //         ),
+              //       ),
+              //       //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+              //       SizedBox(width: 10),
+              //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
+              //       SizedBox(width: 4),
+              //       const Text('To',style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.normal
+              //       ),),
+              //       SizedBox(width: 4),
+              //       GestureDetector(
+              //         onTap: ()async{
+              //           DateTime? pickedDate = await showDatePicker(
+              //             context: context,
+              //             initialDate: DateTime.now(),
+              //             firstDate: DateTime(2000),
+              //             lastDate: DateTime(2100),
+              //           );
+              //           // Check if a date was picked
+              //           if (pickedDate != null) {
+              //             // Format the picked date
+              //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+              //             // Update the state with the picked date
+              //             setState(() {
+              //               lastDayOfCurrentMonth = formattedDate;
+              //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             });
+              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+              //             //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+              //             print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+              //
+              //           } else {
+              //
+              //           }
+              //         },
+              //         child: Container(
+              //           height: 35,
+              //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+              //           decoration: BoxDecoration(
+              //             color: Colors.white, // Change this to your preferred color
+              //             borderRadius: BorderRadius.circular(15),
+              //           ),
+              //           child: Center(
+              //             child: Text(
+              //               '$lastDayOfCurrentMonth',
+              //               style: TextStyle(
+              //                 color: Colors.grey, // Change this to your preferred text color
+              //                 fontSize: 12.0, // Adjust font size as needed
+              //               ),
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              
               SizedBox(height: 10),
              
               // SizedBox(height: 10),
@@ -603,31 +738,55 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   Row(
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     children: [
-                                                      Icon(Icons.location_on,color:Color(0xFF0098a6),size: 20),
+                                                      Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
                                                       Text(
                                                         'Project Name :',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
-                                                      SizedBox(width: 2),
-                                                      Text(
-                                                        leaveData.sProjectName,
                                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                         maxLines: 1, // Limits the text to 1 line
                                                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: false, // Prevents the text from wrapping to a new line
                                                       ),
+                                                      SizedBox(width: 2),
+
+                                                      // Wrap the dynamic text in Expanded to prevent overflow
+                                                       Text(
+                                                          leaveData.sProjectName,
+                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 1, // Limits the text to 1 line
+                                                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: false, // Prevents the text from wrapping to a new line
+                                                        ),
                                                     ],
-                                                  ),
-                                                  
+                                                  )
+
+                                                  // Row(
+                                                  //   mainAxisAlignment: MainAxisAlignment.start,
+                                                  //   children: [
+                                                  //     Icon(Icons.location_on,color:Color(0xFF0098a6),size: 20),
+                                                  //     Text(
+                                                  //       'Project Name :',
+                                                  //       style: AppTextStyle
+                                                  //           .font12OpenSansRegularBlackTextStyle,
+                                                  //       maxLines: 2, // Limits the text to 2 lines
+                                                  //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                  //       softWrap: true,
+                                                  //     ),
+                                                  //     SizedBox(width: 2),
+                                                  //     Text(
+                                                  //       leaveData.sProjectName,
+                                                  //       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                  //       maxLines: 2, // Limits the text to 1 line
+                                                  //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                  //       //softWrap: false, // Prevents the text from wrapping to a new line
+                                                  //     ),
+                                                  //   ],
+                                                  // ),
+
 
                                                 ],
                                               )
                                             ],
                                           ),
+
                                           const SizedBox(height: 10),
                                           Padding(
                                             padding: const EdgeInsets.only(

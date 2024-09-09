@@ -757,7 +757,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 0),
                             child: Container(
-                              height: 65,
+                              height: 42,
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 0),
@@ -1170,8 +1170,15 @@ class _MyHomePageState extends State<MyHomePage> {
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";
-                    displayToast(msg);
-                    Navigator.of(context).pop();
+                   // displayToast(msg);
+                    // Dialog
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return _buildDialogSucces2(context,msg);
+                      },
+                    );
+                    //Navigator.of(context).pop();
                   },
                   child: Text('Yes'),
                 ),

@@ -396,11 +396,11 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const SizedBox(width: 4),
-                    Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                    Icon(Icons.calendar_month,size: 15,color: Colors.white),
                     const SizedBox(width: 4),
                     const Text('From',style: TextStyle(
                     color: Colors.white,
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.normal
                     ),),
                     SizedBox(width: 4),
@@ -441,7 +441,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       },
                       child: Container(
                         height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
                         decoration: BoxDecoration(
                           color: Colors.white, // Change this to your preferred color
                           borderRadius: BorderRadius.circular(15),
@@ -458,7 +458,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       ),
                     ),
 
-                    SizedBox(width: 10),
+                    SizedBox(width: 6),
                     Container(
                       height: 32,
                       width: 32,
@@ -468,15 +468,15 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       ),
                     ),
                     //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                    SizedBox(width: 10),
+                    SizedBox(width: 8),
                     Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                    SizedBox(width: 4),
+                    SizedBox(width: 5),
                     const Text('To',style: TextStyle(
                         color: Colors.white,
                         fontSize: 12,
                         fontWeight: FontWeight.normal
                     ),),
-                    SizedBox(width: 4),
+                    SizedBox(width: 5),
                     GestureDetector(
                       onTap: ()async{
                         DateTime? pickedDate = await showDatePicker(
@@ -504,7 +504,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       },
                       child: Container(
                         height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
                         decoration: BoxDecoration(
                           color: Colors.white, // Change this to your preferred color
                           borderRadius: BorderRadius.circular(15),
@@ -523,6 +523,9 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                   ],
                 ),
               ),
+
+
+
               SizedBox(height: 10),
               Center(
                 child: Padding(
@@ -606,59 +609,55 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                     CrossAxisAlignment.start,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Container(
-                                              width: 30.0,
-                                              height: 30.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(15.0),
-                                                border: Border.all(
-                                                  color: Color(0xFF255899),
-                                                  // Outline border color
-                                                  width:
-                                                  0.5, // Outline border width
-                                                ),
-                                                color: Colors.white,
+                                            width: 30.0,
+                                            height: 30.0,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                              border: Border.all(
+                                                color: Color(0xFF255899),
+                                                width: 0.5, // Outline border width
                                               ),
-                                              child: Center(
-                                                child: Text(
-                                                    "${1}",
-                                                    style: AppTextStyle
-                                                        .font14OpenSansRegularBlackTextStyle
-                                                ),
-                                              )),
+                                              color: Colors.white,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "${1}",
+                                                style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                                              ),
+                                            ),
+                                          ),
                                           SizedBox(width: 10),
-                                          Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                leaveData.sExpHeadName,
-                                               // item['sExpHeadName'] ?? '',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle,
-                                                maxLines: 2, // Limits the text to 2 lines
-                                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                softWrap: true,
-                                              ),
-                                              Text(
-                                                leaveData.sProjectName,
-                                                //item['sProjectName'] ?? '',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle,
-                                                maxLines: 2, // Limits the text to 2 lines
-                                                overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                softWrap: true,
-                                              ),
-                                            ],
-                                          )
+                                          // Wrap the column in Flexible to prevent overflow
+                                          Flexible(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  leaveData.sExpHeadName,
+                                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                  maxLines: 2, // Limits the text to 2 lines
+                                                  overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                                ),
+                                                SizedBox(height: 4), // Add spacing between texts if needed
+                                                Padding(
+                                                  padding: const EdgeInsets.only(right: 10),
+                                                  child: Text(
+                                                    leaveData.sProjectName,
+                                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                    maxLines: 2, // Limits the text to 2 lines
+                                                    overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ],
                                       ),
+
                                       const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.only(

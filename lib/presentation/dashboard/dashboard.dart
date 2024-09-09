@@ -134,7 +134,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           child: Text(
                             'No',
                             style: GoogleFonts.openSans(
-                              color: Colors.green, // Text color for "Yes"
+                              color: Colors.red, // Text color for "Yes"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
@@ -163,7 +163,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           child: Text(
                             'Yes',
                             style: GoogleFonts.openSans(
-                              color: Colors.red, // Text color for "No"
+                              color: Colors.green, // Text color for "No"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
@@ -173,69 +173,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                     ],
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 40,right: 40),
-                //   child: Container(
-                //     height: 35,
-                //     padding: EdgeInsets.all(5), // Adjust padding as needed
-                //     decoration: BoxDecoration(
-                //       color: Colors.white, // Container background color
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners
-                //       border: Border.all(color: Colors.grey), // Border color
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         Expanded(
-                //           child: ElevatedButton(
-                //             onPressed: () {
-                //               //Navigator.of(context).pop();
-                //               Navigator.of(context).pop();
-                //
-                //             },
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //                 'No',
-                //                 style: GoogleFonts.openSans(
-                //                     color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400)
-                //             ),
-                //           ),
-                //         ),
-                //         VerticalDivider(
-                //           color: Colors.grey, // Divider color
-                //           width: 20, // Space between buttons
-                //           thickness: 1, // Thickness of the divider
-                //         ),
-                //         Expanded(
-                //           child: ElevatedButton(
-                //             onPressed: () {
-                //               getLocation();
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //                 'Yes',
-                //                 style: GoogleFonts.openSans(
-                //                     color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400)
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // )
+
               ],
             ),
           ),
@@ -309,7 +247,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           child: Text(
                             'Yes',
                             style: GoogleFonts.openSans(
-                              color: Colors.red, // Text color for "Yes"
+                              color: Colors.green, // Text color for "Yes"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
@@ -337,7 +275,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           child: Text(
                             'No',
                             style: GoogleFonts.openSans(
-                              color: Colors.black, // Text color for "No"
+                              color: Colors.red, // Text color for "No"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
@@ -348,224 +286,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                   ),
                 ),
 
-
-                // Container(
-                //     height: 50,
-                //     padding: EdgeInsets.all(5), // Adjust padding as needed
-                //     decoration: BoxDecoration(
-                //       color: Colors.white, // Container background color
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners
-                //       border: Border.all(color: Colors.grey), // Border color
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children: [
-                //         Expanded(
-                //           child: TextButton(
-                //             onPressed: () {
-                //               generalFunction.logout(context);
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: TextButton.styleFrom(
-                //               backgroundColor: Colors.white, // Button background
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'Yes',
-                //               style: GoogleFonts.openSans(
-                //                 color: Colors.red, // Text color for "Yes"
-                //                 fontSize: 10,
-                //                 fontWeight: FontWeight.w400,
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //         VerticalDivider(
-                //           color: Colors.grey, // Divider color
-                //           width: 20, // Space between buttons
-                //           thickness: 1, // Thickness of the divider
-                //         ),
-                //         Expanded(
-                //           child: TextButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: TextButton.styleFrom(
-                //               backgroundColor: Colors.white, // Button background
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'No',
-                //               style: GoogleFonts.openSans(
-                //                 color: Colors.black, // Text color for "No"
-                //                 fontSize: 10,
-                //                 fontWeight: FontWeight.w400,
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-
-
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 40, right: 40),
-                //   child: Container(
-                //     height: 35,
-                //     padding: EdgeInsets.all(5), // Adjust padding as needed
-                //     decoration: BoxDecoration(
-                //       color: Colors.white, // Container background color
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners
-                //       border: Border.all(color: Colors.grey), // Border color
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         Expanded(
-                //           child: TextButton(
-                //             onPressed: () {
-                //               //Navigator.of(context).pop();
-                //               generalFunction.logout(context);
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: TextButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'Yes',
-                //               style: GoogleFonts.openSans(
-                //                   color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400),
-                //             ),
-                //           ),
-                //         ),
-                //         VerticalDivider(
-                //           color: Colors.grey, // Divider color
-                //           width: 20, // Space between buttons
-                //           thickness: 1, // Thickness of the divider
-                //         ),
-                //         Expanded(
-                //           child: TextButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: TextButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'No',
-                //               style: GoogleFonts.openSans(
-                //                   color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400),
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // )
-
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 40,right: 40),
-                //   child: Container(
-                //     height: 35,
-                //     padding: EdgeInsets.all(5), // Adjust padding as needed
-                //     decoration: BoxDecoration(
-                //       color: Colors.white, // Container background color
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners
-                //       border: Border.all(color: Colors.grey), // Border color
-                //     ),
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.end,
-                //       children: [
-                //         Expanded(
-                //           child: ElevatedButton(
-                //             onPressed: () {
-                //               //Navigator.of(context).pop();
-                //               generalFunction.logout(context);
-                //               Navigator.of(context).pop();
-                //
-                //             },
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'Yes',
-                //               style: GoogleFonts.openSans(
-                //                   color: AppColors.red, fontSize: 16, fontWeight: FontWeight.w400)
-                //             ),
-                //           ),
-                //         ),
-                //         VerticalDivider(
-                //           color: Colors.grey, // Divider color
-                //           width: 20, // Space between buttons
-                //           thickness: 1, // Thickness of the divider
-                //         ),
-                //         Expanded(
-                //           child: ElevatedButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //             },
-                //             style: ElevatedButton.styleFrom(
-                //               backgroundColor: Colors.white,
-                //               foregroundColor: Colors.black,
-                //               shape: RoundedRectangleBorder(
-                //                 borderRadius: BorderRadius.circular(15), // Button border radius
-                //               ),
-                //             ),
-                //             child: Text(
-                //               'No',
-                //                 style: GoogleFonts.openSans(
-                //                     color: AppColors.green, fontSize: 16, fontWeight: FontWeight.w400)
-                //             ),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // )
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: [
-                //     ElevatedButton(
-                //       onPressed: () {
-                //         Navigator.of(context).pop();
-                //       },
-                //       style: ElevatedButton.styleFrom(
-                //         backgroundColor: Colors.white, // Set the background color to white
-                //         foregroundColor: Colors.black, // Set the text color to black
-                //       ),
-                //       child: Text('Yes',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                //     ),
-                //     ElevatedButton(
-                //       onPressed: () {
-                //         getLocation();
-                //         Navigator.of(context).pop();
-                //       },
-                //       style: ElevatedButton.styleFrom(
-                //         backgroundColor: Colors.white, // Set the background color to white
-                //         foregroundColor: Colors.black, // Set the text color to black
-                //       ),
-                //       child: Text('No',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                //     )
-                //   ],
-                // )
               ],
             ),
           ),
@@ -588,124 +308,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       ),
     );
   }
-  //
-  // void _showConfirmationDialog(BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(15.0),
-  //           ),
-  //           title: const Column(
-  //             children: [
-  //               Icon(
-  //                 Icons.question_mark_rounded,
-  //                 color: Colors.red,
-  //                 size: 50.0,
-  //               ),
-  //               SizedBox(height: 10.0),
-  //               Text(
-  //                 'Attendance Confirmation',
-  //                 style: TextStyle(
-  //                   fontSize: 22.0,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           content: const Text(
-  //             "Are you sure you want to mark today's attendance?",
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(
-  //               fontSize: 16.0,
-  //             ),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop(); // Dismiss the dialog
-  //               },
-  //               child: Text(
-  //                 'No',
-  //                 style: TextStyle(color: Colors.red),
-  //               ),
-  //             ),
-  //             TextButton(
-  //               onPressed: () {
-  //                 // Perform the "Yes" action here
-  //                 getLocation();
-  //                 Navigator.of(context).pop(); // Dismiss the dialog after action
-  //                 // You can call a function or perform any action you need here
-  //               },
-  //               child: Text(
-  //                 'Yes',
-  //                 style: TextStyle(color: Colors.green),
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       }
-  //   );
-  // }
-  // void _showlogoutDialog(BuildContext context) {
-  //   showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(15.0),
-  //           ),
-  //           title: const Column(
-  //             children: [
-  //               Icon(
-  //                 Icons.logout,
-  //                 color: Colors.red,
-  //                 size: 50.0,
-  //               ),
-  //               SizedBox(height: 10.0),
-  //               Text(
-  //                 'Logout',
-  //                 style: TextStyle(
-  //                   fontSize: 22.0,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           content: const Text(
-  //             "Do you want to log out?",
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(
-  //               fontSize: 16.0,
-  //             ),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop(); // Dismiss the dialog
-  //               },
-  //               child: Text(
-  //                 'No',
-  //                 style: TextStyle(color: Colors.red),
-  //               ),
-  //             ),
-  //             TextButton(
-  //               onPressed: () {
-  //                 generalFunction.logout(context);
-  //                 Navigator.of(context).pop(); // Dismiss the dialog after action
-  //                 // You can call a function or perform any action you need here
-  //               },
-  //               child: Text(
-  //                 'Yes',
-  //                 style: TextStyle(color: Colors.green),
-  //               ),
-  //             ),
-  //           ],
-  //         );
-  //       }
-  //   );
-  // }
+
   Widget _buildDialogSucces2(BuildContext context,String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -862,15 +465,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         },
       );
       /// todo mark Attendance Success Dialog
-      ///
-      // Fluttertoast.showToast(
-      //     msg: msg,
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.green,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0);
+
     }else{
       displayToast("Attendance not confirmed.");
     }
@@ -925,7 +520,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
            title: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 5),
               child: Text(
-                'Welcome, Have a nice day!',
+                'Welcome, Have a nice day !',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -1013,10 +608,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---Profle----');
-                                   // Navigator.push(
-                                   //   context,
-                                   //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                                   // );
+
                           },
                           child: Container(
                             height: 100.0,
@@ -1143,10 +735,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---AttendanceList----');
-                          //  Navigator.pushNamed(context, '/attendancelist');
-                           // Navigator.pushNamed(context, "/attendancelist");
-                          //  Navigator.pushNamed(context, '/login');
-                            // Navigator.pushNamed(context, Routes.attendanceListRoute);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const Attendancelist()),
@@ -1270,7 +858,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---AttendanceList----');
-                            // Navigator.pushNamed(context, '/attendancelist');
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) =>  Applyleave()),

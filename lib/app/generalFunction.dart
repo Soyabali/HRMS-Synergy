@@ -192,7 +192,7 @@ class GeneralFunction {
                           child: Text(
                             'Yes',
                             style: GoogleFonts.openSans(
-                              color: Colors.red, // Text color for "Yes"
+                              color: Colors.green, // Text color for "Yes"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
@@ -220,7 +220,7 @@ class GeneralFunction {
                           child: Text(
                             'No',
                             style: GoogleFonts.openSans(
-                              color: Colors.black, // Text color for "No"
+                              color: Colors.red, // Text color for "No"
                               fontSize: 12, // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
