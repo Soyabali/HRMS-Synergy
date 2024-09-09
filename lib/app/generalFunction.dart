@@ -10,11 +10,14 @@ import '../presentation/login/loginScreen.dart';
 import '../presentation/resources/app_text_style.dart';
 import '../presentation/resources/assets_manager.dart';
 import '../presentation/resources/values_manager.dart';
+import '../presentation/tripList/tripList.dart';
+import '../presentation/tripdetails/tripdetail.dart';
 
 String? sFirstName;
 String? sCompEmailId;
 
 class GeneralFunction {
+  TextEditingController _takeActionController = TextEditingController();
   void logout(BuildContext context)async {
        /// TODO LOGOUT CODE
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -66,6 +69,116 @@ class GeneralFunction {
     prefs.remove("iIsEligibleShLv");
 
     goNext(context);
+  }
+  //  takeActionDialog
+
+  _takeActionDialog(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Remove Reimbursement',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 0),
+                  child: Container(
+                    height: 42,
+                    color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: TextFormField(
+                        controller: _takeActionController,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () =>
+                            FocusScope.of(context).nextFocus(),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                          filled: true, // Enable background color
+                          fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                        ),
+                        autovalidateMode:
+                        AutovalidateMode.onUserInteraction,
+                        // validator: (value) {
+                        //   if (value !=null && value =="0") {
+                        //     return 'Enter an amount greater than 0';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                    ),
+                  ),
+                ),
+                // Text(
+                //   msg,
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     color: Colors.grey[600],
+                //   ),
+                //   maxLines: 2,
+                //   textAlign: TextAlign.center,
+                // ),
+
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Navigator.of(context).pop();
+
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // logout dialogbBOX
@@ -553,39 +666,59 @@ class GeneralFunction {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                drawerItem('assets/images/tripdetails.jpeg', "Trip Details"),
-                drawerItem('assets/images/triplistfirst.jpeg', "Trip List"),
+                drawerItem('assets/images/tripdetails.jpeg', "All Leave Status"),
+                drawerItem('assets/images/triplistfirst.jpeg', "My Leave Status"),
+                // InkWell(
+                //     onTap: (){
+                //       print('---Logout---');
+                //      // _showlogoutDialog(context);
+                //
+                //       showDialog(
+                //         context: context,
+                //         builder: (BuildContext context) {
+                //           return _logoutDialog(context);
+                //         },
+                //       );
+                //
+                //     },
+                //     child: drawerItem('assets/images/logout.jpeg', "Logout")),
+                drawerItem('assets/images/tripdetails.jpeg', "Action On Leave"),
+                drawerItem('assets/images/post_complaint.png', "Short Leave"),
+                drawerItem('assets/images/post_complaint.png', "Leave Cancellation Request"),
                 InkWell(
-                    onTap: (){
-                      print('---Logout---');
-                     // _showlogoutDialog(context);
-
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return _logoutDialog(context);
-                        },
-                      );
-
-                    },
-                    child: drawerItem('assets/images/logout.jpeg', "Logout")),
-                // drawerItem('assets/images/tripdetails.jpeg', "Trip List"),
-                // drawerItem('assets/images/post_complaint.png', "Today's Attendance"),
-                // drawerItem('assets/images/post_complaint.png', "All Leave Status"),
-                // drawerItem('assets/images/post_complaint.png', "My Leave Status"),
-                // drawerItem('assets/images/post_complaint.png', "Action On Leave"),
-                // drawerItem('assets/images/post_complaint.png', "Employee List"),
+                  onTap: (){
+                    // TripDetails
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TripDetail()),
+                    );
+                  },
+                    child: drawerItem('assets/images/tripdetails.jpeg', "Trip Details")),
+                InkWell(
+                  onTap: (){
+                    // StripList
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TripList()),
+                    );
+                  },
+                    child: drawerItem('assets/images/triplistfirst.jpeg', "Trip List")),
+                drawerItem('assets/images/post_complaint.png', "Employee List"),
                 // drawerItem('assets/images/post_complaint.png', "Family Details (Dependents)"),
                 // drawerItem('assets/images/post_complaint.png', "Employees Nomination Details"),
                 // drawerItem('assets/images/post_complaint.png', "Emergency Contact List"),
                 // drawerItem('assets/images/post_complaint.png', "Thought Of The Day"),
                 // drawerItem('assets/images/post_complaint.png', "Change Password"),
-                // InkWell(
-                //      onTap: (){
-                //        print('---Logout---');
-                //        logout(context);
-                //      },
-                //     child: drawerItem('assets/images/logout.jpeg', "Logout")),
+                InkWell(
+                     onTap: (){
+                       showDialog(
+                         context: context,
+                         builder: (BuildContext context) {
+                           return _logoutDialog(context);
+                         },
+                       );
+                     },
+                    child: drawerItem('assets/images/logout.jpeg', "Logout")),
               ],
             ),
           ),

@@ -16,7 +16,9 @@ import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../domain/hrmsreimbursementstatusV3Model.dart';
+import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
+import '../../resources/values_manager.dart';
 import '../expense_management.dart';
 
 class Reimbursementstatus extends StatelessWidget {
@@ -57,21 +59,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   DateTime? _date;
 
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _date = selectedDate;
-      });
-    }
-    print('------67---${_date?.toLocal().toString()}'.split(' ')[0]);
-  }
 
   List stateList = [];
   List hrmsReimbursementList = [];
@@ -81,7 +68,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   late Future<List<Hrmsreimbursementstatusv3model>> reimbursementStatusV3;
   List<Hrmsreimbursementstatusv3model> _allData = [];  // Holds original data
   List<Hrmsreimbursementstatusv3model> _filteredData = [];  // Holds filtered data
-
+  TextEditingController _takeActionController = TextEditingController();
   // Distic List
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
 
@@ -457,7 +444,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         ),
                       ),
                     ),
-
                     SizedBox(width: 6),
                     Container(
                       height: 32,
@@ -499,7 +485,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                           print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
 
                         } else {
-
                         }
                       },
                       child: Container(
@@ -523,8 +508,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                   ],
                 ),
               ),
-
-
 
               SizedBox(height: 10),
               Center(
@@ -657,7 +640,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                           ),
                                         ],
                                       ),
-
                                       const SizedBox(height: 10),
                                       Padding(
                                         padding: const EdgeInsets.only(
@@ -847,12 +829,31 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                       // Change this to your preferred color
                                                       borderRadius: BorderRadius.circular(10),
                                                     ),
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                      children: [
-                                                        Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                                        Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
-                                                      ],
+                                                    child: GestureDetector(
+                                                      onTap: (){
+                                                        print('-----832---View Image---');
+                                                        var images =  leaveData.sExpBillPhoto;
+                                                        var dExpDate = leaveData.dExpDate;
+                                                        var billdate ='Bill Date : $dExpDate';
+                                                       // var images2 = _filteredData[index];
+                                                        print('$images');
+                                                        print('$dExpDate');
+                                                        openFullScreenDialog(
+                                                          context,
+                                                            images,
+                                                            billdate
+                                                         // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                                         // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                                        );
+
+                                                      },
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                          Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -872,11 +873,16 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                     ),
                                                     child: GestureDetector(
                                                       onTap: (){
-                                                        // Navigator.push(
-                                                        //   context,
-                                                        //   MaterialPageRoute(builder: (context) =>
-                                                        //       ReimbursementLog()),
-                                                        // );
+                                                        print('---take action-------');
+                                                        /// todo call a take Action Dialog
+                                                        //_takeActionDialog(context);
+                                                        showDialog(
+                                                        context: context,
+                            builder: (BuildContext context) {
+                            return _takeActionDialog(context);
+                            },
+                            );
+
                                                       },
                                                       child: Row(
                                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -950,7 +956,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                           );
                 
                         });
-                
                       }
                 
                         ),
@@ -960,4 +965,202 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
             ]
         ));
   }
+  // Opend Full Screen DialogbOX
+  void openFullScreenDialog(BuildContext context, String imageUrl, String billDate) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent, // Makes the dialog full screen
+          insetPadding: EdgeInsets.all(0),
+          child: Stack(
+            children: [
+              // Fullscreen Image
+              Positioned.fill(
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover, // Adjust the image to fill the dialog
+                ),
+              ),
+
+              // White container with Bill Date at the bottom
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  color: Colors.white.withOpacity(0.8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        billDate,
+                          style: AppTextStyle
+                              .font16OpenSansRegularBlackTextStyle
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              // Close button in the bottom-right corner
+              Positioned(
+                right: 16,
+                bottom: 10,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.redAccent,
+                    ),
+                    padding: EdgeInsets.all(8),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+  // take a action Dialog
+  Widget _takeActionDialog(BuildContext context) {
+    TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 220, // Adjusted height to accommodate the TextFormField and Submit button
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Remove Reimbursement',
+                  style: AppTextStyle.font16OpenSansRegularRedTextStyle,
+                ),
+                SizedBox(height: 10),
+                // TextFormField for entering data
+
+          Padding(
+                      padding: const EdgeInsets.only(left: 0),
+                      child: TextFormField(
+                        controller: _takeAction,
+                        textInputAction: TextInputAction.next,
+                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                          filled: true, // Enable background color
+                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                        ),
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        // validator: (value) {
+                        //   if (value == null || value.isEmpty) {
+                        //     return 'Please enter a value';
+                        //   }
+                        //   final intValue = int.tryParse(value);
+                        //   if (intValue == null || intValue <= 0) {
+                        //     return 'Enter an amount greater than 0';
+                        //   }
+                        //   return null;
+                        // },
+                      ),
+                    ),
+                SizedBox(height: 15),
+
+                // Submit button
+                InkWell(
+                  onTap: (){
+                    var takeAction = _takeAction.text;
+                    print(takeAction);
+
+                  },
+                  child: Container(
+                    //width: double.infinity,
+                    // Make container fill the width of its parent
+                    height: AppSize.s45,
+                    padding: EdgeInsets.all(AppPadding.p5),
+                    decoration: BoxDecoration(
+                      color: AppColors.loginbutton,
+                      // Background color using HEX value
+                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                    ),
+                    //  #00b3c7
+                    child: Center(
+                      child: Text(
+                        "Submit",
+                        style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     String enteredText = _textController.text;
+                //     if (enteredText.isNotEmpty) {
+                //       print('Submitted: $enteredText');
+                //     }
+                //     // Perform any action you need on submit
+                //    // Navigator.of(context).pop(); // Close the dialog
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
+                //     ),
+                //     backgroundColor: Colors.blue, // Button background color
+                //   ),
+                //   child: Text(
+                //     'Submit',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 }
