@@ -53,31 +53,4 @@ class Hrmsreimbursementstatusv3model {
       dExpDate: json['dExpDate'],
     );
   }
-
-// Method to convert an instance to JSON
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'sTranCode': sTranCode,
-//       'sEmpCode': sEmpCode,
-//       'sProjectName': sProjectName,
-//       'sExpHeadName': sExpHeadName,
-//       'dEntryAt': dEntryAt,
-//       'fAmount': fAmount,
-//       'sExpDetails': sExpDetails,
-//       'sExpBillPhoto': sExpBillPhoto,
-//       'sStatusName': sStatusName,
-//       'sEmpName': sEmpName,
-//       'sRemarks': sRemarks,
-//       'dRemarksAt': dRemarksAt,
-//       'sProjectCode': sProjectCode,
-//       'sExpHeadCode': sExpHeadCode,
-//       'dExpDate': dExpDate,
-//     };
-//   }
-// }
-//
-// // To parse a list of ExpenseEntry from JSON
-// List<ExpenseEntry> parseExpenseEntryList(List<dynamic> list) {
-//   return list.map((json) => ExpenseEntry.fromJson(json)).toList();
-// }
 }

@@ -13,6 +13,8 @@ import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../data/reimbursementClarificationRepo.dart';
 import '../../../domain/rimbursementclarificationmodel.dart';
+import '../../data/hrmsTripDetailRepo.dart';
+import '../../domain/tripDetailModel.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
@@ -57,22 +59,15 @@ class _MyHomePageState extends State<TripListPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
-  late Future<List<HrmsReimbursementClarificationModel>> reimbursementStatusV3;
+  late Future<List<TripDetailModel>> tripDetailModel;
   List<HrmsReimbursementClarificationModel> _allData = [];  // Holds original data
   List<HrmsReimbursementClarificationModel> _filteredData = [];  // Holds filtered data
 
   // Distic List
-  hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
+  hrmsTripList(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
 
-    reimbursementStatusV3 = HrmsreimbursementClarificationRepo().hrmsReimbursementClarificationList(context, firstOfMonthDay, lastDayOfCurrentMonth);
-    print('-----91---$reimbursementStatusV3');
-
-    reimbursementStatusV3.then((data) {
-      setState(() {
-        _allData = data;  // Store the data
-        _filteredData = _allData;  // Initially, no filter applied
-      });
-    });
+    tripDetailModel = HrmstripdetailRepo().hrmsTripDetail(context,firstOfMonthDay,lastDayOfCurrentMonth);
+    print('-----70---$tripDetailModel');
 
   }
   // filter data
@@ -221,7 +216,7 @@ class _MyHomePageState extends State<TripListPage> {
   void initState() {
     // TODO: implement initState
     getCurrentdate();
-    hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+    hrmsTripList(firstOfMonthDay!,lastDayOfCurrentMonth!);
     super.initState();
 
   }
@@ -317,10 +312,10 @@ class _MyHomePageState extends State<TripListPage> {
                             firstOfMonthDay = formattedDate;
                             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          hrmsTripList(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
                           print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          hrmsTripList(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           print('---formPicker--$firstOfMonthDay');
                           // Call API
                           //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
@@ -388,7 +383,7 @@ class _MyHomePageState extends State<TripListPage> {
                             lastDayOfCurrentMonth = formattedDate;
                             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          hrmsTripList(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
                           print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
 
@@ -420,7 +415,8 @@ class _MyHomePageState extends State<TripListPage> {
               SizedBox(height: 10),
               // ui part
               /// todo this is a start journey ui
-              Padding(
+
+                Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Card(
                   elevation: 1,
@@ -720,7 +716,9 @@ class _MyHomePageState extends State<TripListPage> {
                 ),
               )
               /// todo in a future  uncomment this is a complete journey code
-        //        Padding(
+
+
+              //        Padding(
         //   padding: const EdgeInsets.only(left: 10, right: 10),
         //   child: Card(
         //     elevation: 1,
