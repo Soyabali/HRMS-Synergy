@@ -124,301 +124,304 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // statusBarColore
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color  // 2a697b
-            statusBarColor: Color(0xFF2a697b),
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark,
-            // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          ),
-          // backgroundColor: Colors.blu
-          backgroundColor: Color(0xFF0098a6),
-          leading: InkWell(
-            onTap: () {
-              // Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Reimbursementstatus()),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-                color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // statusBarColore
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              // Status bar color  // 2a697b
+              statusBarColor: Color(0xFF2a697b),
+              // Status bar brightness (optional)
+              statusBarIconBrightness: Brightness.dark,
+              // For Android (dark icons)
+              statusBarBrightness: Brightness.light, // For iOS (dark icons)
+            ),
+            // backgroundColor: Colors.blu
+            backgroundColor: Color(0xFF0098a6),
+            leading: InkWell(
+              onTap: () {
+                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Reimbursementstatus()),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Reimbursement Log',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Montserrat',
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Reimbursement Log',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ), // Removes shadow under the AppBar
-        ),
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-    Expanded(
-      child: ListView.builder(
-      itemCount: reimbursementStatusLog?.length ?? 0,
-      itemBuilder: (context, index) {
-        return
-          Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              child: Card(
-                elevation: 1,
-                color: Colors.white,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5.0),
-                    border: Border.all(
-                      color: Colors.grey, // Outline border color
-                      width: 0.2, // Outline border width
+            ), // Removes shadow under the AppBar
+          ),
+          body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+      Expanded(
+        child: ListView.builder(
+        itemCount: reimbursementStatusLog?.length ?? 0,
+        itemBuilder: (context, index) {
+          return
+            Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                child: Card(
+                  elevation: 1,
+                  color: Colors.white,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5.0),
+                      border: Border.all(
+                        color: Colors.grey, // Outline border color
+                        width: 0.2, // Outline border width
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding:
-                    const EdgeInsets.only(left: 8, right: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5),
-                              child: Container(
-                                  width: 30.0,
-                                  height: 30.0,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                    BorderRadius.circular(15.0),
-                                    border: Border.all(
-                                      color: Color(0xFF255899),
-                                      // Outline border color
-                                      width:
-                                      0.5, // Outline border width
-                                    ),
-                                    color: Colors.white,
-                                  ),
-                                  child: Center(
-                                      child: Icon(Icons.light_mode_rounded,
-                                        color: Colors.redAccent,)
-                                  )),
-                            ),
-                            SizedBox(width: 10),
-                            Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.start,
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 15),
-                                  child: Text(
-                                      '${widget.projact}', style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle,
-                                    maxLines: 1, // Allows up to 2 lines for the text
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-
-                              ],
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15),
-                          child: Container(
-                            height: 0.5,
-                            color: Color(0xff3f617d),
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: 10.0,
-                              width: 10.0,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                // Change this to your preferred color
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            //  '‣ Sector',
-                            Text(
-                                'Amount',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Text(
-                              '${reimbursementStatusLog?[index]['fAmount']}',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlack45TextStyle
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: 10.0,
-                              width: 10.0,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                // Change this to your preferred color
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                                'Expense Details',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Text(
-                              '${reimbursementStatusLog?[index]['sExpDetails']}',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlack45TextStyle
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              height: 10.0,
-                              width: 10.0,
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                // Change this to your preferred color
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                                'Status',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle
-                            )
-                          ],
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 15),
-                          child: Text(
-                              '${reimbursementStatusLog?[index]['sStatusName']}',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlack45TextStyle
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  // Handle button press
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      'Action At',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.only(left: 8, right: 8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Container(
+                                    width: 30.0,
+                                    height: 30.0,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(15.0),
+                                      border: Border.all(
+                                        color: Color(0xFF255899),
+                                        // Outline border color
+                                        width:
+                                        0.5, // Outline border width
                                       ),
+                                      color: Colors.white,
                                     ),
-                                    SizedBox(height: 4),
-                                    // Add some spacing between texts
-                                    Text(
-                                      '${reimbursementStatusLog?[index]['dActionAt']}',
-                                      style: AppTextStyle
-                                          .font12OpenSansRegularBlackTextStyle,
-                                    ),
-                                  ],
-                                ),
+                                    child: Center(
+                                        child: Icon(Icons.light_mode_rounded,
+                                          color: Colors.redAccent,)
+                                    )),
                               ),
-                              Container(
-                                height: 40,
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  // Handle button press
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'Action By',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(height: 4),
-                                    // Add some spacing between texts
-                                    Text(
-                                      '${reimbursementStatusLog?[index]['sActionBy']}',
-                                      style: AppTextStyle
-                                          .font12OpenSansRegularBlackTextStyle,
+                              SizedBox(width: 10),
+                              Column(
+                                mainAxisAlignment:
+                                MainAxisAlignment.start,
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 15),
+                                    child: Text(
+                                        '${widget.projact}', style: AppTextStyle
+                                        .font12OpenSansRegularBlackTextStyle,
                                       maxLines: 1, // Allows up to 2 lines for the text
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+
+                                ],
+                              )
                             ],
                           ),
-                        ),
+                          const SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 15, right: 15),
+                            child: Container(
+                              height: 0.5,
+                              color: Color(0xff3f617d),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 10.0,
+                                width: 10.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  // Change this to your preferred color
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              //  '‣ Sector',
+                              Text(
+                                  'Amount',
+                                  style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text(
+                                '${reimbursementStatusLog?[index]['fAmount']}',
+                                style: AppTextStyle
+                                    .font12OpenSansRegularBlack45TextStyle
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 10.0,
+                                width: 10.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  // Change this to your preferred color
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                  'Expense Details',
+                                  style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text(
+                                '${reimbursementStatusLog?[index]['sExpDetails']}',
+                                style: AppTextStyle
+                                    .font12OpenSansRegularBlack45TextStyle
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 10.0,
+                                width: 10.0,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  // Change this to your preferred color
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                  'Status',
+                                  style: AppTextStyle
+                                      .font12OpenSansRegularBlackTextStyle
+                              )
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: Text(
+                                '${reimbursementStatusLog?[index]['sStatusName']}',
+                                style: AppTextStyle
+                                    .font12OpenSansRegularBlack45TextStyle
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Handle button press
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Action At',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      // Add some spacing between texts
+                                      Text(
+                                        '${reimbursementStatusLog?[index]['dActionAt']}',
+                                        style: AppTextStyle
+                                            .font12OpenSansRegularBlackTextStyle,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  height: 40,
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    // Handle button press
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Text(
+                                        'Action By',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      // Add some spacing between texts
+                                      Text(
+                                        '${reimbursementStatusLog?[index]['sActionBy']}',
+                                        style: AppTextStyle
+                                            .font12OpenSansRegularBlackTextStyle,
+                                        maxLines: 1, // Allows up to 2 lines for the text
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-          );
-      }
-      ),
-    )
-    ]
-    ));
+                )
+            );
+        }
+        ),
+      )
+      ]
+      )),
+    );
   }
 }

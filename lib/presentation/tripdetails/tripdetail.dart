@@ -61,7 +61,27 @@ class _MyHomePageState extends State<WorkDetailPage> {
   bool isStopButtonActive = false;
   Color startButtonColor = Color(0xFF0098a6); // Green color for start
   Color stopButtonColor = Colors.grey;
+  bool isStartTripEnabled = true;
+  bool isEndTripEnabled = false;
+  String? tripMsg;
+  bool isTripStarted = false;
   // Inactive color for stop button
+  Future<void> _loadTripStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      tripMsg = prefs.getString('tripMsg');
+      isTripStarted = tripMsg == 'Trip has been started';
+    });
+  }
+
+  Color getButtonColor(String msg) {
+    return msg == 'Trip has been started' ? Colors.grey : Color(0xFF0098a6);
+  }
+
+  Color getButtonColorStoptrip(String msg) {
+    return msg == 'Trip has been started' ? Colors.green : Colors.grey;
+  }
+
 
   // InitState
   TextEditingController _takeAction = TextEditingController();
@@ -72,6 +92,48 @@ class _MyHomePageState extends State<WorkDetailPage> {
     String formattedDateTime = DateFormat('dd/MMM/yyyy HH:mm').format(now);
     return formattedDateTime;
   }
+
+  // to change bg colore loginc
+  // Logic to determine button color based on tripMsg
+  // Color getButtonColor(String tripMsg) {
+  //   print('---82---$tripMsg');
+  //   if (tripMsg == "Trip has been started") {
+  //     return Color(0xFF0098a6); // Green color if tripMsg is null or "Trip has been started"
+  //   } else if (tripMsg == "trip") {
+  //     return Colors.red; // Red color if tripMsg is "trip"
+  //   } else {
+  //     return Colors.grey; // Gray color for all other cases
+  //   }
+  // }
+  // stop trip colore
+  // Color getButtonColorStoptrip(String tripMsg) {
+  //   print('---82---$tripMsg');
+  //   if (tripMsg == null || tripMsg == "Trip has been started") {
+  //     return Color(0xFF0098a6); // Green color if tripMsg is null or "Trip has been started"
+  //  // Red color if tripMsg is "trip"
+  //   } else {
+  //     return Colors.grey; // Gray color for all other cases
+  //   }
+  // }
+
+  // Determine if the Start Trip button should be clickable and its color
+  // bool isStartButtonEnabled() {
+  //   return tripMsg == null || tripMsg!.isEmpty || tripMsg != "Trip has been started";
+  // }
+  //
+  // // Determine if the Stop Trip button should be clickable and its color
+  // bool isStopButtonEnabled() {
+  //   return tripMsg == "Trip has been started";
+  // }
+  // // Get button color dynamically for Start Trip
+  // Color getButtonColorStartTrip() {
+  //   return isStartButtonEnabled() ? Color(0xFF0098a6) : Colors.grey; // Green if enabled, else gray
+  // }
+  //
+  // // Get button color dynamically for Stop Trip
+  // Color getButtonColorStopTrip() {
+  //   return isStopButtonEnabled() ? Colors.green : Colors.grey; // Green if enabled, else gray
+  // }
 
   // get a currecr location latitude and longitude
   void getLocation() async {
@@ -180,6 +242,21 @@ class _MyHomePageState extends State<WorkDetailPage> {
     }
   }
 
+  // void getlocalDataInSharedPreference() async{
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //    tripMsg = prefs.getString('tripMsg');//  tripMsg
+  //   print('----188---$tripMsg');
+  //   getButtonColor(tripMsg ?? "Not a value");
+  // }
+  void getlocalDataInSharedPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      tripMsg = prefs.getString('tripMsg');
+      sTranNo = prefs.getString('sTranNo');
+      print('---Trip Message---$tripMsg');
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -188,6 +265,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('Current Date : $dTripDateTime');
     print(randomNumber); // Example output: 1234567890
     getLocation();
+    _loadTripStatus();
+    //getlocalDataInSharedPreference();
   }
 
   @override
@@ -199,496 +278,257 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        // statusBarColore
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color  // 2a697b
-          statusBarColor: Color(0xFF2a697b),
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
-        ),
-        // backgroundColor: Colors.blu
-        backgroundColor: Color(0xFF0098a6),
-        leading: InkWell(
-          onTap: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DashBoard()),
-            );
-          },
-          child: const Padding(
-            padding: EdgeInsets.only(left: 5.0),
-            child: Icon(
-              Icons.arrow_back_ios,
-              size: 24,
-              color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          // statusBarColore
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            // Status bar color  // 2a697b
+            statusBarColor: Color(0xFF2a697b),
+            // Status bar brightness (optional)
+            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
+          // backgroundColor: Colors.blu
+          backgroundColor: Color(0xFF0098a6),
+          leading: InkWell(
+            onTap: () {
+              // Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DashBoard()),
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 5.0),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 24,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-        title: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Trip Detail',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Montserrat',
+          title: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Trip Detail',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Montserrat',
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ), // Removes shadow under the AppBar
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              child: Container(
-                width: MediaQuery.of(context).size.width - 30,
-                // decoration: BoxDecoration(
-                //     color: Colors.white, // Background color of the container
-                //     borderRadius: BorderRadius.circular(20),
-                //     boxShadow: [
-                //       BoxShadow(
-                //         color: Colors.grey.withOpacity(0.5), // Color of the shadow
-                //         spreadRadius: 5, // Spread radius
-                //         blurRadius: 7, // Blur radius
-                //         offset: Offset(0, 3), // Offset of the shadow
-                //
-                //       ),
-                //     ]),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15),
-                  child: Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(height: 10),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                //Icon(Icons.light_mode_rounded,size: 25,color: Colors.redAccent,),
-                                Image.asset(
-                                  'assets/images/tripicon.jpeg',
-                                  height: 25,
-                                  width: 25,
-                                  fit: BoxFit.fill,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  'Trip Details',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle,
-                                  maxLines: 2, // Limits the text to 2 lines
-                                  overflow: TextOverflow
-                                      .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                  softWrap: true,
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          // take a EditTextView
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0),
-                            child: TextFormField(
-                              controller: _takeAction,
-                              textInputAction: TextInputAction.next,
-                              onEditingComplete: () =>
-                                  FocusScope.of(context).nextFocus(),
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 10.0, horizontal: 10.0),
-                                filled: true, // Enable background color
-                                fillColor: Color(
-                                    0xFFf2f3f5), // Set your desired background color here
-                                hintText:
-                                    'Enter Odometer', // Add your hint text here
-                                hintStyle: TextStyle(color: Colors.grey),
+          ), // Removes shadow under the AppBar
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15,top: 15),
+                child: Container(
+                  width: MediaQuery.of(context).size.width - 30,
+                  decoration: BoxDecoration(
+                      color: Colors.white, // Background color of the container
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5), // Color of the shadow
+                          spreadRadius: 5, // Spread radius
+                          blurRadius: 7, // Blur radius
+                          offset: Offset(0, 3), // Offset of the shadow
+                        ),
+                      ]),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15,),
+                    child: Form(
+                      key: _formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            SizedBox(height: 10),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  //Icon(Icons.light_mode_rounded,size: 25,color: Colors.redAccent,),
+                                  Image.asset(
+                                    'assets/images/tripicon.jpeg',
+                                    height: 25,
+                                    width: 25,
+                                    fit: BoxFit.fill,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    'Trip Details',
+                                    style: AppTextStyle
+                                        .font12OpenSansRegularBlackTextStyle,
+                                    maxLines: 2, // Limits the text to 2 lines
+                                    overflow: TextOverflow
+                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                    softWrap: true,
+                                  )
+                                ],
                               ),
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true), // Allow decimal keyboard
-                              inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(
-                                    r'^\d*\.?\d{0,10}')), // Allow only numbers with optional decimal point
-                                //LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
-                              ],
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter a value';
-                                }
-                                if (double.tryParse(value) == null) {
-                                  return 'Please enter a valid number';
-                                }
-                                return null;
-                              },
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            child: DottedBorder(
-                              color: Colors.grey,
-                              strokeWidth: 1.0,
-                              dashPattern: [4, 2],
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(5.0),
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Container(
-                                  height: 200,
-                                  child: Center(
-                                    child: InkWell(
-                                      onTap: () {
-                                        print('----click photo---');
-                                        pickImage();
-                                      },
-                                      child: image == null
-                                          ? Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                // Icon(Icons.camera,size: 25),
-                                                Image.asset(
-                                                  'assets/images/camra.jpeg',
-                                                  height: 25,
-                                                  width: 25,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                                SizedBox(height: 5),
-                                                Text(
-                                                  'Click Odometer Photo',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle,
-                                                )
-                                              ],
-                                            )
-                                          : Container(
-                                              height: 190,
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              child: Image.file(
-                                                image!,
-                                                fit: BoxFit.cover,
-                                              )),
+                            SizedBox(height: 10),
+                            // take a EditTextView
+                            Padding(
+                              padding: const EdgeInsets.only(left: 0),
+                              child: TextFormField(
+                                controller: _takeAction,
+                                textInputAction: TextInputAction.next,
+                                onEditingComplete: () =>
+                                    FocusScope.of(context).nextFocus(),
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 10.0),
+                                  filled: true, // Enable background color
+                                  fillColor: Color(
+                                      0xFFf2f3f5), // Set your desired background color here
+                                  hintText:
+                                      'Enter Odometer', // Add your hint text here
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                ),
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                keyboardType: TextInputType.numberWithOptions(
+                                    decimal: true), // Allow decimal keyboard
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.allow(RegExp(
+                                      r'^\d*\.?\d{0,10}')), // Allow only numbers with optional decimal point
+                                  //LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
+                                ],
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter a value';
+                                  }
+                                  if (double.tryParse(value) == null) {
+                                    return 'Please enter a valid number';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: DottedBorder(
+                                color: Colors.grey,
+                                strokeWidth: 1.0,
+                                dashPattern: [4, 2],
+                                borderType: BorderType.RRect,
+                                radius: const Radius.circular(5.0),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Container(
+                                    height: 200,
+                                    child: Center(
+                                      child: InkWell(
+                                        onTap: () {
+                                          print('----click photo---');
+                                          pickImage();
+                                        },
+                                        child: image == null
+                                            ? Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  // Icon(Icons.camera,size: 25),
+                                                  Image.asset(
+                                                    'assets/images/camra.jpeg',
+                                                    height: 25,
+                                                    width: 25,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  SizedBox(height: 5),
+                                                  Text(
+                                                    'Click Odometer Photo',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle,
+                                                  )
+                                                ],
+                                              )
+                                            : Container(
+                                                height: 190,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: Image.file(
+                                                  image!,
+                                                  fit: BoxFit.cover,
+                                                )),
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(height: 15),
-                          // Start Trip Button
-                          // ElevatedButton(
-                          //   onPressed: isStartButtonActive
-                          //       ? () async {
-                          //     var edtOdometer = _takeAction.text;
-                          //     SharedPreferences prefs = await SharedPreferences.getInstance();
-                          //     String? sContactNo = prefs.getString('sContactNo');
-                          //
-                          //     if (_formKey.currentState!.validate() &&
-                          //         edtOdometer != null &&
-                          //         image != null) {
-                          //       print('---Api call---');
-                          //       var tripStart = await HrmstripstartendRepo().tripStart(
-                          //         context,
-                          //         sContactNo!,
-                          //         lat,
-                          //         long,
-                          //         randomNumber,
-                          //         uplodedImage,
-                          //         edtOdometer,
-                          //         dTripDateTime,
-                          //       );
-                          //       print('---380--$tripStart');
-                          //       Msg = "${tripStart[0]['Msg']}";
-                          //       Result = "${tripStart[0]['Result']}";
-                          //       SharedPreferences prefs = await SharedPreferences.getInstance();
-                          //       prefs.setString('sTranNo', tripStart[0]['sTranNo']);
-                          //
-                          //       // If trip started successfully
-                          //       if (Msg == "Trip has been started" && Result == "1") {
-                          //         displayToast(Msg);
-                          //         setState(() {
-                          //           // Disable the start button and change its color to gray
-                          //           isStartButtonActive = false;
-                          //           startButtonColor = Colors.grey;
-                          //           // Enable the stop button and change its color to green
-                          //           isStopButtonActive = true;
-                          //           stopButtonColor = Color(0xFF0098a6);
-                          //         });
-                          //       } else {
-                          //         displayToast(Msg);
-                          //       }
-                          //     } else {
-                          //       print('---Api not call---');
-                          //     }
-                          //   }
-                          //       : null, // Disable button when not actionable
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: startButtonColor, // Dynamic color
-                          //   ),
-                          //   child: const Text(
-                          //     "START TRIP",
-                          //     style: TextStyle(
-                          //       fontFamily: 'Montserrat',
-                          //       color: Colors.white,
-                          //       fontSize: 16.0,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(height: 15),
-                          // // Space between buttons
-                          // // Stop Trip Button
-                          // ElevatedButton(
-                          //   onPressed: isStopButtonActive
-                          //       ? () async {
-                          //     var edtOdometer = _takeAction.text;
-                          //     SharedPreferences prefs = await SharedPreferences.getInstance();
-                          //     String? sContactNo = prefs.getString('sContactNo');
-                          //     String? sTranNo = prefs.getString('sTranNo');
-                          //
-                          //     if (_formKey.currentState!.validate() &&
-                          //         edtOdometer != null &&
-                          //         image != null) {
-                          //       print('---Api call---');
-                          //       var tripEnd = await HrmstripEndRepo().tripEnd(
-                          //         context,
-                          //         sContactNo!,
-                          //         lat,
-                          //         long,
-                          //         sTranNo!,
-                          //         uplodedImage,
-                          //         edtOdometer,
-                          //         dTripDateTime,
-                          //       );
-                          //       print('---425--$tripEnd');
-                          //       Msg = "${tripEnd[0]['Msg']}";
-                          //       Result = "${tripEnd[0]['Result']}";
-                          //
-                          //       if (Result == "1") {
-                          //         // Success logic for stopping the trip
-                          //         showDialog(
-                          //           context: context,
-                          //           builder: (BuildContext context) {
-                          //             return _buildDialogSucces2(context, Msg);
-                          //           },
-                          //         );
-                          //       } else {
-                          //         displayToast(Msg);
-                          //       }
-                          //     } else {
-                          //       print('---Api not call---');
-                          //     }
-                          //   }
-                          //       : null, // Disable button when not actionable
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: stopButtonColor, // Dynamic color
-                          //   ),
-                          //   child: const Text(
-                          //     "STOP TRIP",
-                          //     style: TextStyle(
-                          //       fontFamily: 'Montserrat',
-                          //       color: Colors.white,
-                          //       fontSize: 16.0,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
-                          // ElevatedButton(
-                          //   onPressed: isStartButtonActive
-                          //       ? () async {
-                          //           var edtOdometer = _takeAction.text;
-                          //           SharedPreferences prefs =
-                          //               await SharedPreferences.getInstance();
-                          //           String? sContactNo =
-                          //               prefs.getString('sContactNo');
-                          //
-                          //           if (_formKey.currentState!.validate() &&
-                          //               edtOdometer != null &&
-                          //               image != null) {
-                          //             print('---Api call---');
-                          //             var tripStart =
-                          //                 await HrmstripstartendRepo()
-                          //                     .tripStart(
-                          //               context,
-                          //               sContactNo!,
-                          //               lat,
-                          //               long,
-                          //               randomNumber,
-                          //               uplodedImage,
-                          //               edtOdometer,
-                          //               dTripDateTime,
-                          //             );
-                          //             print('---380--$tripStart');
-                          //             Msg = "${tripStart[0]['Msg']}";
-                          //             Result = "${tripStart[0]['Result']}";
-                          //             SharedPreferences prefs =
-                          //                 await SharedPreferences.getInstance();
-                          //             prefs.setString('sTranNo', tripStart[0]['sTranNo']);
-                          //
-                          //             // If trip started successfully
-                          //             if (Msg == "Trip has been started" && Result == "1") {
-                          //               displayToast(Msg);
-                          //               setState(() {
-                          //                 // Disable the start button
-                          //                 isStartButtonActive = false;
-                          //                 startButtonColor = Colors.grey;
-                          //                 // Enable the stop button
-                          //                 isStopButtonActive = true;
-                          //                 stopButtonColor = Color(0xFF0098a6); // Green color
-                          //                 // showDialog(
-                          //                 //   context: context,
-                          //                 //   builder: (BuildContext context) {
-                          //                 //     return _buildDialogSucces2(
-                          //                 //         context, Msg);
-                          //                 //   },
-                          //                 // );
-                          //
-                          //               });
-                          //             } else {
-                          //               displayToast(Msg);
-                          //             }
-                          //           } else {
-                          //             print('---Api not call---');
-                          //           }
-                          //         }
-                          //       : null, // Disable button when it's non-actionable
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor:
-                          //         startButtonColor, // Dynamic color
-                          //   ),
-                          //   child: const Text(
-                          //     "START TRIP",
-                          //     style: TextStyle(
-                          //       fontFamily: 'Montserrat',
-                          //       color: Colors.white,
-                          //       fontSize: 16.0,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
-                          // SizedBox(height: 20), // Space between buttons
-                          // ElevatedButton(
-                          //   onPressed: isStopButtonActive
-                          //       ? () async {
-                          //           var edtOdometer = _takeAction.text;
-                          //           SharedPreferences prefs =
-                          //               await SharedPreferences.getInstance();
-                          //           String? sContactNo =
-                          //               prefs.getString('sContactNo');
-                          //           String? sTranNo =
-                          //               prefs.getString('sTranNo');
-                          //
-                          //           if (_formKey.currentState!.validate() &&
-                          //               edtOdometer != null &&
-                          //               image != null) {
-                          //             print('---Api call---');
-                          //             var tripEnd =
-                          //                 await HrmstripEndRepo().tripEnd(
-                          //               context,
-                          //               sContactNo!,
-                          //               lat,
-                          //               long,
-                          //               sTranNo!,
-                          //               uplodedImage,
-                          //               edtOdometer,
-                          //               dTripDateTime,
-                          //             );
-                          //             print('---425--$tripEnd');
-                          //             Msg = "${tripEnd[0]['Msg']}";
-                          //             Result = "${tripEnd[0]['Result']}";
-                          //
-                          //             if (Result == "1") {
-                          //               // Success logic for stopping the trip
-                          //               showDialog(
-                          //                 context: context,
-                          //                 builder: (BuildContext context) {
-                          //                   return _buildDialogSucces2(
-                          //                       context, Msg);
-                          //                 },
-                          //               );
-                          //             } else {
-                          //               displayToast(Msg);
-                          //             }
-                          //           } else {
-                          //             print('---Api not call---');
-                          //           }
-                          //         }
-                          //       : null, // Disable button when it's non-actionable
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: stopButtonColor, // Dynamic color
-                          //   ),
-                          //   child: const Text(
-                          //     "STOP TRIP",
-                          //     style: TextStyle(
-                          //       fontFamily: 'Montserrat',
-                          //       color: Colors.white,
-                          //       fontSize: 16.0,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ),
+                            SizedBox(height: 15),
+                            // Start Trip Button
+                            ElevatedButton(
+                              onPressed: isTripStarted ? null : () async {
+                                // Your trip start API logic
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                var sImage;
+                                var edtOdometer = _takeAction.text;
+                                String? sContactNo = prefs.getString('sContactNo');
 
-                          ElevatedButton(
-                             onPressed: () async {
-                               var sImage;
-                               var edtOdometer = _takeAction.text;
-                               SharedPreferences prefs = await SharedPreferences.getInstance();
-                               String? sContactNo = prefs.getString('sContactNo');
+                                if (_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null) {
 
+                                  var tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!, lat, long, randomNumber, uplodedImage, edtOdometer, dTripDateTime);
+                                   print('---488---$tripStart');
+                                  String Msg = "${tripStart[0]['Msg']}";
+                                  String sTranNo = "${tripStart[0]['sTranNo']}";
+                                  String Result = "${tripStart[0]['Result']}";
 
-                               if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
-                                    print('---Api call---');
-                                  var  tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!,lat,long,randomNumber,uplodedImage,edtOdometer,dTripDateTime);
-                                  print('---380--$tripStart');
-                                    Msg = "${tripStart[0]['Msg']}";
-                                    sTranNo = "${tripStart[0]['sTranNo']}";
-                                    Result = "${tripStart[0]['Result']}";
-                                    /// todo here you should short sTranNo
-                                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    prefs.setString('sTranNo',sTranNo);
+                                  prefs.setString('sTranNo', sTranNo);
+                                  prefs.setString('tripMsg', Msg);
 
+                                  setState(() {
+                                    tripMsg = Msg;
+                                    isTripStarted = tripMsg == 'Trip has been started';
+                                  });
+                                  // Dialog logic and other actions
+                                }
+                                else{
+                                         if(edtOdometer==null || edtOdometer==''){
+                                           print('----print---424---');
+                                           displayToast('Enter Odometer details ');
+                                         }else if(uplodedImage==null || uplodedImage==''){
+                                           displayToast('Please click Odometer image');
+                                           //print('----print---424---');
+                                         }
+                                         print('---Api not call---');
+                                        // displayToast('Click Photo');
+                                       }
+                                       if(Result=="1"){
+                                        // displayToast(Msg);
+                                         showDialog(
+                                           context: context,
+                                           builder: (BuildContext context) {
+                                             return _buildDialogSucces2(context,Msg);
+                                           },
+                                         );
+                                         setState(() {
 
-                               }else{
-                                 print('---Api not call---');
-                               }
-                               if(Result=="1"){
-                                // displayToast(Msg);
-                                 showDialog(
-                                   context: context,
-                                   builder: (BuildContext context) {
-                                     return _buildDialogSucces2(context,Msg);
-                                   },
-                                 );
-                                 setState(() {
+                                         });
+                                       }else{
+                                         //displayToast(Msg);
 
-                                 });
-                               }else{
-                                 displayToast(Msg);
-                               }
-                               /// todo here you get record value and hit the api
-                             },
-
+                                }
+                              },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
+                                backgroundColor: getButtonColor(tripMsg ?? "Not a value"),
                               ),
                               child: const Text(
                                 "START TRIP",
@@ -697,51 +537,63 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                     color: Colors.white,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold),
-                              )),
-                          SizedBox(height: 15),
-                          ElevatedButton(
-                              onPressed: () async {
-                                var sImage;
-                                var edtOdometer = _takeAction.text;
+                              ),
+                            ),
+                            const SizedBox(height: 15),
+
+
+                            ElevatedButton(
+                              onPressed: isTripStarted ? () async {
+                                // Your trip stop API logic
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
+                                var edtOdometer = _takeAction.text;
                                 String? sContactNo = prefs.getString('sContactNo');
                                 String? sTranNo = prefs.getString('sTranNo');
 
-                                if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
-                                  print('---Api call---');
-                                  var  tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!,lat,long,sTranNo!,uplodedImage,edtOdometer,dTripDateTime);
-                                  print('---425--$tripEnd');
-                                  Msg = "${tripEnd[0]['Msg']}";
-                                  sTranNo = "${tripEnd[0]['sTranNo']}";
-                                  Result = "${tripEnd[0]['Result']}";
-                                  //1583476266
+                                if (_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null) {
+
+                                  var tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!, lat, long, sTranNo!, uplodedImage, edtOdometer, dTripDateTime);
+                                  String Msg = "${tripEnd[0]['Msg']}";
+                                  String Result = "${tripEnd[0]['Result']}";
+
+                                  prefs.setString('tripMsg', Msg);
                                   setState(() {
+                                    tripMsg = Msg;
+                                    isTripStarted = false;
                                   });
 
-
+                                  // Dialog logic and other actions
                                 }else{
-                                  print('---Api not call---');
-                                }
-                                if(Result=="1"){
-                                 // displayToast(Msg);
-                                 // _buildDialogSucces2(context,Msg);
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return _buildDialogSucces2(context,Msg);
-                                    },
-                                  );
-                                  setState(() {
+    if(edtOdometer==null || edtOdometer==''){
+    print('----print---424---');
+    displayToast('Enter Odometer details ');
+    }else if(uplodedImage==null || uplodedImage==''){
+    displayToast('Please click Odometer image');
+    //print('----print---424---');
+    }
+    print('---Api not call---');
+    // displayToast('Click Photo');
+    }
+    if(Result=="1"){
+    // displayToast(Msg);
+    showDialog(
+    context: context,
+    builder: (BuildContext context) {
+    return _buildDialogSucces2(context,Msg);
+    },
+    );
+    setState(() {
 
-                                  });
-                                }else{
-                                  displayToast(Msg);
+    });
+    }else{
+    //displayToast(Msg);
+
+
                                 }
-                                /// todo here you get record value and hit the api
-                              },
+
+                              } : null,
                               style: ElevatedButton.styleFrom(
-                               // backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
-                                backgroundColor : Colors.grey,
+                                backgroundColor: getButtonColorStoptrip(tripMsg ?? "Not a value"),
                               ),
                               child: const Text(
                                 "STOP TRIP",
@@ -750,15 +602,141 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                     color: Colors.white,
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold),
-                              )),
-                        ],
+                              ),
+                            ),
+                            // ElevatedButton(
+                            //    onPressed: () async {
+                            //      var sImage;
+                            //      var edtOdometer = _takeAction.text;
+                            //      SharedPreferences prefs = await SharedPreferences.getInstance();
+                            //      String? sContactNo = prefs.getString('sContactNo');//  tripMsg
+                            //
+                            //      if(_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null){
+                            //           print('---Api call---');
+                            //         var  tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!,lat,long,randomNumber,uplodedImage,edtOdometer,dTripDateTime);
+                            //         print('---380--$tripStart');
+                            //
+                            //           Msg = "${tripStart[0]['Msg']}";
+                            //           sTranNo = "${tripStart[0]['sTranNo']}";
+                            //           Result = "${tripStart[0]['Result']}";
+                            //           /// todo here you should short sTranNo
+                            //           SharedPreferences prefs = await SharedPreferences.getInstance();
+                            //           prefs.setString('sTranNo',sTranNo);
+                            //           prefs.setString('tripMsg',Msg);
+                            //           print('---423---msg--$Msg');
+                            //
+                            //      }else{
+                            //        if(edtOdometer==null || edtOdometer==''){
+                            //          print('----print---424---');
+                            //          displayToast('Enter Odometer details ');
+                            //        }else if(uplodedImage==null || uplodedImage==''){
+                            //          displayToast('Please click Odometer image');
+                            //          //print('----print---424---');
+                            //        }
+                            //        print('---Api not call---');
+                            //       // displayToast('Click Photo');
+                            //      }
+                            //      if(Result=="1"){
+                            //       // displayToast(Msg);
+                            //        showDialog(
+                            //          context: context,
+                            //          builder: (BuildContext context) {
+                            //            return _buildDialogSucces2(context,Msg);
+                            //          },
+                            //        );
+                            //        setState(() {
+                            //
+                            //        });
+                            //      }else{
+                            //        //displayToast(Msg);
+                            //      }
+                            //      /// todo here you get record value and hit the api
+                            //    },
+                            //
+                            //     style: ElevatedButton.styleFrom(
+                            //       backgroundColor: getButtonColor(tripMsg ?? "Not a value") // Hex color code (FF for alpha, followed by RGB)
+                            //     ),
+                            //     child: const Text(
+                            //       "START TRIP",
+                            //       style: TextStyle(
+                            //           fontFamily: 'Montserrat',
+                            //           color: Colors.white,
+                            //           fontSize: 16.0,
+                            //           fontWeight: FontWeight.bold),
+                            //     )),
+                            //
+                            // SizedBox(height: 15),
+                            // ElevatedButton(
+                            //     onPressed: () async {
+                            //       var sImage;
+                            //       var edtOdometer = _takeAction.text;
+                            //       SharedPreferences prefs = await SharedPreferences.getInstance();
+                            //       String? sContactNo = prefs.getString('sContactNo');
+                            //       String? sTranNo = prefs.getString('sTranNo');
+                            //
+                            //       if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
+                            //         print('---Api call---');
+                            //         var  tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!,lat,long,sTranNo!,uplodedImage,edtOdometer,dTripDateTime);
+                            //         print('---425--$tripEnd');
+                            //         Msg = "${tripEnd[0]['Msg']}";
+                            //         sTranNo = "${tripEnd[0]['sTranNo']}";
+                            //         Result = "${tripEnd[0]['Result']}";
+                            //         // todo
+                            //         SharedPreferences prefs = await SharedPreferences.getInstance();
+                            //         prefs.setString('sTranNo',sTranNo);
+                            //         prefs.setString('tripMsg',Msg);
+                            //         setState(() {
+                            //         });
+                            //         String? msgg = prefs.getString('tripMsg');
+                            //         print('---517---$Msg');
+                            //         print('---519---$msgg');
+                            //
+                            //
+                            //
+                            //       }else{
+                            //         print('---Api not call---');
+                            //       }
+                            //       if(Result=="1"){
+                            //        // displayToast(Msg);
+                            //        // _buildDialogSucces2(context,Msg);
+                            //         showDialog(
+                            //           context: context,
+                            //           builder: (BuildContext context) {
+                            //             return _buildDialogSucces2(context,Msg);
+                            //           },
+                            //         );
+                            //         setState(() {
+                            //
+                            //         });
+                            //       }else{
+                            //         displayToast(Msg);
+                            //       }
+                            //       /// todo here you get record value and hit the api
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //      // backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
+                            //       backgroundColor : getButtonColorStoptrip(tripMsg ?? "Not a value"),
+                            //     ),
+                            //     child: const Text(
+                            //       "STOP TRIP",
+                            //       style: TextStyle(
+                            //           fontFamily: 'Montserrat',
+                            //           color: Colors.white,
+                            //           fontSize: 16.0,
+                            //           fontWeight: FontWeight.bold),
+                            //     )),
+
+
+
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

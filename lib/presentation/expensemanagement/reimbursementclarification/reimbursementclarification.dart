@@ -343,505 +343,380 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // statusBarColore
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color  // 2a697b
-            statusBarColor: Color(0xFF2a697b),
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark,
-            // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          ),
-          // backgroundColor: Colors.blu
-          backgroundColor: Color(0xFF0098a6),
-          leading: InkWell(
-            onTap: () {
-              //Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-                color: Colors.white,
-              ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // statusBarColore
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              // Status bar color  // 2a697b
+              statusBarColor: Color(0xFF2a697b),
+              // Status bar brightness (optional)
+              statusBarIconBrightness: Brightness.dark,
+              // For Android (dark icons)
+              statusBarBrightness: Brightness.light, // For iOS (dark icons)
             ),
-          ),
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Reimbursement Clarification',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Montserrat',
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ), // Removes shadow under the AppBar
-        ),
-
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                height: 45,
-                color: Color(0xFF2a697b),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(width: 4),
-                    Icon(Icons.calendar_month,size: 15,color: Colors.white),
-                    const SizedBox(width: 4),
-                    const Text('From',style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal
-                    ),),
-                    SizedBox(width: 4),
-
-                    GestureDetector(
-                      onTap: () async {
-                        /// TODO Open Date picke and get a date
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        // Check if a date was picked
-                        if (pickedDate != null) {
-                          // Format the picked date
-                          String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          // Update the state with the picked date
-                          setState(() {
-                            firstOfMonthDay = formattedDate;
-                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          });
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          print('---formPicker--$firstOfMonthDay');
-                          // Call API
-                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          // print('---formPicker--$firstOfMonthDay');
-
-                          // Display the selected date as a toast
-                          //displayToast(dExpDate.toString());
-                        } else {
-                          // Handle case where no date was selected
-                          //displayToast("No date selected");
-                        }
-                      },
-                      child: Container(
-                        height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                        decoration: BoxDecoration(
-                          color: Colors.white, // Change this to your preferred color
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$firstOfMonthDay',
-                            style: TextStyle(
-                              color: Colors.grey, // Change this to your preferred text color
-                              fontSize: 12.0, // Adjust font size as needed
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(width: 6),
-                    Container(
-                      height: 32,
-                      width: 32,
-                      child: Image.asset(
-                        "assets/images/reimicon_2.png",
-                        fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
-                      ),
-                    ),
-                    //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                    SizedBox(width: 8),
-                    Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                    SizedBox(width: 5),
-                    const Text('To',style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.normal
-                    ),),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: ()async{
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        // Check if a date was picked
-                        if (pickedDate != null) {
-                          // Format the picked date
-                          String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          // Update the state with the picked date
-                          setState(() {
-                            lastDayOfCurrentMonth = formattedDate;
-                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          });
-                          hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-
-                        } else {
-
-                        }
-                      },
-                      child: Container(
-                        height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                        decoration: BoxDecoration(
-                          color: Colors.white, // Change this to your preferred color
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$lastDayOfCurrentMonth',
-                            style: TextStyle(
-                              color: Colors.grey, // Change this to your preferred text color
-                              fontSize: 12.0, // Adjust font size as needed
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            // backgroundColor: Colors.blu
+            backgroundColor: Color(0xFF0098a6),
+            leading: InkWell(
+              onTap: () {
+                //Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 24,
+                  color: Colors.white,
                 ),
               ),
-              // Container(
-              //   height: 45,
-              //   color: Color(0xFF2a697b),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: [
-              //       const SizedBox(width: 4),
-              //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
-              //       const SizedBox(width: 4),
-              //       const Text('From',style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 14,
-              //           fontWeight: FontWeight.normal
-              //       ),),
-              //       SizedBox(width: 4),
-              //
-              //       GestureDetector(
-              //         onTap: () async {
-              //           /// TODO Open Date picke and get a date
-              //           DateTime? pickedDate = await showDatePicker(
-              //             context: context,
-              //             initialDate: DateTime.now(),
-              //             firstDate: DateTime(2000),
-              //             lastDate: DateTime(2100),
-              //           );
-              //           // Check if a date was picked
-              //           if (pickedDate != null) {
-              //             // Format the picked date
-              //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-              //             // Update the state with the picked date
-              //             setState(() {
-              //               firstOfMonthDay = formattedDate;
-              //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             });
-              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-              //             print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             print('---formPicker--$firstOfMonthDay');
-              //             // Call API
-              //             //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             // print('---formPicker--$firstOfMonthDay');
-              //
-              //             // Display the selected date as a toast
-              //             //displayToast(dExpDate.toString());
-              //           } else {
-              //             // Handle case where no date was selected
-              //             //displayToast("No date selected");
-              //           }
-              //         },
-              //         child: Container(
-              //           height: 35,
-              //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
-              //           decoration: BoxDecoration(
-              //             color: Colors.white, // Change this to your preferred color
-              //             borderRadius: BorderRadius.circular(15),
-              //           ),
-              //           child: Center(
-              //             child: Text(
-              //               '$firstOfMonthDay',
-              //               style: TextStyle(
-              //                 color: Colors.grey, // Change this to your preferred text color
-              //                 fontSize: 12.0, // Adjust font size as needed
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //
-              //       SizedBox(width: 10),
-              //       Container(
-              //         height: 32,
-              //         width: 32,
-              //         child: Image.asset(
-              //           "assets/images/reimicon_2.png",
-              //           fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
-              //         ),
-              //       ),
-              //       //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-              //       SizedBox(width: 10),
-              //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
-              //       SizedBox(width: 4),
-              //       const Text('To',style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: 12,
-              //           fontWeight: FontWeight.normal
-              //       ),),
-              //       SizedBox(width: 4),
-              //       GestureDetector(
-              //         onTap: ()async{
-              //           DateTime? pickedDate = await showDatePicker(
-              //             context: context,
-              //             initialDate: DateTime.now(),
-              //             firstDate: DateTime(2000),
-              //             lastDate: DateTime(2100),
-              //           );
-              //           // Check if a date was picked
-              //           if (pickedDate != null) {
-              //             // Format the picked date
-              //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-              //             // Update the state with the picked date
-              //             setState(() {
-              //               lastDayOfCurrentMonth = formattedDate;
-              //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             });
-              //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-              //             //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-              //             print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-              //
-              //           } else {
-              //
-              //           }
-              //         },
-              //         child: Container(
-              //           height: 35,
-              //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
-              //           decoration: BoxDecoration(
-              //             color: Colors.white, // Change this to your preferred color
-              //             borderRadius: BorderRadius.circular(15),
-              //           ),
-              //           child: Center(
-              //             child: Text(
-              //               '$lastDayOfCurrentMonth',
-              //               style: TextStyle(
-              //                 color: Colors.grey, // Change this to your preferred text color
-              //                 fontSize: 12.0, // Adjust font size as needed
-              //               ),
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              
-              SizedBox(height: 10),
-             
-              // SizedBox(height: 10),
-              Expanded(
-                child: Container(
-                  child: FutureBuilder<List<HrmsReimbursementClarificationModel>>(
-                      future: reimbursementStatusV3,
-                      builder: (context, snapshot) {
-                        return ListView.builder(
-                          // itemCount: snapshot.data!.length ?? 0,
-                          // itemBuilder: (context, index)
-                            itemCount: _filteredData.length?? 0,
-                            itemBuilder: (context, index)
-                            {
-                              final leaveData = _filteredData[index];
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
-                                child: Card(
-                                  elevation: 1,
-                                  color: Colors.white,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      border: Border.all(
-                                        color: Colors.grey, // Outline border color
-                                        width: 0.2, // Outline border width
+            ),
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Reimbursement Clarification',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ), // Removes shadow under the AppBar
+          ),
+
+          body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                  height: 45,
+                  color: Color(0xFF2a697b),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 4),
+                      Icon(Icons.calendar_month,size: 15,color: Colors.white),
+                      const SizedBox(width: 4),
+                      const Text('From',style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal
+                      ),),
+                      SizedBox(width: 4),
+
+                      GestureDetector(
+                        onTap: () async {
+                          /// TODO Open Date picke and get a date
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          // Check if a date was picked
+                          if (pickedDate != null) {
+                            // Format the picked date
+                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            // Update the state with the picked date
+                            setState(() {
+                              firstOfMonthDay = formattedDate;
+                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            });
+                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            print('---formPicker--$firstOfMonthDay');
+                            // Call API
+                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            // print('---formPicker--$firstOfMonthDay');
+
+                            // Display the selected date as a toast
+                            //displayToast(dExpDate.toString());
+                          } else {
+                            // Handle case where no date was selected
+                            //displayToast("No date selected");
+                          }
+                        },
+                        child: Container(
+                          height: 35,
+                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Change this to your preferred color
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$firstOfMonthDay',
+                              style: TextStyle(
+                                color: Colors.grey, // Change this to your preferred text color
+                                fontSize: 12.0, // Adjust font size as needed
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(width: 6),
+                      Container(
+                        height: 32,
+                        width: 32,
+                        child: Image.asset(
+                          "assets/images/reimicon_2.png",
+                          fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                        ),
+                      ),
+                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                      SizedBox(width: 8),
+                      Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                      SizedBox(width: 5),
+                      const Text('To',style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.normal
+                      ),),
+                      SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: ()async{
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          // Check if a date was picked
+                          if (pickedDate != null) {
+                            // Format the picked date
+                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            // Update the state with the picked date
+                            setState(() {
+                              lastDayOfCurrentMonth = formattedDate;
+                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            });
+                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+
+                          } else {
+
+                          }
+                        },
+                        child: Container(
+                          height: 35,
+                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                          decoration: BoxDecoration(
+                            color: Colors.white, // Change this to your preferred color
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$lastDayOfCurrentMonth',
+                              style: TextStyle(
+                                color: Colors.grey, // Change this to your preferred text color
+                                fontSize: 12.0, // Adjust font size as needed
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Container(
+                //   height: 45,
+                //   color: Color(0xFF2a697b),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.start,
+                //     children: [
+                //       const SizedBox(width: 4),
+                //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                //       const SizedBox(width: 4),
+                //       const Text('From',style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 14,
+                //           fontWeight: FontWeight.normal
+                //       ),),
+                //       SizedBox(width: 4),
+                //
+                //       GestureDetector(
+                //         onTap: () async {
+                //           /// TODO Open Date picke and get a date
+                //           DateTime? pickedDate = await showDatePicker(
+                //             context: context,
+                //             initialDate: DateTime.now(),
+                //             firstDate: DateTime(2000),
+                //             lastDate: DateTime(2100),
+                //           );
+                //           // Check if a date was picked
+                //           if (pickedDate != null) {
+                //             // Format the picked date
+                //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                //             // Update the state with the picked date
+                //             setState(() {
+                //               firstOfMonthDay = formattedDate;
+                //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             });
+                //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                //             print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             print('---formPicker--$firstOfMonthDay');
+                //             // Call API
+                //             //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             // print('---formPicker--$firstOfMonthDay');
+                //
+                //             // Display the selected date as a toast
+                //             //displayToast(dExpDate.toString());
+                //           } else {
+                //             // Handle case where no date was selected
+                //             //displayToast("No date selected");
+                //           }
+                //         },
+                //         child: Container(
+                //           height: 35,
+                //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                //           decoration: BoxDecoration(
+                //             color: Colors.white, // Change this to your preferred color
+                //             borderRadius: BorderRadius.circular(15),
+                //           ),
+                //           child: Center(
+                //             child: Text(
+                //               '$firstOfMonthDay',
+                //               style: TextStyle(
+                //                 color: Colors.grey, // Change this to your preferred text color
+                //                 fontSize: 12.0, // Adjust font size as needed
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //
+                //       SizedBox(width: 10),
+                //       Container(
+                //         height: 32,
+                //         width: 32,
+                //         child: Image.asset(
+                //           "assets/images/reimicon_2.png",
+                //           fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                //         ),
+                //       ),
+                //       //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                //       SizedBox(width: 10),
+                //       Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                //       SizedBox(width: 4),
+                //       const Text('To',style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize: 12,
+                //           fontWeight: FontWeight.normal
+                //       ),),
+                //       SizedBox(width: 4),
+                //       GestureDetector(
+                //         onTap: ()async{
+                //           DateTime? pickedDate = await showDatePicker(
+                //             context: context,
+                //             initialDate: DateTime.now(),
+                //             firstDate: DateTime(2000),
+                //             lastDate: DateTime(2100),
+                //           );
+                //           // Check if a date was picked
+                //           if (pickedDate != null) {
+                //             // Format the picked date
+                //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                //             // Update the state with the picked date
+                //             setState(() {
+                //               lastDayOfCurrentMonth = formattedDate;
+                //               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             });
+                //             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                //             //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                //             print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                //
+                //           } else {
+                //
+                //           }
+                //         },
+                //         child: Container(
+                //           height: 35,
+                //           padding: EdgeInsets.symmetric(horizontal: 16.0), // Optional: Adjust padding for horizontal space
+                //           decoration: BoxDecoration(
+                //             color: Colors.white, // Change this to your preferred color
+                //             borderRadius: BorderRadius.circular(15),
+                //           ),
+                //           child: Center(
+                //             child: Text(
+                //               '$lastDayOfCurrentMonth',
+                //               style: TextStyle(
+                //                 color: Colors.grey, // Change this to your preferred text color
+                //                 fontSize: 12.0, // Adjust font size as needed
+                //               ),
+                //             ),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 10),
+                // SizedBox(height: 10),
+                Expanded(
+                  child: Container(
+                    child: FutureBuilder<List<HrmsReimbursementClarificationModel>>(
+                        future: reimbursementStatusV3,
+                        builder: (context, snapshot) {
+                          return ListView.builder(
+                            // itemCount: snapshot.data!.length ?? 0,
+                            // itemBuilder: (context, index)
+                              itemCount: _filteredData.length?? 0,
+                              itemBuilder: (context, index)
+                              {
+                                final leaveData = _filteredData[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 10, right: 10),
+                                  child: Card(
+                                    elevation: 1,
+                                    color: Colors.white,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5.0),
+                                        border: Border.all(
+                                          color: Colors.grey, // Outline border color
+                                          width: 0.2, // Outline border width
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.only(left: 8, right: 8),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Container(
-                                                  width: 30.0,
-                                                  height: 30.0,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                    BorderRadius.circular(15.0),
-                                                    border: Border.all(
-                                                      color: Color(0xFF255899),
-                                                      // Outline border color
-                                                      width:
-                                                      0.5, // Outline border width
-                                                    ),
-                                                    color: Colors.white,
-                                                  ),
-                                                  child: Center(
-                                                    child: Icon(Icons.email,size: 20,color: Color(0xFF0098a6),)
-                                                  )),
-                                              SizedBox(width: 10),
-                                              Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    leaveData.sExpHeadName,
-                                                    // item['sExpHeadName'] ?? '',
-                                                    style: AppTextStyle
-                                                        .font12OpenSansRegularBlackTextStyle,
-                                                    maxLines: 2, // Limits the text to 2 lines
-                                                    overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                    softWrap: true,
-                                                  ),
-                                                  SizedBox(height: 2),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
-                                                      Text(
-                                                        'Project Name :',
-                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 1, // Limits the text to 1 line
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                      ),
-                                                      SizedBox(width: 2),
-
-                                                      // Wrap the dynamic text in Expanded to prevent overflow
-                                                       Text(
-                                                          leaveData.sProjectName,
-                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                          maxLines: 1, // Limits the text to 1 line
-                                                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                          softWrap: false, // Prevents the text from wrapping to a new line
-                                                        ),
-                                                    ],
-                                                  )
-
-                                                  // Row(
-                                                  //   mainAxisAlignment: MainAxisAlignment.start,
-                                                  //   children: [
-                                                  //     Icon(Icons.location_on,color:Color(0xFF0098a6),size: 20),
-                                                  //     Text(
-                                                  //       'Project Name :',
-                                                  //       style: AppTextStyle
-                                                  //           .font12OpenSansRegularBlackTextStyle,
-                                                  //       maxLines: 2, // Limits the text to 2 lines
-                                                  //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                  //       softWrap: true,
-                                                  //     ),
-                                                  //     SizedBox(width: 2),
-                                                  //     Text(
-                                                  //       leaveData.sProjectName,
-                                                  //       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                  //       maxLines: 2, // Limits the text to 1 line
-                                                  //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                  //       //softWrap: false, // Prevents the text from wrapping to a new line
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
-
-
-                                                ],
-                                              )
-                                            ],
-                                          ),
-
-                                          const SizedBox(height: 10),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15, right: 15),
-                                            child: Container(
-                                              height: 0.5,
-                                              color: Color(0xff3f617d),
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Container(
-                                                height: 10.0,
-                                                width: 10.0,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.black,
-                                                  // Change this to your preferred color
-                                                  borderRadius: BorderRadius.circular(5.0),
-                                                ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              //  '‣ Sector',
-                                              Text(
-                                                  'Expense Details',
-                                                  style: AppTextStyle
-                                                      .font14OpenSansRegularBlackTextStyle
-                                              )
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 15),
-                                            child: Text(
-                                                leaveData.sExpDetails,
-                                                //item['dExpDate'] ??'',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlack45TextStyle
-                                            ),
-                                          ),
-                                          SizedBox(height: 5),
-
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 5),
-                                            child: Row(
+                                      child: Padding(
+                                        padding:
+                                        const EdgeInsets.only(left: 8, right: 8),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Container(
-                                                    width: 20.0,
-                                                    height: 20.0,
-
+                                                    width: 30.0,
+                                                    height: 30.0,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius.circular(15.0),
+                                                      border: Border.all(
+                                                        color: Color(0xFF255899),
+                                                        // Outline border color
+                                                        width:
+                                                        0.5, // Outline border width
+                                                      ),
+                                                      color: Colors.white,
+                                                    ),
                                                     child: Center(
-                                                        child: Icon(Icons.calendar_today,size: 16,color: Color(0xFF0098a6),)
+                                                      child: Icon(Icons.email,size: 20,color: Color(0xFF0098a6),)
                                                     )),
                                                 SizedBox(width: 10),
                                                 Column(
@@ -851,7 +726,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text(
-                                                      leaveData.dEntryAt,
+                                                      leaveData.sExpHeadName,
                                                       // item['sExpHeadName'] ?? '',
                                                       style: AppTextStyle
                                                           .font12OpenSansRegularBlackTextStyle,
@@ -860,165 +735,291 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       softWrap: true,
                                                     ),
                                                     SizedBox(height: 2),
-                                                    Text(
-                                                      'Entry At',
-                                                      // item['sExpHeadName'] ?? '',
-                                                      style: AppTextStyle
-                                                          .font12OpenSansRegularBlackTextStyle,
-                                                      maxLines: 2, // Limits the text to 2 lines
-                                                      overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                      softWrap: true,
-                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
+                                                        Text(
+                                                          'Project Name :',
+                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 1, // Limits the text to 1 line
+                                                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        ),
+                                                        SizedBox(width: 2),
 
+                                                        // Wrap the dynamic text in Expanded to prevent overflow
+                                                         Text(
+                                                            leaveData.sProjectName,
+                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                            maxLines: 1, // Limits the text to 1 line
+                                                            overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                            softWrap: false, // Prevents the text from wrapping to a new line
+                                                          ),
+                                                      ],
+                                                    )
+
+                                                    // Row(
+                                                    //   mainAxisAlignment: MainAxisAlignment.start,
+                                                    //   children: [
+                                                    //     Icon(Icons.location_on,color:Color(0xFF0098a6),size: 20),
+                                                    //     Text(
+                                                    //       'Project Name :',
+                                                    //       style: AppTextStyle
+                                                    //           .font12OpenSansRegularBlackTextStyle,
+                                                    //       maxLines: 2, // Limits the text to 2 lines
+                                                    //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                    //       softWrap: true,
+                                                    //     ),
+                                                    //     SizedBox(width: 2),
+                                                    //     Text(
+                                                    //       leaveData.sProjectName,
+                                                    //       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                    //       maxLines: 2, // Limits the text to 1 line
+                                                    //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                    //       //softWrap: false, // Prevents the text from wrapping to a new line
+                                                    //     ),
+                                                    //   ],
+                                                    // ),
 
 
                                                   ],
-                                                ),
-                                                Spacer(),
-                                                Container(
-                                                  height: 25,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(17), // Border radius of 17
-                                                    border: Border.all(color: Colors.grey, width: 1), // Red border color
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      '₹ ${leaveData.fAmount}', // Replace with your text
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle
-                                                    ),
-                                                  ),
                                                 )
-
-
                                               ],
                                             ),
-                                          ),
-                                          SizedBox(height: 15),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 10,right: 10),
-                                            child: Container(
-                                              color: Colors.grey,
-                                              height: 1,
+
+                                            const SizedBox(height: 10),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15, right: 15),
+                                              child: Container(
+                                                height: 0.5,
+                                                color: Color(0xff3f617d),
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 15),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 5),
-                                            child: Row(
+                                            SizedBox(height: 5),
+                                            Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Container(
-                                                    width: 20.0,
-                                                    height: 20.0,
-
-                                                    child: Center(
-                                                        child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
-                                                    )),
-                                                SizedBox(width: 10),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      'Remark',
-                                                      // item['sExpHeadName'] ?? '',
-                                                      style: AppTextStyle
-                                                          .font12OpenSansRegularBlackTextStyle,
-                                                      maxLines: 2, // Limits the text to 2 lines
-                                                      overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                      softWrap: true,
-                                                    ),
-                                                    SizedBox(height: 2), // sRemarks
-                                                    Text(
-                                                      leaveData.sRemarks,
-                                                      // item['sExpHeadName'] ?? '',
-                                                      style: AppTextStyle
-                                                          .font12OpenSansRegularBlackTextStyle,
-                                                      maxLines: 2, // Limits the text to 2 lines
-                                                      overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                      softWrap: true,
-                                                    ),
-
-
-
-                                                  ],
+                                                  height: 10.0,
+                                                  width: 10.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black,
+                                                    // Change this to your preferred color
+                                                    borderRadius: BorderRadius.circular(5.0),
+                                                  ),
                                                 ),
-                                                Spacer(),
-                                                Container(
-                                                  height: 25,
-                                                  child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.end,
-                                                    children: [
-                                                    Text(
-                                                          'Bill Date :', // Replace with your text
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlackTextStyle
+                                                SizedBox(width: 5),
+                                                //  '‣ Sector',
+                                                Text(
+                                                    'Expense Details',
+                                                    style: AppTextStyle
+                                                        .font14OpenSansRegularBlackTextStyle
+                                                )
+                                              ],
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.only(left: 15),
+                                              child: Text(
+                                                  leaveData.sExpDetails,
+                                                  //item['dExpDate'] ??'',
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlack45TextStyle
+                                              ),
+                                            ),
+                                            SizedBox(height: 5),
+
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 5),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                      width: 20.0,
+                                                      height: 20.0,
+
+                                                      child: Center(
+                                                          child: Icon(Icons.calendar_today,size: 16,color: Color(0xFF0098a6),)
+                                                      )),
+                                                  SizedBox(width: 10),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        leaveData.dEntryAt,
+                                                        // item['sExpHeadName'] ?? '',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        softWrap: true,
                                                       ),
-                                                    SizedBox(width: 5),
-                                                    Text(
-                                                          '${leaveData.dRemarksAt}', // Replace with your text
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlackTextStyle
+                                                      SizedBox(height: 2),
+                                                      Text(
+                                                        'Entry At',
+                                                        // item['sExpHeadName'] ?? '',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        softWrap: true,
                                                       ),
+
+
+
                                                     ],
                                                   ),
-                                                )
+                                                  Spacer(),
+                                                  Container(
+                                                    height: 25,
+                                                    width: 100,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(17), // Border radius of 17
+                                                      border: Border.all(color: Colors.grey, width: 1), // Red border color
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        '₹ ${leaveData.fAmount}', // Replace with your text
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle
+                                                      ),
+                                                    ),
+                                                  )
 
 
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 15),
-                                          Container(
-                                            height: 40,
-                                            color: Colors.grey[300], // Light gray background
-                                            padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
-                                            child: const Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
-                                              children: [
-                                                Center(
-                                                  child: Text(
-                                                    'Revert', // Centered text
-                                                    style: TextStyle(
-                                                      color: Colors.red, // Text color
-                                                      fontSize: 16, // Adjust font size if needed
+                                            SizedBox(height: 15),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 10,right: 10),
+                                              child: Container(
+                                                color: Colors.grey,
+                                                height: 1,
+                                              ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            Padding(
+                                              padding: const EdgeInsets.only(top: 5),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                      width: 20.0,
+                                                      height: 20.0,
+
+                                                      child: Center(
+                                                          child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
+                                                      )),
+                                                  SizedBox(width: 10),
+                                                  Column(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        'Remark',
+                                                        // item['sExpHeadName'] ?? '',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        softWrap: true,
+                                                      ),
+                                                      SizedBox(height: 2), // sRemarks
+                                                      Text(
+                                                        leaveData.sRemarks,
+                                                        // item['sExpHeadName'] ?? '',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        softWrap: true,
+                                                      ),
+
+
+
+                                                    ],
+                                                  ),
+                                                  Spacer(),
+                                                  Container(
+                                                    height: 25,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      children: [
+                                                      Text(
+                                                            'Bill Date :', // Replace with your text
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle
+                                                        ),
+                                                      SizedBox(width: 5),
+                                                      Text(
+                                                            '${leaveData.dRemarksAt}', // Replace with your text
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+
+
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 15),
+                                            Container(
+                                              height: 40,
+                                              color: Colors.grey[300], // Light gray background
+                                              padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
+                                              child: const Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
+                                                children: [
+                                                  Center(
+                                                    child: Text(
+                                                      'Revert', // Centered text
+                                                      style: TextStyle(
+                                                        color: Colors.red, // Text color
+                                                        fontSize: 16, // Adjust font size if needed
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Icon(
-                                                  Icons.arrow_forward_ios, // iOS forward icon
-                                                  color: Colors.red, // Icon color
-                                                  size: 16, // Adjust icon size if needed
-                                                ),
-                                              ],
+                                                  Icon(
+                                                    Icons.arrow_forward_ios, // iOS forward icon
+                                                    color: Colors.red, // Icon color
+                                                    size: 16, // Adjust icon size if needed
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                          SizedBox(height: 15),
+                                            SizedBox(height: 15),
 
 
 
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
+                                );
 
-                            });
+                              });
 
-                      }
+                        }
 
+                    ),
                   ),
                 ),
-              ),
 
-            ]
-        ));
+              ]
+          )),
+    );
   }
 }
 

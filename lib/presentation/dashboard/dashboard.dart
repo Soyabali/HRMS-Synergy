@@ -546,16 +546,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       },
                     );
                     },
-                  child: Container(
-                    color: Colors.white,
-                    margin: EdgeInsets.all(12.0), // Apply margin around the image
+
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0), // Optional: add rounded corners if needed
                     child: Image.asset(
-                      'assets/images/logoutnew.jpeg',
-                      width: 25,
-                      height: 25,
-                      fit: BoxFit.fill,
+                      'assets/images/logout2.jpeg',
+                      fit: BoxFit.contain, // Ensure the image fits properly in the container
                     ),
                   ),
+                  // child: Container(
+                  //  // color: Colors.white,
+                  //   margin: EdgeInsets.all(12.0), // Apply margin around the image
+                  //   child: Image.asset(
+                  //     'assets/images/logout2.jpeg',
+                  //     width: 25,
+                  //     height: 25,
+                  //     fit: BoxFit.fill,
+                  //   ),
+                  // ),
                 )
               ),
             ],

@@ -750,7 +750,7 @@ class GeneralFunction {
                   fontFamily: 'Montserrat',
                   color: Color(0xff3f617d),
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.normal,
                 ),
               ),
             ],
