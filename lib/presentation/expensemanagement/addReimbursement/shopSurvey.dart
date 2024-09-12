@@ -737,7 +737,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                             ),
-
                             SizedBox(height: 10),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5, top: 5),
@@ -847,46 +846,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
 
-
-                          // Padding(
-                            //   padding: const EdgeInsets.only(left: 10, right: 0),
-                            //   child: Container(
-                            //     height: 42,
-                            //     color: Colors.white,
-                            //     child: Padding(
-                            //       padding: const EdgeInsets.only(left: 0),
-                            //       child: TextFormField(
-                            //         focusNode: _shopfocus,
-                            //         controller: _amountController,
-                            //         textInputAction: TextInputAction.next,
-                            //         onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                            //         keyboardType: TextInputType.number,
-                            //         inputFormatters: [
-                            //           FilteringTextInputFormatter.digitsOnly, // Only allows digits
-                            //         ],
-                            //         decoration: const InputDecoration(
-                            //           border: OutlineInputBorder(),
-                            //           contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                            //           filled: true, // Enable background color
-                            //           fillColor: Color(0xFFf2f3f5), // Set your desired background color here
-                            //         ),
-                            //         autovalidateMode: AutovalidateMode.onUserInteraction,
-                            //         validator: (value) {
-                            //           if (value == null || value.isEmpty) {
-                            //             return 'Please enter a value';
-                            //           }
-                            //           final intValue = int.tryParse(value);
-                            //           if (intValue == null || intValue <= 0) {
-                            //             return 'Enter an amount greater than 0';
-                            //           }
-                            //           return null;
-                            //         },
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-
-
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5, top: 5),
                               child: Row(
@@ -973,7 +932,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 radius:  Radius.circular(5.0),
                                 // Optional: rounded corners
                                 child: Padding(
-                                  padding: EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.all(2.0),
                                   // Equal padding on all sides
                                   child: Center(
                                     child: Row(
