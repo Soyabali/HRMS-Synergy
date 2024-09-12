@@ -37,6 +37,9 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        // non pad google map key : AIzaSyDuiwmpnEJdm4hTUQwmT4WDiFW7a2ONjKw
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAkUfhrldqKHWEk5wEHLrTTPSaURHcmwPQ"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

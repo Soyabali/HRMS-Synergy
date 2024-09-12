@@ -278,7 +278,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                Padding(
                                                  padding: const EdgeInsets.only(right: 10),
                                                  child: Container(
-                                                   height: 35, // Height of the second container
+                                                   height: 25, // Height of the second container
                                                    width: 90, // Width of the second container
                                                    decoration: BoxDecoration(
                                                      color: containerColor, // Background color of the second container
@@ -301,7 +301,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                            SizedBox(height: 10),
                                            Center(
                                              child: Container(
-                                               height: 35,
+                                               height: 25,
                                                child: DottedBorder(
                                                  color: Colors.grey, // Color of the dotted line
                                                  strokeWidth: 1.0, // Width of the dotted line
@@ -309,7 +309,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                  borderType: BorderType.RRect,
                                                  radius: Radius.circular(5.0), // Optional: rounded corners
                                                  child: Padding(
-                                                   padding: EdgeInsets.all(8.0), // Equal padding on all sides
+                                                   padding: EdgeInsets.all(2.0), // Equal padding on all sides
                                                    child: Row(
                                                      mainAxisSize: MainAxisSize.min, // Center the row contents
                                                      children: [

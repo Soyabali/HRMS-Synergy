@@ -88,7 +88,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
         fontSize: 16.0);
   }
 
-
   // dialogBox
   Widget _buildDialogSucces2(BuildContext context,String msg) {
     return Dialog(

@@ -82,7 +82,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     return msg == 'Trip has been started' ? Colors.green : Colors.grey;
   }
 
-
   // InitState
   TextEditingController _takeAction = TextEditingController();
   // get a currectDate Date and time  function
@@ -92,48 +91,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
     String formattedDateTime = DateFormat('dd/MMM/yyyy HH:mm').format(now);
     return formattedDateTime;
   }
+  // trip dialog success
 
-  // to change bg colore loginc
-  // Logic to determine button color based on tripMsg
-  // Color getButtonColor(String tripMsg) {
-  //   print('---82---$tripMsg');
-  //   if (tripMsg == "Trip has been started") {
-  //     return Color(0xFF0098a6); // Green color if tripMsg is null or "Trip has been started"
-  //   } else if (tripMsg == "trip") {
-  //     return Colors.red; // Red color if tripMsg is "trip"
-  //   } else {
-  //     return Colors.grey; // Gray color for all other cases
-  //   }
-  // }
-  // stop trip colore
-  // Color getButtonColorStoptrip(String tripMsg) {
-  //   print('---82---$tripMsg');
-  //   if (tripMsg == null || tripMsg == "Trip has been started") {
-  //     return Color(0xFF0098a6); // Green color if tripMsg is null or "Trip has been started"
-  //  // Red color if tripMsg is "trip"
-  //   } else {
-  //     return Colors.grey; // Gray color for all other cases
-  //   }
-  // }
-
-  // Determine if the Start Trip button should be clickable and its color
-  // bool isStartButtonEnabled() {
-  //   return tripMsg == null || tripMsg!.isEmpty || tripMsg != "Trip has been started";
-  // }
-  //
-  // // Determine if the Stop Trip button should be clickable and its color
-  // bool isStopButtonEnabled() {
-  //   return tripMsg == "Trip has been started";
-  // }
-  // // Get button color dynamically for Start Trip
-  // Color getButtonColorStartTrip() {
-  //   return isStartButtonEnabled() ? Color(0xFF0098a6) : Colors.grey; // Green if enabled, else gray
-  // }
-  //
-  // // Get button color dynamically for Stop Trip
-  // Color getButtonColorStopTrip() {
-  //   return isStopButtonEnabled() ? Colors.green : Colors.grey; // Green if enabled, else gray
-  // }
 
   // get a currecr location latitude and longitude
   void getLocation() async {
@@ -288,7 +247,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
             // Status bar color  // 2a697b
             statusBarColor: Color(0xFF2a697b),
             // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarIconBrightness:
+                Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           // backgroundColor: Colors.blu
@@ -328,7 +288,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15,top: 15),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: Container(
                   width: MediaQuery.of(context).size.width - 30,
                   decoration: BoxDecoration(
@@ -336,14 +296,18 @@ class _MyHomePageState extends State<WorkDetailPage> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.5), // Color of the shadow
+                          color: Colors.grey
+                              .withOpacity(0.5), // Color of the shadow
                           spreadRadius: 5, // Spread radius
                           blurRadius: 7, // Blur radius
                           offset: Offset(0, 3), // Offset of the shadow
                         ),
                       ]),
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15,),
+                    padding: const EdgeInsets.only(
+                      left: 15,
+                      right: 15,
+                    ),
                     child: Form(
                       key: _formKey,
                       child: Padding(
@@ -403,8 +367,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                     decimal: true), // Allow decimal keyboard
                                 inputFormatters: [
                                   FilteringTextInputFormatter.allow(RegExp(
-                                      r'^\d*\.?\d{0,10}')), // Allow only numbers with optional decimal point
-                                  //LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
+                                      r'^\d*\.?\d{0,2}')), // Allow only numbers with optional decimal point
+                                  LengthLimitingTextInputFormatter(
+                                      5), // Limit input to 10 characters
                                 ],
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -476,59 +441,92 @@ class _MyHomePageState extends State<WorkDetailPage> {
                             SizedBox(height: 15),
                             // Start Trip Button
                             ElevatedButton(
-                              onPressed: isTripStarted ? null : () async {
-                                // Your trip start API logic
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                var sImage;
-                                var edtOdometer = _takeAction.text;
-                                String? sContactNo = prefs.getString('sContactNo');
+                              onPressed: isTripStarted
+                                  ? null
+                                  : () async {
+                                      // Your trip start API logic
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      var sImage;
+                                      var edtOdometer = _takeAction.text;
+                                      String? sContactNo =
+                                          prefs.getString('sContactNo');
 
-                                if (_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null) {
+                                      if (_formKey.currentState!.validate() &&
+                                          edtOdometer != null &&
+                                          uplodedImage != null) {
+                                        var tripStart =
+                                            await HrmstripstartendRepo()
+                                                .tripStart(
+                                                    context,
+                                                    sContactNo!,
+                                                    lat,
+                                                    long,
+                                                    randomNumber,
+                                                    uplodedImage,
+                                                    edtOdometer,
+                                                    dTripDateTime);
+                                        print('---488---$tripStart');
+                                        String Msg = "${tripStart[0]['Msg']}";
+                                        String sTranNo =
+                                            "${tripStart[0]['sTranNo']}";
+                                        String Result =
+                                            "${tripStart[0]['Result']}";
 
-                                  var tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!, lat, long, randomNumber, uplodedImage, edtOdometer, dTripDateTime);
-                                   print('---488---$tripStart');
-                                  String Msg = "${tripStart[0]['Msg']}";
-                                  String sTranNo = "${tripStart[0]['sTranNo']}";
-                                  String Result = "${tripStart[0]['Result']}";
+                                        prefs.setString('sTranNo', sTranNo);
+                                        prefs.setString('tripMsg', Msg);
 
-                                  prefs.setString('sTranNo', sTranNo);
-                                  prefs.setString('tripMsg', Msg);
-
-                                  setState(() {
-                                    tripMsg = Msg;
-                                    isTripStarted = tripMsg == 'Trip has been started';
-                                  });
-                                  // Dialog logic and other actions
-                                }
-                                else{
-                                         if(edtOdometer==null || edtOdometer==''){
-                                           print('----print---424---');
-                                           displayToast('Enter Odometer details ');
-                                         }else if(uplodedImage==null || uplodedImage==''){
-                                           displayToast('Please click Odometer image');
-                                           //print('----print---424---');
-                                         }
-                                         print('---Api not call---');
+                                        setState(() {
+                                          tripMsg = Msg;
+                                          isTripStarted = tripMsg ==
+                                              'Trip has been started';
+                                        });
+                                        // todo celan foield adm image data
+                                        _takeAction.clear();
+                                        image == null;
+                                        print('---487---$tripMsg');
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return _buildDialogSucces2(
+                                                  context, tripMsg!);
+                                            }
+                                            );
+                                        // Dialog logic and other actions
+                                      } else {
+                                        if (edtOdometer == null ||
+                                            edtOdometer == '') {
+                                          print('----print---424---');
+                                          displayToast(
+                                              'Enter Odometer details ');
+                                        } else if (uplodedImage == null ||
+                                            uplodedImage == '') {
+                                          displayToast(
+                                              'Please click Odometer image');
+                                          //print('----print---424---');
+                                        }
+                                        print('---Api not call---');
                                         // displayToast('Click Photo');
-                                       }
-                                       if(Result=="1"){
+                                      }
+                                      if (Result == "1") {
                                         // displayToast(Msg);
-                                         showDialog(
-                                           context: context,
-                                           builder: (BuildContext context) {
-                                             return _buildDialogSucces2(context,Msg);
-                                           },
-                                         );
-                                         setState(() {
-
-                                         });
-                                       }else{
-                                         //displayToast(Msg);
-
-                                }
-                              },
+                                        _takeAction.clear();
+                                        image == null;
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return _buildDialogSucces2(
+                                                context, Msg);
+                                          },
+                                        );
+                                        setState(() {});
+                                      } else {
+                                        //displayToast(Msg);
+                                      }
+                                    },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: getButtonColor(tripMsg ?? "Not a value"),
+                                backgroundColor:
+                                    getButtonColor(tripMsg ?? "Not a value"),
                               ),
                               child: const Text(
                                 "START TRIP",
@@ -541,59 +539,96 @@ class _MyHomePageState extends State<WorkDetailPage> {
                             ),
                             const SizedBox(height: 15),
 
-
                             ElevatedButton(
-                              onPressed: isTripStarted ? () async {
-                                // Your trip stop API logic
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                var edtOdometer = _takeAction.text;
-                                String? sContactNo = prefs.getString('sContactNo');
-                                String? sTranNo = prefs.getString('sTranNo');
+                              onPressed: isTripStarted
+                                  ? () async {
+                                      // Your trip stop API logic
+                                      SharedPreferences prefs =
+                                          await SharedPreferences.getInstance();
+                                      var edtOdometer = _takeAction.text;
+                                      String? sContactNo =
+                                          prefs.getString('sContactNo');
+                                      String? sTranNo =
+                                          prefs.getString('sTranNo');
 
-                                if (_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null) {
+                                      if (_formKey.currentState!.validate() &&
+                                          edtOdometer != null &&
+                                          uplodedImage != null) {
+                                        var tripEnd = await HrmstripEndRepo()
+                                            .tripEnd(
+                                                context,
+                                                sContactNo!,
+                                                lat,
+                                                long,
+                                                sTranNo!,
+                                                uplodedImage,
+                                                edtOdometer,
+                                                dTripDateTime);
+                                        String Msg = "${tripEnd[0]['Msg']}";
+                                        String Result =
+                                            "${tripEnd[0]['Result']}";
 
-                                  var tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!, lat, long, sTranNo!, uplodedImage, edtOdometer, dTripDateTime);
-                                  String Msg = "${tripEnd[0]['Msg']}";
-                                  String Result = "${tripEnd[0]['Result']}";
+                                        prefs.setString('tripMsg', Msg);
+                                        setState(() {
+                                          tripMsg = Msg;
+                                          isTripStarted = false;
+                                        });
+                                        print('-----576---$tripMsg');
 
-                                  prefs.setString('tripMsg', Msg);
-                                  setState(() {
-                                    tripMsg = Msg;
-                                    isTripStarted = false;
-                                  });
+                                        _takeAction.clear();
+                                        image == null;
+                                        print('---487---$tripMsg');
+                                        showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return _buildDialogSucces2(
+                                                  context, tripMsg!);
+                                            }
+                                        );
 
-                                  // Dialog logic and other actions
-                                }else{
-    if(edtOdometer==null || edtOdometer==''){
-    print('----print---424---');
-    displayToast('Enter Odometer details ');
-    }else if(uplodedImage==null || uplodedImage==''){
-    displayToast('Please click Odometer image');
-    //print('----print---424---');
-    }
-    print('---Api not call---');
-    // displayToast('Click Photo');
-    }
-    if(Result=="1"){
-    // displayToast(Msg);
-    showDialog(
-    context: context,
-    builder: (BuildContext context) {
-    return _buildDialogSucces2(context,Msg);
-    },
-    );
-    setState(() {
+                                        // _takeAction.clear();
+                                        // image==null;
+                                        // // to navigate Dashboard
+                                        //
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(builder: (context) => const DashBoard()),
+                                        // );
 
-    });
-    }else{
-    //displayToast(Msg);
-
-
-                                }
-
-                              } : null,
+                                        // Dialog logic and other actions
+                                      } else {
+                                        if (edtOdometer == null ||
+                                            edtOdometer == '') {
+                                          print('----print---424---');
+                                          displayToast(
+                                              'Enter Odometer details ');
+                                        } else if (uplodedImage == null ||
+                                            uplodedImage == '') {
+                                          displayToast(
+                                              'Please click Odometer image');
+                                          //print('----print---424---');
+                                        }
+                                        print('---Api not call---');
+                                        // displayToast('Click Photo');
+                                      }
+                                      if (Result == "1") {
+                                        // displayToast(Msg);
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return _buildDialogSucces2(
+                                                context, Msg);
+                                          },
+                                        );
+                                        setState(() {});
+                                      } else {
+                                        //displayToast(Msg);
+                                      }
+                                    }
+                                  : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: getButtonColorStoptrip(tripMsg ?? "Not a value"),
+                                backgroundColor: getButtonColorStoptrip(
+                                    tripMsg ?? "Not a value"),
                               ),
                               child: const Text(
                                 "STOP TRIP",
@@ -725,9 +760,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                             //           fontSize: 16.0,
                             //           fontWeight: FontWeight.bold),
                             //     )),
-
-
-
                           ],
                         ),
                       ),
@@ -837,4 +869,5 @@ class _MyHomePageState extends State<WorkDetailPage> {
       ),
     );
   }
+  //
 }

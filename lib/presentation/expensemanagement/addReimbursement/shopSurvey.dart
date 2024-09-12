@@ -703,37 +703,41 @@ class _MyHomePageState extends State<MyHomePage> {
                                 }
                               },
 
-                              child: DottedBorder(
-                                color: Colors.grey, // Color of the dotted line
-                                strokeWidth: 1.0, // Width of the dotted line
-                                dashPattern: [4, 2], // Dash pattern for the dotted line
-                                borderType: BorderType.RRect,
-                                radius: Radius.circular(5.0), // Optional: rounded corners
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0), // Equal padding on all sides
-                                  child: Row(
-                                    // Center the row contents
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Icon(
-                                        Icons.calendar_month,
-                                        size: 20,
-                                        color: Color(0xFF0098a6),
-                                      ),
-                                      SizedBox(width: 5.0),
-                                      // Display the selected date or a placeholder if no date is selected
-                                      Text(
-                                        dExpDate == null
-                                            ? 'Select Bill / Expense Date'
-                                            : '$dExpDate',
-                                        style: AppTextStyle
-                                            .font16OpenSansRegularBlack45TextStyle,
-                                      ),
-                                    ],
+                              child: Container(
+                                height: 30,
+                                child: DottedBorder(
+                                  color: Colors.grey, // Color of the dotted line
+                                  strokeWidth: 1.0, // Width of the dotted line
+                                  dashPattern: [4, 2], // Dash pattern for the dotted line
+                                  borderType: BorderType.RRect,
+                                  radius: Radius.circular(5.0), // Optional: rounded corners
+                                  child: Padding(
+                                    padding: EdgeInsets.all(2.0), // Equal padding on all sides
+                                    child: Row(
+                                      // Center the row contents
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_month,
+                                          size: 20,
+                                          color: Color(0xFF0098a6),
+                                        ),
+                                        SizedBox(width: 5.0),
+                                        // Display the selected date or a placeholder if no date is selected
+                                        Text(
+                                          dExpDate == null
+                                              ? 'Select Bill / Expense Date'
+                                              : '$dExpDate',
+                                          style: AppTextStyle
+                                              .font16OpenSansRegularBlack45TextStyle,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+
                             SizedBox(height: 10),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5, top: 5),
@@ -756,43 +760,133 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 0),
-                              child: Container(
-                                height: 42,
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 0),
-                                  child: TextFormField(
-                                    focusNode: _shopfocus,
-                                    controller: _amountController,
-                                    textInputAction: TextInputAction.next,
-                                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly, // Only allows digits
-                                    ],
-                                    decoration: const InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                      filled: true, // Enable background color
-                                      fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                            // this is my TextFormFoield
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 0),
+                            child: Container(
+                              height: 70, // Increased height to accommodate error message without resizing
+                              color: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                        focusNode: _shopfocus,
+                                        controller: _amountController,
+                                        textInputAction: TextInputAction.next,
+                                        onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                            RegExp(r'^\d{0,5}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
+                                          ),
+                                          //FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')), // Allow up to 2 decimal places
+                                        ],
+                                        decoration: const InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                          filled: true, // Enable background color
+                                          fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                        ),
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Please enter a value';
+                                          }
+                                          final doubleValue = double.tryParse(value);
+                                          if (doubleValue == null || doubleValue <= 0) {
+                                            return 'Enter an amount greater than 0';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      // child: TextFormField(
+                                      //   focusNode: _shopfocus,
+                                      //   controller: _amountController,
+                                      //   textInputAction: TextInputAction.next,
+                                      //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                      //   keyboardType: TextInputType.number,
+                                      //   inputFormatters: [
+                                      //     FilteringTextInputFormatter.digitsOnly, // Only allows digits
+                                      //   ],
+                                      //   decoration: const InputDecoration(
+                                      //     border: OutlineInputBorder(),
+                                      //     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                      //     filled: true, // Enable background color
+                                      //     fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                      //   ),
+                                      //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      //   validator: (value) {
+                                      //     if (value == null || value.isEmpty) {
+                                      //       return 'Please enter a value';
+                                      //     }
+                                      //     final intValue = int.tryParse(value);
+                                      //     if (intValue == null || intValue <= 0) {
+                                      //       return 'Enter an amount greater than 0';
+                                      //     }
+                                      //     return null;
+                                      //   },
+                                      // ),
+
+
                                     ),
-                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter a value';
-                                      }
-                                      final intValue = int.tryParse(value);
-                                      if (intValue == null || intValue <= 0) {
-                                        return 'Enter an amount greater than 0';
-                                      }
-                                      return null;
-                                    },
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          '', // Placeholder for error message space
+                                          style: TextStyle(fontSize: 0), // Keeps the size unchanged when no error
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
+                          ),
+
+
+                          // Padding(
+                            //   padding: const EdgeInsets.only(left: 10, right: 0),
+                            //   child: Container(
+                            //     height: 42,
+                            //     color: Colors.white,
+                            //     child: Padding(
+                            //       padding: const EdgeInsets.only(left: 0),
+                            //       child: TextFormField(
+                            //         focusNode: _shopfocus,
+                            //         controller: _amountController,
+                            //         textInputAction: TextInputAction.next,
+                            //         onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                            //         keyboardType: TextInputType.number,
+                            //         inputFormatters: [
+                            //           FilteringTextInputFormatter.digitsOnly, // Only allows digits
+                            //         ],
+                            //         decoration: const InputDecoration(
+                            //           border: OutlineInputBorder(),
+                            //           contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                            //           filled: true, // Enable background color
+                            //           fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                            //         ),
+                            //         autovalidateMode: AutovalidateMode.onUserInteraction,
+                            //         validator: (value) {
+                            //           if (value == null || value.isEmpty) {
+                            //             return 'Please enter a value';
+                            //           }
+                            //           final intValue = int.tryParse(value);
+                            //           if (intValue == null || intValue <= 0) {
+                            //             return 'Enter an amount greater than 0';
+                            //           }
+                            //           return null;
+                            //         },
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+
+
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5, top: 5),
                               child: Row(

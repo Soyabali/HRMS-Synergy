@@ -317,9 +317,6 @@ class _LeaveScreenState extends State<Applyleave> {
                                   ),
                                 ],
                               ),
-
-
-
                             ],
                           ),
                           SizedBox(height: 16.0),
@@ -358,7 +355,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                       );
                                     },
                                     child: Container(
-                                      height: 35, // Height of the second container
+                                      height: 25, // Height of the second container
                                       width: 90, // Width of the second container
                                       decoration: BoxDecoration(
                                         color: containerColor, // Background color of the second container
