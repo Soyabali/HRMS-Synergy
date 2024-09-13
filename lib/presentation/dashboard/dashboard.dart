@@ -546,14 +546,14 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       },
                     );
                     },
-
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0), // Optional: add rounded corners if needed
+                    borderRadius: BorderRadius.circular(16.0), // Optional: add rounded corners if needed
                     child: Image.asset(
                       'assets/images/logout2.jpeg',
                       fit: BoxFit.contain, // Ensure the image fits properly in the container
                     ),
                   ),
+
                   // child: Container(
                   //  // color: Colors.white,
                   //   margin: EdgeInsets.all(12.0), // Apply margin around the image
