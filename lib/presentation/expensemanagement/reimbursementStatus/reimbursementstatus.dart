@@ -15,6 +15,7 @@ import '../../../app/generalFunction.dart';
 import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
+import '../../../data/reimbursementStatusTakeAction.dart';
 import '../../../domain/hrmsreimbursementstatusV3Model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
@@ -145,6 +146,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   String? lastDayOfCurrentMonth;
   var fromPicker;
   var toPicker;
+  var sTranCode;
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -175,7 +177,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.redAccent,
         textColor: Colors.white,
         fontSize: 16.0);
   }
@@ -510,7 +512,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     ],
                   ),
                 ),
-
                 SizedBox(height: 10),
                 Center(
                   child: Padding(
@@ -875,9 +876,12 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                       ),
                                                       child: GestureDetector(
                                                         onTap: (){
+
                                                           print('---take action-------');
                                                           /// todo call a take Action Dialog
                                                           //_takeActionDialog(context);
+                                                         sTranCode  = leaveData.sTranCode;
+                                                        print('-------882----$sTranCode');
                                                           showDialog(
                                                           context: context,
                               builder: (BuildContext context) {
@@ -1094,11 +1098,55 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
                 // Submit button
                 InkWell(
-                  onTap: (){
-                    var takeAction = _takeAction.text;
-                    print(takeAction);
+                  onTap: ()async{
+                    var takeAction = _takeAction.text.trim();
+                    print('-----1102--$takeAction');
+                    print(sTranCode);
 
-                  },
+                    // Check if the input is not empty
+                    if (takeAction != null && takeAction != '') {
+                      print('---Call Api-----');
+
+                      // Make API call here
+                      var loginMap = await Reimbursementstatustakeaction().reimbursementTakeAction(context, sTranCode);
+
+                      print('---418----$loginMap');
+
+                      setState(() {
+                        result = "${loginMap[0]['Result']}";
+                        msg = "${loginMap[0]['Msg']}";
+                      });
+
+                      print('---1114----$result');
+                      print('---1115----$msg');
+
+                      // Check the result of the API call
+                      if (result == "1") {
+                        // Close the current dialog and show a success dialog
+                        Navigator.of(context).pop();
+
+                        // Show the success dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                          },
+                        );
+                        print('-----1123---');
+                      } else if (result == "0") {
+                        // Keep the dialog open and show an error message (if needed)
+                        // You can display an error message in the same dialog without dismissing it
+                        displayToast(msg);  // Optionally, show a toast message to indicate failure
+
+                        // Optionally clear the input field if needed
+                        // _takeAction.clear();  // Do not clear to allow retrying
+                      }
+                    } else {
+                      // Handle the case where no input is provided
+                      displayToast("Enter remarks");
+                    }
+
+                    },
                   child: Container(
                     //width: double.infinity,
                     // Make container fill the width of its parent
@@ -1154,6 +1202,86 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
               child: ClipOval(
                 child: Image.asset(
                   'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // sucessDialog
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                         Navigator.of(context).pop();
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                        // );
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
