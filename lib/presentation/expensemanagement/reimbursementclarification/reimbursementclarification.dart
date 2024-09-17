@@ -850,10 +850,12 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   var fAmount = leaveData.fAmount;
                                                   var sExpDetails = leaveData.sExpDetails;
                                                   var sExpBillPhoto = leaveData.sExpBillPhoto;
+                                                 var sProjectCode = leaveData.sProjectCode;
+                                                  var sExpHeadCode = leaveData.sExpHeadCode;
 
                                                   Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto)),
+                                                  MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode)),
                                                 );
                                               },
                                               child: Container(

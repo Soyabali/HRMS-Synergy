@@ -137,6 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double? lat, long;
   //var dExpDate;
   String? dExpDate;
+  var remarks;
 
 
   // Uplode Id Proof with gallary
@@ -1121,7 +1122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 if(result=="0"){
                                   // CALL API HRMS Reimbursement
                                   var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                                      _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                                      _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
                                   );
                                   print('---1050--$hrmsPostReimbursement');
                                   result = "${hrmsPostReimbursement[0]['Result']}";
@@ -1221,7 +1222,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     var expenseDetails = '${_expenseController.text}';
 
                     var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
                     );
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";

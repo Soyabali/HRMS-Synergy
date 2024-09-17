@@ -19,7 +19,8 @@ class HrmsPostReimbursementRepo {
       String expenseDetails,
       uplodedImage,
       String? sContactNo,
-      result) async {
+      result,
+      String remarks) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
@@ -33,7 +34,7 @@ class HrmsPostReimbursementRepo {
       print('----expenseDetails--15---$expenseDetails');
       print('----uplodedImage--15---$uplodedImage');
       print('----sContactNo--15---$sContactNo');
-      print('----sRemarks--15---${'NA'}');
+      print('----sRemarks--15---${remarks}');
       print('----result--15---$result');
 
       var baseURL = BaseRepo().baseurl;
@@ -57,7 +58,7 @@ class HrmsPostReimbursementRepo {
         "sExpDetails": expenseDetails,
         "sExpBillPhoto": uplodedImage,
         "sEntryBy": sContactNo,
-        "sRemarks": 'NA',
+        "sRemarks": remarks,
         "sResult": result,
       });
       request.headers.addAll(headers);
@@ -68,10 +69,10 @@ class HrmsPostReimbursementRepo {
       print('----------20---login RESPONSE----$map');
       if (response.statusCode == 200) {
         hideLoader();
-        print('----------22-----$map');
+        print('----------71-----$map');
         return map;
       } else {
-        print('----------29---LOGINaPI RESPONSE----$map');
+        print('----------74--hrmsPostReimbursement----$map');
         hideLoader();
         print(response.reasonPhrase);
         return map;

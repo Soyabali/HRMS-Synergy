@@ -49,8 +49,8 @@ import '../expense_management.dart';
 // }
 
 class ReimbursementrevertPage extends StatefulWidget {
-  final sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto;
-  ReimbursementrevertPage(this.sProjectName, this.sExpHeadName,this.dEntryAt, this.fAmount,this.sExpDetails, this.sExpBillPhoto, {super.key});
+  final sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode;
+  ReimbursementrevertPage(this.sProjectName, this.sExpHeadName,this.dEntryAt, this.fAmount,this.sExpDetails, this.sExpBillPhoto, this.sProjectCode, this.sExpHeadCode, {super.key});
 
   @override
   State<ReimbursementrevertPage> createState() => _MyHomePageState();
@@ -142,6 +142,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   //var dExpDate;
   String? dExpDate;
   var billPhoto;
+  var remarks;
 
 
   // Uplode Id Proof with gallary
@@ -352,7 +353,10 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     getLocation();
     expenseCategory();
     super.initState();
-    print('xxxx---351--${widget.sProjectName}');
+    print('xxxx---355--${widget.sProjectCode}');
+    print('xxxx---356--${widget.sExpHeadCode}');
+    // widget.dEntryAt}
+    print('xxxx---359--${widget.dEntryAt}');
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
     _contactfocus = FocusNode();
@@ -611,7 +615,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
-
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -1115,48 +1118,48 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 print('--1002--sEmpCode---$sEmpCode');
                                 print('--1003--sProjectCode---$_selectedSectorId');
                                 print('--1004--sExpHeadCode---$_selectedShopId');
-                                print('--1005--dExpDate---$dExpDate');
+                                print('--1005--dExpDate---${widget.dEntryAt}');
                                 print('--1006--fAmount---${_amountController.text}');
                                 print('--1007--sExpDetails---${_expenseController.text}');
                                 print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
                                 print('--1009--sEntryBy---$sContactNo');
-                                print('--1010--sRemarks---${'NA'}');
                                 print('--1011--sResult---$result');
 
                                 var amount = '${_amountController.text}';
                                 var expenseDetails = '${_expenseController.text}';
-                                var remarks = '${_remarkController.text}';
+                                remarks = '${_remarkController.text}';
 
 
+                                print('xxxx---355--${widget.sProjectCode}');
+                                print('xxxx---356--${widget.sExpHeadCode}');
+                                _selectedSectorId = '${widget.sProjectCode}';
+                                _selectedShopId = '${widget.sExpHeadCode}';
+                                dExpDate   = '${widget.dEntryAt}';
+                                print('xxxx---1138--${dExpDate}');
 
-                               //   _selectedSectorId!=null && _selectedShopId!=null &&
-
-
+                                //   _selectedSectorId!=null && _selectedShopId!=null &&
 
                                 if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
                                     dExpDate!=null && amount !=null && expenseDetails!=null &&
                                     uplodedImage!=null && sContactNo!=null && remarks!=null){
 
                                   // Call Api
-
                                   var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode,dExpDate,amount);
                                   print('---975--$hrmsPopWarning');
                                   result = "${hrmsPopWarning[0]['Result']}";
                                   msg = "${hrmsPopWarning[0]['Msg']}";
-
-
 
                                 }else{
                                   if(sTranCode==null){
                                     displayToast('Genrate Random Number');
                                   }else if(sEmpCode==null){
                                     displayToast('Enter sEmpCode');
-                                  // }else if(_selectedSectorId==null){
-                                  //   displayToast('Please Select Project');
-                                  // }else if(_selectedShopId==null){
-                                  //   displayToast('Please Select Expense Category');
-                                  // }else if(dExpDate==null){
-                                  //   displayToast('Select Expense Date');
+                                  }else if(_selectedSectorId==null){
+                                    displayToast('Please Select Project');
+                                  }else if(_selectedShopId==null){
+                                    displayToast('Please Select Expense Category');
+                                  }else if(dExpDate==null){
+                                    displayToast('Select Expense Date');
                                   }else if(amount==null || amount==''){
                                     displayToast('Please Enter Amount');
                                   }
@@ -1173,9 +1176,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 if(result=="0"){
                                   // CALL API HRMS Reimbursement
                                   var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                                      _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                                      _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
                                   );
-                                  print('---1050--$hrmsPostReimbursement');
+                                  print('---1185--$hrmsPostReimbursement');
                                   result = "${hrmsPostReimbursement[0]['Result']}";
                                   msg = "${hrmsPostReimbursement[0]['Msg']}";
 
@@ -1273,7 +1276,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     var expenseDetails = '${_expenseController.text}';
 
                     var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result
+                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
                     );
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
