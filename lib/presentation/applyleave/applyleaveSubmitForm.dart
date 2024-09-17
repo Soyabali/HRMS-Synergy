@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -427,14 +428,10 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                 height: 150, // Height of the container
                 width: MediaQuery.of(context).size.width,
                 //width: 200, // Width of the container
-                child: Opacity(
-                  opacity: 0.9,
-                  //step3.jpg
-                  child: Image.asset(
-                    'assets/images/leave.jpeg',
-                    // Replace 'image_name.png' with your asset image path
-                    fit: BoxFit.cover, // Adjust the image fit to cover the container
-                  ),
+                child: Image.asset(
+                  'assets/images/leave.jpeg',
+                  // Replace 'image_name.png' with your asset image path
+                  fit: BoxFit.cover, // Adjust the image fit to cover the container
                 ),
               ),
             ),
@@ -462,244 +459,482 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center, // Center all widgets vertically
                               children: <Widget>[
-                                // 'assets/images/favicon.png',
+                                // First widget: Image or Icon
                                 Container(
-                                    margin: const EdgeInsets.only(
-                                        left: 0, right: 10, top: 10),
-                                    child: const Icon(
-                                      Icons.person,
-                                      size: 24,
-                                      color: Color(0xFF0098a6),
-                                    )),
-                                Padding(
-                                  padding: EdgeInsets.only(top: 10),
-                                  child: Text('$fullName'?? 'No Name',
-                                      style: AppTextStyle
-                                          .font16OpenSansRegularBlack45TextStyle),
+                                  height: 24,
+                                  width: 24,
+                                  margin: const EdgeInsets.only(left: 0, right: 5, top: 10), // Consistent top margin
+                                  child: Image.asset('assets/images/triplist_1.jpeg'),
                                 ),
-                                Spacer(),
-                                Container(
-                                  height: 40.0, // Set the desired height
-                                  padding: EdgeInsets.symmetric(horizontal: 4.0), // Add padding for horizontal spacing
-                                  decoration: BoxDecoration(
-                                    color: Colors.white, // Set background color to white
-                                    borderRadius: BorderRadius.circular(20.0), // Half of the height for rounded corners
+
+                                // Second widget: Text (fullName)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10), // Add top margin for consistent spacing
+                                  child: Text(
+                                    fullName ?? 'No Name',
+                                    style: const TextStyle(
+                                      color: Color(0xFF0097A7),
+                                      fontSize: 12,
+                                    ),
                                   ),
-                                  child: Center( // Center the text inside the container
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 5),
-                                      child: Text(
-                                        '${widget.sLvDesc}',
-                                        style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                        textAlign: TextAlign.center, // Ensure the text is centered
+                                ),
+
+                                // Spacer to push the third widget to the right
+                                Spacer(),
+
+                                // Third widget: Container with text inside
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10),
+                                  child: Container(
+                                    height: 24.0, // Set the height of the container
+                                    padding: const EdgeInsets.symmetric(horizontal: 2.0), // Optional: horizontal padding
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[200], // Background color
+                                      borderRadius: BorderRadius.circular(9.0), // Rounded corners
+                                    ),
+                                    child: Center( // Center the text inside the container
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 5.0), // Left and right padding inside the container
+                                        child: Text(
+                                          '${widget.sLvDesc}',
+                                          style: AppTextStyle.font10OpenSansRegularBlackTextStyle,
+                                          textAlign: TextAlign.center, // Center the text horizontally
+                                        ),
                                       ),
                                     ),
                                   ),
-                                )
-                                // Container(
-                                //
-                                //   child: Text('${widget.sLvDesc}',
-                                //       style: AppTextStyle
-                                //           .font14OpenSansRegularBlack45TextStyle),
-                                // )
+                                ),
                               ],
                             ),
-                            SizedBox(height: 15),
-                            InkWell(
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate != null) {
-                                  String formattedDate =
-                                      DateFormat('dd/MMM/yyyy')
-                                          .format(pickedDate);
-                                  setState(() {
-                                    tempDate =
-                                        formDate; // Save the current formDate before updating
-                                    formDate = formattedDate;
-                                    calculateTotalDays();
-                                  });
-                                  fromDateSelectLogic();
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween, // Space between widgets
-                                children: [
-                                  // First widget: Text widget
-                                  Text('From Date :',
-                                      style: AppTextStyle
-                                          .font14OpenSansRegularBlack45TextStyle),
-                                  // Second widget: Container with light gray background
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical:
-                                            8), // Padding inside the Container
-                                    decoration: BoxDecoration(
-                                      color: Color(
-                                          0xFFD3D3D3), // Light gray background color
-                                      borderRadius: BorderRadius.circular(
-                                          8), // Rounded corners
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        // First widget inside the Container: Icon
-                                        const Icon(
-                                          Icons.calendar_month, // Example icon
-                                          color:
-                                              Color(0xFF0098a6), // Icon color
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                8), // Spacing between Icon and Text
-                                        // Second widget inside the Container: Text widget
-                                        Text('$formDate',
-                                            style: AppTextStyle
-                                                .font14OpenSansRegularBlack45TextStyle),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 15),
-                            GestureDetector(
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2100),
-                                );
-                                if (pickedDate != null) {
-                                  String formattedDate =
-                                      DateFormat('dd/MMM/yyyy')
-                                          .format(pickedDate);
-                                  setState(() {
-                                    tempDate =
-                                        toDate; // Save the current toDate before updating
-                                    toDate = formattedDate;
-                                    calculateTotalDays();
-                                  });
-                                  toDateSelectLogic();
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween, // Space between widgets
-                                children: [
-                                  // First widget: Text widget
-                                  Text('To Date :',
-                                      style: AppTextStyle
-                                          .font14OpenSansRegularBlack45TextStyle),
-                                  // Second widget: Container with light gray background
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical:
-                                            8), // Padding inside the Container
-                                    decoration: BoxDecoration(
-                                      color: const Color(
-                                          0xFFD3D3D3), // Light gray background color
-                                      borderRadius: BorderRadius.circular(
-                                          8), // Rounded corners
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        // First widget inside the Container: Icon
-                                        const Icon(
-                                          Icons.calendar_month, // Example icon
-                                          color:
-                                              Color(0xFF0098a6), // Icon color
-                                        ),
-                                        SizedBox(
-                                            width:
-                                                8), // Spacing between Icon and Text
 
-                                        // Second widget inside the Container: Text widget
-                                        Text('$toDate',
-                                            style: AppTextStyle
-                                                .font14OpenSansRegularBlack45TextStyle),
-                                      ],
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.start,
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: <Widget>[
+                            //     // 'assets/images/favicon.png',
+                            //     Container(
+                            //       height: 24,
+                            //         width: 24,
+                            //         margin: const EdgeInsets.only(
+                            //             left: 0, right: 5, top: 10),
+                            //          child: Image.asset('assets/images/triplist_1.jpeg'),
+                            //       // child: const Icon(
+                            //         //   Icons.person,
+                            //         //   size: 24,
+                            //         //   color: Color(0xFF0098a6),
+                            //         // )
+                            //     ),
+                            //     Padding(
+                            //       padding: EdgeInsets.only(top: 10),
+                            //       child: Text('$fullName'?? 'No Name',
+                            //           style: const TextStyle(
+                            //                 color: Color(0xFF0097A7),
+                            //                 fontSize: 12,
+                            //                // fontWeight: FontWeight.w400
+                            //           ),
+                            //           //style: AppTextStyle.font16OpenSansRegularBlack45TextStyle
+                            //       ),
+                            //     ),
+                            //     Spacer(),
+                            //     Container(
+                            //       height: 24.0, // Set the desired height
+                            //       padding: EdgeInsets.symmetric(horizontal: 2.0), // Optional: Add padding for horizontal spacing
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.grey[200],
+                            //         //color: Colors.white, // Set background color to white
+                            //         borderRadius: BorderRadius.circular(9.0), // Border radius for rounded corners
+                            //       ),
+                            //       child: Center( // Center the text inside the container
+                            //         child: Padding(
+                            //           padding: const EdgeInsets.only(left: 5,right: 5),
+                            //           child: Center(
+                            //             child: Text(
+                            //               '${widget.sLvDesc}',
+                            //               style: AppTextStyle.font10OpenSansRegularBlackTextStyle,
+                            //               textAlign: TextAlign.center, // Ensure the text is centered horizontally
+                            //             ),
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            SizedBox(height: 10),
+                            Container(
+                              height: 30,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start, // Align row children horizontally
+                                crossAxisAlignment: CrossAxisAlignment.center, // Align row children vertically to the center
+                                children: [
+                                  // First Column takes 1/3 of the width
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 30,
+                                      color: Colors.white, // Background color for the first container
+                                      alignment: Alignment.centerLeft, // Align the text to the left
+                                      child: Text(
+                                        'From Date :',
+                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // Optional spacing between columns
+                                  // Second Column takes the remaining 2/3 of the width
+                                  Expanded(
+                                    flex: 2,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        DateTime? pickedDate = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2100),
+                                        );
+                                        if (pickedDate != null) {
+                                          String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                                          setState(() {
+                                            tempDate = formDate; // Save the current formDate before updating
+                                            formDate = formattedDate;
+                                            calculateTotalDays();
+                                          });
+                                          fromDateSelectLogic();
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 30,
+                                        color: Colors.grey[100], // Background color for the second container
+                                        padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding inside the date container
+                                        alignment: Alignment.center, // Align the row to the center
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start, // Center the icon and text horizontally
+                                          crossAxisAlignment: CrossAxisAlignment.center, // Center the icon and text vertically
+                                          children: [
+                                            // First widget: Icon
+                                            const Icon(
+                                              Icons.calendar_month,
+                                              color: Color(0xFF0098a6),
+                                              size: 16, // Icon size
+                                            ),
+                                            SizedBox(width: 8), // Spacing between Icon and Text
+                                            // Second widget: Text widget
+                                            Text(
+                                              '$formDate',
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            SizedBox(height: 15),
+
+                            // Container(
+                            //   height: 30,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       // First Column takes 1/3 of the width
+                            //       Expanded(
+                            //         flex: 1,
+                            //         child: Container(
+                            //           height: 30,
+                            //           color: Colors.white, // Background color for the first container
+                            //           child:
+                            //           Text('From Date :',
+                            //               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       SizedBox(width: 8), // Optional spacing between columns
+                            //       // Second Column takes the remaining 2/3 of the width
+                            //       Expanded(
+                            //         flex: 2,
+                            //         child: InkWell(
+                            //           onTap: () async {
+                            //             DateTime? pickedDate = await showDatePicker(
+                            //               context: context,
+                            //               initialDate: DateTime.now(),
+                            //               firstDate: DateTime(2000),
+                            //               lastDate: DateTime(2100),
+                            //             );
+                            //             if (pickedDate != null) {
+                            //               String formattedDate =
+                            //               DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            //               setState(() {
+                            //                 tempDate = formDate; // Save the current formDate before updating
+                            //                 formDate = formattedDate;
+                            //                 calculateTotalDays();
+                            //               });
+                            //               fromDateSelectLogic();
+                            //             }
+                            //
+                            //           },
+                            //           child: Container(
+                            //             height: 30,
+                            //               color: Colors.grey[100], // Background color for the second container
+                            //             child: Row(
+                            //               mainAxisAlignment: MainAxisAlignment.start,
+                            //               crossAxisAlignment: CrossAxisAlignment.start,
+                            //               children: [
+                            //                             Padding(
+                            //                               padding: const EdgeInsets.only(left: 5),
+                            //                               child: Center(
+                            //                                 child: Row(
+                            //                                   mainAxisAlignment: MainAxisAlignment.center, // Centers children horizontally
+                            //                                   crossAxisAlignment: CrossAxisAlignment.center, // Centers children vertically
+                            //                                   children: [
+                            //                                     // First widget: Icon
+                            //                                     const Icon(
+                            //                                       Icons.calendar_month, // Example icon
+                            //                                       color: Color(0xFF0098a6),
+                            //                                       size: 16,// Icon color
+                            //                                     ),
+                            //                                     SizedBox(width: 8), // Spacing between Icon and Text
+                            //                                     // Second widget: Text widget
+                            //                                     Text(
+                            //                                       '$formDate',
+                            //                                       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //                                     ),
+                            //                                   ],
+                            //                                 ),
+                            //                               ),
+                            //                             ),
+                            //               ],
+                            //             )
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            SizedBox(height: 10),
                             Container(
-                              height: 45, // Reduced height
-                              color: Colors.white,
+                              height: 30,
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start, // Align row children horizontally
+                                crossAxisAlignment: CrossAxisAlignment.center, // Align row children vertically to the center
                                 children: [
-                                  // First widget: Text widget with fixed width
-                                  Flexible(
-                                    flex:
-                                        2, // Adjust the flex value as per your design
-                                    child: Text(
-                                      'Reason',
-                                      style: AppTextStyle
-                                          .font14OpenSansRegularBlack45TextStyle,
-                                      overflow: TextOverflow
-                                          .ellipsis, // Add ellipsis if the text is too long
+                                  // First Column takes 1/3 of the width
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 30,
+                                      color: Colors.white, // Background color for the first container
+                                      alignment: Alignment.centerLeft, // Align the text to the left
+                                      child: Text(
+                                        'To Date :',
+                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(width: 10),
-                                  // Second widget: Container with the TextFormField
-                                  Flexible(
-                                    flex:
-                                        8, // Adjust the flex value as per your design
-                                    child: Container(
-                                      height:
-                                          40, // Adjust the height to fit within the parent container
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Rounded corners
-                                      ),
+                                  SizedBox(width: 8), // Optional spacing between columns
+                                  // Second Column takes the remaining 2/3 of the width
+                                  Expanded(
+                                    flex: 2,
+                                    child: InkWell(
+                                      onTap: () async {
+                                                    DateTime? pickedDate = await showDatePicker(
+                                                      context: context,
+                                                      initialDate: DateTime.now(),
+                                                      firstDate: DateTime(2000),
+                                                      lastDate: DateTime(2100),
+                                                    );
+                                                    if (pickedDate != null) {
+                                                      String formattedDate =
+                                                      DateFormat('dd/MMM/yyyy')
+                                                          .format(pickedDate);
+                                                      setState(() {
+                                                        tempDate =
+                                                            toDate; // Save the current toDate before updating
+                                                        toDate = formattedDate;
+                                                        calculateTotalDays();
+                                                      });
+                                                      toDateSelectLogic();
+                                                    }
+                                        // DateTime? pickedDate = await showDatePicker(
+                                        //   context: context,
+                                        //   initialDate: DateTime.now(),
+                                        //   firstDate: DateTime(2000),
+                                        //   lastDate: DateTime(2100),
+                                        // );
+                                        // if (pickedDate != null) {
+                                        //   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                                        //   setState(() {
+                                        //     toDate = formDate; // Save the current formDate before updating
+                                        //     toDate = formattedDate;
+                                        //     calculateTotalDays();
+                                        //   });
+                                        //   fromDateSelectLogic();
+                                        // }
+                                      },
                                       child: Container(
-                                        color: Colors.white,
+                                        height: 30,
+                                        color: Colors.grey[100], // Background color for the second container
+                                        padding: const EdgeInsets.symmetric(horizontal: 8), // Add padding inside the date container
+                                        alignment: Alignment.center, // Align the row to the center
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start, // Center the icon and text horizontally
+                                          crossAxisAlignment: CrossAxisAlignment.center, // Center the icon and text vertically
+                                          children: [
+                                            // First widget: Icon
+                                            const Icon(
+                                              Icons.calendar_month,
+                                              color: Color(0xFF0098a6),
+                                              size: 16, // Icon size
+                                            ),
+                                            SizedBox(width: 8), // Spacing between Icon and Text
+                                            // Second widget: Text widget
+                                            Text(
+                                              '$toDate',
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Container(
+                            //   height: 30,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       // First Column takes 1/3 of the width
+                            //       Expanded(
+                            //         flex: 1,
+                            //         child: Container(
+                            //           height: 30,
+                            //           color: Colors.white, // Background color for the first container
+                            //           child:
+                            //           Text('To Date :',
+                            //             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       SizedBox(width: 8), // Optional spacing between columns
+                            //       // Second Column takes the remaining 2/3 of the width
+                            //       Expanded(
+                            //         flex: 2,
+                            //         child: InkWell(
+                            //           onTap: () async{
+                            //             DateTime? pickedDate = await showDatePicker(
+                            //               context: context,
+                            //               initialDate: DateTime.now(),
+                            //               firstDate: DateTime(2000),
+                            //               lastDate: DateTime(2100),
+                            //             );
+                            //             if (pickedDate != null) {
+                            //               String formattedDate =
+                            //               DateFormat('dd/MMM/yyyy')
+                            //                   .format(pickedDate);
+                            //               setState(() {
+                            //                 tempDate =
+                            //                     toDate; // Save the current toDate before updating
+                            //                 toDate = formattedDate;
+                            //                 calculateTotalDays();
+                            //               });
+                            //               toDateSelectLogic();
+                            //             }
+                            //           },
+                            //           child: Container(
+                            //               height: 30,
+                            //               color: Colors.grey[100], // Background color for the second container
+                            //               child: Padding(
+                            //                 padding: const EdgeInsets.only(left: 5),
+                            //                 child: Center(
+                            //                   child: Row(
+                            //                     mainAxisAlignment: MainAxisAlignment.start,
+                            //                     crossAxisAlignment: CrossAxisAlignment.start,
+                            //                     children: [
+                            //                       Row(
+                            //                         mainAxisAlignment: MainAxisAlignment.center, // Centers children horizontally
+                            //                         crossAxisAlignment: CrossAxisAlignment.center, // Centers children vertically
+                            //                         children: [
+                            //                           // First widget: Icon
+                            //                           const Icon(
+                            //                             Icons.calendar_month, // Example icon
+                            //                             color: Color(0xFF0098a6),
+                            //                             size: 16,// Icon color
+                            //                           ),
+                            //                           SizedBox(width: 8), // Spacing between Icon and Text
+                            //                           // Second widget: Text widget
+                            //                           Text(
+                            //                             '$toDate',
+                            //                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //                           ),
+                            //                         ],
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ),
+                            //               )
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            SizedBox(height: 10),
+                            Container(
+                              height: 35,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start, // Align row children horizontally
+                                crossAxisAlignment: CrossAxisAlignment.center, // Align row children vertically at the center
+                                children: [
+                                  // First Column takes 1/3 of the width
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 35,
+                                      color: Colors.white, // Background color for the first container
+                                      alignment: Alignment.centerLeft, // Align text to the left
+                                      child: Text(
+                                        'Reason :',
+                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8), // Optional spacing between columns
+                                  // Second Column takes the remaining 2/3 of the width
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 35, // Ensure consistent height for the container
+                                      color: Colors.grey[100], // Background color for the second container
+                                      child: Center(
                                         child: TextFormField(
                                           focusNode: _reasonfocus,
                                           controller: _reasonController,
                                           textInputAction: TextInputAction.next,
-                                          onEditingComplete: () =>
-                                              FocusScope.of(context)
-                                                  .nextFocus(),
+                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                           decoration: const InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 10,
-                                                    horizontal:
-                                                        10), // Adjust padding
+                                            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10), // Adjust padding
+                                            hintText: 'Enter leave reason', // Add your hint text here
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12, // Adjust the font size as needed
+                                            ),
                                             border: OutlineInputBorder(),
-                                            filled:
-                                                true, // Enable background color
-                                            fillColor: Color(
-                                                0xFFf2f3f5), // Set your desired background color here
+                                            filled: true, // Enable background color
+                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                           ),
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          maxLines:
-                                              1, // Keeps the TextFormField to a single line
-                                          // keyboardType: TextInputType.text,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          maxLines: 1, // Keeps the TextFormField to a single line
                                           showCursor: true,
-                                          // validator: (value) {
-                                          //   if (value == null || value.isEmpty) {
-                                          //     return 'Enter reason'; // Display message if empty
-                                          //   }
-                                          //   return null; // Return null if validation passes
-                                          // },
                                         ),
                                       ),
                                     ),
@@ -707,63 +942,124 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 15),
+
+                            // Container(
+                            //   height: 35,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       // First Column takes 1/3 of the width
+                            //       Expanded(
+                            //         flex: 1,
+                            //         child: Container(
+                            //           height: 35,
+                            //           color: Colors.white, // Background color for the first container
+                            //           child:
+                            //           Text('Reason :',
+                            //             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       SizedBox(width: 8), // Optional spacing between columns
+                            //       // Second Column takes the remaining 2/3 of the width
+                            //       Expanded(
+                            //         flex: 2,
+                            //         child: Container(
+                            //           color: Colors.grey[100],
+                            //           //color: Colors.white,
+                            //           child: Center(
+                            //             child: TextFormField(
+                            //               focusNode: _reasonfocus,
+                            //               controller: _reasonController,
+                            //               textInputAction: TextInputAction.next,
+                            //               onEditingComplete: () =>
+                            //                   FocusScope.of(context)
+                            //                       .nextFocus(),
+                            //               decoration: const InputDecoration(
+                            //                 contentPadding:
+                            //                 EdgeInsets.symmetric(
+                            //                     vertical: 10,
+                            //                     horizontal:
+                            //                     10), // Adjust padding
+                            //                 hintText: 'Enter leave reason', // Add your hint text here
+                            //                 hintStyle: TextStyle(
+                            //                   color: Colors.grey,
+                            //                   fontSize: 10
+                            //
+                            //                   // You can also customize the hint text style
+                            //                 ),
+                            //                 border: OutlineInputBorder(),
+                            //                 filled:
+                            //                 true, // Enable background color
+                            //                 fillColor: Color(
+                            //                     0xFFf2f3f5), // Set your desired background color here
+                            //               ),
+                            //               autovalidateMode: AutovalidateMode
+                            //                   .onUserInteraction,
+                            //               maxLines:
+                            //               1, // Keeps the TextFormField to a single line
+                            //               // keyboardType: TextInputType.text,
+                            //               showCursor: true,
+                            //               // validator: (value) {
+                            //               //   if (value == null || value.isEmpty) {
+                            //               //     return 'Enter reason'; // Display message if empty
+                            //               //   }
+                            //               //   return null; // Return null if validation passes
+                            //               // },
+                            //             ),
+                            //           ),
+                            //         ),
+                            //         ),
+                            //     ],
+                            //   ),
+                            // ),
+                            SizedBox(height: 10),
                             Container(
-                              height: 45, // Reduced height
-                              color: Colors.white,
+                              height: 35,
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start, // Align row children horizontally
+                                crossAxisAlignment: CrossAxisAlignment.center, // Align row children vertically at the center
                                 children: [
-                                  // First widget: Text widget with fixed width
-                                  Flexible(
-                                    flex:
-                                        2, // Adjust the flex value as per your design
-                                    child: Text(
-                                      'Address',
-                                      style: AppTextStyle
-                                          .font14OpenSansRegularBlack45TextStyle,
-                                      overflow: TextOverflow
-                                          .ellipsis, // Add ellipsis if the text is too long
+                                  // First Column takes 1/3 of the width
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 35,
+                                      color: Colors.white, // Background color for the first container
+                                      alignment: Alignment.centerLeft, // Align text to the left
+                                      child: Text(
+                                        'Address :',
+                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                      ),
                                     ),
                                   ),
-                                  SizedBox(width: 5),
-                                  // Second widget: Container with the TextFormField
-                                  Flexible(
-                                    flex:
-                                        8, // Adjust the flex value as per your design
+                                  SizedBox(width: 8), // Optional spacing between columns
+                                  // Second Column takes the remaining 2/3 of the width
+                                  Expanded(
+                                    flex: 2,
                                     child: Container(
-                                      height:
-                                          40, // Adjust the height to fit within the parent container
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(
-                                            8), // Rounded corners
-                                      ),
-                                      child: Container(
-                                        color: Colors.white,
+                                      height: 35, // Ensure consistent height for the container
+                                      color: Colors.grey[100], // Background color for the second container
+                                      child: Center(
                                         child: TextFormField(
                                           focusNode: _addressfocus,
                                           controller: _addressController,
                                           textInputAction: TextInputAction.next,
-                                          onEditingComplete: () =>
-                                              FocusScope.of(context)
-                                                  .nextFocus(),
+                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                           decoration: const InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.symmetric(
-                                                    vertical: 10,
-                                                    horizontal:
-                                                        10), // Adjust padding
+                                            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10), // Adjust padding
+                                            hintText: 'Enter Contactable address', // Add your hint text here
+                                            hintStyle: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12, // Adjust the font size as needed
+                                            ),
                                             border: OutlineInputBorder(),
-                                            filled:
-                                                true, // Enable background color
-                                            fillColor: Color(
-                                                0xFFf2f3f5), // Set your desired background color here
+                                            filled: true, // Enable background color
+                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                           ),
-                                          autovalidateMode: AutovalidateMode
-                                              .onUserInteraction,
-                                          maxLines:
-                                              1, // Keeps the TextFormField to a single line
-                                          keyboardType: TextInputType.text,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          maxLines: 1, // Keeps the TextFormField to a single line
                                           showCursor: true,
                                         ),
                                       ),
@@ -772,216 +1068,210 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 15),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment
-                                  .spaceBetween, // Space between widgets
-                              children: [
-                                // First widget: Text widget
-                                Text('Applied For :',
-                                    style: AppTextStyle
-                                        .font14OpenSansRegularBlack45TextStyle),
-                              ],
-                            ),
-                            SizedBox(height: 15),
+                            // Container(
+                            //   height: 35,
+                            //   child: Row(
+                            //     mainAxisAlignment: MainAxisAlignment.start,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       // First Column takes 1/3 of the width
+                            //       Expanded(
+                            //         flex: 1,
+                            //         child: Container(
+                            //           height: 35,
+                            //           color: Colors.white, // Background color for the first container
+                            //           child:
+                            //           Text('Address :',
+                            //             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       SizedBox(width: 8), // Optional spacing between columns
+                            //       // Second Column takes the remaining 2/3 of the width
+                            //       Expanded(
+                            //         flex: 2,
+                            //         child: Container(
+                            //           color: Colors.grey[100],
+                            //           //color: Colors.white,
+                            //           child: TextFormField(
+                            //             focusNode: _addressfocus,
+                            //             controller: _addressController,
+                            //             textInputAction: TextInputAction.next,
+                            //             onEditingComplete: () =>
+                            //                 FocusScope.of(context)
+                            //                     .nextFocus(),
+                            //             decoration: const InputDecoration(
+                            //               contentPadding:
+                            //               EdgeInsets.symmetric(
+                            //                   vertical: 10,
+                            //                   horizontal:
+                            //                   10), // Adjust padding
+                            //               hintText: 'Enter Contactable address', // Add your hint text here
+                            //               hintStyle: TextStyle(
+                            //                 color: Colors.grey, // You can also customize the hint text style
+                            //                 fontSize: 10
+                            //               ),
+                            //               border: OutlineInputBorder(),
+                            //               filled:
+                            //               true, // Enable background color
+                            //               fillColor: Color(
+                            //                   0xFFf2f3f5), // Set your desired background color here
+                            //             ),
+                            //             autovalidateMode: AutovalidateMode
+                            //                 .onUserInteraction,
+                            //             maxLines:
+                            //             1, // Keeps the TextFormField to a single line
+                            //             // keyboardType: TextInputType.text,
+                            //             showCursor: true,
+                            //             // validator: (value) {
+                            //             //   if (value == null || value.isEmpty) {
+                            //             //     return 'Enter reason'; // Display message if empty
+                            //             //   }
+                            //             //   return null; // Return null if validation passes
+                            //             // },
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            // ),
+                            SizedBox(height: 10),
+
                             Visibility(
                               visible: totalDays <= 1,
                               replacement: SizedBox.shrink(),
                               child: Container(
-                                height: 50,
-                                color: Colors.grey[200], // Light gray color
-                                child: Row(
+                                height: 88,
+                              // color: Colors.white,
+                                color: Colors.grey[100], // Light gray color
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                              Radio<String>(
-                                                value: "Full Day",
-                                                groupValue: _selectedValue,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    _selectedValue = value!;
-                                                  });
-                                                  if (_selectedValue != null) {
-                                                    print(
-                                                        "Selected Radio Value: $_selectedValue");
-                                                    // You can also set this value to a Text widget
-                                                    displayText = _selectedValue;
-                                                  }
-                                                },
-                                              ),
-                                        SizedBox(width: 3), // Adjust the width to reduce the gap
-                                        Text(
-                                                    "Full Day",
-                                                    style: AppTextStyle
-                                                        .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Handle overflow
-                                                    softWrap: false,
-                                                  ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Radio<String>(
-                                          value: "First Half",
-                                          groupValue: _selectedValue,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedValue = value!;
-                                            });
-                                            if (_selectedValue != null) {
-                                              print(
-                                                  "Selected Radio Value: $_selectedValue");
-                                              // You can also set this value to a Text widget
-                                              displayText = _selectedValue;
-                                            }
-                                          },
-                                        ),
-                                        SizedBox(width: 3), // Adjust the width to reduce the gap
-                                        Text(
-                                          "First Half",
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 10,left: 20),
+                                      child: Text('Applied For :',
                                           style: AppTextStyle
-                                              .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                          overflow: TextOverflow
-                                              .ellipsis, // Handle overflow
-                                          softWrap: false,
-                                        ),
-                                      ],
+                                              .font14OpenSansRegularBlackTextStyle),
                                     ),
+                                    SizedBox(height: 0),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Radio<String>(
-                                          value: "Second Half",
-                                          groupValue: _selectedValue,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedValue = value!;
-                                            });
-                                            if (_selectedValue != null) {
-                                              print("Selected Radio Value: $_selectedValue");
-                                              // You can also set this value to a Text widget
-                                              displayText = _selectedValue;
-                                            }
-                                          },
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Radio<String>(
+                                              value: "Full Day",
+                                              groupValue: _selectedValue,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedValue = value!;
+                                                });
+                                                if (_selectedValue != null) {
+                                                  print(
+                                                      "Selected Radio Value: $_selectedValue");
+                                                  // You can also set this value to a Text widget
+                                                  displayText = _selectedValue;
+                                                }
+                                              },
+                                            ),
+                                            SizedBox(width: 3), // Adjust the width to reduce the gap
+                                            Text(
+                                              "Full Day",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(width: 3), // Adjust the width to reduce the gap
-                                        Text(
-                                          "Second Half",
-                                          style: AppTextStyle
-                                              .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                          overflow: TextOverflow
-                                              .ellipsis, // Handle overflow
-                                          softWrap: false,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Radio<String>(
+                                              value: "First Half",
+                                              groupValue: _selectedValue,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedValue = value!;
+                                                });
+                                                if (_selectedValue != null) {
+                                                  print(
+                                                      "Selected Radio Value: $_selectedValue");
+                                                  // You can also set this value to a Text widget
+                                                  displayText = _selectedValue;
+                                                }
+                                              },
+                                            ),
+                                            SizedBox(width: 3), // Adjust the width to reduce the gap
+                                            Text(
+                                              "First Half",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Radio<String>(
+                                              value: "Second Half",
+                                              groupValue: _selectedValue,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedValue = value!;
+                                                });
+                                                if (_selectedValue != null) {
+                                                  print("Selected Radio Value: $_selectedValue");
+                                                  // You can also set this value to a Text widget
+                                                  displayText = _selectedValue;
+                                                }
+                                              },
+                                            ),
+                                            SizedBox(width: 3), // Adjust the width to reduce the gap
+                                            Text(
+                                              "Second Half",
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlack45TextStyle, // Reduce font size
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow
+                                              softWrap: false,
+                                            ),
+                                          ],
                                         ),
                                       ],
-                                    ),
-
-                                    // Expanded(
-                                    //   child: Row(
-                                    //     children: <Widget>[
-                                    //       Radio<String>(
-                                    //         value: "Full Day",
-                                    //         groupValue: _selectedValue,
-                                    //         onChanged: (value) {
-                                    //           setState(() {
-                                    //             _selectedValue = value!;
-                                    //           });
-                                    //           if (_selectedValue != null) {
-                                    //             print(
-                                    //                 "Selected Radio Value: $_selectedValue");
-                                    //             // You can also set this value to a Text widget
-                                    //             displayText = _selectedValue;
-                                    //           }
-                                    //         },
-                                    //       ),
-                                    //       Flexible(
-                                    //         child: Text(
-                                    //           "Full Day",
-                                    //           style: AppTextStyle
-                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                    //           overflow: TextOverflow
-                                    //               .ellipsis, // Handle overflow
-                                    //           softWrap: false,
-                                    //         ),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    // Expanded(
-                                    //   child: Row(
-                                    //     children: <Widget>[
-                                    //       Radio<String>(
-                                    //         value: "First Half",
-                                    //         groupValue: _selectedValue,
-                                    //         onChanged: (value) {
-                                    //           setState(() {
-                                    //             _selectedValue = value!;
-                                    //           });
-                                    //           if (_selectedValue != null) {
-                                    //             print(
-                                    //                 "Selected Radio Value: $_selectedValue");
-                                    //             // You can also set this value to a Text widget
-                                    //             displayText = _selectedValue;
-                                    //           }
-                                    //         },
-                                    //       ),
-                                    //       Flexible(
-                                    //         child: Text(
-                                    //           "First Half",
-                                    //           style: AppTextStyle
-                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                    //           overflow: TextOverflow
-                                    //               .ellipsis, // Handle overflow
-                                    //           softWrap: false,
-                                    //         ),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
-                                    // Expanded(
-                                    //   child: Row(
-                                    //     children: <Widget>[
-                                    //       Radio<String>(
-                                    //         value: "Second Half",
-                                    //         groupValue: _selectedValue,
-                                    //         onChanged: (value) {
-                                    //           setState(() {
-                                    //             _selectedValue = value!;
-                                    //           });
-                                    //           if (_selectedValue != null) {
-                                    //             print("Selected Radio Value: $_selectedValue");
-                                    //             // You can also set this value to a Text widget
-                                    //             displayText = _selectedValue;
-                                    //           }
-                                    //         },
-                                    //       ),
-                                    //       Flexible(
-                                    //         child: Text(
-                                    //           "Second Half",
-                                    //           style: AppTextStyle
-                                    //               .font10OpenSansRegularBlack45TextStyle, // Reduce font size
-                                    //           overflow: TextOverflow
-                                    //               .ellipsis, // Handle overflow
-                                    //           softWrap: false,
-                                    //         ),
-                                    //       ),
-                                    //     ],
-                                    //   ),
-                                    // ),
+                                    )
                                   ],
                                 ),
                               ),
                             ),
                             SizedBox(height: 25),
                             Center(
-                              child: Text(
-                                  'You are going to apply for a leave of $displayText',
-                                  style: AppTextStyle
-                                      .font14OpenSansRegularBlack45TextStyle),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: 'You are going to apply for a leave of ', // Regular text
+                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle, // Apply your existing text style here
+                                    ),
+                                    TextSpan(
+                                      text: displayText, // Text you want in red
+                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle.copyWith(
+                                        color: Colors.red, // Set the displayText color to red
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // child: Text(
+                              //     'You are going to apply for a leave of $displayText',
+                              //     style: AppTextStyle
+                              //         .font14OpenSansRegularBlack45TextStyle),
                             ),
                             SizedBox(height: 15),
                             InkWell(
