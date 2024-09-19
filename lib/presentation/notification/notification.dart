@@ -145,8 +145,7 @@ class _NotificationPageState extends State<NotificationPage> {
               radius: 30,
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
-                child: Image.asset(
-                  'assets/images/logoutnew.jpeg', // Replace with your asset image path
+                child: Image.asset('assets/images/logoutnew.jpeg', // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,

@@ -19,6 +19,7 @@ import '../../../data/hrmsPopUpWarning_repo.dart';
 import '../../../data/hrmspostreimbursement.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
+import '../../../data/reimbursementClarificationRevert.dart';
 import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_colors.dart';
@@ -28,27 +29,9 @@ import 'dart:math';
 
 import '../expense_management.dart';
 
-// class Reimbursementrevert extends StatelessWidget {
-//   const Reimbursementrevert({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         appBarTheme: const AppBarTheme(
-//           iconTheme: IconThemeData(
-//             color: Colors.white, // Change the color of the drawer icon here
-//           ),
-//         ),
-//       ),
-//
-//       home: ReimbursementrevertPage(),
-//     );
-//   }
-// }
 
 class ReimbursementrevertPage extends StatefulWidget {
+
   final sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode;
   ReimbursementrevertPage(this.sProjectName, this.sExpHeadName,this.dEntryAt, this.fAmount,this.sExpDetails, this.sExpBillPhoto, this.sProjectCode, this.sExpHeadCode, {super.key});
 
@@ -262,6 +245,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     final responseData = json.decode(responsed.body);
     print('---155----$responseData');
   }
+
   // build dialog sucess
   Widget _buildDialogSucces2(BuildContext context,String msg) {
     return Dialog(
@@ -615,6 +599,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
+
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -1109,94 +1094,173 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                 String? sEmpCode = prefs.getString('sEmpCode');
                                 String? sContactNo = prefs.getString('sContactNo');
-                                print('----sEmpCode--15---$sEmpCode');
-                                /// TODO GET A RANDOM NUMBER
+
+                                // Generate random transaction code
                                 Random random = Random();
                                 int sTranCode = 10000000 + random.nextInt(90000000);
 
-                                print('--1001--sTranCode---$sTranCode');
-                                print('--1002--sEmpCode---$sEmpCode');
-                                print('--1003--sProjectCode---$_selectedSectorId');
-                                print('--1004--sExpHeadCode---$_selectedShopId');
-                                print('--1005--dExpDate---${widget.dEntryAt}');
-                                print('--1006--fAmount---${_amountController.text}');
-                                print('--1007--sExpDetails---${_expenseController.text}');
-                                print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
-                                print('--1009--sEntryBy---$sContactNo');
-                                print('--1011--sResult---$result');
+                                var amount = _amountController.text.trim();
+                                var expenseDetails = _expenseController.text.trim();
+                                var remarks = _remarkController.text.trim();
 
-                                var amount = '${_amountController.text}';
-                                var expenseDetails = '${_expenseController.text}';
-                                remarks = '${_remarkController.text}';
+                                // Project code and expense category from widget
+                                _selectedSectorId = widget.sProjectCode;
+                                _selectedShopId = widget.sExpHeadCode;
+                                dExpDate = widget.dEntryAt;
 
+                                // Validate all fields
+                                if (amount.isEmpty) {
+                                  displayToast('Please enter amount');
+                                } else if (expenseDetails.isEmpty) {
+                                  displayToast('Please enter expense details');
+                                } else if (_selectedSectorId == null) {
+                                  displayToast('Please select project');
+                                } else if (_selectedShopId == null) {
+                                  displayToast('Please select expense category');
+                                } else if (dExpDate == null) {
+                                  displayToast('Please select expense date');
+                                } else if (uplodedImage == null) {
+                                  displayToast('Please pick a photo');
+                                } else if (remarks.isEmpty) {
+                                  displayToast('Please enter remarks');
+                                } else if (sEmpCode == null) {
+                                  displayToast('Employee code missing');
+                                } else if (sContactNo == null) {
+                                  displayToast('Contact number missing');
+                                } else {
+                                  // All validations passed, call the first API
+                                  var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate!, amount);
+                                  print('---API Response: $hrmsPopWarning');
 
-                                print('xxxx---355--${widget.sProjectCode}');
-                                print('xxxx---356--${widget.sExpHeadCode}');
-                                _selectedSectorId = '${widget.sProjectCode}';
-                                _selectedShopId = '${widget.sExpHeadCode}';
-                                dExpDate   = '${widget.dEntryAt}';
-                                print('xxxx---1138--${dExpDate}');
-
-                                //   _selectedSectorId!=null && _selectedShopId!=null &&
-
-                                if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
-                                    dExpDate!=null && amount !=null && expenseDetails!=null &&
-                                    uplodedImage!=null && sContactNo!=null && remarks!=null){
-
-                                  // Call Api
-                                  var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode,dExpDate,amount);
-                                  print('---975--$hrmsPopWarning');
                                   result = "${hrmsPopWarning[0]['Result']}";
                                   msg = "${hrmsPopWarning[0]['Msg']}";
 
-                                }else{
-                                  if(sTranCode==null){
-                                    displayToast('Genrate Random Number');
-                                  }else if(sEmpCode==null){
-                                    displayToast('Enter sEmpCode');
-                                  }else if(_selectedSectorId==null){
-                                    displayToast('Please Select Project');
-                                  }else if(_selectedShopId==null){
-                                    displayToast('Please Select Expense Category');
-                                  }else if(dExpDate==null){
-                                    displayToast('Select Expense Date');
-                                  }else if(amount==null || amount==''){
-                                    displayToast('Please Enter Amount');
-                                  }
-                                  else if(expenseDetails==null || expenseDetails==''){
-                                    displayToast('Please Enter Expense Details');
-                                  }else if(uplodedImage==null){
-                                    displayToast('Please pick a photo');
-                                  }else if(sContactNo==null){
-                                    displayToast('Please get a contact number');
-                                  }else if(remarks==null || remarks==''){
-                                    displayToast('Please Remarks');
-                                  }
-                                } // condition to fetch a response form a api
-                                if(result=="0"){
-                                  // CALL API HRMS Reimbursement
-                                  var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                                      _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
-                                  );
-                                  print('---1185--$hrmsPostReimbursement');
-                                  result = "${hrmsPostReimbursement[0]['Result']}";
-                                  msg = "${hrmsPostReimbursement[0]['Msg']}";
+                                  // If result is "0", call the second API
+                                  if (result == "0") {
+                                    var hrmsPostReimbursement = await HrmsPostReimbursementRevertRepo().hrmsPostReimbursementRevert(
+                                        context, sTranCode, sEmpCode, _selectedSectorId!, _selectedShopId!, dExpDate!, amount, expenseDetails, uplodedImage, sContactNo!, result, remarks
+                                    );
 
-                                  // displayToast(msg);
-                                  /// todo here to show the dialog sucess
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return _buildDialogSucces2(context,msg);
-                                    },
-                                  );
+                                    result = "${hrmsPostReimbursement[0]['Result']}";
+                                    msg = "${hrmsPostReimbursement[0]['Msg']}";
 
-                                }else{
-                                  showCustomDialog(context,msg);
-                                  //displayToast(msg);
-                                  print('---diaplay dialog --');
+                                    // Show success dialog
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return _buildDialogSucces2(context, msg);
+                                      },
+                                    );
+                                  } else {
+                                    showCustomDialog(context, msg);
+                                  }
                                 }
                               },
+
+                              // onTap: () async {
+                              //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //   String? sEmpCode = prefs.getString('sEmpCode');
+                              //   String? sContactNo = prefs.getString('sContactNo');
+                              //   print('----sEmpCode--15---$sEmpCode');
+                              //   /// TODO GET A RANDOM NUMBER
+                              //   Random random = Random();
+                              //   int sTranCode = 10000000 + random.nextInt(90000000);
+                              //
+                              //   print('--1001--sTranCode---$sTranCode');
+                              //   print('--1002--sEmpCode---$sEmpCode');
+                              //   print('--1003--sProjectCode---$_selectedSectorId');
+                              //   print('--1004--sExpHeadCode---$_selectedShopId');
+                              //   print('--1005--dExpDate---${widget.dEntryAt}');
+                              //   print('--1006--fAmount---${_amountController.text}');
+                              //   print('--1007--sExpDetails---${_expenseController.text}');
+                              //   print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
+                              //   print('--1009--sEntryBy---$sContactNo');
+                              //   print('--1011--sResult---$result');
+                              //
+                              //   var amount = '${_amountController.text}';
+                              //   var expenseDetails ='${_expenseController.text}';
+                              //   remarks = '${_remarkController.text}'.trim();
+                              //
+                              //   print('-----1135---$remarks');
+                              //   print('-----1136---$expenseDetails');
+                              //
+                              //   print('xxxx---355--${widget.sProjectCode}');
+                              //   print('xxxx---356--${widget.sExpHeadCode}');
+                              //   _selectedSectorId = '${widget.sProjectCode}';
+                              //   _selectedShopId = '${widget.sExpHeadCode}';
+                              //   dExpDate   = '${widget.dEntryAt}';
+                              //   print('xxxx---1138--${dExpDate}');
+                              //
+                              //   //   _selectedSectorId!=null && _selectedShopId!=null &&
+                              //
+                              //   if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
+                              //       dExpDate!=null && amount !=null && expenseDetails!=null || expenseDetails !='' &&
+                              //       uplodedImage!=null && sContactNo!=null && remarks!=null){
+                              //
+                              //     // Call Api
+                              //     var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!,dExpDate,amount);
+                              //     print('---975--$hrmsPopWarning');
+                              //     result = "${hrmsPopWarning[0]['Result']}";
+                              //     msg = "${hrmsPopWarning[0]['Msg']}";
+                              //
+                              //     print('---Api is calling---');
+                              //
+                              //   }else{
+                              //     if(sTranCode==null){
+                              //       displayToast('Genrate Random Number');
+                              //     }else if(sEmpCode==null){
+                              //       displayToast('Enter sEmpCode');
+                              //     }else if(_selectedSectorId==null){
+                              //       displayToast('Please Select Project');
+                              //     }else if(_selectedShopId==null){
+                              //       displayToast('Please Select Expense Category');
+                              //     }else if(dExpDate==null){
+                              //       displayToast('Select Expense Date');
+                              //     }else if(amount==null || amount==''){
+                              //       displayToast('Please Enter Amount');
+                              //     }
+                              //     else if(expenseDetails==null || expenseDetails==''){
+                              //       displayToast('Please Enter Expense Details');
+                              //     }else if(uplodedImage==null){
+                              //       displayToast('Please pick a photo');
+                              //     }else if(sContactNo==null){
+                              //       displayToast('Please get a contact number');
+                              //     }else if(remarks==null || remarks==''){
+                              //       displayToast('Please Remarks');
+                              //     }
+                              //
+                              //   } // condition to fetch a response form a api
+                              //   //showCustomDialog(context,msg);
+                              //
+                              //   if(result=="0"){
+                              //     // CALL API HRMS Reimbursement
+                              //     // var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
+                              //     //     _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
+                              //     // );
+                              //
+                              //     var  hrmsPostReimbursement = await HrmsPostReimbursementRevertRepo().hrmsPostReimbursementRevert(context,sTranCode,sEmpCode,
+                              //         _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
+                              //     );
+                              //
+                              //     print('---1185--$hrmsPostReimbursement');
+                              //     result = "${hrmsPostReimbursement[0]['Result']}";
+                              //     msg = "${hrmsPostReimbursement[0]['Msg']}";
+                              //
+                              //     // displayToast(msg);
+                              //     /// todo here to show the dialog sucess
+                              //     showDialog(
+                              //       context: context,
+                              //       builder: (BuildContext context) {
+                              //         return _buildDialogSucces2(context,msg);
+                              //       },
+                              //     );
+                              //
+                              //   }else{
+                              //     showCustomDialog(context,msg);
+                              //     //displayToast(msg);
+                              //     print('---diaplay dialog --');
+                              //   }
+                              // },
 
                               child: Container(
                                 width: double.infinity,
@@ -1276,7 +1340,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     var expenseDetails = '${_expenseController.text}';
 
                     var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
+                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,"Testing"
                     );
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";

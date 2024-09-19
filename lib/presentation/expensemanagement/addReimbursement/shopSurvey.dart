@@ -137,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double? lat, long;
   //var dExpDate;
   String? dExpDate;
-  var remarks;
+  var remarks="N/A";
 
 
   // Uplode Id Proof with gallary
