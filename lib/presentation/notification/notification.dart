@@ -22,8 +22,6 @@ class _NotificationPageState extends State<NotificationPage> {
 
   var iTranId;
   late Future<List<NotificationModel>> _notificationList;
-  List<NotificationModel> _allData = []; // Holds original data
-  List<NotificationModel> _filteredData = [];
 
   // deleteDialogBox
   Widget _deleteItemDialog(BuildContext context) {
