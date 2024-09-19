@@ -70,6 +70,17 @@ class GeneralFunction {
 
     goNext(context);
   }
+  // dialogBOX
+  void displayToast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
   //  takeActionDialog
 
   _takeActionDialog(BuildContext context) {
@@ -593,17 +604,17 @@ class GeneralFunction {
   }
 
   // tost
-  void displayToast(String msg){
-    Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-  }
+  // void displayToast(String msg){
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  // }
   // drawerFunction
 
   drawerFunction(BuildContext context, String sName, String email) {

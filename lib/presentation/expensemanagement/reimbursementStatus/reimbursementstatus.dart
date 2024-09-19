@@ -1257,6 +1257,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     ElevatedButton(
                       onPressed: () {
                          Navigator.of(context).pop();
+                         // call api again
+                         hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),

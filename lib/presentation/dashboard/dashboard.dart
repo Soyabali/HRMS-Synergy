@@ -10,6 +10,7 @@ import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
+import '../notification/notification.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
@@ -577,7 +578,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               Stack(
                 children: [
                   Container(
-                    height: 200.0, // Set the height of the container
+                    height: 170.0, // Set the height of the container
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(ImageAssets.deshboardtop), // Path to your asset image
@@ -1291,11 +1292,11 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         ),
                         GestureDetector(
                           onTap: (){
-                            print('---Profle----');
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                            // );
+                            print('---Notification----');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => NotificationPage()),
+                            );
                           },
                           child: Container(
                             height: 100.0,
