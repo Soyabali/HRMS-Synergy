@@ -11,6 +11,7 @@ import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../notification/notification.dart';
+import '../policydoc/policydoc.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
@@ -990,10 +991,12 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('-------');
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                            // );
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => PolicyDoc()
+                              ),
+                            );
                           },
                           child: Container(
                             height: 100.0,
