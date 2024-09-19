@@ -10,12 +10,14 @@ import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
+import '../holiday/holidaylist.dart';
 import '../notification/notification.dart';
 import '../policydoc/policydoc.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
+import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
 
 class DashBoard extends StatelessWidget {
@@ -1054,11 +1056,13 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---Mark Attendance----');
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                            // );
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => HolidaylistScreen()),
+                            );
                           },
+
                           child: Container(
                             height: 100.0,
                             decoration: BoxDecoration(
@@ -1115,10 +1119,10 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---Profle----');
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Userquery()),
+                            );
                           },
                           child: Container(
                             height: 100.0,
