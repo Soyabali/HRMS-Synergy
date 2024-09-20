@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/data/holidaylist.dart';
+import '../../domain/holidaylist_model.dart';
 import '../dashboard/dashboard.dart';
-import '../resources/app_text_style.dart';
-import 'package:intl/intl.dart';
 
 class Holidaylist extends StatelessWidget {
   const Holidaylist({super.key});
@@ -25,37 +25,70 @@ class HolidaylistScreen extends StatefulWidget {
 
 class _PolicydocScreenState extends State<HolidaylistScreen> {
   // month name list
-  late String currentMonth;
-  late String selectedMonth;
 
-  final List<String> months = [
-    "JAN",
-    "FEB",
-    "MAR",
-    "APR",
-    "MAY",
-    "JUN",
-    "JUL",
-    "AUG",
-    "SEP",
-    "OCT",
-    "NOV",
-    "DEC"
+  late Future<List<HolidayListModel>> holidayList;
+  List<HolidayListModel> filteredHolidayList = [];
+  late String selectedMonth ; // Default month
+  List<String> months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
   ];
 
-  // DateTime now = DateTime.now(); // Get the current date and time
-  //String currentMonth = DateFormat('MMM').format(now); // Format it to get the short month name (e.g., "Jan")
+  final List<Color> colorList = [
+    Color(0xFF4DB6AC),
+    Color(0xFFE1A245),
+    Color(0xFFC888D3),
+    Color(0xFFE88989),
+    Color(0xFFA6A869),
+    Color(0xFF379BF3),
+  ];
+  var randomColor;
+
+  // get the current Month
+
+  String getCurrentMonth() {
+    DateTime now = DateTime.now(); // Get the current date and time
+    List<String> months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return months[now.month - 1]; // Return the current month as a string
+  }
+  // convet month name
+  String capitalizeFirstLetter(String month) {
+    // Convert the first letter to uppercase and the rest to lowercase
+    return month[0].toUpperCase() + month.substring(1).toLowerCase();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    DateTime now = DateTime.now();
-    currentMonth = DateFormat('MMM')
-        .format(now)
-        .toUpperCase(); // Format to get the month as "Jan"
-    selectedMonth = currentMonth;
-    print('----44---$selectedMonth');
+    holidayList = HolidayListRepo().holidayList(context);
+     selectedMonth = getCurrentMonth();
+    capitalizeFirstLetter(selectedMonth);
+    selectedMonth = capitalizeFirstLetter(selectedMonth);
+    print('----97---$selectedMonth');
+    holidayList.then((holidays) {
+      filterByMonth(holidays, selectedMonth);
+    });
+  }
+  // Function to filter the holidays based on the selected month
+  void filterByMonth(List<HolidayListModel> holidays, String month) {
+    setState(() {
+      filteredHolidayList =
+          holidays.where((holiday) => holiday.getMonth() == month).toList();
+    });
   }
 
   @override
@@ -106,273 +139,142 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
             ),
           ), // Removes shadow under the AppBar
         ),
-        body: ListView(
+        body: Column(
           children: [
+            // Horizontal Month ListView
             Padding(
               padding: const EdgeInsets.only(bottom: 10, top: 10),
               child: Container(
-                  height: 50, // Set the height of the list
-                  // width: 70,
-                  color: Colors.white,
-                  child: ListView.builder(
-                      scrollDirection:
-                          Axis.horizontal, // Makes the list horizontal
-                      itemCount: months.length, // Number of months
-                      itemBuilder: (context, index) {
-                        bool isCurrentMonth = months[index] == currentMonth;
-                        bool isSelectedMonth = months[index] == selectedMonth;
+                height: 50,
+                color: Colors.white,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: months.length,
+                  itemBuilder: (context, index) {
+                    String month = months[index];
+                    bool isSelectedMonth = month == selectedMonth;
 
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedMonth = months[index];
-                            });
-                          },
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 2.0),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 0),
-                              child: Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(horizontal: 7),
-                                decoration: BoxDecoration(
-                                  // color: Colors.blueAccent,
-                                  color: isSelectedMonth
-                                      ? Color(0xFF0098a6)
-                                      : Colors.transparent,
-                                  //color: isCurrentMonth ? Color(0xFF0098a6) : Colors.transparent,
-                                  borderRadius: BorderRadius.circular(2),
-                                ),
-                                child: Text(months[index],
-                                    style: AppTextStyle
-                                        .font16OpenSansRegularBlack45TextStyle),
-                              ),
-                            ),
+
+                    return InkWell(
+                      onTap: () {
+
+                        setState(() {
+                          selectedMonth = month;
+                          print('----177--$selectedMonth');
+                        });
+                        // Fetch filtered holiday list for the selected month
+                        holidayList.then((holidays) {
+                          filterByMonth(holidays, month);
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 7),
+                          decoration: BoxDecoration(
+                            color: isSelectedMonth
+                                ? Color(0xFF0098a6)
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(2),
                           ),
-                        );
-                      })),
-            ),
-            SizedBox(height: 2),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Container(
-                height: 0.5,
-                color: Colors.grey,
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.only(left: 10,right: 10,bottom: 5), // Margin around the container
-                decoration: BoxDecoration(
-                  border:
-                  Border.all(color: Colors.grey, width: 1), // Outline border
-                  borderRadius: BorderRadius.circular(5), // Rounded corners
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.white,
-                     // color: Colors.grey.withOpacity(0.5), // Shadow color
-                      spreadRadius: 0, // Spread radius of shadow
-                      blurRadius: 0, // Blur radius of shadow
-                      offset: Offset(0, 3), // Offset for the shadow
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 2, top: 5,bottom: 5),
-                      child: Container(
-                        height: 75,
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              /// todo here change a color as a dynamic in a future
-                            color: Colors.blue, width: 5), // Left border
+                          child: Text(
+                            month,
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black45),
                           ),
                         ),
-                        padding: EdgeInsets.all(8), // Padding inside the container
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            // Vertical Holiday ListView
+            Expanded(
+              child: FutureBuilder<List<HolidayListModel>>(
+                future: holidayList,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (filteredHolidayList.isEmpty) {
+                    return Center(
+                        child: Text('No holidays lies in this month!'));
+                  }
+
+                  return ListView.builder(
+                    itemCount: filteredHolidayList.length,
+                    itemBuilder: (context, index) {
+                      final holiday = filteredHolidayList[index];
+                      final randomColor = colorList[index % colorList.length];
+
+
+                      return Container(
+                       // margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey, width: 1),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Row(
                           children: [
-                            Text('Aug',
-                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 2, top: 5, bottom: 5),
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    left: BorderSide(
+                                        color:randomColor,
+                                        width: 4),
+                                  ),
+                                ),
+                                padding: EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      holiday.sDate,
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            Text('15', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                            SizedBox(width: 15),
+                            Container(height: 50, width: 1, color: Colors.grey),
+                            SizedBox(width: 15),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    holiday.sDayName,
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.black),
+                                  ),
+                                  Text(
+                                    holiday.sHolidayName,
+                                    style: TextStyle(
+                                        fontSize: 10, color: Colors.black54),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                    ),
-                    // SizedBox(height: 30),
-                    SizedBox(width: 15),
-                    Center(
-                      child: Container(
-                        height: 50,
-                        width: 1,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    SizedBox(width: 15),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Thursday',
-                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                          ),
-                          Text('Independence Day', style: AppTextStyle.font10OpenSansRegularBlackTextStyle
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            Container(
-              margin: EdgeInsets.only(left: 10,right: 10,bottom: 5), // Margin around the container
-              decoration: BoxDecoration(
-                border:
-                Border.all(color: Colors.grey, width: 1), // Outline border
-                borderRadius: BorderRadius.circular(5), // Rounded corners
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white,
-                    // color: Colors.grey.withOpacity(0.5), // Shadow color
-                    spreadRadius: 0, // Spread radius of shadow
-                    blurRadius: 0, // Blur radius of shadow
-                    offset: Offset(0, 3), // Offset for the shadow
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2, top: 5,bottom: 5),
-                    child: Container(
-                      height: 75,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            /// todo here change a color as a dynamic in a future
-                              color: Colors.blue, width: 5), // Left border
-                        ),
-                      ),
-                      padding: EdgeInsets.all(8), // Padding inside the container
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Aug',
-                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                          ),
-                          Text('15', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // SizedBox(height: 30),
-                  SizedBox(width: 15),
-                  Center(
-                    child: Container(
-                      height: 50,
-                      width: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Thursday',
-                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                        ),
-                        Text('Independence Day', style: AppTextStyle.font10OpenSansRegularBlackTextStyle
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                      );
+                    },
+                  );
+                },
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(left: 10,right: 10,bottom: 5), // Margin around the container
-              decoration: BoxDecoration(
-                border:
-                Border.all(color: Colors.grey, width: 1), // Outline border
-                borderRadius: BorderRadius.circular(5), // Rounded corners
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white,
-                    // color: Colors.grey.withOpacity(0.5), // Shadow color
-                    spreadRadius: 0, // Spread radius of shadow
-                    blurRadius: 0, // Blur radius of shadow
-                    offset: Offset(0, 3), // Offset for the shadow
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2, top: 5,bottom: 5),
-                    child: Container(
-                      height: 75,
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            /// todo here change a color as a dynamic in a future
-                              color: Colors.blue, width: 5), // Left border
-                        ),
-                      ),
-                      padding: EdgeInsets.all(8), // Padding inside the container
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Aug',
-                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                          ),
-                          Text('15', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  // SizedBox(height: 30),
-                  SizedBox(width: 15),
-                  Center(
-                    child: Container(
-                      height: 50,
-                      width: 1,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(width: 15),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Thursday',
-                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                        ),
-                        Text('Independence Day', style: AppTextStyle.font10OpenSansRegularBlackTextStyle
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
           ],
         ));
   }

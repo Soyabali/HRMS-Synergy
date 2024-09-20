@@ -36,6 +36,15 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
   var result,msg;
   GeneralFunction generalFunction = GeneralFunction();
 
+  final List<Color> colorList = [
+    Color(0xFF4DB6AC),
+    Color(0xFFE1A245),
+    Color(0xFFC888D3),
+    Color(0xFFE88989),
+    Color(0xFFA6A869),
+    Color(0xFF379BF3),
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -119,6 +128,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                          itemCount: polocyDocList.length,
                          itemBuilder: (context, index) {
                            final policyDocData = polocyDocList[index];
+                           final randomColor = colorList[index % colorList.length];
                            return
                              Padding(
                                  padding: const EdgeInsets.only(left: 5, right: 5),
@@ -155,7 +165,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                                                              height: 10,
                                                              width: 10,
                                                              decoration: BoxDecoration(
-                                                               color: Colors.red, // Red color
+                                                               color: randomColor, // Red color
                                                                borderRadius: BorderRadius
                                                                    .circular(5), // Radius of 5
                                                              ),
