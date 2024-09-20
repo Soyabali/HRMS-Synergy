@@ -779,7 +779,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(
-                                            RegExp(r'^\d{0,5}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
+                                            RegExp(r'^\d{0,6}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
                                           ),
                                           //FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')), // Allow up to 2 decimal places
                                         ],

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/presentation/policydoc/policyDocPdf.dart';
+import '../../app/generalFunction.dart';
 import '../../data/companyPolicy_repo.dart';
+import '../../data/policyDocAcceptRepo.dart';
+import '../../data/policyDocRejectRepo.dart';
 import '../../domain/policy_model.dart';
 import '../dashboard/dashboard.dart';
+import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import '../resources/values_manager.dart';
 
 class PolicyDoc extends StatelessWidget {
 
@@ -27,11 +32,9 @@ class PolicydocScreen extends StatefulWidget {
 
 class _PolicydocScreenState extends State<PolicydocScreen> {
 
-  //late Future<List<PolicyDoc>> policyDoclist;
-  //late Future<List<PolicyDoc>> policyDoclist;
   late Future<List<PolicyDocModel>> polocyDocList;
-
-
+  var result,msg;
+  GeneralFunction generalFunction = GeneralFunction();
 
   @override
   void initState() {
@@ -89,11 +92,10 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
           ),
         ), // Removes shadow under the AppBar
       ),
-      body: ListView(
-        children: [
 
-           Expanded(
-             child: Container(
+        body: ListView(
+        children: [
+         Container(
                height: MediaQuery.of(context).size.height,
                child: FutureBuilder<List<PolicyDocModel>>(
                    future: polocyDocList,
@@ -190,8 +192,14 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                                                          child: IconButton(
                                                            icon: Icon(Icons.attach_file),
                                                            onPressed: () {
-                                                             print('---Downlode pdf--');
-                                                             // Handle onPressed for icon here
+
+                                                             var pdfFile =  policyDocData.sPolicyFile;
+                                                             print('---Downlode pdf ---195------$pdfFile');
+                                                             Navigator.push(
+                                                               context,
+                                                               MaterialPageRoute(builder: (context) =>  PolicydocPdfScreen(pdfFile:pdfFile)),
+                                                             );
+                                          // Handle onPressed for icon here
                                                            },
                                                          ),
                                                        ),
@@ -213,29 +221,68 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                                                // Aligns Row to the right
                                                children: [
                                                  // Accept text with iOS forward icon
-                                                 Row(
-                                                   children: [
-                                                     Text('ACCEPT', style: AppTextStyle
-                                                         .font12OpenSansRegularGreenTextStyle,
+                                                 GestureDetector(
+                                                   onTap: () async {
+                                                     print('---ACCEPT---');
+                                                     // call api
+                                                     var sPolicyCode = policyDocData.sPolicyCode;
+                                                     print('---sPolicyCode---$sPolicyCode');
+                                                     var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
+                                                     print('---232---$projectDocAccept');
+                                                     setState(() {
+                                                       msg = "${projectDocAccept[0]['Msg']}";
+                                                     });
+                                                     if(msg!=null && msg!=''){
+                                                       showDialog(
+                                                         context: context,
+                                                         builder: (BuildContext context) {
+                                                           return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                                                         },
+                                                       );
+                                                     }else{
+                                                       generalFunction.displayToast("Not Response");
+                                                     }
 
-                                                     ),
-                                                     SizedBox(width: 8),
-                                                     // Space between text and icon
-                                                     Icon(Icons.arrow_forward_ios, size: 12),
-                                                   ],
+
+                                                   },
+                                                   child: Row(
+                                                     children: [
+                                                       Text('ACCEPT', style: AppTextStyle
+                                                           .font12OpenSansRegularGreenTextStyle,
+                                                       ),
+                                                       SizedBox(width: 8),
+                                                       // Space between text and icon
+                                                       Icon(Icons.arrow_forward_ios, size: 12),
+                                                     ],
+                                                   ),
                                                  ),
                                                  SizedBox(width: 20),
                                                  // Space between "Accept" and "Reject"
 
                                                  // Reject text with iOS forward icon
-                                                 Row(
-                                                   children: [
-                                                     Text('REJECT', style: AppTextStyle
-                                                         .font12OpenSansRegularRedTextStyle),
-                                                     SizedBox(width: 8),
-                                                     // Space between text and icon
-                                                     Icon(Icons.arrow_forward_ios, size: 12),
-                                                   ],
+                                                 GestureDetector(
+                                                   onTap: (){
+                                                     print('---REJECT---');
+                                                     //_takeActionDialog(context);
+                                                     var sPolicyCode = policyDocData.sPolicyCode;
+                                                     print('---PoliceCode---$sPolicyCode');
+
+                                                     showDialog(
+                                                       context: context,
+                                                       builder: (BuildContext context) {
+                                                         return _takeActionDialog(context,sPolicyCode);
+                                                       },
+                                                     );
+                                                   },
+                                                   child: Row(
+                                                     children: [
+                                                       Text('REJECT', style: AppTextStyle
+                                                           .font12OpenSansRegularRedTextStyle),
+                                                       SizedBox(width: 8),
+                                                       // Space between text and icon
+                                                       Icon(Icons.arrow_forward_ios, size: 12),
+                                                     ],
+                                                   ),
                                                  ),
                                                ],
                                              ),
@@ -252,9 +299,267 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                    }
                ),
              ),
-           )
         ],
       )
+    );
+  }
+  // Open DIALOG
+  // take a action Dialog
+  Widget _takeActionDialog(BuildContext context, String sPolicyCode) {
+    TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
+
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 220, // Adjusted height to accommodate the TextFormField and Submit button
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Update Policy View Status',
+                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                ),
+                SizedBox(height: 10),
+                // TextFormField for entering data
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: TextFormField(
+                    controller: _takeAction,
+                    textInputAction: TextInputAction.next,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                      filled: true, // Enable background color
+                      fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                      hintText: 'Enter Reason', // Add hint text here
+                      hintStyle: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
+                ),
+                SizedBox(height: 15),
+
+                // Submit button
+                InkWell(
+                  onTap: ()async{
+                    var remark = _takeAction.text.trim();
+                    print('-----1102--$remark');
+                    //  sPolicyCode
+                    print('-----350----$sPolicyCode');
+                   // print(sTranCode);
+                    // Check if the input is not empty
+                    if (remark != null && remark != '') {
+                      print('---Call Api-----');
+
+                      // Make API call here
+                      var projectdocReject = await PolicydocrejectRepo().policydocReject(context,remark,sPolicyCode);
+
+                       print('---360----$projectdocReject');
+                      //
+                      setState(() {
+                       // result = "${projectdocReject[0]['Result']}";
+                        msg = "${projectdocReject[0]['Msg']}";
+                      });
+
+                      print('---1114----$result');
+                      print('---1115----$msg');
+
+                      // Check the result of the API call
+                      if (msg!=null && msg !='') {
+                        // Close the current dialog and show a success dialog
+                        Navigator.of(context).pop();
+
+                        // Show the success dialog
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                          },
+                        );
+                        print('-----1123---');
+                      } else if (msg == '') {
+                        generalFunction.displayToast("No Response");
+                        // Keep the dialog open and show an error message (if needed)
+                        // You can display an error message in the same dialog without dismissing it
+                        //generalFunction.displayToast(msg);  // Optionally, show a toast message to indicate failure
+
+                        // Optionally clear the input field if needed
+                        // _takeAction.clear();  // Do not clear to allow retrying
+                      }
+                    } else {
+                      // Handle the case where no input is provided
+                      generalFunction.displayToast("Enter remarks");
+                    }
+
+                  },
+                  child: Container(
+                    //width: double.infinity,
+                    // Make container fill the width of its parent
+                    height: AppSize.s45,
+                    padding: EdgeInsets.all(AppPadding.p5),
+                    decoration: BoxDecoration(
+                      color: AppColors.loginbutton,
+                      // Background color using HEX value
+                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                    ),
+                    //  #00b3c7
+                    child: Center(
+                      child: Text(
+                        "Rejected",
+                        style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                // ElevatedButton(
+                //   onPressed: () {
+                //     String enteredText = _textController.text;
+                //     if (enteredText.isNotEmpty) {
+                //       print('Submitted: $enteredText');
+                //     }
+                //     // Perform any action you need on submit
+                //    // Navigator.of(context).pop(); // Close the dialog
+                //   },
+                //   style: ElevatedButton.styleFrom(
+                //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
+                //     shape: RoundedRectangleBorder(
+                //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
+                //     ),
+                //     backgroundColor: Colors.blue, // Button background color
+                //   ),
+                //   child: Text(
+                //     'Submit',
+                //     style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // sucessDialog
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // call api again
+                        /// todo here you uncomment of the api link
+                        ///
+                      //  hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                        // );
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset('assets/images/dialogimg.jpeg',
+                fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                )
+                // child: Image.asset('assets/images/sussess.jpeg', // Replace with your asset image path
+                //   fit: BoxFit.cover,
+                //   width: 60,
+                //   height: 60,
+                // ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
