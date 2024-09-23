@@ -144,8 +144,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                                 10), // Same radius as the Card
                                           ),
                                           child: Column(
-                                            mainAxisSize: MainAxisSize
-                                                .min, // Wrap content inside the container
+                                            mainAxisSize: MainAxisSize.min, // Wrap content inside the container
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
