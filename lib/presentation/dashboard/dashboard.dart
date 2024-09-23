@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/applyleave/applyLeave.dart';
+import 'package:untitled/presentation/profile/profile.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
@@ -620,6 +621,10 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         GestureDetector(
                           onTap: (){
                             print('---Profle----');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Profile()),
+                            );
 
                           },
                           child: Container(
