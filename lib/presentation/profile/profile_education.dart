@@ -1,6 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/data/educationResponseRepo.dart';
+import 'package:untitled/domain/educationModel.dart';
 import 'package:untitled/presentation/profile/profile.dart';
 
 import '../dashboard/dashboard.dart';
@@ -26,6 +28,17 @@ class ProfileEducationPage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfileEducationPage> {
+  late Future<List<EducationModel>> educationRes;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    educationRes = EducationrRepo().educationList(context);
+    print('-----38---$educationRes');
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,424 +86,196 @@ class _ProfilePageState extends State<ProfileEducationPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 10, right: 10, top: 10, bottom: 10),
-                child: Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        radius: 20, // Adjust the size as needed
-                        backgroundImage: NetworkImage(
-                            'https://via.placeholder.com/150'), // Replace with your image URL or use AssetImage
-                      ),
-                      SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Soyab Ali', // First Text (Name)
-                              style: AppTextStyle
-                                  .font14OpenSansRegularBlackTextStyle),
-                          SizedBox(height: 0),
-                          Text('Male', // Second Text (Designation)
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlack45TextStyle),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: DottedBorder(
-                    color: Colors.grey, // Color of the dotted line
-                    strokeWidth: 1.0, // Width of the dotted line
-                    dashPattern: [4, 2], // Dash pattern for the dotted line
-                    borderType: BorderType.RRect,
-                    radius: Radius.circular(5.0), // Optional: rounded corners
-                    child: Padding(
-                      padding:
-                      EdgeInsets.all(2.0), // Equal padding on all sides
-                      child: Row(
-                        mainAxisSize:
-                        MainAxisSize.min, // Center the row contents
-                        children: [
-                          Text('20/Jun/1992',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle),
-                          SizedBox(width: 5.0), // Space between 'Day' and ':'
-                          Text(':',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle),
-                          SizedBox(
-                              width: 5.0), // Space between ':' and 'Monday'
-                          Text('',
-                              style: AppTextStyle
-                                  .font12OpenSansRegularBlackTextStyle),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisSize:
-                MainAxisSize.min, // Wrap content inside the container
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF0098a6), // Black color
-                                borderRadius: BorderRadius.circular(
-                                    5), // Border radius of 5
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 4),
+        body: Column(
+          children: [
+            Expanded(
+                child: FutureBuilder<List<EducationModel>>(
+                    future: educationRes,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text('No data'));
+                      }
+                      final educationList = snapshot.data!;
+
+                      return ListView.builder(
+                          itemCount: educationList.length,
+                          itemBuilder: (context, index) {
+                            final education = educationList[index];
+
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, top: 10, bottom: 10),
                               child: Container(
-                                height: 100,
-                                width: 2,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey, // Black color
-                                  borderRadius: BorderRadius.circular(
-                                      0), // Border radius of 5
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 10,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF2a697b), // Black color
-                                borderRadius: BorderRadius.circular(
-                                    5), // Border radius of 5
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: 5),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Father Name',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlack45TextStyle,
-                              ),
-                              SizedBox(height: 2),
-                              Text('Mr.Sabir Ali',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle),
-                              SizedBox(height: 2),
-                              Text(
-                                'Mother Name',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlack45TextStyle,
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'Mrs.Khasroon',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle,
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'Marriage Status',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlack45TextStyle,
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'Married',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Material(
-                      elevation: 8.0, // Elevation for shadow effect
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        height: 120,
-                        color: Colors.white,
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Personal Email ID',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlack45TextStyle),
-                                SizedBox(height: 2),
-                                Text('Not Specified',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text('Permanent Addresss',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlack45TextStyle),
-                                SizedBox(height: 2),
-                                Flexible(
-                                  child: Text(
-                                    'Vill - Bharampur,Badhli, Dist Hapur,Post- Nagli Via kithore, 250104',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle,
-                                    overflow: TextOverflow.visible,
+                                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                height: 215,
+                                child: Card(
+                                  elevation: 5,
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10, right: 10, top: 10),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Row with Icon and "Qualification" text
+                                        Row(
+                                          children: [
+                                            Icon(Icons.school, color: Colors.blue),
+                                            SizedBox(width: 8),
+                                            Text('Qualification',
+                                                style: AppTextStyle
+                                                    .font14OpenSansRegularBlack45TextStyle),
+                                          ],
+                                        ),
+                                        SizedBox(height: 2),
+                                        // M.C.A Text
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 28),
+                                          child: Text(education.sQualdName,
+                                              style: AppTextStyle
+                                                  .font12OpenSansRegularBlackTextStyle),
+                                        ),
+                                        // Divider
+                                        Divider(color: Colors.grey),
+                                        SizedBox(height: 2),
+                                        // Row with two Columns (Institution)
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.business,
+                                                      color: Colors.blue),
+                                                  SizedBox(width: 8),
+                                                  Text('Institution',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(':',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                    SizedBox(width: 15),
+                                                    Text(education.sInstitutation,
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                  ],
+                                                )),
+                                          ],
+                                        ),
+                                        // Divider
+                                        Divider(color: Colors.grey),
+                                        SizedBox(height: 2),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: Row(
+                                                children: [
+                                                  Icon(Icons.business,
+                                                      color: Colors.blue),
+                                                  SizedBox(width: 8),
+                                                  Text('Subject',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                                flex: 1,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(':',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                    SizedBox(width: 15),
+                                                    Text(education.sSubjects,
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                  ],
+                                                )),
+                                          ],
+                                        ),
+                                        SizedBox(height: 2),
+                                        Divider(color: Colors.grey),
+                                        Row(
+                                          children: [
+                                            // First Column (Passed Year)
+                                            Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                                children: [
+                                                  Text('Passed Year',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                  SizedBox(height: 4),
+                                                  Text(education.dPassedOut,
+                                                      style: AppTextStyle
+                                                          .font12OpenSansRegularBlackTextStyle),
+                                                ],
+                                              ),
+                                            ),
+
+                                            // Vertical Divider
+                                            Container(
+                                              height:
+                                              40, // Ensure the height of the divider is sufficient
+                                              child: VerticalDivider(
+                                                color: Colors.grey,
+                                                thickness:
+                                                1, // Thickness of the divider line
+                                              ),
+                                            ),
+
+                                            // Second Column (Percentage)
+                                            Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                                children: [
+                                                  Text('Percentage',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                  SizedBox(height: 4),
+                                                  Text(education.fPercentage,
+                                                      style: AppTextStyle
+                                                          .font12OpenSansRegularBlackTextStyle),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ],
-                            )),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                    const EdgeInsets.only(left: 10, right: 10, top: 10),
-                    child: Material(
-                      elevation: 8.0, // Elevation for shadow effect
-                      borderRadius: BorderRadius.circular(15),
-                      child: Container(
-                        height: 155,
-                        color: Colors.white,
-                        child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10, top: 10),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.notes_outlined,
-                                      size: 18,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text('Government Identity Detail',
-                                        style: AppTextStyle
-                                            .font14OpenSansRegularBlack45TextStyle),
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // First Column
-                                    Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        children: [
-                                          // Row with Icon and Text
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
-                                              Text(
-                                                'Aadhar No.',
-                                                style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
-                                          // Text below the Row
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 12),
-                                            child: Text(
-                                              '331919758643',
-                                              style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width: 16), // Space between two columns
-                                    // Second Column
-                                    Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        children: [
-                                          // Row with Icon and Text
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
-                                              Text(
-                                                'Pan No.',
-                                                style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
-                                          // Text below the Row
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 28),
-                                            child: Text(
-                                              'AAACB8403F',
-                                              style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    // First Column
-                                    Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        children: [
-                                          // Row with Icon and Text
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
-                                              Text(
-                                                'Passport No.',
-                                                style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
-                                          // Text below the Row
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 22),
-                                            child: Text(
-                                              'Not Specified',
-                                              style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        width: 16), // Space between two columns
-                                    // Second Column
-                                    Expanded(
-                                      flex: 1,
-                                      child: Column(
-                                        children: [
-                                          // Row with Icon and Text
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
-                                              Text(
-                                                'Voter Id No.',
-                                                style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
-                                          // Text below the Row
-                                          Padding(
-                                            padding:
-                                            const EdgeInsets.only(right: 28),
-                                            child: Text(
-                                              'No Specified',
-                                              style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                  ],
-                                ),
-                              ],
-                            )),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+                              ),
+                            );
+                          });
+                    }))
+          ],
         )
+
     );
   }
 }

@@ -68,7 +68,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +115,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
+
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

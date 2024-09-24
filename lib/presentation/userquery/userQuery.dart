@@ -23,6 +23,7 @@ class Userquery extends StatelessWidget {
 }
 
 class UserqueryScreen extends StatefulWidget {
+
   const UserqueryScreen({super.key});
 
   @override
