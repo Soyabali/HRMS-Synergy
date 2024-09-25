@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../presentation/allLeaveStatus/allLeaveStatus.dart';
 import '../presentation/login/loginScreen.dart';
 import '../presentation/resources/app_text_style.dart';
 import '../presentation/resources/assets_manager.dart';
@@ -677,7 +678,15 @@ class GeneralFunction {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                drawerItem('assets/images/tripdetails.jpeg', "All Leave Status"),
+                InkWell(
+                  onTap:(){
+                  // AllLeaveStatus
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AllLeaveStatus()),
+                    );
+                  },
+                    child: drawerItem('assets/images/tripdetails.jpeg', "All Leave Status")),
                 drawerItem('assets/images/triplistfirst.jpeg', "My Leave Status"),
                 // InkWell(
                 //     onTap: (){
