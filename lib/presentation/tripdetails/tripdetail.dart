@@ -455,6 +455,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                       if (_formKey.currentState!.validate() &&
                                           edtOdometer != null &&
                                           uplodedImage != null) {
+
                                         var tripStart =
                                             await HrmstripstartendRepo()
                                                 .tripStart(
@@ -466,25 +467,26 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                     uplodedImage,
                                                     edtOdometer,
                                                     dTripDateTime);
-                                        print('---488---$tripStart');
+
+
+                                        print('---472---$tripStart');
+
                                         String Msg = "${tripStart[0]['Msg']}";
-                                        String sTranNo =
-                                            "${tripStart[0]['sTranNo']}";
-                                        String Result =
-                                            "${tripStart[0]['Result']}";
+                                        String sTranNo = "${tripStart[0]['sTranNo']}";
+                                        String Result = "${tripStart[0]['Result']}";
 
                                         prefs.setString('sTranNo', sTranNo);
                                         prefs.setString('tripMsg', Msg);
 
                                         setState(() {
                                           tripMsg = Msg;
-                                          isTripStarted = tripMsg ==
-                                              'Trip has been started';
+                                          isTripStarted = tripMsg == 'Trip has been started';
                                         });
                                         // todo celan foield adm image data
                                         _takeAction.clear();
                                         image == null;
                                         print('---487---$tripMsg');
+
                                         showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -524,6 +526,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                         //displayToast(Msg);
                                       }
                                     },
+
+
                               style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     getButtonColor(tripMsg ?? "Not a value"),
@@ -564,9 +568,11 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                 uplodedImage,
                                                 edtOdometer,
                                                 dTripDateTime);
+
+                                          print('----572---$tripEnd');
+
                                         String Msg = "${tripEnd[0]['Msg']}";
-                                        String Result =
-                                            "${tripEnd[0]['Result']}";
+                                        String Result = "${tripEnd[0]['Result']}";
 
                                         prefs.setString('tripMsg', Msg);
                                         setState(() {
@@ -585,27 +591,15 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                   context, tripMsg!);
                                             }
                                         );
-
-                                        // _takeAction.clear();
-                                        // image==null;
-                                        // // to navigate Dashboard
-                                        //
-                                        // Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(builder: (context) => const DashBoard()),
-                                        // );
-
                                         // Dialog logic and other actions
                                       } else {
                                         if (edtOdometer == null ||
                                             edtOdometer == '') {
                                           print('----print---424---');
-                                          displayToast(
-                                              'Enter Odometer details ');
+                                          displayToast('Enter Odometer details ');
                                         } else if (uplodedImage == null ||
                                             uplodedImage == '') {
-                                          displayToast(
-                                              'Please click Odometer image');
+                                          displayToast('Please click Odometer image');
                                           //print('----print---424---');
                                         }
                                         print('---Api not call---');

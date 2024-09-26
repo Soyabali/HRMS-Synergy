@@ -122,8 +122,9 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
            children: [
              Container(
-               height: 135,
-               color: Color(0xFF2a697b),
+               height: 145,
+              // color: Color(0xFF2a697b),
+               color: Color(0xFF00acc2),
                child: Column(
                  mainAxisAlignment: MainAxisAlignment.start,
                  children: [
@@ -132,7 +133,14 @@ class _ProfilePageState extends State<ProfilePage> {
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Icon(Icons.account_box,color: Colors.white,size: 18),
+                         Image.asset('assets/images/ic_user_profile.PNG',
+                         height: 16,
+                           width: 16,
+                           fit: BoxFit.fill,
+                         ),
+
+                         //Icon(Icons.account_box,color: Colors.white,size: 18),
+
                          SizedBox(width: 10),
                          Text('${fullName}',style: AppTextStyle
                              .font12OpenSansRegularWhiteTextStyle)
@@ -141,11 +149,16 @@ class _ProfilePageState extends State<ProfilePage> {
                    ),
                    SizedBox(height: 10),
                    Padding(
-                     padding: const EdgeInsets.only(left:50,),
+                     padding: const EdgeInsets.only(left:50),
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Icon(Icons.phone,color: Colors.white,size: 18,),
+                         //Icon(Icons.phone,color: Colors.white,size: 18,),
+                         Image.asset('assets/images/ic_mobile_phone_white.PNG',
+                           height: 16,
+                           width: 16,
+                           fit: BoxFit.fill,
+                         ),
                          SizedBox(width: 10),
                          Text('Mobile No : $sContactNo',style: AppTextStyle
                              .font12OpenSansRegularWhiteTextStyle)
@@ -158,7 +171,12 @@ class _ProfilePageState extends State<ProfilePage> {
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Icon(Icons.account_box,color: Colors.white,size: 18),
+                        // Icon(Icons.account_box,color: Colors.white,size: 18),
+                         Image.asset('assets/images/ic_id.PNG',
+                           height: 16,
+                           width: 16,
+                           fit: BoxFit.fill,
+                         ),
                          SizedBox(width: 10),
                          Text('Employee ID : $sCompEmpCode',style: AppTextStyle
                              .font12OpenSansRegularWhiteTextStyle)
@@ -171,7 +189,12 @@ class _ProfilePageState extends State<ProfilePage> {
                      child: Row(
                        mainAxisAlignment: MainAxisAlignment.start,
                        children: [
-                         Icon(Icons.location_on,color: Colors.white,size: 18,),
+                        // Icon(Icons.location_on,color: Colors.white,size: 18,),
+                         Image.asset('assets/images/ic_location.PNG',
+                           height: 16,
+                           width: 16,
+                           fit: BoxFit.fill,
+                         ),
                          SizedBox(width: 10),
                          Text('$sLocation',style: AppTextStyle
                              .font12OpenSansRegularWhiteTextStyle)
@@ -182,17 +205,16 @@ class _ProfilePageState extends State<ProfilePage> {
                ),
           
              ),
-
              Padding(
-               padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+               padding: const EdgeInsets.only(left: 5,right: 5,top: 5),
                child: Material(
-                 elevation: 8.0, // Elevation for shadow effect
-                 borderRadius: BorderRadius.circular(15),
+                 elevation: 4.0, // Elevation for shadow effect
+                 borderRadius: BorderRadius.circular(5),
                  child: Container(
-                   height: 220,
+                   height: 250,
                    color: Colors.white,
                    child: Padding(
-                     padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+                     padding: const EdgeInsets.only(left: 5,right: 5,top: 5),
                      child: Column(
                        mainAxisAlignment: MainAxisAlignment.start,
                        crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,10 +233,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.center,
                                  children: [
-                                   Icon(Icons.file_copy_sharp,size: 18),
+                                   //Icon(Icons.file_copy_sharp,size: 16),
+                                   Image.asset('assets/images/ic_experience.PNG',
+                                     height: 16,
+                                     width: 16,
+                                     fit: BoxFit.fill,
+                                   ),
                                    SizedBox(height: 2),
                                    Text('Personal',style: AppTextStyle
-                                       .font14OpenSansRegularBlack45TextStyle)
+                                       .font12OpenSansRegularBlackTextStyle)
 
                                  ],
                                ),
@@ -230,10 +257,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.center,
                                  children: [
-                                   Icon(Icons.file_copy_outlined,size: 18),
+                                   Image.asset('assets/images/ic_education.PNG',
+                                     height: 16,
+                                     width: 16,
+                                     fit: BoxFit.fill,
+                                   ),
+                                  // Icon(Icons.file_copy_outlined,size: 16),
                                    SizedBox(height: 2),
                                    Text('Education',style: AppTextStyle
-                                       .font14OpenSansRegularBlack45TextStyle)
+                                       .font12OpenSansRegularBlackTextStyle)
 
                                  ],
                                ),
@@ -249,75 +281,199 @@ class _ProfilePageState extends State<ProfilePage> {
                                child: Column(
                                  crossAxisAlignment: CrossAxisAlignment.center,
                                  children: [
-                                   Icon(Icons.details,size: 18),
+                                   //Icon(Icons.details,size: 16),
+                                   Image.asset('assets/images/ic_answers.PNG',
+                                     height: 16,
+                                     width: 16,
+                                     fit: BoxFit.fill,
+                                   ),
                                    SizedBox(height: 2),
                                    Text('Job Details',style: AppTextStyle
-                                       .font14OpenSansRegularBlack45TextStyle)
-
+                                       .font12OpenSansRegularBlackTextStyle)
                                  ],
                                ),
                              ),
                            ],
                          ),
-                         SizedBox(height: 10),
+                          // divider
+                         Divider(
+                           color: Colors.grey[400],   // Set the color of the divider to gray
+                           thickness: 0.5,         // Set the thickness of the line
+                           indent: 10,           // Optional: Indent from the left
+                           endIndent: 10,        // Optional: Indent from the right
+                         ),
+                         SizedBox(height: 5),
                          Row(
                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                            children: [
-                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text('Department',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
-                                 SizedBox(height: 5),
-                                 Text('$sDeptName',style: AppTextStyle
-                                     .font12OpenSansRegularBlackTextStyle)
-                               ],
-          
+                             Expanded(
+                               flex: 1,
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     'Department',
+                                     style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                   ),
+                                   SizedBox(height: 5),
+                                   Text(
+                                     '$sDeptName',
+                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                     maxLines: 2, // Allow text to wrap into 2 lines
+                                     softWrap: true, // Enable text wrapping
+                                     overflow: TextOverflow.ellipsis, // Optional: Show '...' if text exceeds 2 lines
+                                   ),
+                                 ],
+                               ),
                              ),
-                             Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text('Designation',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
-                                 SizedBox(height: 5),
-                                 Text('$sDsgName',style: AppTextStyle
-                                     .font12OpenSansRegularBlackTextStyle)
-                               ],
-          
+                             SizedBox(width: 10), // Add some spacing between the two columns if needed
+                             Expanded(
+                               flex: 1,
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     'Designation',
+                                     style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                   ),
+                                   SizedBox(height: 5),
+                                   Text(
+                                     '$sDsgName',
+                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                     maxLines: 2, // Allow text to wrap into 2 lines
+                                     softWrap: true, // Enable text wrapping
+                                     overflow: TextOverflow.ellipsis, // Optional: Show '...' if text exceeds 2 lines
+                                   ),
+                                 ],
+                               ),
                              ),
                            ],
                          ),
-                         SizedBox(height: 10),
+
+                         // Row(
+                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         //   children: [
+                         //     Column(
+                         //      crossAxisAlignment: CrossAxisAlignment.start,
+                         //      // mainAxisAlignment: MainAxisAlignment.start,
+                         //       children: [
+                         //         Text('Department',style: AppTextStyle
+                         //             .font12OpenSansRegularBlack45TextStyle),
+                         //         SizedBox(height: 5),
+                         //         Text('$sDeptName',style: AppTextStyle
+                         //             .font12OpenSansRegularBlackTextStyle)
+                         //       ],
+                         //
+                         //     ),
+                         //     Column(
+                         //       crossAxisAlignment: CrossAxisAlignment.start,
+                         //       children: [
+                         //         Text('Designation',style: AppTextStyle
+                         //             .font14OpenSansRegularBlack45TextStyle),
+                         //         SizedBox(height: 5),
+                         //         Text('$sDsgName',style: AppTextStyle
+                         //             .font12OpenSansRegularBlackTextStyle)
+                         //       ],
+                         //
+                         //     ),
+                         //   ],
+                         // ),
+
+                         SizedBox(height: 5),
+                         Divider(
+                           color: Colors.grey[400],   // Set the color of the divider to gray
+                           thickness: 0.5,         // Set the thickness of the line
+                           indent: 10,           // Optional: Indent from the left
+                           endIndent: 10,        // Optional: Indent from the right
+                         ),
                          Row(
-                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                            children: [
-                             Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text('Blood Group',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
-                                 SizedBox(height: 5),
-                                 Text('$sBloodGroup',style: AppTextStyle
-                                     .font12OpenSansRegularBlackTextStyle)
-                               ],
-          
+                             Expanded(
+                               flex: 1, // Flex to equally divide the space
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     'Blood Group',
+                                     style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                   ),
+                                   SizedBox(height: 5),
+                                   Text(
+                                     '$sBloodGroup',
+                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                     maxLines: 2, // Wraps the text into 2 lines if too long
+                                     softWrap: true, // Enable text wrapping
+                                     overflow: TextOverflow.ellipsis, // Optional: show '...' if text exceeds 2 lines
+                                   ),
+                                 ],
+                               ),
                              ),
-                             Column(
-                               crossAxisAlignment: CrossAxisAlignment.start,
-                               children: [
-                                 Text('Category',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
-                                 SizedBox(height: 5),
-                                 Text('$sCategory',style: AppTextStyle
-                                     .font12OpenSansRegularBlackTextStyle)
-                               ],
-          
+                             SizedBox(width: 10), // Add spacing between columns if necessary
+                             Expanded(
+                               flex: 1, // Flex to equally divide the space
+                               child: Column(
+                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                 children: [
+                                   Text(
+                                     'Category',
+                                     style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                   ),
+                                   SizedBox(height: 5),
+                                   Text(
+                                     '$sCategory',
+                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                     maxLines: 2, // Wraps the text into 2 lines if too long
+                                     softWrap: true, // Enable text wrapping
+                                     overflow: TextOverflow.ellipsis, // Optional: show '...' if text exceeds 2 lines
+                                   ),
+                                 ],
+                               ),
                              ),
                            ],
                          ),
-                         SizedBox(height: 10),
+                         SizedBox(height: 5),
+                         // Divider(
+                         //   color: Colors.grey[400],   // Set the color of the divider to gray
+                         //   thickness: 0.5,         // Set the thickness of the line
+                         //   indent: 10,           // Optional: Indent from the left
+                         //   endIndent: 10,        // Optional: Indent from the right
+                         // ),
+
+                         // Row(
+                         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                         //   children: [
+                         //     Column(
+                         //       crossAxisAlignment: CrossAxisAlignment.start,
+                         //       children: [
+                         //         Text('Blood Group',style: AppTextStyle
+                         //             .font14OpenSansRegularBlack45TextStyle),
+                         //         SizedBox(height: 5),
+                         //         Text('$sBloodGroup',style: AppTextStyle
+                         //             .font12OpenSansRegularBlackTextStyle)
+                         //       ],
+                         //
+                         //     ),
+                         //     Column(
+                         //       crossAxisAlignment: CrossAxisAlignment.start,
+                         //       children: [
+                         //         Text('Category',style: AppTextStyle
+                         //             .font14OpenSansRegularBlack45TextStyle),
+                         //         SizedBox(height: 5),
+                         //         Text('$sCategory',style: AppTextStyle
+                         //             .font12OpenSansRegularBlackTextStyle)
+                         //       ],
+                         //
+                         //     ),
+                         //   ],
+                         // ),
+                         Divider(
+                           color: Colors.grey[400],   // Set the color of the divider to gray
+                           thickness: 0.5,         // Set the thickness of the line
+                           indent: 10,           // Optional: Indent from the left
+                           endIndent: 10,        // Optional: Indent from the right
+                         ),
                          Text('Email ID',style: AppTextStyle
-                             .font14OpenSansRegularBlack45TextStyle),
+                             .font12OpenSansRegularBlack45TextStyle),
                          SizedBox(height: 2),
                          Text('$sCompEmailId',style: AppTextStyle
                              .font12OpenSansRegularBlackTextStyle),
@@ -328,16 +484,16 @@ class _ProfilePageState extends State<ProfilePage> {
                ),
              ),
              Padding(
-               padding: const EdgeInsets.only(left: 10,right: 10,top: 10),
+               padding: const EdgeInsets.only(left: 5,right: 5,top: 5),
                child: Material(
-                 elevation: 8.0, // Elevation for shadow effect
-                 borderRadius: BorderRadius.circular(15),
+                 elevation: 4.0, // Elevation for shadow effect
+                 borderRadius: BorderRadius.circular(5),
                  child: Container(
-                   height: 250,
+                   height: 185,
                    color: Colors.white,
                    child: Padding(
                        padding: const EdgeInsets.only(
-                       left: 10,right: 10,top: 10),
+                       left: 5,right: 5,top: 5),
                        child: Column(
                          mainAxisAlignment: MainAxisAlignment.start,
                          crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,40 +501,40 @@ class _ProfilePageState extends State<ProfilePage> {
                            Row(
                              mainAxisAlignment: MainAxisAlignment.start,
                              children: [
-                               Icon(Icons.notes_outlined,size: 18,),
+                               Icon(Icons.notes_outlined,size: 16),
                                SizedBox(width: 5),
                                Text('Reporting Person Detail',style: AppTextStyle
-                                   .font14OpenSansRegularBlack45TextStyle),
+                                   .font12OpenSansRegularBlack45TextStyle),
           
                              ],
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 22),
                              child: Text('$sMngrName',style: AppTextStyle
                                  .font12OpenSansRegularBlackTextStyle),
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 20),
                              child: Row(
                                mainAxisAlignment: MainAxisAlignment.start,
                                children: [
-                                 Icon(Icons.call,size: 18,),
+                                 Icon(Icons.call,size: 16),
                                  SizedBox(width: 5),
                                  Text('$sMngrContactNo',style: AppTextStyle
                                      .font12OpenSansRegularBlack45TextStyle),
                                ],
                              ),
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 20),
                              child: Row(
                                mainAxisAlignment: MainAxisAlignment.start,
                                children: [
                                  Text('Designation :',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
+                                     .font12OpenSansRegularBlack45TextStyle),
                                  SizedBox(width: 5),
                                  Flexible(
                                    child: Text('$sMngrDesgName',style: AppTextStyle
@@ -391,30 +547,30 @@ class _ProfilePageState extends State<ProfilePage> {
                                ],
                              ),
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Row(
                              mainAxisAlignment: MainAxisAlignment.start,
                              children: [
-                               Icon(Icons.notes_outlined,size: 18,),
+                               Icon(Icons.notes_outlined,size: 16),
                                SizedBox(width: 5),
                                Text('Emergency Person Detail',style: AppTextStyle
-                                   .font14OpenSansRegularBlack45TextStyle),
+                                   .font12OpenSansRegularBlack45TextStyle),
 
                              ],
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 22),
                              child: Text('$sEmergencyContactPerson',style: AppTextStyle
-                                 .font14OpenSansRegularBlackTextStyle),
+                                 .font12OpenSansRegularBlackTextStyle),
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height:5),
                            Padding(
                              padding: const EdgeInsets.only(left: 20),
                              child: Row(
                                mainAxisAlignment: MainAxisAlignment.start,
                                children: [
-                                 Icon(Icons.call,size: 18,),
+                                 Icon(Icons.call,size: 16),
                                  SizedBox(width: 5),
                                  Text('$sEmergencyContactNo',style: AppTextStyle
                                      .font12OpenSansRegularBlack45TextStyle),
@@ -422,14 +578,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                ],
                              ),
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 20),
                              child: Row(
                                mainAxisAlignment: MainAxisAlignment.start,
                                children: [
                                  Text('Relation :',style: AppTextStyle
-                                     .font14OpenSansRegularBlack45TextStyle),
+                                     .font12OpenSansRegularBlack45TextStyle),
                                  SizedBox(width: 5),
                                  Flexible(
                                    child: Text('$sEmergencyContactRelation',style: AppTextStyle
@@ -448,18 +604,17 @@ class _ProfilePageState extends State<ProfilePage> {
                  ),
                ),
              ),
-
              Padding(
-               padding: const EdgeInsets.only(left: 10,right: 10,top: 10,bottom: 10),
+               padding: const EdgeInsets.only(left: 5,right: 5,top: 5,bottom: 5),
                child: Material(
-                 elevation: 8.0, // Elevation for shadow effect
-                 borderRadius: BorderRadius.circular(15),
+                 elevation: 4.0, // Elevation for shadow effect
+                 borderRadius: BorderRadius.circular(5),
                  child: Container(
-                   height: 130,
+                   height: 90,
                    color: Colors.white,
                    child: Padding(
                        padding: const EdgeInsets.only(
-                           left: 10,right: 10,top: 10),
+                           left: 5,right: 5,top: 5),
                        child: Column(
                          mainAxisAlignment: MainAxisAlignment.start,
                          crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,14 +622,19 @@ class _ProfilePageState extends State<ProfilePage> {
                            Row(
                              mainAxisAlignment: MainAxisAlignment.start,
                              children: [
-                               Icon(Icons.food_bank,size: 18,),
+                              // Icon(Icons.food_bank,size:16),
+                               Image.asset('assets/images/ic_bank.PNG',
+                                 height: 16,
+                                 width: 16,
+                                 fit: BoxFit.fill,
+                               ),
                                SizedBox(width: 5),
                                Text('Bank Name : $sBankName',style: AppTextStyle
-                                   .font14OpenSansRegularBlack45TextStyle),
+                                   .font12OpenSansRegularBlack45TextStyle),
 
                              ],
                            ),
-                           SizedBox(height: 10),
+                           SizedBox(height: 5),
                            Padding(
                              padding: const EdgeInsets.only(left: 22),
                              child: Text('IFSC : $sISFCode',style: AppTextStyle

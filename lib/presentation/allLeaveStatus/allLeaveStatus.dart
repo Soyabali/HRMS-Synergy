@@ -28,7 +28,6 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class AllLeaveStatus extends StatelessWidget {
-
   const AllLeaveStatus({super.key});
 
   @override
@@ -55,7 +54,6 @@ class AllLeaveStatusPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<AllLeaveStatusPage> {
-
   List<Map<String, dynamic>>? reimbursementStatusList;
   // List<Map<String, dynamic>> _filteredData = [];
   ///List<dynamic>  hrmsReimbursementList;
@@ -72,36 +70,41 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   List shopTypeList = [];
   var result2, msg2;
   late Future<List<LeaveStatusModel>> reimbursementStatusV3;
-  List<LeaveStatusModel> _allData = [];  // Holds original data
-  List<LeaveStatusModel> _filteredData = [];  // Holds filtered data
+  List<LeaveStatusModel> _allData = []; // Holds original data
+  List<LeaveStatusModel> _filteredData = []; // Holds filtered data
   TextEditingController _takeActionController = TextEditingController();
   // Distic List
-  hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
-
+  hrmsReimbursementStatus(
+      String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
-    reimbursementStatusV3 = HrmsAllLeaveStatusRepo().allleaveStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
+    reimbursementStatusV3 = HrmsAllLeaveStatusRepo()
+        .allleaveStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
     reimbursementStatusV3.then((data) {
       setState(() {
-        _allData = data;  // Store the data
-        _filteredData = _allData;  // Initially, no filter applied
+        _allData = data; // Store the data
+        _filteredData = _allData; // Initially, no filter applied
       });
     });
     // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
     // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
 
-    print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
+    print(
+        " -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
     // setState(() {});
   }
+
   // filter data
   void filterData(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredData = _allData;  // Show all data if search query is empty
+        _filteredData = _allData; // Show all data if search query is empty
       } else {
         _filteredData = _allData.where((item) {
-          return item.sName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
+          return item.sName
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) || // Filter by project name
               item.sDesg.toLowerCase().contains(query.toLowerCase()) ||
               item.sLeaveStatus.toLowerCase().contains(query.toLowerCase());
           // Filter by employee name
@@ -109,12 +112,12 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       }
     });
   }
-
   // postImage
 
   postimage() async {
     print('----ImageFile----$_imageFile');
-    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
+    var postimageResponse =
+        await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
@@ -157,6 +160,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   Color? containerColor;
   String? status;
   String? tempDate;
+  String? formDate;
+  String? toDate;
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -187,7 +192,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Colors.black,
         textColor: Colors.white,
         fontSize: 16.0);
   }
@@ -248,30 +253,20 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     print('---155----$responseData');
   }
 
-  getCurrentdate() async{
-    DateTime now = DateTime.now();
-    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
-    // last day of the current month
-    DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
-    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
-    lastDayOfCurrentMonth = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
-    setState(() {
-    });
-    if(firstDayOfNextMonth!=null && lastDayOfCurrentMonth!=null){
-      print('You should call api');
-      //reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!)) as Future<List<Hrmsreimbursementstatusv3model>>;
-      //print('---255--$reimbursementStatusV3');
-      /// reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!);
-      // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-      // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-    }else{
-      print('You should  not call api');
-    }
-  }
+  // getCurrentdate() async {
+  //   DateTime now = DateTime.now();
+  //   DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+  //   formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+  //   print('----258---$formDate');
+  //   // last day of the current month
+  //   DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+  //   DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+  //   toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+  //   print('----263---$toDate');
+  //   setState(() {});
+  // }
 
   // leave type
-
   final List<Color> colorList = [
     Color(0xFF4DB6AC),
     Color(0xFFE1A245),
@@ -281,14 +276,15 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     Color(0xFF379BF3),
   ];
 
-
   // InitState
   @override
   void initState() {
     // TODO: implement initState
     getLocation();
-    getCurrentdate();
-    hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+   // getCurrentdate();
+    getACurrentDate();
+
+    hrmsReimbursementStatus(formDate!, toDate!);
 
     super.initState();
     _shopfocus = FocusNode();
@@ -297,6 +293,55 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
   }
+  // date logic
+
+  getACurrentDate() {
+   // DateTime now = DateTime.now();
+      DateTime now = DateTime.now();
+      DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+      formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+
+    setState(() {
+      //formDate = DateFormat('dd/MMM/yyyy').format(now);
+    });
+    //
+    DateTime now2 = DateTime.now();
+        DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+        DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+        toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    setState(() {
+      //toDate = DateFormat('dd/MMM/yyyy').format(now2);
+    });
+  }
+  // to Date SelectedLogic
+  void toDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (toDate2.isBefore(fromDate2)) {
+      setState(() {
+        toDate = tempDate;
+      });
+      displayToast("To Date can not be less than From Date");
+    }
+  }
+
+  void fromDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        formDate = tempDate;
+      });
+     // calculateTotalDays();
+      displayToast("From date can not be greater than To Date");
+    }
+  }
+
+
 
   // location
   void getLocation() async {
@@ -347,6 +392,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     _landMarkfocus.dispose();
     _addressfocus.dispose();
   }
+
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -369,7 +415,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
             backgroundColor: Color(0xFF0098a6),
             leading: InkWell(
               onTap: () {
-               // Navigator.pop(context);
+                // Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const DashBoard()),
@@ -398,7 +444,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
-
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -409,14 +454,17 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(width: 4),
-                      Icon(Icons.calendar_month,size: 15,color: Colors.white),
+                      Icon(Icons.calendar_month, size: 15, color: Colors.white),
                       const SizedBox(width: 4),
-                      const Text('From',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal
-                      ),),
+                      const Text(
+                        'From',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
+                      ),
                       SizedBox(width: 4),
+
                       GestureDetector(
                         onTap: () async {
                           /// TODO Open Date picke and get a date
@@ -426,38 +474,56 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                           );
-                          // Check if a date was picked
                           if (pickedDate != null) {
-                            // Format the picked date
                             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            print('----FromDate----433---$formattedDate');
-                            // Update the state with the picked date
                             setState(() {
-                              firstOfMonthDay = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              tempDate = formDate; // Save the current formDate before updating
+                              formDate = formattedDate;
+                             // calculateTotalDays();
                             });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            print('---formPicker--$firstOfMonthDay');
-                          } else {
-
+                            fromDateSelectLogic();
                           }
+                          // DateTime? pickedDate = await showDatePicker(
+                          //   context: context,
+                          //   initialDate: DateTime.now(),
+                          //   firstDate: DateTime(2000),
+                          //   lastDate: DateTime(2100),
+                          // );
+                          // // Check if a date was picked
+                          // if (pickedDate != null) {
+                          //   // Format the picked date
+                          //   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                          //   print('----FromDate----433---$formattedDate');
+                          //   // Update the state with the picked date
+                          //   setState(() {
+                          //     firstOfMonthDay = formattedDate;
+                          //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          //   });
+                          //   // call Ai
+                          //   hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          //   // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          //   print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                          //   //hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          //  // print('---formPicker--$firstOfMonthDay');
+                          // } else {}
                         },
 
                         child: Container(
                           height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  14.0), // Optional: Adjust padding for horizontal space
                           decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
+                            color: Colors
+                                .white, // Change this to your preferred color
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Center(
                             child: Text(
-                              '$firstOfMonthDay',
+                              '$formDate',
                               style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
+                                color: Colors
+                                    .grey, // Change this to your preferred text color
                                 fontSize: 12.0, // Adjust font size as needed
                               ),
                             ),
@@ -470,56 +536,81 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                         width: 32,
                         child: Image.asset(
                           "assets/images/reimicon_2.png",
-                          fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                          fit: BoxFit
+                              .contain, // or BoxFit.cover depending on the desired effect
                         ),
                       ),
                       //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                       SizedBox(width: 8),
-                      Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                      Icon(Icons.calendar_month, size: 16, color: Colors.white),
                       SizedBox(width: 5),
-                      const Text('To',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal
-                      ),),
+                      const Text(
+                        'To',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
+                      ),
                       SizedBox(width: 5),
                       GestureDetector(
-                        onTap: ()async{
+                        onTap: () async {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                           );
-                          // Check if a date was picked
                           if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            print('----504--$formattedDate');
-                            // Update the state with the picked date
+                            String formattedDate =
+                            DateFormat('dd/MMM/yyyy')
+                                .format(pickedDate);
                             setState(() {
-                              lastDayOfCurrentMonth = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              tempDate =
+                                  toDate; // Save the current toDate before updating
+                              toDate = formattedDate;
+                             // calculateTotalDays();
                             });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-
-                          } else {
+                            toDateSelectLogic();
                           }
+                          // DateTime? pickedDate = await showDatePicker(
+                          //   context: context,
+                          //   initialDate: DateTime.now(),
+                          //   firstDate: DateTime(2000),
+                          //   lastDate: DateTime(2100),
+                          // );
+                          // // Check if a date was picked
+                          // if (pickedDate != null) {
+                          //   // Format the picked date
+                          //   String formattedDate =
+                          //       DateFormat('dd/MMM/yyyy').format(pickedDate);
+                          //   print('----504--$formattedDate');
+                          //   // Update the state with the picked date
+                          //   setState(() {
+                          //     lastDayOfCurrentMonth = formattedDate;
+                          //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                          //   });
+                          //   hrmsReimbursementStatus(
+                          //       firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          //   //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                          //   print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                          // } else {}
                         },
                         child: Container(
                           height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                          padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  14.0), // Optional: Adjust padding for horizontal space
                           decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
+                            color: Colors
+                                .white, // Change this to your preferred color
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Center(
                             child: Text(
-                              '$lastDayOfCurrentMonth',
+                              '$toDate',
                               style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
+                                color: Colors
+                                    .grey, // Change this to your preferred text color
                                 fontSize: 12.0, // Adjust font size as needed
                               ),
                             ),
@@ -533,7 +624,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                 SizedBox(height: 10),
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                    padding:
+                        const EdgeInsets.only(left: 15, right: 15, top: 10),
                     // child: SearchBar(),
                     child: Container(
                       height: 45,
@@ -566,7 +658,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                     border: InputBorder.none,
                                   ),
                                   onChanged: (query) {
-                                    filterData(query);  // Call the filter function on text input change
+                                    filterData(
+                                        query); // Call the filter function on text input change
                                   },
                                 ),
                               ),
@@ -584,130 +677,159 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                         future: reimbursementStatusV3,
                         builder: (context, snapshot) {
                           return ListView.builder(
-                            // itemCount: snapshot.data!.length ?? 0,
-                            // itemBuilder: (context, index)
-                              itemCount: _filteredData.length?? 0,
-                              itemBuilder: (context, index)
-                              {
+                              // itemCount: snapshot.data!.length ?? 0,
+                              // itemBuilder: (context, index)
+                              itemCount: _filteredData.length ?? 0,
+                              itemBuilder: (context, index) {
                                 final leaveStatus = _filteredData[index];
-                                final randomColor = colorList[index % colorList.length];
-                                 status = leaveStatus.sLeaveStatus;
+                                final randomColor =
+                                    colorList[index % colorList.length];
+                                status = leaveStatus.sLeaveStatus;
                                 containerColor;
-                                if(status=="Sanctioned"){
+                                if (status == "Sanctioned") {
                                   containerColor = Color(0xFF689F38);
-                                }else if(status=="Request For Cancellation"){
+                                } else if (status ==
+                                    "Request For Cancellation") {
                                   containerColor = Colors.redAccent;
-                                }else{
+                                } else {
                                   containerColor = Color(0xFFFFD700);
                                 }
 
-                                return
-                                Card(
-                                    elevation: 1,
-                                    color: Colors.white,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(0.0),
-                                        border: Border.all(
-                                          color: Colors.grey, // Outline border color
-                                          width: 0.2, // Outline border width
-                                        ),
+                                return Card(
+                                  elevation: 1,
+                                  color: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      border: Border.all(
+                                        color:
+                                            Colors.grey, // Outline border color
+                                        width: 0.2, // Outline border width
                                       ),
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.only(left: 0, right: 8,top: 8),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 8),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap:(){
-                                                      var images =  leaveStatus.sImageLink;
-                                                      var designation =  leaveStatus.sDesg;
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 0, right: 8, top: 8),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    var images =
+                                                        leaveStatus.sImageLink;
+                                                    var designation =
+                                                        leaveStatus.sDesg;
 
-                                                      openFullScreenDialog(
-                                                          context,
-                                                          images,
-                                                          designation
+                                                    openFullScreenDialog(
+                                                        context,
+                                                        images,
+                                                        designation
                                                         // 'https://your-image-url.com/image.jpg', // Replace with your image URL
                                                         // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                      );
-                                                                                    },
-                                                    child: Center(
-                                                      child: ClipOval(
-                                                        // Clip the image to make it circular
-                                                        child: Container(
-                                                          child: Image.network(
-                                                            leaveStatus.sImageLink, // Replace with your image URL
-                                                            height: 35, // Adjust height as needed
-                                                            width: 35,  // Adjust width as needed
-                                                            fit: BoxFit.cover, // Make the image cover the container
-                                                          ),
+                                                        );
+                                                  },
+                                                  child: Center(
+                                                    child: ClipOval(
+                                                      // Clip the image to make it circular
+                                                      child: Container(
+                                                        child: Image.network(
+                                                          leaveStatus
+                                                              .sImageLink, // Replace with your image URL
+                                                          height:
+                                                              35, // Adjust height as needed
+                                                          width:
+                                                              35, // Adjust width as needed
+                                                          fit: BoxFit
+                                                              .cover, // Make the image cover the container
                                                         ),
                                                       ),
                                                     ),
                                                   ),
+                                                ),
 
-                                                  SizedBox(width: 10),
-                                                  // Wrap the column in Flexible to prevent overflow
-                                                  Flexible(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          leaveStatus.sName,
-                                                          //'Prabhat Yadav',
-                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                          maxLines: 2, // Limits the text to 2 lines
-                                                          overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                                SizedBox(width: 10),
+                                                // Wrap the column in Flexible to prevent overflow
+                                                Flexible(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[
+                                                      Text(
+                                                        leaveStatus.sName,
+                                                        //'Prabhat Yadav',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines:
+                                                            2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow
+                                                            .ellipsis, // Truncates with an ellipsis if too long
+                                                      ),
+                                                      // SizedBox(height: 4), // Add spacing between texts if needed
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                right: 10),
+                                                        child: Text(
+                                                          leaveStatus.sDesg,
+                                                          //leaveData.sProjectName,
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlack45TextStyle,
+                                                          maxLines:
+                                                              2, // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Truncates with an ellipsis if too long
                                                         ),
-                                                       // SizedBox(height: 4), // Add spacing between texts if needed
-                                                        Padding(
-                                                          padding: const EdgeInsets.only(right: 10),
-                                                          child: Text(
-                                                            leaveStatus.sDesg,
-                                                            //leaveData.sProjectName,
-                                                            style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
-                                                            maxLines: 2, // Limits the text to 2 lines
-                                                            overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: [
-                                                Icon(Icons.notes_outlined,size: 18,),
-                                                SizedBox(width: 5),
-                                                Text('Leave Details',style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle),
-
+                                                ),
                                               ],
                                             ),
-                                            SizedBox(height: 5),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 25),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                Icons.notes_outlined,
+                                                size: 18,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text('Leave Details',
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 25),
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     'Leave Status :',
                                                     style: GoogleFonts.openSans(
                                                       color: containerColor,
                                                       fontSize: 8,
-                                                      fontWeight: FontWeight.w400,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ), // This directly returns a TextStyle
                                                   ),
                                                   SizedBox(width: 2),
@@ -715,46 +837,65 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                   Flexible(
                                                     child: Text(
                                                       leaveStatus.sLeaveStatus,
-                                                      style: GoogleFonts.openSans(
+                                                      style:
+                                                          GoogleFonts.openSans(
                                                         color: containerColor,
                                                         fontSize: 8,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontWeight:
+                                                            FontWeight.w400,
                                                       ), // This d
                                                       // style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
-                                                       overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                       maxLines: 1, // Ensures the text stays on one line
-                                                       softWrap: false, // Prevents the text from wrapping
-
-
+                                                      overflow: TextOverflow
+                                                          .ellipsis, // Adds "..." if the text is too long
+                                                      maxLines:
+                                                          1, // Ensures the text stays on one line
+                                                      softWrap:
+                                                          false, // Prevents the text from wrapping
                                                     ),
                                                   ),
-                                                   Spacer(),
+                                                  Spacer(),
                                                   Align(
-                                                    alignment: Alignment.centerRight,
+                                                    alignment:
+                                                        Alignment.centerRight,
                                                     child: Container(
                                                       height: 25,
                                                       child: DottedBorder(
-                                                        color: Colors.grey, // Color of the dotted line
-                                                        strokeWidth: 1.0, // Width of the dotted line
-                                                        dashPattern: [4, 2], // Dash pattern for the dotted line
-                                                        borderType: BorderType.RRect,
-                                                        radius: Radius.circular(5.0), // Optional: rounded corners
+                                                        color: Colors
+                                                            .grey, // Color of the dotted line
+                                                        strokeWidth:
+                                                            1.0, // Width of the dotted line
+                                                        dashPattern: [
+                                                          4,
+                                                          2
+                                                        ], // Dash pattern for the dotted line
+                                                        borderType:
+                                                            BorderType.RRect,
+                                                        radius: Radius.circular(
+                                                            5.0), // Optional: rounded corners
                                                         child: Padding(
-                                                          padding: EdgeInsets.all(2.0), // Equal padding on all sides
+                                                          padding: EdgeInsets.all(
+                                                              2.0), // Equal padding on all sides
                                                           child: Center(
                                                             child: Row(
-                                                              mainAxisSize: MainAxisSize.min, // Center the row contents
+                                                              mainAxisSize:
+                                                                  MainAxisSize
+                                                                      .min, // Center the row contents
                                                               children: [
                                                                 Text(
                                                                   'Leave Type',
-                                                                  style: AppTextStyle.font8OpenSansRegularBlack45TextStyle,
+                                                                  style: AppTextStyle
+                                                                      .font8OpenSansRegularBlack45TextStyle,
                                                                 ),
-                                                                SizedBox(width: 2.0), // Space between 'Day' and ':'
+                                                                SizedBox(
+                                                                    width:
+                                                                        2.0), // Space between 'Day' and ':'
                                                                 Text(
                                                                   ' : ',
-                                                                  style: AppTextStyle.font8OpenSansRegularBlack45TextStyle,
+                                                                  style: AppTextStyle
+                                                                      .font8OpenSansRegularBlack45TextStyle,
                                                                 ),
-                                                                SizedBox(width: 2.0), // Space between ':' and 'leave type'
+                                                                SizedBox(
+                                                                    width: 2.0), // Space between ':' and 'leave type'
 
                                                                 // Wrap this Text widget with Flexible to handle long text
                                                                 // Flexible(
@@ -766,14 +907,15 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                                 //     softWrap: false, // Prevents the text from wrapping
                                                                 //   ),
                                                                 // ),
-                                                               Text(
-                                                                    leaveStatus.sLeaveType,
-                                                                    style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
-                                                                   // overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                                   // maxLines: 1, // Ensures the text remains on one line
-                                                                    //softWrap: false, // Prevents the text from wrapping
-                                                                  ),
-
+                                                                Text(
+                                                                  leaveStatus
+                                                                      .sLeaveType,
+                                                                  style: AppTextStyle
+                                                                      .font8OpenSansRegularBlackTextStyle,
+                                                                  // overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
+                                                                  // maxLines: 1, // Ensures the text remains on one line
+                                                                  //softWrap: false, // Prevents the text from wrapping
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
@@ -782,107 +924,139 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                     ),
                                                   ),
                                                 ],
-                                              )
-                                            ),
-                                            SizedBox(height: 5),
-                                            Padding(
-                                              padding: const EdgeInsets.only(bottom: 0),
-                                              child: Container(
+                                              )),
+                                          SizedBox(height: 5),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 0),
+                                            child: Container(
                                                 height: 40.0,
                                                 decoration: BoxDecoration(
-                                                  color: Colors.grey[200],    // Background color
+                                                  color: Colors.grey[
+                                                      200], // Background color
                                                   border: Border(
                                                     left: BorderSide(
                                                       color: randomColor,
-                                                     // color: Colors.grey, // Left border color
-                                                      width: 3.0, // Left border width
+                                                      // color: Colors.grey, // Left border color
+                                                      width:
+                                                          3.0, // Left border width
                                                     ),
                                                   ),
                                                 ),
                                                 child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Padding(
-                                                          padding: const EdgeInsets.all(2.0),
-                                                          child: Icon(Icons.calendar_month,size: 16),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child: Icon(
+                                                              Icons
+                                                                  .calendar_month,
+                                                              size: 16),
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(left: 10),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 10),
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
-                                                              Text('Applied At',style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
-                                                              Text(leaveStatus.dLeaveAt,style: AppTextStyle
-                                                                  .font12OpenSansRegularBlackTextStyle),
+                                                              Text('Applied At',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlack45TextStyle),
+                                                              Text(
+                                                                  leaveStatus
+                                                                      .dLeaveAt,
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle),
                                                             ],
                                                           ),
                                                         ),
-
                                                       ],
                                                     ),
                                                     Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Padding(
-                                                          padding: const EdgeInsets.all(2.0),
-                                                          child: Icon(Icons.calendar_month,size: 16),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(2.0),
+                                                          child: Icon(
+                                                              Icons
+                                                                  .calendar_month,
+                                                              size: 16),
                                                         ),
                                                         Padding(
-                                                          padding: const EdgeInsets.only(right: 10),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  right: 10),
                                                           child: Column(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
-                                                              Text('Applied for',style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
+                                                              Text(
+                                                                  'Applied for',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlack45TextStyle),
                                                               //sLeaveApplyFor
-                                                              Text(leaveStatus.sLeaveApplyFor,style: AppTextStyle
-                                                                  .font12OpenSansRegularBlackTextStyle),
+                                                              Text(
+                                                                  leaveStatus
+                                                                      .sLeaveApplyFor,
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle),
                                                             ],
                                                           ),
                                                         ),
-
                                                       ],
                                                     ),
-
-
                                                   ],
-                                                )
-                                              ),
-                                            ),
-
-
-
-
-                                          ],
-                                        ),
-
-
+                                                )),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  );
-
+                                  ),
+                                );
                               });
-                        }
-
-                    ),
+                        }),
                   ),
                 ),
-
-              ]
-          )),
+              ])),
     );
   }
+
   // Opend Full Screen DialogbOX
-  void openFullScreenDialog(BuildContext context, String imageUrl, String billDate) {
+  void openFullScreenDialog(
+      BuildContext context, String imageUrl, String billDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -912,10 +1086,10 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                     children: [
                       Flexible(
                         child: Text(
-                            billDate,
-                            style: AppTextStyle
-                                .font12OpenSansRegularBlackTextStyle,
-                               overflow: TextOverflow.ellipsis,
+                          billDate,
+                          style:
+                              AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],
@@ -950,9 +1124,11 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       },
     );
   }
+
   // take a action Dialog
   Widget _takeActionDialog(BuildContext context) {
-    TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
+    TextEditingController _takeAction =
+        TextEditingController(); // Text controller for the TextFormField
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -965,7 +1141,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 220, // Adjusted height to accommodate the TextFormField and Submit button
+            height:
+                220, // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -989,9 +1166,11 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10.0),
                       filled: true, // Enable background color
-                      fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                      fillColor: Color(
+                          0xFFf2f3f5), // Set your desired background color here
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     // validator: (value) {
@@ -1010,7 +1189,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
 
                 // Submit button
                 InkWell(
-                  onTap: ()async{
+                  onTap: () async {
                     var takeAction = _takeAction.text.trim();
                     print('-----1102--$takeAction');
                     print(sTranCode);
@@ -1020,7 +1199,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                       print('---Call Api-----');
 
                       // Make API call here
-                      var loginMap = await Reimbursementstatustakeaction().reimbursementTakeAction(context, sTranCode);
+                      var loginMap = await Reimbursementstatustakeaction()
+                          .reimbursementTakeAction(context, sTranCode);
 
                       print('---418----$loginMap');
 
@@ -1041,14 +1221,16 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                            return _buildDialogSucces2(context,
+                                msg); // A new dialog for showing success
                           },
                         );
                         print('-----1123---');
                       } else if (result == "0") {
                         // Keep the dialog open and show an error message (if needed)
                         // You can display an error message in the same dialog without dismissing it
-                        displayToast(msg);  // Optionally, show a toast message to indicate failure
+                        displayToast(
+                            msg); // Optionally, show a toast message to indicate failure
 
                         // Optionally clear the input field if needed
                         // _takeAction.clear();  // Do not clear to allow retrying
@@ -1057,7 +1239,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                       // Handle the case where no input is provided
                       displayToast("Enter remarks");
                     }
-
                   },
                   child: Container(
                     //width: double.infinity,
@@ -1067,7 +1248,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                     decoration: BoxDecoration(
                       color: AppColors.loginbutton,
                       // Background color using HEX value
-                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                      borderRadius: BorderRadius.circular(
+                          AppMargin.m10), // Rounded corners
                     ),
                     //  #00b3c7
                     child: Center(
@@ -1125,8 +1307,9 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       ),
     );
   }
+
   // sucessDialog
-  Widget _buildDialogSucces2(BuildContext context,String msg) {
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -1148,10 +1331,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 Text(
                   msg,
@@ -1170,18 +1351,22 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         // call api again
-                        hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        hrmsReimbursementStatus(
+                            firstOfMonthDay!, lastDayOfCurrentMonth!);
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
                         // );
-
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
+                        backgroundColor:
+                            Colors.white, // Set the background color to white
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -1207,6 +1392,4 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       ),
     );
   }
-
-
 }

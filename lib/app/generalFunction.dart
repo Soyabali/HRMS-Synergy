@@ -159,8 +159,6 @@ class GeneralFunction {
                     ElevatedButton(
                       onPressed: () {
                         // Navigator.of(context).pop();
-
-
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the background color to white

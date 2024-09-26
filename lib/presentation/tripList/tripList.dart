@@ -12,8 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/reimbursementClarificationRepo.dart';
-import '../../../domain/rimbursementclarificationmodel.dart';
 import '../../data/hrmsTripDetailRepo.dart';
 import '../../domain/tripDetailModel.dart';
 import '../dashboard/dashboard.dart';
@@ -46,10 +44,10 @@ class TripListPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<TripListPage> {
+
   List<Map<String, dynamic>>? reimbursementStatusList;
 
   DateTime? _date;
-
   List stateList = [];
   List hrmsReimbursementList = [];
   List blockList = [];
@@ -99,9 +97,7 @@ class _MyHomePageState extends State<TripListPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
   String? _chosenValue;
-
   var msg;
   var result;
   var SectorData;
@@ -294,6 +290,7 @@ class _MyHomePageState extends State<TripListPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
+
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -462,12 +459,10 @@ class _MyHomePageState extends State<TripListPage> {
                                 itemCount: _filteredData.length ?? 0,
                                 itemBuilder: (context, index) {
                                   final tripDetailData = _filteredData[index];
-                                  sTripEndLocation =
-                                      tripDetailData.sTripEndLocation;
+                                  sTripEndLocation = tripDetailData.sTripEndLocation;
 
                                   return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 10),
+                                    padding: const EdgeInsets.only(left: 10, right: 10),
                                     child: Card(
                                       elevation: 1,
                                       color: Colors.white,
@@ -476,14 +471,13 @@ class _MyHomePageState extends State<TripListPage> {
                                           borderRadius:
                                               BorderRadius.circular(5.0),
                                           border: Border.all(
-                                            color: Colors
-                                                .grey, // Outline border color
+                                            color: Colors.grey, // Outline border color
                                             width: 0.2, // Outline border width
                                           ),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.only(
-                                              left: 8, right: 8, bottom: 10),
+                                              left: 8, right: 8, bottom: 0),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
@@ -538,15 +532,15 @@ class _MyHomePageState extends State<TripListPage> {
                                                   )
                                                 ],
                                               ),
-                                              const SizedBox(height: 10),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 15, right: 15),
-                                                child: Container(
-                                                  height: 0.5,
-                                                  color: Color(0xff3f617d),
-                                                ),
-                                              ),
+                                              // const SizedBox(height: 5),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.only(
+                                              //       left: 15, right: 15),
+                                              //   child: Container(
+                                              //     height: 0.5,
+                                              //     color: Color(0xff3f617d),
+                                              //   ),
+                                              // ),
                                               SizedBox(height: 5),
                                               Padding(
                                                 padding: const EdgeInsets.only(
@@ -613,12 +607,10 @@ class _MyHomePageState extends State<TripListPage> {
                                                 color: Colors.white,
                                                 // color: Colors.grey[300], // Light gray background
                                                 padding: EdgeInsets.symmetric(
-                                                    horizontal:
-                                                        10), // Padding to give space for the content
+                                                 horizontal: 10), // Padding to give space for the content
                                                 child: Row(
                                                   mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .end, // Align text and icon at the ends
+                                                      MainAxisAlignment.end, // Align text and icon at the ends
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () async {
@@ -654,56 +646,52 @@ class _MyHomePageState extends State<TripListPage> {
                                                     ),
                                                     SizedBox(width: 10),
                                                     Container(
-                                                      height: 25,
-                                                      width: 150,
-                                                      color: Colors.red,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          const Padding(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 20),
-                                                            child: Text(
-                                                              'Dur :',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontFamily:
-                                                                    'Montserrat',
+                                                        height: 25,
+                                                        width: 180,
+                                                        color: Colors.red,
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets.only(left: 10),
+                                                              child: Text(
+                                                                'Dur :',
+                                                                style: TextStyle(
+                                                                  color: Colors.white,
+                                                                  fontSize: 14,
+                                                                  fontWeight:
+                                                                  FontWeight.normal,
+                                                                  fontFamily: 'Montserrat',
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 10),
-                                                            child: Text(
-                                                              "${tripDetailData.fDistance} HH:MM" ??
-                                                                  "0",
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal,
-                                                                fontFamily:
-                                                                    'Montserrat',
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets.only(
+                                                                      left: 5,right: 5),
+                                                              child: Text(
+                                                                "${tripDetailData.sDuration} HH:MM" ??
+                                                                    "0",
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 12,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal,
+                                                                  fontFamily:
+                                                                      'Montserrat',
+                                                                ),
+                                                                   overflow: TextOverflow.ellipsis,
+                                                                softWrap: false,
+
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
                                                     SizedBox(width: 10),
                                                     GestureDetector(
                                                       onTap: () {
@@ -740,8 +728,7 @@ class _MyHomePageState extends State<TripListPage> {
                                               Visibility(
                                                 visible: sTripEndLocation == "",
                                                 child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       height: 40,
@@ -894,8 +881,7 @@ class _MyHomePageState extends State<TripListPage> {
                                                                 ),
                                                               ),
                                                               SizedBox(
-                                                                  height:
-                                                                      10), // Spacing between the image and text
+                                                                  height: 10), // Spacing between the image and text
                                                               // TextView
                                                               Text(
                                                                 'Start Odometer',
@@ -1136,7 +1122,7 @@ class _MyHomePageState extends State<TripListPage> {
                                                           SizedBox(width: 10),
                                                           Container(
                                                             height: 25,
-                                                            width: 150,
+                                                            width: 180,
                                                             color: Color(
                                                                 0xFF0098a6),
                                                             child: Row(
@@ -1147,8 +1133,7 @@ class _MyHomePageState extends State<TripListPage> {
                                                                 const Padding(
                                                                   padding: EdgeInsets
                                                                       .only(
-                                                                          left:
-                                                                              20),
+                                                                          left: 10),
                                                                   child: Text(
                                                                     'Dur :',
                                                                     style:
@@ -1156,7 +1141,7 @@ class _MyHomePageState extends State<TripListPage> {
                                                                       color: Colors
                                                                           .white,
                                                                       fontSize:
-                                                                          14,
+                                                                          12,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal,
@@ -1169,10 +1154,10 @@ class _MyHomePageState extends State<TripListPage> {
                                                                   padding:
                                                                       const EdgeInsets
                                                                           .only(
-                                                                          left:
-                                                                              10),
+                                                                          left: 5,right: 5),
+                                                                        //  ${tripDetailData.sDuration} HH:MM" ??
                                                                   child: Text(
-                                                                    "${tripDetailData.sDuration} HH:MM" ??
+                                                                    "${tripDetailData.fDistance} Km" ??
                                                                         "0",
                                                                     // tripDetailData.sDuration,
                                                                     style:
@@ -1180,7 +1165,7 @@ class _MyHomePageState extends State<TripListPage> {
                                                                       color: Colors
                                                                           .white,
                                                                       fontSize:
-                                                                          14,
+                                                                          12,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .normal,

@@ -51,7 +51,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   GeneralFunction generalFunction = GeneralFunction();
   double? lat, long;
-  var sFirstName,sCompEmailId;
+  var sFirstName,sCompEmailId,sLastName,fullName;
    // DialogBox
 
   Widget _buildDialogSucces(BuildContext context) {
@@ -492,6 +492,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
      // get a stored value
      setState(() {
        sFirstName = prefs.getString('sFirstName');
+       sLastName = prefs.getString('sLastName');
+       fullName = "$sFirstName $sLastName";
        sCompEmailId = prefs.getString('sCompEmailId');
      });
    }
@@ -575,7 +577,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
             elevation: 0, // Removes shadow under the AppBar
           ),
         // drawer
-        drawer: generalFunction.drawerFunction(context,'$sFirstName','$sCompEmailId'),
+        drawer: generalFunction.drawerFunction(context,'$fullName','$sCompEmailId'),
 
         body: Column(
             children: [

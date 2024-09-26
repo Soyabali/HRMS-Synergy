@@ -21,6 +21,7 @@ class ProfileEducation extends StatelessWidget {
 }
 
 class ProfileEducationPage extends StatefulWidget {
+
   const ProfileEducationPage({super.key});
 
   @override
@@ -28,6 +29,7 @@ class ProfileEducationPage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfileEducationPage> {
+
   late Future<List<EducationModel>> educationRes;
 
   @override
@@ -107,20 +109,18 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                             final education = educationList[index];
 
                             return Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10, right: 10, top: 10, bottom: 10),
+                              padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
                               child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                height: 215,
+                                margin: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                height: 205,
                                 child: Card(
                                   elevation: 5,
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10, right: 10, top: 10),
+                                    padding: EdgeInsets.only(left: 5, right: 5, top: 5),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
@@ -257,9 +257,13 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                                       style: AppTextStyle
                                                           .font14OpenSansRegularBlack45TextStyle),
                                                   SizedBox(height: 4),
-                                                  Text(education.fPercentage,
-                                                      style: AppTextStyle
-                                                          .font12OpenSansRegularBlackTextStyle),
+                                                  Text(
+                                                    '${education.fPercentage}%',  // Concatenating % to the value
+                                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                  ),
+                                                  // Text(education.fPercentage,
+                                                  //     style: AppTextStyle
+                                                  //         .font12OpenSansRegularBlackTextStyle),
                                                 ],
                                               ),
                                             ),

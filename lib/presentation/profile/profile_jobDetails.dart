@@ -2,13 +2,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled/presentation/profile/profile.dart';
-
 import '../../data/jobDetailRepo.dart';
 import '../../domain/jobDetailModel.dart';
-import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
 class ProfileJobdetails extends StatelessWidget {
+
   const ProfileJobdetails({super.key});
 
   @override
@@ -28,6 +27,7 @@ class ProfileEducationPage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfileEducationPage> {
+
   late Future<List<JobDetailmodel>> jobDetailRes;
 
   @override
@@ -101,27 +101,31 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                         }
                         final educationList = snapshot.data!;
 
+
                         return ListView.builder(
                             itemCount: educationList.length,
                             itemBuilder: (context, index) {
                               final jobDetail = educationList[index];
+                              var companyName = jobDetail.sCompanyName;
+                              print('------110---$companyName');
 
                               return
+                                (companyName!="Fresher") ?
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 10, right: 10, top: 10, bottom: 10),
+                                      left: 5, right: 5, top: 5, bottom: 5),
                                   child: Container(
                                     margin: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                                    height: 200,
+                                    height: 155,
                                     child: Card(
                                       elevation: 5,
                                       color: Colors.white,
                                       shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
+                                        borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Padding(
                                         padding: EdgeInsets.only(
-                                            left: 10, right: 10, top: 10),
+                                            left: 5, right: 5, top: 5),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment
                                               .start,
@@ -129,24 +133,22 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                             // Row with Icon and "Qualification" text
                                             Row(
                                               children: [
-                                                Icon(
-                                                    Icons.school, color: Colors.blue),
+                                                Icon(Icons.school, color: Colors.blue,size: 16),
                                                 SizedBox(width: 8),
                                                 Text(jobDetail.sCompanyName,
                                                     style: AppTextStyle
-                                                        .font14OpenSansRegularBlack45TextStyle),
+                                                        .font12OpenSansRegularBlack45TextStyle),
                                               ],
                                             ),
-                                            SizedBox(height: 2),
                                             // M.C.A Text
                                             Padding(
-                                              padding: EdgeInsets.only(left: 28),
+                                              padding: EdgeInsets.only(left: 25),
                                               child: Text('Company Name',
                                                   style: AppTextStyle
                                                       .font12OpenSansRegularBlackTextStyle),
                                             ),
                                             // Divider
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 5),
                                             // Row with two Columns (Institution)
                                             Row(
                                               children: [
@@ -154,13 +156,9 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                                   flex: 1,
                                                   child: Row(
                                                     children: [
-                                                      Text('From Date :',
+                                                      Text('From Date : ',
                                                           style: AppTextStyle
-                                                              .font14OpenSansRegularBlack45TextStyle),
-
-                                                      // Icon(Icons.business,
-                                                      //     color: Colors.blue),
-                                                      SizedBox(width: 8),
+                                                              .font12OpenSansRegularBlack45TextStyle),
                                                       Text(jobDetail.dFromDate,
                                                           style: AppTextStyle
                                                               .font12OpenSansRegularBlackTextStyle),
@@ -173,10 +171,10 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                                       mainAxisAlignment:
                                                       MainAxisAlignment.end,
                                                       children: [
-                                                        Text('To Date',
+                                                        Text('To Date : ',
                                                             style: AppTextStyle
-                                                                .font14OpenSansRegularBlack45TextStyle),
-                                                        SizedBox(width: 15),
+                                                                .font12OpenSansRegularBlack45TextStyle),
+                                                       // SizedBox(width: 15),
                                                         Text(jobDetail.dToDate,
                                                             style: AppTextStyle
                                                                 .font12OpenSansRegularBlackTextStyle),
@@ -185,12 +183,12 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                               ],
                                             ),
                                             // Divider
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 5),
                                             Row(
                                               mainAxisAlignment: MainAxisAlignment
                                                   .start,
                                               children: [
-                                                Icon(Icons.notes_outlined, size: 18,),
+                                                Icon(Icons.notes_outlined, size: 16),
                                                 SizedBox(width: 5),
                                                 Text('Other Detail',
                                                     style: AppTextStyle
@@ -198,16 +196,16 @@ class _ProfilePageState extends State<ProfileEducationPage> {
 
                                               ],
                                             ),
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 5),
                                             Text(
                                                 jobDetail.sLeavingReason,
                                                 style: AppTextStyle
                                                     .font12OpenSansRegularBlack45TextStyle),
-                                            SizedBox(height: 10),
+                                            SizedBox(height: 5),
                                             Align(
                                               alignment: Alignment.topRight,
                                               child: Container(
-                                                height: 30,
+                                                height: 25,
                                                 child: DottedBorder(
                                                   color: Colors.grey,
                                                   // Color of the dotted line
@@ -255,6 +253,15 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                       ),
                                     ),
                                   ),
+                                )
+                                    :Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.emoji_people,size: 16),
+                                        SizedBox(width: 5),
+                                        Text('You are working here as a fresher',style: AppTextStyle
+                                            .font14OpenSansRegularBlackTextStyle)
+                                      ],
                                 );
                             }
                         );
