@@ -574,7 +574,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 final leaveData = _filteredData[index];
                                // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
                             return Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(left: 10, right: 10,top: 10),
                               child: Card(
                                 elevation: 1,
                                 color: Colors.white,

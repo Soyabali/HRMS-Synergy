@@ -88,6 +88,7 @@ class _ProfilePageState extends State<ProfileEducationPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
+
         body: Column(
           children: [
             Expanded(
@@ -111,10 +112,10 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                             return Padding(
                               padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
                               child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
-                                height: 205,
+                               // margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                                height: 195,
                                 child: Card(
-                                  elevation: 5,
+                                  elevation: 4,
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
@@ -127,7 +128,12 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                         // Row with Icon and "Qualification" text
                                         Row(
                                           children: [
-                                            Icon(Icons.school, color: Colors.blue),
+                                            Image.asset('assets/images/ic_qualification.PNG',
+                                              height: 16,
+                                              width: 16,
+                                              fit: BoxFit.fill,
+                                            ),
+                                           // Icon(Icons.school, color: Colors.blue),
                                             SizedBox(width: 8),
                                             Text('Qualification',
                                                 style: AppTextStyle
@@ -152,8 +158,12 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                               flex: 1,
                                               child: Row(
                                                 children: [
-                                                  Icon(Icons.business,
-                                                      color: Colors.blue),
+                                                  Image.asset('assets/images/ic_institutation.PNG',
+                                                    height: 16,
+                                                    width: 16,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                 // Icon(Icons.business, color: Colors.blue),
                                                   SizedBox(width: 8),
                                                   Text('Institution',
                                                       style: AppTextStyle
@@ -187,8 +197,12 @@ class _ProfilePageState extends State<ProfileEducationPage> {
                                               flex: 1,
                                               child: Row(
                                                 children: [
-                                                  Icon(Icons.business,
-                                                      color: Colors.blue),
+                                                 // Icon(Icons.business, color: Colors.blue),
+                                                  Image.asset('assets/images/ic_subject.PNG',
+                                                    height: 16,
+                                                    width: 16,
+                                                    fit: BoxFit.fill,
+                                                  ),
                                                   SizedBox(width: 8),
                                                   Text('Subject',
                                                       style: AppTextStyle

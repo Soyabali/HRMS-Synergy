@@ -19,38 +19,21 @@ import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 
-// class ReimbursementLog extends StatelessWidget {
-//
-//   const ReimbursementLog({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//         appBarTheme: const AppBarTheme(
-//           iconTheme: IconThemeData(
-//             color: Colors.white, // Change the color of the drawer icon here
-//           ),
-//         ),
-//       ),
-//       debugShowCheckedModeBanner: false,
-//       home: ReimbursementLogPage(),
-//     );
-//   }
-// }
-
 class ReimbursementLogPage extends StatefulWidget {
+  
   var projact;
   var sTranCode;
+  
    ReimbursementLogPage(this.projact, this.sTranCode, {super.key});
-
-  @override
+   
+   @override
   State<ReimbursementLogPage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<ReimbursementLogPage> {
 
   List<Map<String, dynamic>>? pendingScheduleLogList;
+  
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
@@ -62,6 +45,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
+  
   //List<Map<String, dynamic>>? reimbursementStatusLog;
 
   // Distic List
@@ -103,8 +87,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-
-  // datepicker
+  
   // InitState
   @override
   void initState() {
@@ -115,7 +98,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
     super.initState();
 
   }
-
+  
   @override
   void dispose() {
     // TODO: implement dispose
@@ -160,7 +143,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
             title: const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                'Reimbursement Log',
+                'Reimbursement Log ',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -226,23 +209,25 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     )),
                               ),
                               SizedBox(width: 10),
-                              Column(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 15),
-                                    child: Text(
-                                        '${widget.projact}', style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle,
-                                      maxLines: 1, // Allows up to 2 lines for the text
-                                      overflow: TextOverflow.ellipsis,
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.start,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 15),
+                                      child: Text(
+                                          '${widget.projact}', style: AppTextStyle
+                                          .font12OpenSansRegularBlackTextStyle,
+                                        maxLines: 2, // Allows up to 2 lines for the text
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
                                     ),
-                                  ),
-
-                                ],
+                                
+                                  ],
+                                ),
                               )
                             ],
                           ),
@@ -346,7 +331,16 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     .font12OpenSansRegularBlack45TextStyle
                             ),
                           ),
-                          SizedBox(height: 10),
+                         SizedBox(height: 10),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 2, right: 2),
+                            child: Container(
+                              height: 0.5,
+                             color: Colors.grey,
+                             // color: Color(0xff3f617d),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5),
                             child: Row(
@@ -361,10 +355,8 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     children: [
                                       Text(
                                         'Action At',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                          style: AppTextStyle
+                                              .font14OpenSansRegularBlack45TextStyle
                                       ),
                                       SizedBox(height: 4),
                                       // Add some spacing between texts
@@ -388,12 +380,10 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      const Text(
+                                       Text(
                                         'Action By',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                          style: AppTextStyle
+                                              .font14OpenSansRegularBlack45TextStyle
                                       ),
                                       SizedBox(height: 4),
                                       // Add some spacing between texts

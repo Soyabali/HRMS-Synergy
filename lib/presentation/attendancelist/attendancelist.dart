@@ -134,7 +134,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: 15),
+                SizedBox(height: 5),
                 SizedBox(
                   height: 35, // Set the height for the horizontal list
                   child: GestureDetector(
@@ -195,9 +195,10 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                     ),
                   ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 5),
+
                 Padding(
-                   padding: const EdgeInsets.only(left: 5,right: 5,bottom: 10,top: 10),
+                   padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5,top: 5),
                    child: Container(
                     height: MediaQuery.of(context).size.height-85,
                     color: Colors.white,
@@ -240,260 +241,274 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                       }
                                      return Padding(
                                        padding: const EdgeInsets.only(left: 5,right: 5,bottom: 20),
-                                       child: Card(
-                                         margin: EdgeInsets.zero,
-                                         elevation: 5.0,
-                                         color: Colors.white,
-                                         shape: RoundedRectangleBorder(
-                                           borderRadius: BorderRadius.circular(10.0), // Border radius of the card
-                                         ),
-                                         child: Column(
-                                         mainAxisAlignment: MainAxisAlignment.start,
-                                         children: [
-                                           SizedBox(height: 10),
-                                           Row(
-                                             mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
-                                             children: [
-                                               Padding(
-                                                 padding: const EdgeInsets.only(left: 10),
-                                                 child: Container(
-                                                   height: 40, // Height of the first container
-                                                   width: 40, // Width of the first container
-                                                   decoration: BoxDecoration(
-                                                     color: Color(0xFFD3D3D3), // Background color of the first container
-                                                     borderRadius: BorderRadius.circular(20), // Border radius
-                                                   ),
-                                                   alignment: Alignment.center, // Center the text within the container
-                                                   child: Text(
-                                                       '${index+1}', style: AppTextStyle.font14OpenSansRegularBlackTextStyle
+                                       child: Container(
+                                     decoration: BoxDecoration(
+                                     color: Colors.white, // Background color of the container
+                                     borderRadius: BorderRadius.circular(2), // Rounded corners
+                                     border: Border.all(
+                                     color: Colors.grey, // Gray color for the border
+                                     width: 0.5, // Border width
+                                     ),),
+
+                                         child: Card(
+                                           margin: EdgeInsets.zero,
+                                           elevation: 5.0,
+                                           color: Colors.white,
+                                           shape: RoundedRectangleBorder(
+                                             borderRadius: BorderRadius.circular(1.0), // Border radius of the card
+                                           ),
+                                           child: Column(
+                                           mainAxisAlignment: MainAxisAlignment.start,
+                                           children: [
+                                             SizedBox(height: 4),
+                                             Row(
+                                               mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
+                                               children: [
+                                                 Padding(
+                                                   padding: const EdgeInsets.only(left: 10,top: 5),
+                                                   child: Container(
+                                                     height: 30, // Height of the first container
+                                                     width: 30, // Width of the first container
+                                                     decoration: BoxDecoration(
+                                                       color: Color(0xFFD3D3D3), // Background color of the first container
+                                                       borderRadius: BorderRadius.circular(15), // Border radius
+                                                     ),
+                                                     alignment: Alignment.center, // Center the text within the container
+                                                     child: Text(
+                                                         '${index+1}', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                     ),
                                                    ),
                                                  ),
-                                               ),
-                                               SizedBox(width: 15), // Spacing between the two containers
-                                               Text(
-                                                   '${monthlyAttendance?[index]['dDate']}', // The text to display
-                                                   style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                               ),
-                                               Spacer(),
-                                               Padding(
-                                                 padding: const EdgeInsets.only(right: 10),
-                                                 child: Container(
-                                                   height: 25, // Height of the second container
-                                                   width: 90, // Width of the second container
-                                                   decoration: BoxDecoration(
-                                                     color: containerColor, // Background color of the second container
-                                                     borderRadius: BorderRadius.circular(20), // Border radius
+                                                 SizedBox(width: 15), // Spacing between the two containers
+                                                 Text(
+                                                     '${monthlyAttendance?[index]['dDate']}', // The text to display
+                                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                 ),
+                                                 Spacer(),
+                                                 Padding(
+                                                   padding: const EdgeInsets.only(right: 10),
+                                                   child: Container(
+                                                     height: 25, // Height of the second container
+                                                     //width: 90, // Width of the second container
+                                                     decoration: BoxDecoration(
+                                                       color: containerColor, // Background color of the second container
+                                                       borderRadius: BorderRadius.circular(20), // Border radius
+                                                     ),
+                                                     alignment: Alignment.center, // Center the text within the container
+                                                     child: Padding(
+                                                       padding: const EdgeInsets.only(left: 10,right: 10),
+                                                       child: Center(
+                                                         child: Text(
+                                                             '${monthlyAttendance?[index]['sStatus']}', // The text to display
+                                                             style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
+                                                           softWrap: true,
+                                                           maxLines: 2,  // Allow the text to wrap to a second line
+                                                           textAlign: TextAlign.center,
+                                                         ),
+                                                       ),
+                                                     ),
                                                    ),
-                                                   alignment: Alignment.center, // Center the text within the container
-                                                   child: Center(
-                                                     child: Text(
-                                                         '${monthlyAttendance?[index]['sStatus']}', // The text to display
-                                                         style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
-                                                       softWrap: true,
-                                                       maxLines: 2,  // Allow the text to wrap to a second line
-                                                       textAlign: TextAlign.center,
+                                                 ),
+                                               ],
+                                             ),
+
+                                             SizedBox(height: 10),
+                                             Center(
+                                               child: Container(
+                                                 height: 25,
+                                                 child: DottedBorder(
+                                                   color: Colors.grey, // Color of the dotted line
+                                                   strokeWidth: 1.0, // Width of the dotted line
+                                                   dashPattern: [4, 2], // Dash pattern for the dotted line
+                                                   borderType: BorderType.RRect,
+                                                   radius: Radius.circular(5.0), // Optional: rounded corners
+                                                   child: Padding(
+                                                     padding: EdgeInsets.all(2.0), // Equal padding on all sides
+                                                     child: Row(
+                                                       mainAxisSize: MainAxisSize.min, // Center the row contents
+                                                       children: [
+                                                         Text(
+                                                             'Day',
+                                                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                         ),
+                                                         SizedBox(width: 5.0), // Space between 'Day' and ':'
+                                                         Text(
+                                                             ':',
+                                                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                         ),
+                                                         SizedBox(width: 5.0), // Space between ':' and 'Monday'
+                                                         Text(
+                                                             '${monthlyAttendance?[index]['sDay']}',
+                                                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                         ),
+                                                       ],
                                                      ),
                                                    ),
                                                  ),
                                                ),
-                                             ],
-                                           ),
-                                           SizedBox(height: 10),
-                                           Center(
-                                             child: Container(
-                                               height: 25,
-                                               child: DottedBorder(
-                                                 color: Colors.grey, // Color of the dotted line
-                                                 strokeWidth: 1.0, // Width of the dotted line
-                                                 dashPattern: [4, 2], // Dash pattern for the dotted line
-                                                 borderType: BorderType.RRect,
-                                                 radius: Radius.circular(5.0), // Optional: rounded corners
-                                                 child: Padding(
-                                                   padding: EdgeInsets.all(2.0), // Equal padding on all sides
-                                                   child: Row(
-                                                     mainAxisSize: MainAxisSize.min, // Center the row contents
-                                                     children: [
-                                                       Text(
-                                                           'Day',
-                                                           style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                                       ),
-                                                       SizedBox(width: 5.0), // Space between 'Day' and ':'
-                                                       Text(
-                                                           ':',
-                                                           style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                                       ),
-                                                       SizedBox(width: 5.0), // Space between ':' and 'Monday'
-                                                       Text(
-                                                           '${monthlyAttendance?[index]['sDay']}',
-                                                           style: AppTextStyle.font12OpenSansRegularBlackTextStyle
-                                                       ),
-                                                     ],
-                                                   ),
-                                                 ),
-                                               ),
                                              ),
-                                           ),
-                                           SizedBox(height: 10),
+                                             SizedBox(height: 10),
 
-                                           Visibility(
-                                             visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off'
-                                                 && '${monthlyAttendance?[index]['sStatus']}' != 'On Leave'  && '${monthlyAttendance?[index]['sStatus']}' != 'Work From Home',
+                                             Visibility(
+                                               visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off'
+                                                   && '${monthlyAttendance?[index]['sStatus']}' != 'On Leave'  && '${monthlyAttendance?[index]['sStatus']}' != 'Work From Home',
 
-                                             child: Column(
-                                               mainAxisAlignment: MainAxisAlignment.start,
-                                               children: [
-                                                 Column(
-                                                   children: [
-                                                     Container(
-                                                       child:
-                                                       Column(
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(left: 10),
-                                                                child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                                  children: [
-                                                                    // Icon(Icons.refresh,size: 20,color: Colors.black),
-                                                                    Image.asset('assets/images/attendancelisticon_2.jpeg',height: 16,width: 16,
-                                                                      fit: BoxFit.cover,),
-                                                                    SizedBox(width: 10),
-                                                                    Text('In / Out Attendance Time Details',style: AppTextStyle.font12OpenSansRegularBlackTextStyle)
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              SizedBox(height: 10),
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(left: 10,right: 10),
-                                                                    child: Container(
-                                                                      height: 0.5,
-                                                                      color: Colors.grey,
-                                                                    ),
+                                               child: Column(
+                                                 mainAxisAlignment: MainAxisAlignment.start,
+                                                 children: [
+                                                   Column(
+                                                     children: [
+                                                       Container(
+                                                         child:
+                                                         Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: const EdgeInsets.only(left: 10),
+                                                                  child: Row(
+                                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                                    children: [
+                                                                      // Icon(Icons.refresh,size: 20,color: Colors.black),
+                                                                      Image.asset('assets/images/attendancelisticon_2.jpeg',height: 16,width: 16,
+                                                                        fit: BoxFit.cover,),
+                                                                      SizedBox(width: 10),
+                                                                      Text('In / Out Attendance Time Details',style: AppTextStyle.font12OpenSansRegularBlackTextStyle)
+                                                                    ],
                                                                   ),
-                                                                  SizedBox(height: 10),
-                                                                  Padding(
-                                                                    padding: const EdgeInsets.only(bottom: 15),
-                                                                    child: monthlyAttendance?[index]['sInTime'] == null || monthlyAttendance?[index]['sInTime'].isEmpty
-                                                                        ? SizedBox.shrink()
-                                                                        :
-                                                                    Row(
-                                                                      mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
-                                                                      children: [
-                                                                        Container(
-                                                                          height: 20, // Height of the first container
-                                                                          width: 35, // Width of the first container
-                                                                          decoration: BoxDecoration(
-                                                                            color: Colors.white, // Background color of the first container
-                                                                            borderRadius: BorderRadius.circular(20), // Border radius
+                                                                ),
+                                                                SizedBox(height: 10),
+                                                                Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(left: 10,right: 10),
+                                                                      child: Container(
+                                                                        height: 0.5,
+                                                                        color: Colors.grey,
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(height: 10),
+                                                                    Padding(
+                                                                      padding: const EdgeInsets.only(bottom: 15),
+                                                                      child: monthlyAttendance?[index]['sInTime'] == null || monthlyAttendance?[index]['sInTime'].isEmpty
+                                                                          ? SizedBox.shrink()
+                                                                          :
+                                                                      Row(
+                                                                        mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
+                                                                        children: [
+                                                                          Container(
+                                                                            height: 20, // Height of the first container
+                                                                            width: 35, // Width of the first container
+                                                                            decoration: BoxDecoration(
+                                                                              color: Colors.white, // Background color of the first container
+                                                                              borderRadius: BorderRadius.circular(20), // Border radius
+                                                                            ),
+                                                                            alignment: Alignment.center, // Center the text within the container
+                                                                            child: Icon(
+                                                                              Icons.watch_later_rounded,
+                                                                              size: 25,
+                                                                              color: Color(0xFFD3D3D3),
+                                                                            ),
                                                                           ),
-                                                                          alignment: Alignment.center, // Center the text within the container
-                                                                          child: Icon(
-                                                                            Icons.watch_later_rounded,
-                                                                            size: 25,
-                                                                            color: Color(0xFFD3D3D3),
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(width: 5), // Spacing between the two containers
-                                                                        Text(
-                                                                          'In Time', // The text to display
-                                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                                        ),
-                                                                        Spacer(),
-                                                                        Container(
-                                                                          height: 20, // Height of the container
-                                                                          width: 150, // Width of the container
-                                                                          decoration: BoxDecoration(
-                                                                            borderRadius: BorderRadius.circular(20), // Border radius
-                                                                          ),
-                                                                          alignment: Alignment.centerRight, // Align the text to the right within the container
-                                                                          padding: EdgeInsets.only(right: 10.0), // Optional: Add some padding to the right
-                                                                          child: Text(
-                                                                            '${monthlyAttendance?[index]['sInTime']}', // The text to display
+                                                                          SizedBox(width: 5), // Spacing between the two containers
+                                                                          Text(
+                                                                            'In Time', // The text to display
                                                                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                                           ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                children: [
-                                                                  Container(
-                                                                    child:
-                                                                    monthlyAttendance?[index]['sOutTime'] == null || monthlyAttendance?[index]['sOutTime'].isEmpty
-                                                                        ? SizedBox.shrink()
-                                                                        :
-                                                                    Column(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding: const EdgeInsets.only(left: 10,right: 10),
-                                                                          child: Container(
-                                                                            height: 0.5,
-                                                                            color: Colors.grey,
+                                                                          Spacer(),
+                                                                          Container(
+                                                                            height: 20, // Height of the container
+                                                                            width: 150, // Width of the container
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(20), // Border radius
+                                                                            ),
+                                                                            alignment: Alignment.centerRight, // Align the text to the right within the container
+                                                                            padding: EdgeInsets.only(right: 10.0), // Optional: Add some padding to the right
+                                                                            child: Text(
+                                                                              '${monthlyAttendance?[index]['sInTime']}', // The text to display
+                                                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                        SizedBox(height: 10),
-                                                                        Padding(
-                                                                          padding: const EdgeInsets.only(bottom: 15),
-                                                                          child: Row(
-                                                                            mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
-                                                                            children: [
-                                                                              Container(
-                                                                                height: 20, // Height of the first container
-                                                                                width: 35, // Width of the first container
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.white, // Background color of the first container
-                                                                                  borderRadius: BorderRadius.circular(20), // Border radius
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                                  children: [
+                                                                    Container(
+                                                                      child:
+                                                                      monthlyAttendance?[index]['sOutTime'] == null || monthlyAttendance?[index]['sOutTime'].isEmpty
+                                                                          ? SizedBox.shrink()
+                                                                          :
+                                                                      Column(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.only(left: 10,right: 10),
+                                                                            child: Container(
+                                                                              height: 0.5,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(height: 10),
+                                                                          Padding(
+                                                                            padding: const EdgeInsets.only(bottom: 15),
+                                                                            child: Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.start, // Align items to the start of the row
+                                                                              children: [
+                                                                                Container(
+                                                                                  height: 20, // Height of the first container
+                                                                                  width: 35, // Width of the first container
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: Colors.white, // Background color of the first container
+                                                                                    borderRadius: BorderRadius.circular(20), // Border radius
+                                                                                  ),
+                                                                                  alignment: Alignment.center, // Center the text within the container
+                                                                                  child: Icon(
+                                                                                    Icons.watch_later_rounded,
+                                                                                    size: 25,
+                                                                                    color: Color(0xFFD3D3D3),
+                                                                                  ),
                                                                                 ),
-                                                                                alignment: Alignment.center, // Center the text within the container
-                                                                                child: Icon(
-                                                                                  Icons.watch_later_rounded,
-                                                                                  size: 25,
-                                                                                  color: Color(0xFFD3D3D3),
-                                                                                ),
-                                                                              ),
-                                                                              SizedBox(width: 5), // Spacing between the two containers
-                                                                              Text(
-                                                                                'Out Time', // The text to display
-                                                                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                                              ),
-                                                                              Spacer(),
-                                                                              Container(
-                                                                                height: 20, // Height of the container
-                                                                                width: 150, // Width of the container
-                                                                                decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(20), // Border radius
-                                                                                ),
-                                                                                alignment: Alignment.centerRight, // Align the text to the right within the container
-                                                                                padding: EdgeInsets.only(right: 10.0), // Optional: Add some padding to the right
-                                                                                child: Text(
-                                                                                  '${monthlyAttendance?[index]['sOutTime']}', // The text to display
+                                                                                SizedBox(width: 5), // Spacing between the two containers
+                                                                                Text(
+                                                                                  'Out Time', // The text to display
                                                                                   style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                                                 ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  )
+                                                                                Spacer(),
+                                                                                Container(
+                                                                                  height: 20, // Height of the container
+                                                                                  width: 150, // Width of the container
+                                                                                  decoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(20), // Border radius
+                                                                                  ),
+                                                                                  alignment: Alignment.centerRight, // Align the text to the right within the container
+                                                                                  padding: EdgeInsets.only(right: 10.0), // Optional: Add some padding to the right
+                                                                                  child: Text(
+                                                                                    '${monthlyAttendance?[index]['sOutTime']}', // The text to display
+                                                                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    )
 
-                                                                ],
-                                                              ),
-                                                            ],
-                                                       ),
-                                                     )
-                                                   ],
-                                                 ),
-                                               ],
-                                             ),
-                                           )
-                                         ],
-                                                                        ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                         ),
+                                                       )
+                                                     ],
+                                                   ),
+                                                 ],
+                                               ),
+                                             )
+                                           ],
+                                                                          ),
+                                         ),
                                        ),
 
                                      );

@@ -259,7 +259,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           child: Card(
                             shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.circular(15.0), // Rounded corners
+                                  BorderRadius.circular(5.0), // Rounded corners
                             ),
                             elevation: 5, // Shadow under the card
                             color: Colors.white,

@@ -115,7 +115,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
-
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -185,8 +184,8 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                 ),
               ),
               Column(
-                mainAxisSize:
-                    MainAxisSize.min, // Wrap content inside the container
+                mainAxisAlignment: MainAxisAlignment.start,
+                //mainAxisSize: MainAxisSize.min, // Wrap content inside the container
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
@@ -204,8 +203,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                               width: 10,
                               decoration: BoxDecoration(
                                 color: Color(0xFF0098a6), // Black color
-                                borderRadius: BorderRadius.circular(
-                                    5), // Border radius of 5
+                                borderRadius: BorderRadius.circular(5), // Border radius of 5
                               ),
                             ),
                             Padding(
@@ -215,8 +213,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                 width: 2,
                                 decoration: BoxDecoration(
                                   color: Colors.grey, // Black color
-                                  borderRadius: BorderRadius.circular(
-                                      0), // Border radius of 5
+                                  borderRadius: BorderRadius.circular(0), // Border radius of 5
                                 ),
                               ),
                             ),
@@ -277,6 +274,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                       ],
                     ),
                   ),
+
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -285,6 +283,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                       borderRadius: BorderRadius.circular(15),
                       child: Container(
                         height: 130,
+                        width: MediaQuery.of(context).size.width-30,
                         color: Colors.white,
                         child: Padding(
                             padding: const EdgeInsets.only(
@@ -346,7 +345,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                     SizedBox(width: 5),
                                     Text('Government Identity Detail',
                                         style: AppTextStyle
-                                            .font14OpenSansRegularBlack45TextStyle),
+                                            .font12OpenSansRegularBlack45TextStyle),
                                   ],
                                 ),
                                 SizedBox(height: 10),
@@ -366,35 +365,28 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                      8), // Space between icon and text
-                                              Text(
-                                                'Aadhar No.',
-                                                style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
+                                              Icon(Icons.card_giftcard, size: 16),
+                                              SizedBox(width: 8), // Space between icon and text
+                                              Text('Aadhar No.',
+                                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
                                               ),
                                             ],
                                           ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
+                                          SizedBox(height: 4), // Space between Row and Text
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(right: 12),
+                                                const EdgeInsets.only(right: 20),
                                             child: Text(
                                               '$sAdharCardNo',
                                               style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
+                                                  .font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                        width: 16), // Space between two columns
+                                    SizedBox(width: 16), // Space between two columns
                                     // Second Column
                                     Expanded(
                                       flex: 1,
@@ -406,15 +398,12 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
+                                              Icon(Icons.card_giftcard, size: 16),
+                                              SizedBox(width: 8), // Space between icon and text
                                               Text(
                                                 'Pan No.',
                                                 style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
+                                                    .font12OpenSansRegularBlack45TextStyle,
                                               ),
                                             ],
                                           ),
@@ -423,11 +412,11 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(right: 28),
+                                            const EdgeInsets.only(right: 45),
                                             child: Text(
                                               '$sPanNo',
                                               style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
+                                                  .font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
                                         ],
@@ -446,35 +435,34 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                     Expanded(
                                       flex: 1,
                                       child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
+
                                           // Row with Icon and Text
                                           Row(
                                             mainAxisAlignment:
                                             MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
-                                              SizedBox(
-                                                  width:
-                                                  8), // Space between icon and text
+                                              Icon(Icons.card_giftcard, size: 16),
+                                              SizedBox(width: 8), // Space between icon and text
                                               Text(
                                                 'Passport No.',
                                                 style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
+                                                    .font12OpenSansRegularBlack45TextStyle,
                                               ),
                                             ],
                                           ),
-                                          SizedBox(
-                                              height: 4), // Space between Row and Text
+                                          SizedBox(height: 4), // Space between Row and Text
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(right: 22),
+                                            const EdgeInsets.only(left: 22),
                                             child: Text(
                                               '$sPassportNo',
                                               style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
+                                                  .font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
                                         ],
@@ -486,6 +474,8 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                     Expanded(
                                       flex: 1,
                                       child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           // Row with Icon and Text
                                           Row(
@@ -501,7 +491,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                               Text(
                                                 'Voter Id No.',
                                                 style: AppTextStyle
-                                                    .font14OpenSansRegularBlack45TextStyle,
+                                                    .font12OpenSansRegularBlack45TextStyle,
                                               ),
                                             ],
                                           ),
@@ -510,11 +500,12 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(right: 28),
+                                            const EdgeInsets.only(left: 25),
                                             child: Text(
-                                              '$sVoterId',
+                                              '8787',
+                                              //'$sVoterId',
                                               style: AppTextStyle
-                                                  .font14OpenSansRegularBlackTextStyle,
+                                                  .font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
                                         ],
