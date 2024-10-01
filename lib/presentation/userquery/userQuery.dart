@@ -42,7 +42,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
     // TODO: implement initState
     super.initState();
     queryResponsemodel = QueryResponseRepo().quryList(context);
-    print('----37----$queryResponsemodel');
+    print('----45----$queryResponsemodel');
   }
 
   @override

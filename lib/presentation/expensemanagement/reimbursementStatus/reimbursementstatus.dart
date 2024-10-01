@@ -574,7 +574,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 final leaveData = _filteredData[index];
                                // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
                             return Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10,top: 10),
+                              padding: const EdgeInsets.only(left: 10, right: 10,top: 15),
                               child: Card(
                                 elevation: 1,
                                 color: Colors.white,
@@ -893,7 +893,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                         child: Row(
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
-                                                            Text('Take Action',style: AppTextStyle
+                                                            Text('Delete',style: AppTextStyle
                                                                 .font14OpenSansRegularWhiteTextStyle),
                                                             Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
                                                           ],
@@ -908,40 +908,51 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                 child: Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Container(
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Color(0xFF0098a6),
-                                                        // Change this to your preferred color
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: GestureDetector(
-                                                        onTap: () {
+                                                    GestureDetector(
 
-                                                         // var projact =  item['sProjectName'] ??'';
-                                                           var projact =  leaveData.sProjectName;
-                                                         // var sTranCode =   item['sTranCode'] ?? '';
-                                                           var sTranCode =   leaveData.sTranCode;
-                                                          print('--project---$projact');
-                                                          print('--sTranCode---$sTranCode');
+                                                      onTap :(){
+
+                                                        var projact =  leaveData.sProjectName;
+                                                        // var sTranCode =   item['sTranCode'] ?? '';
+                                                        var sTranCode =   leaveData.sTranCode;
+                                                        print('--project---$projact');
+                                                        print('--sTranCode---$sTranCode');
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
+                                                        );
+                                              },
+                                                      child: Container(
+                                                        height: 40,
+                                                        decoration: BoxDecoration(
+                                                          color: Color(0xFF0098a6),
+                                                          // Change this to your preferred color
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+
+                                                           // var projact =  item['sProjectName'] ??'';
 
 
-                                                          // Navigator.push(
-                                                          //   context,
-                                                          //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
-                                                          // );
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
-                                                          );
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                                            SizedBox(width: 10),
-                                                            Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
-                                                          ],
+
+                                                            // Navigator.push(
+                                                            //   context,
+                                                            //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
+                                                            // );
+                                                            // Navigator.push(
+                                                            //   context,
+                                                            //   MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
+                                                            // );
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                              SizedBox(width: 10),
+                                                              Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
