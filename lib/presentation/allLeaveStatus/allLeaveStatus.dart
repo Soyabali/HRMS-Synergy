@@ -13,16 +13,12 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
-import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementlog.dart';
 import '../../../app/generalFunction.dart';
-import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../data/reimbursementStatusTakeAction.dart';
-import '../../../domain/hrmsreimbursementstatusV3Model.dart';
 import '../../data/allLeaveStatusRepo.dart';
 import '../../domain/allLeaveStatusModel.dart';
-import '../expensemanagement/expense_management.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
@@ -253,18 +249,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     print('---155----$responseData');
   }
 
-  // getCurrentdate() async {
-  //   DateTime now = DateTime.now();
-  //   DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-  //   formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
-  //   print('----258---$formDate');
-  //   // last day of the current month
-  //   DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
-  //   DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
-  //   toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
-  //   print('----263---$toDate');
-  //   setState(() {});
-  // }
+
 
   // leave type
   final List<Color> colorList = [
@@ -444,9 +429,11 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
+
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+
                 Container(
                   height: 45,
                   color: Color(0xFF2a697b),

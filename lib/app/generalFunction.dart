@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
 import '../presentation/login/loginScreen.dart';
+import '../presentation/myLeaveStatus/myLeaveStatus.dart';
 import '../presentation/resources/app_text_style.dart';
 import '../presentation/resources/assets_manager.dart';
 import '../presentation/resources/values_manager.dart';
@@ -78,7 +79,7 @@ class GeneralFunction {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.black45,
         textColor: Colors.white,
         fontSize: 16.0);
   }
@@ -685,7 +686,14 @@ class GeneralFunction {
                     );
                   },
                     child: drawerItem('assets/images/tripdetails.jpeg', "All Leave Status")),
-                drawerItem('assets/images/triplistfirst.jpeg', "My Leave Status"),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Myleavestatus()),
+                    );
+                  },
+                    child: drawerItem('assets/images/triplistfirst.jpeg', "My Leave Status")),
                 // InkWell(
                 //     onTap: (){
                 //       print('---Logout---');
