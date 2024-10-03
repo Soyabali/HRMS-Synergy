@@ -5,10 +5,13 @@ import 'package:untitled/presentation/myLeaveStatus/pending.dart';
 import 'package:untitled/presentation/myLeaveStatus/rejected.dart';
 import 'package:untitled/presentation/myLeaveStatus/sanctioned.dart';
 import '../../app/generalFunction.dart';
+import '../../data/hrmsLeaveStatusRepo.dart';
+import '../../domain/leaveStatusModel.dart';
 import '../dashboard/dashboard.dart';
 import 'all.dart';
 
 class Myleavestatus extends StatelessWidget {
+
   const Myleavestatus({super.key});
 
   @override
@@ -29,11 +32,16 @@ class MyLeaveStatusPage extends StatefulWidget {
 
 class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
     with SingleTickerProviderStateMixin {
+  //
+  late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
+  String status = 'P';
+
   GeneralFunction generalFunction = new GeneralFunction();
   TabController? tabController;
   String? tempDate;
   String? formDate;
   String? toDate;
+
   getACurrentDate() {
     // DateTime now = DateTime.now();
     DateTime now = DateTime.now();
@@ -52,7 +60,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       //toDate = DateFormat('dd/MMM/yyyy').format(now2);
     });
   }
-
   // to Date SelectedLogic
   void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
@@ -65,6 +72,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       });
       generalFunction.displayToast("To Date can not be less than From Date");
     }
+   // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
   }
 
   void fromDateSelectLogic() {
@@ -76,6 +84,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       setState(() {
         formDate = tempDate;
       });
+     // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
       // calculateTotalDays();
       generalFunction.displayToast("From date can not be greater than To Date");
     }
@@ -85,11 +94,42 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
   void initState() {
     // TODO: implement initState
     getACurrentDate();
+
     tabController = TabController(vsync: this, length: 4);
-    // tabController.addListener(() {
-    //   setState(() {});
-    // });
+   // hrmsLeaveStatus = HrmsPolicyDocRepo().policyDocList(context);
+    tabController!.addListener(() {
+      if (!tabController!.indexIsChanging) {
+        setState(() {
+          // Update status based on the selected tab
+          switch (tabController!.index) {
+            case 0:
+              status = 'P';
+              PendingPage(formDate:formDate,toDate:toDate);
+              // Pending
+              print("----P-----");
+              break;
+            case 1:
+              status = 'S'; // Sanctioned
+             // print("----S-----");
+              SanctionedPage(formDate:formDate,toDate:toDate);
+              break;
+            case 2:
+              status = 'R'; // Rejected
+              print("----R-----");
+          RejectedPage(formDate:formDate,toDate:toDate);
+              break;
+            case 3:
+              status = 'A'; // All
+              print("----A-----");
+              AllPage(formDate:formDate,toDate:toDate);
+              break;
+          }
+        });
+      }
+
     super.initState();
+  }
+  );
   }
 
   @override
@@ -197,11 +237,11 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                           DateFormat('dd/MMM/yyyy')
                                               .format(pickedDate);
                                       setState(() {
-                                        tempDate =
-                                            formDate; // Save the current formDate before updating
+                                        tempDate = formDate; // Save the current formDate before updating
                                         formDate = formattedDate;
                                         // calculateTotalDays();
                                       });
+                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       fromDateSelectLogic();
                                     }
                                   },
@@ -218,7 +258,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                     child: Center(
                                       child: Text(
                                         '$formDate',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors
                                               .grey, // Change this to your preferred text color
                                           fontSize:
@@ -240,7 +280,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                 ),
                                 //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                                 SizedBox(width: 8),
-                                Icon(Icons.calendar_month,
+                                const Icon(Icons.calendar_month,
                                     size: 16, color: Colors.white),
                                 SizedBox(width: 5),
                                 const Text(
@@ -269,12 +309,14 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                         toDate = formattedDate;
                                         // calculateTotalDays();
                                       });
+                                      //
+                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       toDateSelectLogic();
                                     }
                                   },
                                   child: Container(
                                     height: 35,
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal:
                                             14.0), // Optional: Adjust padding for horizontal space
                                     decoration: BoxDecoration(
@@ -285,7 +327,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                     child: Center(
                                       child: Text(
                                         '$toDate',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors
                                               .grey, // Change this to your preferred text color
                                           fontSize:
@@ -357,10 +399,10 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                 child: TabBarView(
                                   controller: tabController,
                                   children: <Widget>[
-                                    Pending(),
-                                    Sanctioned(),
-                                    Rejected(),
-                                    All()
+                                    PendingPage(formDate:formDate,toDate:toDate),
+                                    SanctionedPage(formDate:formDate,toDate:toDate),
+                                    RejectedPage(formDate:formDate,toDate:toDate),
+                                    AllPage(formDate:formDate,toDate:toDate)
                                   ],
                                 ),
                               ),

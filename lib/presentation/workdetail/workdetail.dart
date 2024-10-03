@@ -157,7 +157,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
         Expanded(
           child: ListView.builder(
               // itemCount: _items.length,
-              itemCount: 2,
+              itemCount: 4,
               itemBuilder: (context, index) {
                 return Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
