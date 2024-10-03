@@ -31,6 +31,7 @@ class MyLeaveStatusPage extends StatefulWidget {
 }
 
 class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
+
     with SingleTickerProviderStateMixin {
   //
   late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
@@ -96,40 +97,33 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
     getACurrentDate();
 
     tabController = TabController(vsync: this, length: 4);
-   // hrmsLeaveStatus = HrmsPolicyDocRepo().policyDocList(context);
-    tabController!.addListener(() {
-      if (!tabController!.indexIsChanging) {
-        setState(() {
-          // Update status based on the selected tab
-          switch (tabController!.index) {
-            case 0:
-              status = 'P';
+    tabController?.addListener(() {
+      if (tabController!.indexIsChanging) {
+        print('Tab ${tabController!.index + 1} is open');
+        switch(tabController!.index){
+          case 0:
+            setState(() {
               PendingPage(formDate:formDate,toDate:toDate);
-              // Pending
-              print("----P-----");
-              break;
-            case 1:
-              status = 'S'; // Sanctioned
-             // print("----S-----");
+            });
+            break;
+          case 1:
+            setState(() {
               SanctionedPage(formDate:formDate,toDate:toDate);
-              break;
-            case 2:
-              status = 'R'; // Rejected
-              print("----R-----");
-          RejectedPage(formDate:formDate,toDate:toDate);
-              break;
-            case 3:
-              status = 'A'; // All
-              print("----A-----");
+            });
+            break;
+          case 2:
+            setState(() {
+              RejectedPage(formDate:formDate,toDate:toDate);
+            });
+            break;
+          case 3:
+            setState(() {
               AllPage(formDate:formDate,toDate:toDate);
-              break;
-          }
-        });
+            });
+            break;
+        }
       }
-
-    super.initState();
-  }
-  );
+    });
   }
 
   @override
@@ -191,9 +185,9 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
             body: Column(children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                  padding: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
                   child: Container(
-                      height: MediaQuery.of(context).size.height - 110,
+                      height: MediaQuery.of(context).size.height - 115,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
                           color: Color(0xFF0098a6)),
@@ -212,7 +206,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                               children: [
                                 const SizedBox(width: 4),
                                 Icon(Icons.calendar_month,
-                                    size: 15, color: Colors.white),
+                                    size: 15,
+                                    color: Colors.white),
                                 const SizedBox(width: 4),
                                 const Text(
                                   'From',
@@ -300,9 +295,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                       lastDate: DateTime(2100),
                                     );
                                     if (pickedDate != null) {
-                                      String formattedDate =
-                                          DateFormat('dd/MMM/yyyy')
-                                              .format(pickedDate);
+                                      String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                                       setState(() {
                                         tempDate =
                                             toDate; // Save the current toDate before updating
@@ -360,7 +353,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                   top: 2, bottom: 2, left: 2, right: 2),
                               child: TabBar(
                                 controller: tabController,
-                                // indicatorColor: Colors.white,
                                 indicatorColor: Color(0xFF0098a6),
                                 indicatorSize: TabBarIndicatorSize.label,
                                 indicatorWeight: 0.9,
@@ -391,7 +383,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                           Expanded(
                             child: Padding(
                               padding:
-                                  const EdgeInsets.only(bottom: 5, top: 8),
+                                  const EdgeInsets.only(bottom: 0, top: 8),
                               child: Container(
                                 height:
                                     MediaQuery.of(context).size.height - 300.0,
