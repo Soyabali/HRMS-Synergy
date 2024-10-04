@@ -1249,7 +1249,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           onTap: (){
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const WorkDetail()),
+                              MaterialPageRoute(builder: (context) => WorkDetail()),
                             );
                           },
                           child: Container(

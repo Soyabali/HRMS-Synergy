@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../data/baseProjectRepo.dart';
+import '../../data/hrmsTimeScheduleRepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
+
 
 class WorkDetail extends StatelessWidget {
 
@@ -28,6 +30,7 @@ class WorkDetail extends StatelessWidget {
 }
 
 class WorkDetailPage extends StatefulWidget {
+
   const WorkDetailPage({super.key});
 
   @override
@@ -35,12 +38,20 @@ class WorkDetailPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<WorkDetailPage> {
+
+  // ----
+
+  final List<TextEditingController> _controllers = [];
+  List<String> projectNames = [];
+  List<String> workDetails = [];
   final _formKey = GlobalKey<FormState>();
-  // Create a list of controllers for each TextFormField in the ListView
-  List<TextEditingController> _controllers = [];
+
+
+
   final TextEditingController _controller = TextEditingController();
 
   List<dynamic>?  baseProjectList;
+  List<dynamic>?  hrmsTimeScheduleList;
 
   // toast
   void displayToast(String msg) {
@@ -59,32 +70,95 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print(" -----57---  baseProjectList--59---> $baseProjectList");
     setState(() {});
   }
+  // timeSchedule Response
+  hrmsTimeSchedule() async {
+    hrmsTimeScheduleList = await HrmsTimeScheduleRepo().timeScheduleList(context);
+    print(" -----67---  hrmsTimeScheduleList--67---> $hrmsTimeScheduleList");
+    setState(() {});
+  }
 
   @override
   void initState() {
     baseProject();
+    hrmsTimeSchedule();
     super.initState();
-    // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
-    int itemCount = 5;
-    _controllers = List.generate(itemCount, (index) => TextEditingController());
+
+    if (baseProjectList != null) {
+      for (int i = 0; i < baseProjectList!.length; i++) {
+        _controllers.add(TextEditingController());
+      }
+
+
+      // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
+
+    }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    _controllers.forEach((controller) => controller.dispose());
+    // dispose all Controller
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
+  // submit Form
 
   void _submitForm() {
-    if (_formKey.currentState!.validate()) {
-      // Loop through the controllers and gather values
-      for (int i = 0; i < _controllers.length; i++) {
-        print('Text from TextFormField $i: ${_controllers[i].text}');
+    workDetails.clear();
+    projectNames.clear();
+    bool isAtLeastOneFieldFilled = false; // Track if at least one field is filled
+
+    // Check if baseProjectList exists and has elements
+    if (baseProjectList != null && baseProjectList!.isNotEmpty) {
+      // Ensure that _controllers has the same length as baseProjectList
+      if (_controllers.length != baseProjectList!.length) {
+        // Initialize controllers if they haven't been set up yet
+        _controllers.clear();
+        for (int i = 0; i < baseProjectList!.length; i++) {
+          _controllers.add(TextEditingController());
+        }
       }
-      // You can now process these values (e.g., send to API)
+
+      // Iterate over the baseProjectList and corresponding controllers
+      for (int i = 0; i < baseProjectList!.length; i++) {
+        projectNames.add(baseProjectList![i]['sProjectName'] ?? ''); // Collect project names
+        String workDetail = _controllers[i].text.trim();
+
+        // Check if the field is not empty
+        if (workDetail.isNotEmpty) {
+          isAtLeastOneFieldFilled = true; // At least one field is filled
+          workDetails.add(workDetail); // Collect TextFormField values
+        }
+      }
+      // If at least one field is filled, proceed with the submission
+      if (isAtLeastOneFieldFilled) {
+        // Proceed with the form submission logic
+        print('Project Names: $projectNames');
+        print('Work Details: $workDetails');
+        // You can now pass these lists to your API
+        /// todo Api send thes above list.
+
+      } else {
+        // Show a notification if all fields are empty
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please fill in at least one field'),
+            backgroundColor: Colors.black45,
+          ),
+        );
+      }
+    } else {
+      // Show a notification if there are no projects to fill
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No projects to fill in'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
+
 
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
@@ -135,7 +209,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
           ),
         ), // Removes shadow under the AppBar
       ),
-
+     //
       body: Column(
        mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -153,19 +227,23 @@ class _MyHomePageState extends State<WorkDetailPage> {
             ),
           ),
         ),
+
         Expanded(
           child: ListView.builder(
               itemCount: baseProjectList?.length ?? 0,
               itemBuilder: (context,index){
-               // status = '${monthlyAttendance?[index]['sStatus']}';
-                // Determine the color based on the country
+                // Make sure the _controllers list is initialized properly
+                if (_controllers.length < baseProjectList!.length)
+                {
+                  _controllers.add(TextEditingController());
+                }
+
                 return Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
                     child: Container(
                         width: MediaQuery.of(context).size.width - 10,
                         decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Background color of the container
+                            color: Colors.white, // Background color of the container
                             borderRadius: BorderRadius.circular(5),
                             boxShadow: [
                               BoxShadow(
@@ -231,7 +309,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                     padding: const EdgeInsets.only(left: 0),
                                                     child: TextFormField(
                                                       focusNode: FocusNode(),
-                                                      controller: _controller,
+                                                      controller: _controllers[index],
                                                       textInputAction: TextInputAction.next,
                                                       onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                                       maxLines:
@@ -244,13 +322,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                             "Enter work detail",
                                                         labelStyle: AppTextStyle
                                                             .font14OpenSansRegularBlack45TextStyle,
-                                                        border:
-                                                            const OutlineInputBorder(),
-                                                        contentPadding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                          vertical:
-                                                              10, // Adjust vertical padding as needed
+                                                        border: const OutlineInputBorder(),
+                                                        contentPadding: const EdgeInsets.symmetric(
+                                                          vertical: 10, // Adjust vertical padding as needed
                                                           horizontal: 10,
                                                         ),
                                                       ),
@@ -272,15 +346,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
               }),
         ),
         SizedBox(height: 10),
-
         Padding(
                   padding: const EdgeInsets.only(top: 10,bottom: 10), // Adjust padding as necessary
                   child: ElevatedButton(
-                    onPressed: () async {
-                      // open dialogBox
-                      print('---310---');
-
-                      },
+                    onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF0098a6), // Green color
                       padding: const EdgeInsets.symmetric(
