@@ -235,9 +235,8 @@ class _AllPageState extends State<AllPage> {
                                                   width:
                                                   2.0), // Space between ':' and '1 Days'
                                               Text(
-                                                "${policyDocData.iDays}",
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle,
+                                                "${policyDocData.iDays} Day",
+                                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                               ),
                                             ],
                                           ),

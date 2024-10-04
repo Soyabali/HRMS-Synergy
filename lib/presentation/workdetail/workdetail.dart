@@ -1,15 +1,14 @@
-import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../data/baseProjectRepo.dart';
 import '../dashboard/dashboard.dart';
-import 'dart:convert';
-
 import '../resources/app_text_style.dart';
 
 class WorkDetail extends StatelessWidget {
+
   const WorkDetail({super.key});
 
   @override
@@ -36,34 +35,12 @@ class WorkDetailPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<WorkDetailPage> {
-  final int itemCount = 2;
-  final String jsonResponse = '''
-  [
-    {"sDate": "Jan 01", "sDayName": "Monday", "sHolidayName": "New Year"},
-    {"sDate": "Jan 26", "sDayName": "Friday", "sHolidayName": "Republic Day"},
-    {"sDate": "Mar 25", "sDayName": "Monday", "sHolidayName": "Holi"},
-    {"sDate": "Aug 15", "sDayName": "Thursday", "sHolidayName": "Independence Day"},
-    {"sDate": "Aug 19", "sDayName": "Monday", "sHolidayName": "Rakshabandhan"},
-    {"sDate": "Aug 26", "sDayName": "Monday", "sHolidayName": "Janmashtami"},
-    {"sDate": "Oct 02", "sDayName": "Wednesday", "sHolidayName": "Gandhi Jayanti"},
-    {"sDate": "Nov 01", "sDayName": "Friday", "sHolidayName": "Diwali"},
-    {"sDate": "Dec 25", "sDayName": "Wednesday", "sHolidayName": "Christmas Day"}
-  ]
-  ''';
-
   final _formKey = GlobalKey<FormState>();
-  final List<String> _items = ["aa", "bb", "cc", "dd"];
+  // Create a list of controllers for each TextFormField in the ListView
+  List<TextEditingController> _controllers = [];
   final TextEditingController _controller = TextEditingController();
 
-  void _addItem() {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        _items.add(_controller.text);
-        print("--List Item--$_items");
-        _controller.clear();
-      });
-    }
-  }
+  List<dynamic>?  baseProjectList;
 
   // toast
   void displayToast(String msg) {
@@ -76,23 +53,44 @@ class _MyHomePageState extends State<WorkDetailPage> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+  //
+  baseProject() async {
+    baseProjectList = await HrmsBaseProjectRepo().baseProjectList(context);
+    print(" -----57---  baseProjectList--59---> $baseProjectList");
+    setState(() {});
+  }
 
+  @override
   void initState() {
-    // TODO: implement initState
+    baseProject();
     super.initState();
+    // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
+    int itemCount = 5;
+    _controllers = List.generate(itemCount, (index) => TextEditingController());
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    _controllers.forEach((controller) => controller.dispose());
     super.dispose();
+  }
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      // Loop through the controllers and gather values
+      for (int i = 0; i < _controllers.length; i++) {
+        print('Text from TextFormField $i: ${_controllers[i].text}');
+      }
+      // You can now process these values (e.g., send to API)
+    }
   }
 
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
   Widget build(BuildContext context) {
-    List<dynamic> holidays = json.decode(jsonResponse);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -137,6 +135,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
           ),
         ), // Removes shadow under the AppBar
       ),
+
       body: Column(
        mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -156,9 +155,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
         ),
         Expanded(
           child: ListView.builder(
-              // itemCount: _items.length,
-              itemCount: 4,
-              itemBuilder: (context, index) {
+              itemCount: baseProjectList?.length ?? 0,
+              itemBuilder: (context,index){
+               // status = '${monthlyAttendance?[index]['sStatus']}';
+                // Determine the color based on the country
                 return Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
                     child: Container(
@@ -183,30 +183,23 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                 child: Padding(
                                     padding: const EdgeInsets.only(bottom: 10),
                                     child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: <Widget>[
                                           Container(
                                             child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
-                                                SizedBox(height: 15),
+                                                SizedBox(height: 10),
                                                 Container(
-                                                  alignment:
-                                                      Alignment.centerLeft,
+                                                  alignment: Alignment.centerLeft,
                                                   child: DottedBorder(
                                                     color: Colors.grey,
                                                     strokeWidth: 1.0,
                                                     dashPattern: [4, 2],
-                                                    borderType:
-                                                        BorderType.RRect,
-                                                    radius:
-                                                        const Radius.circular(
-                                                            5.0),
+                                                    borderType: BorderType.RRect,
+                                                    radius: const Radius.circular(5.0),
                                                     child: Padding(
-                                                      padding:
-                                                          EdgeInsets.all(8.0),
+                                                      padding: EdgeInsets.all(8.0),
                                                       child: Row(
                                                         mainAxisSize: MainAxisSize
                                                             .min, // This ensures the Row only takes up as much space as needed
@@ -216,10 +209,14 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                                   .camera_alt_outlined,
                                                               size: 25),
                                                           SizedBox(width: 5),
-                                                          Text(
-                                                            'Head Office',
-                                                            style: AppTextStyle
-                                                                .font14OpenSansRegularBlack45TextStyle,
+                                                          Flexible(
+                                                            child: Text(
+                                                              '${baseProjectList?[index]['sProjectName']}',
+                                                              style: AppTextStyle
+                                                                  .font14OpenSansRegularBlack45TextStyle,
+                                                              overflow: TextOverflow.ellipsis,
+                                                            ),
+
                                                           ),
                                                         ],
                                                       ),
@@ -231,18 +228,12 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                   height: 65,
                                                   color: Color(0xFFf2f3f5),
                                                   child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 0),
+                                                    padding: const EdgeInsets.only(left: 0),
                                                     child: TextFormField(
                                                       focusNode: FocusNode(),
-                                                      controller:
-                                                          TextEditingController(),
-                                                      textInputAction:
-                                                          TextInputAction.next,
-                                                      onEditingComplete: () =>
-                                                          FocusScope.of(context)
-                                                              .nextFocus(),
+                                                      controller: _controller,
+                                                      textInputAction: TextInputAction.next,
+                                                      onEditingComplete: () => FocusScope.of(context).nextFocus(),
                                                       maxLines:
                                                           null, // Allows multiple lines
                                                       expands:
@@ -254,29 +245,34 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                         labelStyle: AppTextStyle
                                                             .font14OpenSansRegularBlack45TextStyle,
                                                         border:
-                                                            OutlineInputBorder(),
+                                                            const OutlineInputBorder(),
                                                         contentPadding:
-                                                            EdgeInsets
+                                                            const EdgeInsets
                                                                 .symmetric(
                                                           vertical:
                                                               10, // Adjust vertical padding as needed
                                                           horizontal: 10,
                                                         ),
                                                       ),
-                                                      autovalidateMode:
-                                                          AutovalidateMode
-                                                              .onUserInteraction,
+                                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                                     ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           )
-                                        ]))))));
+                                        ]
+                                    )
+                                )
+                            )
+                        )
+                    )
+                );
 
               }),
         ),
         SizedBox(height: 10),
+
         Padding(
                   padding: const EdgeInsets.only(top: 10,bottom: 10), // Adjust padding as necessary
                   child: ElevatedButton(

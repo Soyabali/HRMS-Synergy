@@ -233,7 +233,7 @@ class _RejectedPageState extends State<RejectedPage> {
                                                   width:
                                                   2.0), // Space between ':' and '1 Days'
                                               Text(
-                                                "${policyDocData.iDays}",
+                                                "${policyDocData.iDays} Day",
                                                 style: AppTextStyle
                                                     .font12OpenSansRegularBlackTextStyle,
                                               ),
