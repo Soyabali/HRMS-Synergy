@@ -596,6 +596,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ), // Removes shadow under the AppBar
         ),
+
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[

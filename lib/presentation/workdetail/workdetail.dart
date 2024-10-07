@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../data/baseProjectRepo.dart';
 import '../../data/hrmsTimeScheduleRepo.dart';
+import '../../data/hrmsWorkEntryNewRepo.dart';
 import '../dashboard/dashboard.dart';
+import 'dart:convert';
 import '../resources/app_text_style.dart';
 
 
@@ -41,17 +43,28 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
   // ----
 
+  List<Map<String, String>> hrmsTimeScheduleList = [
+    {'sHourCode': 'H00001', 'sHourDescription': '09:30am-10:30am'},
+    {'sHourCode': 'H00002', 'sHourDescription': '10:30am-11:30am'},
+    {'sHourCode': 'H00003', 'sHourDescription': '11:30am-12:30pm'},
+    {'sHourCode': 'H00004', 'sHourDescription': '12:30pm-01:30pm'},
+    {'sHourCode': 'H00005', 'sHourDescription': '01:30pm-02:00pm'},
+    {'sHourCode': 'H00006', 'sHourDescription': '02:00pm-03:00pm'},
+    {'sHourCode': 'H00007', 'sHourDescription': '03:00pm-04:00pm'},
+    {'sHourCode': 'H00008', 'sHourDescription': '04:00pm-05:00pm'},
+    {'sHourCode': 'H00009', 'sHourDescription': '05:00pm-06:30pm'}
+  ];
+
+
   final List<TextEditingController> _controllers = [];
   List<String> projectNames = [];
   List<String> workDetails = [];
   final _formKey = GlobalKey<FormState>();
 
-
-
   final TextEditingController _controller = TextEditingController();
 
   List<dynamic>?  baseProjectList;
-  List<dynamic>?  hrmsTimeScheduleList;
+  //List<dynamic>?  hrmsTimeScheduleList;
 
   // toast
   void displayToast(String msg) {
@@ -71,26 +84,51 @@ class _MyHomePageState extends State<WorkDetailPage> {
     setState(() {});
   }
   // timeSchedule Response
-  hrmsTimeSchedule() async {
-    hrmsTimeScheduleList = await HrmsTimeScheduleRepo().timeScheduleList(context);
-    print(" -----67---  hrmsTimeScheduleList--67---> $hrmsTimeScheduleList");
-    setState(() {});
-  }
+  // hrmsTimeSchedule() async {
+  //   hrmsTimeScheduleList = await HrmsTimeScheduleRepo().timeScheduleList(context);
+  //   print(" -----75---  hrmsTimeScheduleList--67---> $hrmsTimeScheduleList");
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
     baseProject();
-    hrmsTimeSchedule();
+    //hrmsTimeSchedule();
     super.initState();
 
     if (baseProjectList != null) {
       for (int i = 0; i < baseProjectList!.length; i++) {
         _controllers.add(TextEditingController());
       }
-
-
       // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
-
+    }
+  }
+  sendCurrentWorkNew(String combinedList) async{
+    var workEntryNew =
+        await HrmsWorkEntryNewRepo().hrmsWorkEntryNew(
+        context,
+        combinedList,
+        );
+    print('-----111---$workEntryNew');
+     var result = "${workEntryNew[0]["Result"]}";
+     var msg = "${workEntryNew[0]["Msg"]}";
+    print("----Result ---115--$result");
+    if(result=="1"){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return _buildDialogSucces2(context,msg);
+        },
+      );
+      print("----117---");
+      print('-------------118--------');
+    }else{
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return _buildDialogSucces2(context,msg);
+        },
+      );
     }
   }
 
@@ -122,7 +160,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
       // Iterate over the baseProjectList and corresponding controllers
       for (int i = 0; i < baseProjectList!.length; i++) {
-        projectNames.add(baseProjectList![i]['sProjectName'] ?? ''); // Collect project names
+        projectNames.add(baseProjectList![i]['sProjectCode'] ?? ''); // Collect project names
         String workDetail = _controllers[i].text.trim();
 
         // Check if the field is not empty
@@ -134,10 +172,65 @@ class _MyHomePageState extends State<WorkDetailPage> {
       // If at least one field is filled, proceed with the submission
       if (isAtLeastOneFieldFilled) {
         // Proceed with the form submission logic
-        print('Project Names: $projectNames');
-        print('Work Details: $workDetails');
+        print("ProjectName: $projectNames");
+        print("WorkDetail: $workDetails");
+        print("hrmsTimeScheduleList: $hrmsTimeScheduleList");
+
+        print('Project Names--xxx--142--: ${projectNames.length}');
+        print('Work Details xxx--143---xx: ${workDetails.length}');
+        //  hrmsTimeScheduleList
+        print('hrms times schedule lenth xxx--145---xx: ${hrmsTimeScheduleList?.length}');
         // You can now pass these lists to your API
         /// todo Api send thes above list.
+        ///
+        ///
+        int minLength = [
+          projectNames.length,
+          workDetails.length,
+          hrmsTimeScheduleList.length
+        ].reduce((curr, next) => curr < next ? curr : next);
+
+        // Combine the lists into one
+        List<Map<String, dynamic>> combinedList = [];
+        for (int i = 0; i < minLength; i++) {
+          combinedList.add({
+            'sProjectName': projectNames[i],
+            'sEmpWorkStatus': workDetails[i],
+            'sHourCode': hrmsTimeScheduleList[i]['sHourCode']
+          });
+        }
+        print("------184----$combinedList");
+        String jsonString = jsonEncode(combinedList);
+        print("-----185---$jsonString");
+
+        // for (var item in combinedList) {
+        //   combinedList_2.add({
+        //     "sProjectName": item['sProjectName'],
+        //     "sEmpWorkStatus": item['sEmpWorkStatus'],
+        //     "sHourCode": item['sHourCode']
+        //   });
+        // }
+        // print("---194---$combinedList_2");
+
+
+        // String flattenedResponse = '';
+        // for (int i = 0; i < combinedList.length; i++) {
+        //  // flattenedResponse += '${i}\n';  // Indexing starting from 0
+        //   combinedList[i].forEach((key, value) {
+        //     flattenedResponse += '"$key" : "$value"\n';
+        //     combinedList_2.add(flattenedResponse);
+        //   });
+        // }
+        // print("----192--$flattenedResponse");
+
+
+        //List<Map<String, dynamic>> fixedArray = List.unmodifiable(combinedList);
+        //print("----185----$fixedArray");
+        // Convert the combinedList to a JSON string
+      //  String combinedListString = jsonEncode(combinedList);
+        //print("----186---$combinedListString");
+
+       sendCurrentWorkNew(jsonString);
 
       } else {
         // Show a notification if all fields are empty
@@ -237,7 +330,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                 {
                   _controllers.add(TextEditingController());
                 }
-
                 return Padding(
                     padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
                     child: Container(
@@ -365,6 +457,98 @@ class _MyHomePageState extends State<WorkDetailPage> {
                   ),
                 ),
         ]
+      ),
+    );
+  }
+  // dialogSuccess
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DashBoard()),
+                        );
+                        //Navigator.of(context).pop();
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     getLocation();
+                    //     Navigator.of(context).pop();
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.white, // Set the background color to white
+                    //     foregroundColor: Colors.black, // Set the text color to black
+                    //   ),
+                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    // )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

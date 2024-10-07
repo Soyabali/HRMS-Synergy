@@ -23,6 +23,8 @@ class HrmsTimeScheduleRepo
     var hrmsTimeScheduleList = "$baseURL$endPoint";
     print('------------17---hrmsTimeScheduleList---$hrmsTimeScheduleList');
 
+    //showLoader();
+
     try
     {
       var headers = {
