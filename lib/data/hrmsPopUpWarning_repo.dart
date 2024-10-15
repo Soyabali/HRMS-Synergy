@@ -41,13 +41,13 @@ class HrmsPopUpWarningRepo {
       var map;
       var data = await response.stream.bytesToString();
       map = json.decode(data);
-      print('----------20---login RESPONSE----$map');
+     // print('----------20---login RESPONSE----$map');
       if (response.statusCode == 200) {
         hideLoader();
-        print('----------22-----$map');
+        //print('----------22-----$map');
         return map;
       } else {
-        print('----------29---LOGINaPI RESPONSE----$map');
+       // print('----------29---LOGINaPI RESPONSE----$map');
         hideLoader();
         print(response.reasonPhrase);
         return map;

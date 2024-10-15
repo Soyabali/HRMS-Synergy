@@ -239,529 +239,534 @@ class _MyHomePageState extends State<WorkDetailPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // statusBarColore
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color  // 2a697b
-            statusBarColor: Color(0xFF2a697b),
-            // Status bar brightness (optional)
-            statusBarIconBrightness:
-                Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          ),
-          // backgroundColor: Colors.blu
-          backgroundColor: Color(0xFF0098a6),
-          leading: InkWell(
-            onTap: () {
-              // Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DashBoard()),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-                color: Colors.white,
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // statusBarColore
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              // Status bar color  // 2a697b
+              statusBarColor: Color(0xFF2a697b),
+              // Status bar brightness (optional)
+              statusBarIconBrightness:
+                  Brightness.dark, // For Android (dark icons)
+              statusBarBrightness: Brightness.light, // For iOS (dark icons)
+            ),
+            // backgroundColor: Colors.blu
+            backgroundColor: Color(0xFF0098a6),
+            leading: InkWell(
+              onTap: () {
+                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashBoard()),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Trip Detail',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Montserrat',
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Trip Detail',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ), // Removes shadow under the AppBar
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 30,
-                  decoration: BoxDecoration(
-                      color: Colors.white, // Background color of the container
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey
-                              .withOpacity(0.5), // Color of the shadow
-                          spreadRadius: 5, // Spread radius
-                          blurRadius: 7, // Blur radius
-                          offset: Offset(0, 3), // Offset of the shadow
-                        ),
-                      ]),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 15,
-                      right: 15,
-                    ),
-                    child: Form(
-                      key: _formKey,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            SizedBox(height: 10),
-                            Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  //Icon(Icons.light_mode_rounded,size: 25,color: Colors.redAccent,),
-                                  Image.asset(
-                                    'assets/images/tripicon.jpeg',
-                                    height: 25,
-                                    width: 25,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    'Trip Details',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle,
-                                    maxLines: 2, // Limits the text to 2 lines
-                                    overflow: TextOverflow
-                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                    softWrap: true,
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            // take a EditTextView
-                            Padding(
-                              padding: const EdgeInsets.only(left: 0),
-                              child: TextFormField(
-                                controller: _takeAction,
-                                textInputAction: TextInputAction.next,
-                                onEditingComplete: () =>
-                                    FocusScope.of(context).nextFocus(),
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 10.0),
-                                  filled: true, // Enable background color
-                                  fillColor: Color(
-                                      0xFFf2f3f5), // Set your desired background color here
-                                  hintText:
-                                      'Enter Odometer', // Add your hint text here
-                                  hintStyle: TextStyle(color: Colors.grey),
+            ), // Removes shadow under the AppBar
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width - 30,
+                    decoration: BoxDecoration(
+                        color: Colors.white, // Background color of the container
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey
+                                .withOpacity(0.5), // Color of the shadow
+                            spreadRadius: 5, // Spread radius
+                            blurRadius: 7, // Blur radius
+                            offset: Offset(0, 3), // Offset of the shadow
+                          ),
+                        ]),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 15,
+                        right: 15,
+                      ),
+                      child: Form(
+                        key: _formKey,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: 10),
+                              Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    //Icon(Icons.light_mode_rounded,size: 25,color: Colors.redAccent,),
+                                    Image.asset(
+                                      'assets/images/tripicon.jpeg',
+                                      height: 25,
+                                      width: 25,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Trip Details',
+                                      style: AppTextStyle
+                                          .font12OpenSansRegularBlackTextStyle,
+                                      maxLines: 2, // Limits the text to 2 lines
+                                      overflow: TextOverflow
+                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                      softWrap: true,
+                                    )
+                                  ],
                                 ),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true), // Allow decimal keyboard
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(
-                                      r'^\d*\.?\d{0,2}')), // Allow only numbers with optional decimal point
-                                  LengthLimitingTextInputFormatter(
-                                      5), // Limit input to 10 characters
-                                ],
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a value';
-                                  }
-                                  if (double.tryParse(value) == null) {
-                                    return 'Please enter a valid number';
-                                  }
-                                  return null;
-                                },
                               ),
-                            ),
-                            SizedBox(height: 10),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              child: DottedBorder(
-                                color: Colors.grey,
-                                strokeWidth: 1.0,
-                                dashPattern: [4, 2],
-                                borderType: BorderType.RRect,
-                                radius: const Radius.circular(5.0),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 200,
-                                    child: Center(
-                                      child: InkWell(
-                                        onTap: () {
-                                          print('----click photo---');
-                                          pickImage();
-                                        },
-                                        child: image == null
-                                            ? Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  // Icon(Icons.camera,size: 25),
-                                                  Image.asset(
-                                                    'assets/images/camra.jpeg',
-                                                    height: 25,
-                                                    width: 25,
-                                                    fit: BoxFit.fill,
-                                                  ),
-                                                  SizedBox(height: 5),
-                                                  Text(
-                                                    'Click Odometer Photo',
-                                                    style: AppTextStyle
-                                                        .font12OpenSansRegularBlackTextStyle,
-                                                  )
-                                                ],
-                                              )
-                                            : Container(
-                                                height: 190,
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Image.file(
-                                                  image!,
-                                                  fit: BoxFit.cover,
-                                                )),
+                              SizedBox(height: 10),
+                              // take a EditTextView
+                              Padding(
+                                padding: const EdgeInsets.only(left: 0),
+                                child: TextFormField(
+                                  controller: _takeAction,
+                                  textInputAction: TextInputAction.next,
+                                  onEditingComplete: () =>
+                                      FocusScope.of(context).nextFocus(),
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10.0),
+                                    filled: true, // Enable background color
+                                    fillColor: Color(
+                                        0xFFf2f3f5), // Set your desired background color here
+                                    hintText:
+                                        'Enter Odometer', // Add your hint text here
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                  ),
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  keyboardType: TextInputType.numberWithOptions(
+                                      decimal: true), // Allow decimal keyboard
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(RegExp(
+                                        r'^\d*\.?\d{0,2}')), // Allow only numbers with optional decimal point
+                                    LengthLimitingTextInputFormatter(
+                                        5), // Limit input to 10 characters
+                                  ],
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a value';
+                                    }
+                                    if (double.tryParse(value) == null) {
+                                      return 'Please enter a valid number';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                child: DottedBorder(
+                                  color: Colors.grey,
+                                  strokeWidth: 1.0,
+                                  dashPattern: [4, 2],
+                                  borderType: BorderType.RRect,
+                                  radius: const Radius.circular(5.0),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: 200,
+                                      child: Center(
+                                        child: InkWell(
+                                          onTap: () {
+                                            print('----click photo---');
+                                            pickImage();
+                                          },
+                                          child: image == null
+                                              ? Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    // Icon(Icons.camera,size: 25),
+                                                    Image.asset(
+                                                      'assets/images/camra.jpeg',
+                                                      height: 25,
+                                                      width: 25,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                    SizedBox(height: 5),
+                                                    Text(
+                                                      'Click Odometer Photo',
+                                                      style: AppTextStyle
+                                                          .font12OpenSansRegularBlackTextStyle,
+                                                    )
+                                                  ],
+                                                )
+                                              : Container(
+                                                  height: 190,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  child: Image.file(
+                                                    image!,
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 15),
-                            // Start Trip Button
-                            ElevatedButton(
-                              onPressed: isTripStarted
-                                  ? null
-                                  : () async {
-                                      // Your trip start API logic
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      var sImage;
-                                      var edtOdometer = _takeAction.text;
-                                      String? sContactNo =
-                                          prefs.getString('sContactNo');
+                              SizedBox(height: 15),
+                              // Start Trip Button
+                              ElevatedButton(
+                                onPressed: isTripStarted
+                                    ? null
+                                    : () async {
+                                        // Your trip start API logic
+                                        SharedPreferences prefs =
+                                            await SharedPreferences.getInstance();
+                                        var sImage;
+                                        var edtOdometer = _takeAction.text;
+                                        String? sContactNo =
+                                            prefs.getString('sContactNo');
 
-                                      if (_formKey.currentState!.validate() &&
-                                          edtOdometer != null &&
-                                          uplodedImage != null) {
+                                        if (_formKey.currentState!.validate() &&
+                                            edtOdometer != null &&
+                                            uplodedImage != null) {
 
-                                        var tripStart =
-                                            await HrmstripstartendRepo()
-                                                .tripStart(
-                                                    context,
-                                                    sContactNo!,
-                                                    lat,
-                                                    long,
-                                                    randomNumber,
-                                                    uplodedImage,
-                                                    edtOdometer,
-                                                    dTripDateTime);
+                                          var tripStart =
+                                              await HrmstripstartendRepo()
+                                                  .tripStart(
+                                                      context,
+                                                      sContactNo!,
+                                                      lat,
+                                                      long,
+                                                      randomNumber,
+                                                      uplodedImage,
+                                                      edtOdometer,
+                                                      dTripDateTime);
 
 
-                                        print('---472---$tripStart');
+                                          print('---472---$tripStart');
 
-                                        String Msg = "${tripStart[0]['Msg']}";
-                                        String sTranNo = "${tripStart[0]['sTranNo']}";
-                                        String Result = "${tripStart[0]['Result']}";
+                                          String Msg = "${tripStart[0]['Msg']}";
+                                          String sTranNo = "${tripStart[0]['sTranNo']}";
+                                          String Result = "${tripStart[0]['Result']}";
 
-                                        prefs.setString('sTranNo', sTranNo);
-                                        prefs.setString('tripMsg', Msg);
+                                          prefs.setString('sTranNo', sTranNo);
+                                          prefs.setString('tripMsg', Msg);
 
-                                        setState(() {
-                                          tripMsg = Msg;
-                                          isTripStarted = tripMsg == 'Trip has been started';
-                                        });
-                                        // todo celan foield adm image data
-                                        _takeAction.clear();
-                                        image == null;
-                                        print('---487---$tripMsg');
+                                          setState(() {
+                                            tripMsg = Msg;
+                                            isTripStarted = tripMsg == 'Trip has been started';
+                                          });
+                                          // todo celan foield adm image data
+                                          _takeAction.clear();
+                                          image == null;
+                                          print('---487---$tripMsg');
 
-                                        showDialog(
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _buildDialogSucces2(
+                                                    context, tripMsg!);
+                                              }
+                                              );
+                                          // Dialog logic and other actions
+                                        } else {
+                                          if (edtOdometer == null ||
+                                              edtOdometer == '') {
+                                            print('----print---424---');
+                                            displayToast(
+                                                'Enter Odometer details ');
+                                          } else if (uplodedImage == null ||
+                                              uplodedImage == '') {
+                                            displayToast(
+                                                'Please click Odometer image');
+                                            //print('----print---424---');
+                                          }
+                                          print('---Api not call---');
+                                          // displayToast('Click Photo');
+                                        }
+                                        if (Result == "1") {
+                                          // displayToast(Msg);
+                                          _takeAction.clear();
+                                          image == null;
+                                          showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return _buildDialogSucces2(
-                                                  context, tripMsg!);
-                                            }
-                                            );
-                                        // Dialog logic and other actions
-                                      } else {
-                                        if (edtOdometer == null ||
-                                            edtOdometer == '') {
-                                          print('----print---424---');
-                                          displayToast(
-                                              'Enter Odometer details ');
-                                        } else if (uplodedImage == null ||
-                                            uplodedImage == '') {
-                                          displayToast(
-                                              'Please click Odometer image');
-                                          //print('----print---424---');
+                                                  context, Msg);
+                                            },
+                                          );
+                                          setState(() {});
+                                        } else {
+                                          //displayToast(Msg);
                                         }
-                                        print('---Api not call---');
-                                        // displayToast('Click Photo');
-                                      }
-                                      if (Result == "1") {
-                                        // displayToast(Msg);
-                                        _takeAction.clear();
-                                        image == null;
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return _buildDialogSucces2(
-                                                context, Msg);
-                                          },
-                                        );
-                                        setState(() {});
-                                      } else {
-                                        //displayToast(Msg);
-                                      }
-                                    },
+                                      },
 
 
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    getButtonColor(tripMsg ?? "Not a value"),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      getButtonColor(tripMsg ?? "Not a value"),
+                                ),
+                                child: const Text(
+                                  "START TRIP",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                              child: const Text(
-                                "START TRIP",
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            const SizedBox(height: 15),
+                              const SizedBox(height: 15),
 
-                            ElevatedButton(
-                              onPressed: isTripStarted
-                                  ? () async {
-                                      // Your trip stop API logic
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      var edtOdometer = _takeAction.text;
-                                      String? sContactNo =
-                                          prefs.getString('sContactNo');
-                                      String? sTranNo =
-                                          prefs.getString('sTranNo');
+                              ElevatedButton(
+                                onPressed: isTripStarted
+                                    ? () async {
+                                        // Your trip stop API logic
+                                        SharedPreferences prefs =
+                                            await SharedPreferences.getInstance();
+                                        var edtOdometer = _takeAction.text;
+                                        String? sContactNo =
+                                            prefs.getString('sContactNo');
+                                        String? sTranNo =
+                                            prefs.getString('sTranNo');
 
-                                      if (_formKey.currentState!.validate() &&
-                                          edtOdometer != null &&
-                                          uplodedImage != null) {
-                                        var tripEnd = await HrmstripEndRepo()
-                                            .tripEnd(
-                                                context,
-                                                sContactNo!,
-                                                lat,
-                                                long,
-                                                sTranNo!,
-                                                uplodedImage,
-                                                edtOdometer,
-                                                dTripDateTime);
+                                        if (_formKey.currentState!.validate() &&
+                                            edtOdometer != null &&
+                                            uplodedImage != null) {
+                                          var tripEnd = await HrmstripEndRepo()
+                                              .tripEnd(
+                                                  context,
+                                                  sContactNo!,
+                                                  lat,
+                                                  long,
+                                                  sTranNo!,
+                                                  uplodedImage,
+                                                  edtOdometer,
+                                                  dTripDateTime);
 
-                                          print('----572---$tripEnd');
+                                            print('----572---$tripEnd');
 
-                                        String Msg = "${tripEnd[0]['Msg']}";
-                                        String Result = "${tripEnd[0]['Result']}";
+                                          String Msg = "${tripEnd[0]['Msg']}";
+                                          String Result = "${tripEnd[0]['Result']}";
 
-                                        prefs.setString('tripMsg', Msg);
-                                        setState(() {
-                                          tripMsg = Msg;
-                                          isTripStarted = false;
-                                        });
-                                        print('-----576---$tripMsg');
+                                          prefs.setString('tripMsg', Msg);
+                                          setState(() {
+                                            tripMsg = Msg;
+                                            isTripStarted = false;
+                                          });
+                                          print('-----576---$tripMsg');
 
-                                        _takeAction.clear();
-                                        image == null;
-                                        print('---487---$tripMsg');
-                                        showDialog(
+                                          _takeAction.clear();
+                                          image == null;
+                                          print('---487---$tripMsg');
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return _buildDialogSucces2(
+                                                    context, tripMsg!);
+                                              }
+                                          );
+                                          // Dialog logic and other actions
+                                        } else {
+                                          if (edtOdometer == null ||
+                                              edtOdometer == '') {
+                                            print('----print---424---');
+                                            displayToast('Enter Odometer details ');
+                                          } else if (uplodedImage == null ||
+                                              uplodedImage == '') {
+                                            displayToast('Please click Odometer image');
+                                            //print('----print---424---');
+                                          }
+                                          print('---Api not call---');
+                                          // displayToast('Click Photo');
+                                        }
+                                        if (Result == "1") {
+                                          // displayToast(Msg);
+                                          showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return _buildDialogSucces2(
-                                                  context, tripMsg!);
-                                            }
-                                        );
-                                        // Dialog logic and other actions
-                                      } else {
-                                        if (edtOdometer == null ||
-                                            edtOdometer == '') {
-                                          print('----print---424---');
-                                          displayToast('Enter Odometer details ');
-                                        } else if (uplodedImage == null ||
-                                            uplodedImage == '') {
-                                          displayToast('Please click Odometer image');
-                                          //print('----print---424---');
+                                                  context, Msg);
+                                            },
+                                          );
+                                          setState(() {});
+                                        } else {
+                                          //displayToast(Msg);
                                         }
-                                        print('---Api not call---');
-                                        // displayToast('Click Photo');
                                       }
-                                      if (Result == "1") {
-                                        // displayToast(Msg);
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return _buildDialogSucces2(
-                                                context, Msg);
-                                          },
-                                        );
-                                        setState(() {});
-                                      } else {
-                                        //displayToast(Msg);
-                                      }
-                                    }
-                                  : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: getButtonColorStoptrip(
-                                    tripMsg ?? "Not a value"),
+                                    : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: getButtonColorStoptrip(
+                                      tripMsg ?? "Not a value"),
+                                ),
+                                child: const Text(
+                                  "STOP TRIP",
+                                  style: TextStyle(
+                                      fontFamily: 'Montserrat',
+                                      color: Colors.white,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                              child: const Text(
-                                "STOP TRIP",
-                                style: TextStyle(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            // ElevatedButton(
-                            //    onPressed: () async {
-                            //      var sImage;
-                            //      var edtOdometer = _takeAction.text;
-                            //      SharedPreferences prefs = await SharedPreferences.getInstance();
-                            //      String? sContactNo = prefs.getString('sContactNo');//  tripMsg
-                            //
-                            //      if(_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null){
-                            //           print('---Api call---');
-                            //         var  tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!,lat,long,randomNumber,uplodedImage,edtOdometer,dTripDateTime);
-                            //         print('---380--$tripStart');
-                            //
-                            //           Msg = "${tripStart[0]['Msg']}";
-                            //           sTranNo = "${tripStart[0]['sTranNo']}";
-                            //           Result = "${tripStart[0]['Result']}";
-                            //           /// todo here you should short sTranNo
-                            //           SharedPreferences prefs = await SharedPreferences.getInstance();
-                            //           prefs.setString('sTranNo',sTranNo);
-                            //           prefs.setString('tripMsg',Msg);
-                            //           print('---423---msg--$Msg');
-                            //
-                            //      }else{
-                            //        if(edtOdometer==null || edtOdometer==''){
-                            //          print('----print---424---');
-                            //          displayToast('Enter Odometer details ');
-                            //        }else if(uplodedImage==null || uplodedImage==''){
-                            //          displayToast('Please click Odometer image');
-                            //          //print('----print---424---');
-                            //        }
-                            //        print('---Api not call---');
-                            //       // displayToast('Click Photo');
-                            //      }
-                            //      if(Result=="1"){
-                            //       // displayToast(Msg);
-                            //        showDialog(
-                            //          context: context,
-                            //          builder: (BuildContext context) {
-                            //            return _buildDialogSucces2(context,Msg);
-                            //          },
-                            //        );
-                            //        setState(() {
-                            //
-                            //        });
-                            //      }else{
-                            //        //displayToast(Msg);
-                            //      }
-                            //      /// todo here you get record value and hit the api
-                            //    },
-                            //
-                            //     style: ElevatedButton.styleFrom(
-                            //       backgroundColor: getButtonColor(tripMsg ?? "Not a value") // Hex color code (FF for alpha, followed by RGB)
-                            //     ),
-                            //     child: const Text(
-                            //       "START TRIP",
-                            //       style: TextStyle(
-                            //           fontFamily: 'Montserrat',
-                            //           color: Colors.white,
-                            //           fontSize: 16.0,
-                            //           fontWeight: FontWeight.bold),
-                            //     )),
-                            //
-                            // SizedBox(height: 15),
-                            // ElevatedButton(
-                            //     onPressed: () async {
-                            //       var sImage;
-                            //       var edtOdometer = _takeAction.text;
-                            //       SharedPreferences prefs = await SharedPreferences.getInstance();
-                            //       String? sContactNo = prefs.getString('sContactNo');
-                            //       String? sTranNo = prefs.getString('sTranNo');
-                            //
-                            //       if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
-                            //         print('---Api call---');
-                            //         var  tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!,lat,long,sTranNo!,uplodedImage,edtOdometer,dTripDateTime);
-                            //         print('---425--$tripEnd');
-                            //         Msg = "${tripEnd[0]['Msg']}";
-                            //         sTranNo = "${tripEnd[0]['sTranNo']}";
-                            //         Result = "${tripEnd[0]['Result']}";
-                            //         // todo
-                            //         SharedPreferences prefs = await SharedPreferences.getInstance();
-                            //         prefs.setString('sTranNo',sTranNo);
-                            //         prefs.setString('tripMsg',Msg);
-                            //         setState(() {
-                            //         });
-                            //         String? msgg = prefs.getString('tripMsg');
-                            //         print('---517---$Msg');
-                            //         print('---519---$msgg');
-                            //
-                            //
-                            //
-                            //       }else{
-                            //         print('---Api not call---');
-                            //       }
-                            //       if(Result=="1"){
-                            //        // displayToast(Msg);
-                            //        // _buildDialogSucces2(context,Msg);
-                            //         showDialog(
-                            //           context: context,
-                            //           builder: (BuildContext context) {
-                            //             return _buildDialogSucces2(context,Msg);
-                            //           },
-                            //         );
-                            //         setState(() {
-                            //
-                            //         });
-                            //       }else{
-                            //         displayToast(Msg);
-                            //       }
-                            //       /// todo here you get record value and hit the api
-                            //     },
-                            //     style: ElevatedButton.styleFrom(
-                            //      // backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
-                            //       backgroundColor : getButtonColorStoptrip(tripMsg ?? "Not a value"),
-                            //     ),
-                            //     child: const Text(
-                            //       "STOP TRIP",
-                            //       style: TextStyle(
-                            //           fontFamily: 'Montserrat',
-                            //           color: Colors.white,
-                            //           fontSize: 16.0,
-                            //           fontWeight: FontWeight.bold),
-                            //     )),
-                          ],
+                              // ElevatedButton(
+                              //    onPressed: () async {
+                              //      var sImage;
+                              //      var edtOdometer = _takeAction.text;
+                              //      SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //      String? sContactNo = prefs.getString('sContactNo');//  tripMsg
+                              //
+                              //      if(_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null){
+                              //           print('---Api call---');
+                              //         var  tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!,lat,long,randomNumber,uplodedImage,edtOdometer,dTripDateTime);
+                              //         print('---380--$tripStart');
+                              //
+                              //           Msg = "${tripStart[0]['Msg']}";
+                              //           sTranNo = "${tripStart[0]['sTranNo']}";
+                              //           Result = "${tripStart[0]['Result']}";
+                              //           /// todo here you should short sTranNo
+                              //           SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //           prefs.setString('sTranNo',sTranNo);
+                              //           prefs.setString('tripMsg',Msg);
+                              //           print('---423---msg--$Msg');
+                              //
+                              //      }else{
+                              //        if(edtOdometer==null || edtOdometer==''){
+                              //          print('----print---424---');
+                              //          displayToast('Enter Odometer details ');
+                              //        }else if(uplodedImage==null || uplodedImage==''){
+                              //          displayToast('Please click Odometer image');
+                              //          //print('----print---424---');
+                              //        }
+                              //        print('---Api not call---');
+                              //       // displayToast('Click Photo');
+                              //      }
+                              //      if(Result=="1"){
+                              //       // displayToast(Msg);
+                              //        showDialog(
+                              //          context: context,
+                              //          builder: (BuildContext context) {
+                              //            return _buildDialogSucces2(context,Msg);
+                              //          },
+                              //        );
+                              //        setState(() {
+                              //
+                              //        });
+                              //      }else{
+                              //        //displayToast(Msg);
+                              //      }
+                              //      /// todo here you get record value and hit the api
+                              //    },
+                              //
+                              //     style: ElevatedButton.styleFrom(
+                              //       backgroundColor: getButtonColor(tripMsg ?? "Not a value") // Hex color code (FF for alpha, followed by RGB)
+                              //     ),
+                              //     child: const Text(
+                              //       "START TRIP",
+                              //       style: TextStyle(
+                              //           fontFamily: 'Montserrat',
+                              //           color: Colors.white,
+                              //           fontSize: 16.0,
+                              //           fontWeight: FontWeight.bold),
+                              //     )),
+                              //
+                              // SizedBox(height: 15),
+                              // ElevatedButton(
+                              //     onPressed: () async {
+                              //       var sImage;
+                              //       var edtOdometer = _takeAction.text;
+                              //       SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //       String? sContactNo = prefs.getString('sContactNo');
+                              //       String? sTranNo = prefs.getString('sTranNo');
+                              //
+                              //       if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
+                              //         print('---Api call---');
+                              //         var  tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!,lat,long,sTranNo!,uplodedImage,edtOdometer,dTripDateTime);
+                              //         print('---425--$tripEnd');
+                              //         Msg = "${tripEnd[0]['Msg']}";
+                              //         sTranNo = "${tripEnd[0]['sTranNo']}";
+                              //         Result = "${tripEnd[0]['Result']}";
+                              //         // todo
+                              //         SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //         prefs.setString('sTranNo',sTranNo);
+                              //         prefs.setString('tripMsg',Msg);
+                              //         setState(() {
+                              //         });
+                              //         String? msgg = prefs.getString('tripMsg');
+                              //         print('---517---$Msg');
+                              //         print('---519---$msgg');
+                              //
+                              //
+                              //
+                              //       }else{
+                              //         print('---Api not call---');
+                              //       }
+                              //       if(Result=="1"){
+                              //        // displayToast(Msg);
+                              //        // _buildDialogSucces2(context,Msg);
+                              //         showDialog(
+                              //           context: context,
+                              //           builder: (BuildContext context) {
+                              //             return _buildDialogSucces2(context,Msg);
+                              //           },
+                              //         );
+                              //         setState(() {
+                              //
+                              //         });
+                              //       }else{
+                              //         displayToast(Msg);
+                              //       }
+                              //       /// todo here you get record value and hit the api
+                              //     },
+                              //     style: ElevatedButton.styleFrom(
+                              //      // backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
+                              //       backgroundColor : getButtonColorStoptrip(tripMsg ?? "Not a value"),
+                              //     ),
+                              //     child: const Text(
+                              //       "STOP TRIP",
+                              //       style: TextStyle(
+                              //           fontFamily: 'Montserrat',
+                              //           color: Colors.white,
+                              //           fontSize: 16.0,
+                              //           fontWeight: FontWeight.bold),
+                              //     )),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

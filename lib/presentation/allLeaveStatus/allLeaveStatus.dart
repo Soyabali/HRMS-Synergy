@@ -384,660 +384,665 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            // statusBarColore
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              // Status bar color  // 2a697b
-              statusBarColor: Color(0xFF2a697b),
-              // Status bar brightness (optional)
-              statusBarIconBrightness: Brightness.dark,
-              // For Android (dark icons)
-              statusBarBrightness: Brightness.light, // For iOS (dark icons)
-            ),
-            // backgroundColor: Colors.blu
-            backgroundColor: Color(0xFF0098a6),
-            leading: InkWell(
-              onTap: () {
-                // Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DashBoard()),
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(left: 5.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 24,
-                  color: Colors.white,
-                ),
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              // statusBarColore
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                // Status bar color  // 2a697b
+                statusBarColor: Color(0xFF2a697b),
+                // Status bar brightness (optional)
+                statusBarIconBrightness: Brightness.dark,
+                // For Android (dark icons)
+                statusBarBrightness: Brightness.light, // For iOS (dark icons)
               ),
-            ),
-            title: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'All Leave Status',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Montserrat',
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ), // Removes shadow under the AppBar
-          ),
-
-          body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-
-                Container(
-                  height: 45,
-                  color: Color(0xFF2a697b),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 4),
-                      Icon(Icons.calendar_month, size: 15, color: Colors.white),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'From',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(width: 4),
-
-                      GestureDetector(
-                        onTap: () async {
-                          /// TODO Open Date picke and get a date
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (pickedDate != null) {
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            setState(() {
-                              tempDate = formDate; // Save the current formDate before updating
-                              formDate = formattedDate;
-                             // calculateTotalDays();
-                            });
-                            fromDateSelectLogic();
-                          }
-                          // DateTime? pickedDate = await showDatePicker(
-                          //   context: context,
-                          //   initialDate: DateTime.now(),
-                          //   firstDate: DateTime(2000),
-                          //   lastDate: DateTime(2100),
-                          // );
-                          // // Check if a date was picked
-                          // if (pickedDate != null) {
-                          //   // Format the picked date
-                          //   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          //   print('----FromDate----433---$formattedDate');
-                          //   // Update the state with the picked date
-                          //   setState(() {
-                          //     firstOfMonthDay = formattedDate;
-                          //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          //   });
-                          //   // call Ai
-                          //   hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //   // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //   print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                          //   //hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //  // print('---formPicker--$firstOfMonthDay');
-                          // } else {}
-                        },
-
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$formDate',
-                              style: TextStyle(
-                                color: Colors
-                                    .grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 6),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        child: Image.asset(
-                          "assets/images/reimicon_2.png",
-                          fit: BoxFit
-                              .contain, // or BoxFit.cover depending on the desired effect
-                        ),
-                      ),
-                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                      SizedBox(width: 8),
-                      Icon(Icons.calendar_month, size: 16, color: Colors.white),
-                      SizedBox(width: 5),
-                      const Text(
-                        'To',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          if (pickedDate != null) {
-                            String formattedDate =
-                            DateFormat('dd/MMM/yyyy')
-                                .format(pickedDate);
-                            setState(() {
-                              tempDate =
-                                  toDate; // Save the current toDate before updating
-                              toDate = formattedDate;
-                             // calculateTotalDays();
-                            });
-                            toDateSelectLogic();
-                          }
-                          // DateTime? pickedDate = await showDatePicker(
-                          //   context: context,
-                          //   initialDate: DateTime.now(),
-                          //   firstDate: DateTime(2000),
-                          //   lastDate: DateTime(2100),
-                          // );
-                          // // Check if a date was picked
-                          // if (pickedDate != null) {
-                          //   // Format the picked date
-                          //   String formattedDate =
-                          //       DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          //   print('----504--$formattedDate');
-                          //   // Update the state with the picked date
-                          //   setState(() {
-                          //     lastDayOfCurrentMonth = formattedDate;
-                          //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          //   });
-                          //   hrmsReimbursementStatus(
-                          //       firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //   //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //   print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                          // } else {}
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$toDate',
-                              style: TextStyle(
-                                color: Colors
-                                    .grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              // backgroundColor: Colors.blu
+              backgroundColor: Color(0xFF0098a6),
+              leading: InkWell(
+                onTap: () {
+                  // Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DashBoard()),
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 5.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    size: 24,
+                    color: Colors.white,
                   ),
                 ),
+              ),
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'All Leave Status',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ), // Removes shadow under the AppBar
+            ),
 
-                SizedBox(height: 10),
-                Center(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 10),
-                    // child: SearchBar(),
-                    child: Container(
-                      height: 45,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(
-                          color: Colors.grey, // Outline border color
-                          width: 0.2, // Outline border width
+            body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+
+                  Container(
+                    height: 45,
+                    color: Color(0xFF2a697b),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 4),
+                        Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'From',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
                         ),
-                        color: Colors.white,
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _searchController,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Enter Keywords',
-                                    prefixIcon: Icon(Icons.search),
-                                    hintStyle: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF707d83),
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.bold),
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (query) {
-                                    filterData(
-                                        query); // Call the filter function on text input change
-                                  },
+                        SizedBox(width: 4),
+
+                        GestureDetector(
+                          onTap: () async {
+                            /// TODO Open Date picke and get a date
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              setState(() {
+                                tempDate = formDate; // Save the current formDate before updating
+                                formDate = formattedDate;
+                               // calculateTotalDays();
+                              });
+                              fromDateSelectLogic();
+                            }
+                            // DateTime? pickedDate = await showDatePicker(
+                            //   context: context,
+                            //   initialDate: DateTime.now(),
+                            //   firstDate: DateTime(2000),
+                            //   lastDate: DateTime(2100),
+                            // );
+                            // // Check if a date was picked
+                            // if (pickedDate != null) {
+                            //   // Format the picked date
+                            //   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            //   print('----FromDate----433---$formattedDate');
+                            //   // Update the state with the picked date
+                            //   setState(() {
+                            //     firstOfMonthDay = formattedDate;
+                            //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            //   });
+                            //   // call Ai
+                            //   hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //   // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //   print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                            //   //hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //  // print('---formPicker--$firstOfMonthDay');
+                            // } else {}
+                          },
+
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$formDate',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
                                 ),
                               ),
-                            ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 6),
+                        Container(
+                          height: 32,
+                          width: 32,
+                          child: Image.asset(
+                            "assets/images/reimicon_2.png",
+                            fit: BoxFit
+                                .contain, // or BoxFit.cover depending on the desired effect
+                          ),
+                        ),
+                        //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                        SizedBox(width: 8),
+                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                        SizedBox(width: 5),
+                        const Text(
+                          'To',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              String formattedDate =
+                              DateFormat('dd/MMM/yyyy')
+                                  .format(pickedDate);
+                              setState(() {
+                                tempDate =
+                                    toDate; // Save the current toDate before updating
+                                toDate = formattedDate;
+                               // calculateTotalDays();
+                              });
+                              toDateSelectLogic();
+                            }
+                            // DateTime? pickedDate = await showDatePicker(
+                            //   context: context,
+                            //   initialDate: DateTime.now(),
+                            //   firstDate: DateTime(2000),
+                            //   lastDate: DateTime(2100),
+                            // );
+                            // // Check if a date was picked
+                            // if (pickedDate != null) {
+                            //   // Format the picked date
+                            //   String formattedDate =
+                            //       DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            //   print('----504--$formattedDate');
+                            //   // Update the state with the picked date
+                            //   setState(() {
+                            //     lastDayOfCurrentMonth = formattedDate;
+                            //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            //   });
+                            //   hrmsReimbursementStatus(
+                            //       firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //   //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //   print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                            // } else {}
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$toDate',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 10),
+                      // child: SearchBar(),
+                      child: Container(
+                        height: 45,
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                            color: Colors.grey, // Outline border color
+                            width: 0.2, // Outline border width
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _searchController,
+                                    autofocus: true,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Enter Keywords',
+                                      prefixIcon: Icon(Icons.search),
+                                      hintStyle: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold),
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (query) {
+                                      filterData(
+                                          query); // Call the filter function on text input change
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Expanded(
-                  child: Container(
-                    child: FutureBuilder<List<LeaveStatusModel>>(
-                        future: reimbursementStatusV3,
-                        builder: (context, snapshot) {
-                          return ListView.builder(
-                              // itemCount: snapshot.data!.length ?? 0,
-                              // itemBuilder: (context, index)
-                              itemCount: _filteredData.length ?? 0,
-                              itemBuilder: (context, index) {
-                                final leaveStatus = _filteredData[index];
-                                final randomColor =
-                                    colorList[index % colorList.length];
-                                status = leaveStatus.sLeaveStatus;
-                                containerColor;
-                                if (status == "Sanctioned") {
-                                  containerColor = Color(0xFF689F38);
-                                } else if (status ==
-                                    "Request For Cancellation") {
-                                  containerColor = Colors.redAccent;
-                                } else {
-                                  containerColor = Color(0xFFFFD700);
-                                }
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Container(
+                      child: FutureBuilder<List<LeaveStatusModel>>(
+                          future: reimbursementStatusV3,
+                          builder: (context, snapshot) {
+                            return ListView.builder(
+                                // itemCount: snapshot.data!.length ?? 0,
+                                // itemBuilder: (context, index)
+                                itemCount: _filteredData.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  final leaveStatus = _filteredData[index];
+                                  final randomColor =
+                                      colorList[index % colorList.length];
+                                  status = leaveStatus.sLeaveStatus;
+                                  containerColor;
+                                  if (status == "Sanctioned") {
+                                    containerColor = Color(0xFF689F38);
+                                  } else if (status ==
+                                      "Request For Cancellation") {
+                                    containerColor = Colors.redAccent;
+                                  } else {
+                                    containerColor = Color(0xFFFFD700);
+                                  }
 
-                                return Card(
-                                  elevation: 1,
-                                  color: Colors.white,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(0.0),
-                                      border: Border.all(
-                                        color:
-                                            Colors.grey, // Outline border color
-                                        width: 0.2, // Outline border width
+                                  return Card(
+                                    elevation: 1,
+                                    color: Colors.white,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(0.0),
+                                        border: Border.all(
+                                          color:
+                                              Colors.grey, // Outline border color
+                                          width: 0.2, // Outline border width
+                                        ),
                                       ),
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 0, right: 8, top: 8),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 8),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    var images =
-                                                        leaveStatus.sImageLink;
-                                                    var designation =
-                                                        leaveStatus.sDesg;
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 0, right: 8, top: 8),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(left: 8),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: <Widget>[
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      var images =
+                                                          leaveStatus.sImageLink;
+                                                      var designation =
+                                                          leaveStatus.sDesg;
 
-                                                    openFullScreenDialog(
-                                                        context,
-                                                        images,
-                                                        designation
-                                                        // 'https://your-image-url.com/image.jpg', // Replace with your image URL
-                                                        // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                        );
-                                                  },
-                                                  child: Center(
-                                                    child: ClipOval(
-                                                      // Clip the image to make it circular
-                                                      child: Container(
-                                                        child: Image.network(
-                                                          leaveStatus
-                                                              .sImageLink, // Replace with your image URL
-                                                          height:
-                                                              35, // Adjust height as needed
-                                                          width:
-                                                              35, // Adjust width as needed
-                                                          fit: BoxFit
-                                                              .cover, // Make the image cover the container
+                                                      openFullScreenDialog(
+                                                          context,
+                                                          images,
+                                                          designation
+                                                          // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                                          // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                                          );
+                                                    },
+                                                    child: Center(
+                                                      child: ClipOval(
+                                                        // Clip the image to make it circular
+                                                        child: Container(
+                                                          child: Image.network(
+                                                            leaveStatus
+                                                                .sImageLink, // Replace with your image URL
+                                                            height:
+                                                                35, // Adjust height as needed
+                                                            width:
+                                                                35, // Adjust width as needed
+                                                            fit: BoxFit
+                                                                .cover, // Make the image cover the container
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
 
-                                                SizedBox(width: 10),
-                                                // Wrap the column in Flexible to prevent overflow
-                                                Flexible(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        leaveStatus.sName,
-                                                        //'Prabhat Yadav',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines:
-                                                            2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow
-                                                            .ellipsis, // Truncates with an ellipsis if too long
-                                                      ),
-                                                      // SizedBox(height: 4), // Add spacing between texts if needed
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 10),
-                                                        child: Text(
-                                                          leaveStatus.sDesg,
-                                                          //leaveData.sProjectName,
+                                                  SizedBox(width: 10),
+                                                  // Wrap the column in Flexible to prevent overflow
+                                                  Flexible(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          leaveStatus.sName,
+                                                          //'Prabhat Yadav',
                                                           style: AppTextStyle
-                                                              .font12OpenSansRegularBlack45TextStyle,
+                                                              .font12OpenSansRegularBlackTextStyle,
                                                           maxLines:
                                                               2, // Limits the text to 2 lines
                                                           overflow: TextOverflow
                                                               .ellipsis, // Truncates with an ellipsis if too long
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(height: 5),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Icon(
-                                                Icons.notes_outlined,
-                                                size: 18,
-                                              ),
-                                              SizedBox(width: 5),
-                                              Text('Leave Details',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 25),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'Leave Status :',
-                                                    style: GoogleFonts.openSans(
-                                                      color: containerColor,
-                                                      fontSize: 8,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ), // This directly returns a TextStyle
-                                                  ),
-                                                  SizedBox(width: 2),
-                                                  // Wrap long text with Flexible
-                                                  Flexible(
-                                                    child: Text(
-                                                      leaveStatus.sLeaveStatus,
-                                                      style:
-                                                          GoogleFonts.openSans(
-                                                        color: containerColor,
-                                                        fontSize: 8,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ), // This d
-                                                      // style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
-                                                      overflow: TextOverflow
-                                                          .ellipsis, // Adds "..." if the text is too long
-                                                      maxLines:
-                                                          1, // Ensures the text stays on one line
-                                                      softWrap:
-                                                          false, // Prevents the text from wrapping
-                                                    ),
-                                                  ),
-                                                  Spacer(),
-                                                  Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: Container(
-                                                      height: 25,
-                                                      child: DottedBorder(
-                                                        color: Colors
-                                                            .grey, // Color of the dotted line
-                                                        strokeWidth:
-                                                            1.0, // Width of the dotted line
-                                                        dashPattern: [
-                                                          4,
-                                                          2
-                                                        ], // Dash pattern for the dotted line
-                                                        borderType:
-                                                            BorderType.RRect,
-                                                        radius: Radius.circular(
-                                                            5.0), // Optional: rounded corners
-                                                        child: Padding(
-                                                          padding: EdgeInsets.all(
-                                                              2.0), // Equal padding on all sides
-                                                          child: Center(
-                                                            child: Row(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min, // Center the row contents
-                                                              children: [
-                                                                Text(
-                                                                  'Leave Type',
-                                                                  style: AppTextStyle
-                                                                      .font8OpenSansRegularBlack45TextStyle,
-                                                                ),
-                                                                SizedBox(
-                                                                    width:
-                                                                        2.0), // Space between 'Day' and ':'
-                                                                Text(
-                                                                  ' : ',
-                                                                  style: AppTextStyle
-                                                                      .font8OpenSansRegularBlack45TextStyle,
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 2.0), // Space between ':' and 'leave type'
-
-                                                                // Wrap this Text widget with Flexible to handle long text
-                                                                // Flexible(
-                                                                //   child: Text(
-                                                                //     leaveStatus.sLeaveType,
-                                                                //     style: AppTextStyle.font10OpenSansRegularBlackTextStyle,
-                                                                //     overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                                //     maxLines: 1, // Ensures the text remains on one line
-                                                                //     softWrap: false, // Prevents the text from wrapping
-                                                                //   ),
-                                                                // ),
-                                                                Text(
-                                                                  leaveStatus
-                                                                      .sLeaveType,
-                                                                  style: AppTextStyle
-                                                                      .font8OpenSansRegularBlackTextStyle,
-                                                                  // overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                                  // maxLines: 1, // Ensures the text remains on one line
-                                                                  //softWrap: false, // Prevents the text from wrapping
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                          SizedBox(height: 5),
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 0),
-                                            child: Container(
-                                                height: 40.0,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[
-                                                      200], // Background color
-                                                  border: Border(
-                                                    left: BorderSide(
-                                                      color: randomColor,
-                                                      // color: Colors.grey, // Left border color
-                                                      width:
-                                                          3.0, // Left border width
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child: Icon(
-                                                              Icons
-                                                                  .calendar_month,
-                                                              size: 16),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 10),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text('Applied At',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle),
-                                                              Text(
-                                                                  leaveStatus
-                                                                      .dLeaveAt,
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(2.0),
-                                                          child: Icon(
-                                                              Icons
-                                                                  .calendar_month,
-                                                              size: 16),
-                                                        ),
+                                                        // SizedBox(height: 4), // Add spacing between texts if needed
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
                                                                   .only(
                                                                   right: 10),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                  'Applied for',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle),
-                                                              //sLeaveApplyFor
-                                                              Text(
-                                                                  leaveStatus
-                                                                      .sLeaveApplyFor,
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle),
-                                                            ],
+                                                          child: Text(
+                                                            leaveStatus.sDesg,
+                                                            //leaveData.sProjectName,
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlack45TextStyle,
+                                                            maxLines:
+                                                                2, // Limits the text to 2 lines
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Truncates with an ellipsis if too long
                                                           ),
                                                         ),
                                                       ],
                                                     ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(height: 5),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.notes_outlined,
+                                                  size: 18,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text('Leave Details',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5),
+                                            Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 25),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Leave Status :',
+                                                      style: GoogleFonts.openSans(
+                                                        color: containerColor,
+                                                        fontSize: 8,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ), // This directly returns a TextStyle
+                                                    ),
+                                                    SizedBox(width: 2),
+                                                    // Wrap long text with Flexible
+                                                    Flexible(
+                                                      child: Text(
+                                                        leaveStatus.sLeaveStatus,
+                                                        style:
+                                                            GoogleFonts.openSans(
+                                                          color: containerColor,
+                                                          fontSize: 8,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ), // This d
+                                                        // style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
+                                                        overflow: TextOverflow
+                                                            .ellipsis, // Adds "..." if the text is too long
+                                                        maxLines:
+                                                            1, // Ensures the text stays on one line
+                                                        softWrap:
+                                                            false, // Prevents the text from wrapping
+                                                      ),
+                                                    ),
+                                                    Spacer(),
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: Container(
+                                                        height: 25,
+                                                        child: DottedBorder(
+                                                          color: Colors
+                                                              .grey, // Color of the dotted line
+                                                          strokeWidth:
+                                                              1.0, // Width of the dotted line
+                                                          dashPattern: [
+                                                            4,
+                                                            2
+                                                          ], // Dash pattern for the dotted line
+                                                          borderType:
+                                                              BorderType.RRect,
+                                                          radius: Radius.circular(
+                                                              5.0), // Optional: rounded corners
+                                                          child: Padding(
+                                                            padding: EdgeInsets.all(
+                                                                2.0), // Equal padding on all sides
+                                                            child: Center(
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min, // Center the row contents
+                                                                children: [
+                                                                  Text(
+                                                                    'Leave Type',
+                                                                    style: AppTextStyle
+                                                                        .font8OpenSansRegularBlack45TextStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width:
+                                                                          2.0), // Space between 'Day' and ':'
+                                                                  Text(
+                                                                    ' : ',
+                                                                    style: AppTextStyle
+                                                                        .font8OpenSansRegularBlack45TextStyle,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 2.0), // Space between ':' and 'leave type'
+
+                                                                  // Wrap this Text widget with Flexible to handle long text
+                                                                  // Flexible(
+                                                                  //   child: Text(
+                                                                  //     leaveStatus.sLeaveType,
+                                                                  //     style: AppTextStyle.font10OpenSansRegularBlackTextStyle,
+                                                                  //     overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
+                                                                  //     maxLines: 1, // Ensures the text remains on one line
+                                                                  //     softWrap: false, // Prevents the text from wrapping
+                                                                  //   ),
+                                                                  // ),
+                                                                  Text(
+                                                                    leaveStatus
+                                                                        .sLeaveType,
+                                                                    style: AppTextStyle
+                                                                        .font8OpenSansRegularBlackTextStyle,
+                                                                    // overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
+                                                                    // maxLines: 1, // Ensures the text remains on one line
+                                                                    //softWrap: false, // Prevents the text from wrapping
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ],
                                                 )),
-                                          ),
-                                        ],
+                                            SizedBox(height: 5),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 0),
+                                              child: Container(
+                                                  height: 40.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey[
+                                                        200], // Background color
+                                                    border: Border(
+                                                      left: BorderSide(
+                                                        color: randomColor,
+                                                        // color: Colors.grey, // Left border color
+                                                        width:
+                                                            3.0, // Left border width
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child: Icon(
+                                                                Icons
+                                                                    .calendar_month,
+                                                                size: 16),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 10),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text('Applied At',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle),
+                                                                Text(
+                                                                    leaveStatus
+                                                                        .dLeaveAt,
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(2.0),
+                                                            child: Icon(
+                                                                Icons
+                                                                    .calendar_month,
+                                                                size: 16),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 10),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                    'Applied for',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle),
+                                                                //sLeaveApplyFor
+                                                                Text(
+                                                                    leaveStatus
+                                                                        .sLeaveApplyFor,
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              });
-                        }),
+                                  );
+                                });
+                          }),
+                    ),
                   ),
-                ),
-              ])),
+                ])),
+      ),
     );
   }
 

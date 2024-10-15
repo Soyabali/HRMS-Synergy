@@ -245,813 +245,695 @@ class _MyHomePageState extends State<TripListPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            // statusBarColore
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              // Status bar color  // 2a697b
-              statusBarColor: Color(0xFF2a697b),
-              // Status bar brightness (optional)
-              statusBarIconBrightness: Brightness.dark,
-              // For Android (dark icons)
-              statusBarBrightness: Brightness.light, // For iOS (dark icons)
-            ),
-            // backgroundColor: Colors.blu
-            backgroundColor: Color(0xFF0098a6),
-            leading: InkWell(
-              onTap: () {
-                //Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const DashBoard()),
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(left: 5.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 24,
-                  color: Colors.white,
-                ),
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              // statusBarColore
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                // Status bar color  // 2a697b
+                statusBarColor: Color(0xFF2a697b),
+                // Status bar brightness (optional)
+                statusBarIconBrightness: Brightness.dark,
+                // For Android (dark icons)
+                statusBarBrightness: Brightness.light, // For iOS (dark icons)
               ),
-            ),
-            title: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Trip List',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Montserrat',
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ), // Removes shadow under the AppBar
-          ),
-
-          body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  height: 45,
-                  color: Color(0xFF2a697b),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 4),
-                      Icon(Icons.calendar_month, size: 15, color: Colors.white),
-                      const SizedBox(width: 4),
-                      const Text(
-                        'From',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(width: 4),
-
-                      GestureDetector(
-                        onTap: () async {
-                          /// TODO Open Date picke and get a date
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate =
-                                DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              firstOfMonthDay = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsTripList(
-                                firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print(
-                                '--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                            hrmsTripList(
-                                firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('---formPicker--$firstOfMonthDay');
-                            // Call API
-                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            // print('---formPicker--$firstOfMonthDay');
-
-                            // Display the selected date as a toast
-                            //displayToast(dExpDate.toString());
-                          } else {
-                            // Handle case where no date was selected
-                            //displayToast("No date selected");
-                          }
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$firstOfMonthDay',
-                              style: TextStyle(
-                                color: Colors
-                                    .grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(width: 6),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        child: Image.asset(
-                          "assets/images/reimicon_2.png",
-                          fit: BoxFit
-                              .contain, // or BoxFit.cover depending on the desired effect
-                        ),
-                      ),
-                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                      SizedBox(width: 8),
-                      Icon(Icons.calendar_month, size: 16, color: Colors.white),
-                      SizedBox(width: 5),
-                      const Text(
-                        'To',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal),
-                      ),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate =
-                                DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              lastDayOfCurrentMonth = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsTripList(
-                                firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print(
-                                '--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                          } else {}
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$lastDayOfCurrentMonth',
-                              style: TextStyle(
-                                color: Colors
-                                    .grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              // backgroundColor: Colors.blu
+              backgroundColor: Color(0xFF0098a6),
+              leading: InkWell(
+                onTap: () {
+                  //Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DashBoard()),
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 5.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    size: 24,
+                    color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 10),
-                // ui part
-                /// todo this is a start journey ui
-                Expanded(
-                  child: Container(
-                      child: FutureBuilder<List<TripDetailModel>>(
-                          future: tripDetailModel,
-                          builder: (context, snapshot) {
-                            return ListView.builder(
-                                // itemCount: snapshot.data!.length ?? 0,
-                                // itemBuilder: (context, index)
-                                itemCount: _filteredData.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  final tripDetailData = _filteredData[index];
-                                  sTripEndLocation = tripDetailData.sTripEndLocation;
+              ),
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Trip List',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ), // Removes shadow under the AppBar
+            ),
 
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 10, right: 10),
-                                    child: Card(
-                                      elevation: 1,
-                                      color: Colors.white,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5.0),
-                                          border: Border.all(
-                                            color: Colors.grey, // Outline border color
-                                            width: 0.2, // Outline border width
+            body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    height: 45,
+                    color: Color(0xFF2a697b),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 4),
+                        Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'From',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(width: 4),
+
+                        GestureDetector(
+                          onTap: () async {
+                            /// TODO Open Date picke and get a date
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            // Check if a date was picked
+                            if (pickedDate != null) {
+                              // Format the picked date
+                              String formattedDate =
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              // Update the state with the picked date
+                              setState(() {
+                                firstOfMonthDay = formattedDate;
+                                // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              });
+                              hrmsTripList(
+                                  firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              print(
+                                  '--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                              hrmsTripList(
+                                  firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              print('---formPicker--$firstOfMonthDay');
+                              // Call API
+                              //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              // print('---formPicker--$firstOfMonthDay');
+
+                              // Display the selected date as a toast
+                              //displayToast(dExpDate.toString());
+                            } else {
+                              // Handle case where no date was selected
+                              //displayToast("No date selected");
+                            }
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$firstOfMonthDay',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: 6),
+                        Container(
+                          height: 32,
+                          width: 32,
+                          child: Image.asset(
+                            "assets/images/reimicon_2.png",
+                            fit: BoxFit
+                                .contain, // or BoxFit.cover depending on the desired effect
+                          ),
+                        ),
+                        //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                        SizedBox(width: 8),
+                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                        SizedBox(width: 5),
+                        const Text(
+                          'To',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            // Check if a date was picked
+                            if (pickedDate != null) {
+                              // Format the picked date
+                              String formattedDate =
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              // Update the state with the picked date
+                              setState(() {
+                                lastDayOfCurrentMonth = formattedDate;
+                                // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              });
+                              hrmsTripList(
+                                  firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              print(
+                                  '--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                            } else {}
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$lastDayOfCurrentMonth',
+                                style: TextStyle(
+                                  color: Colors
+                                      .grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  // ui part
+                  /// todo this is a start journey ui
+                  Expanded(
+                    child: Container(
+                        child: FutureBuilder<List<TripDetailModel>>(
+                            future: tripDetailModel,
+                            builder: (context, snapshot) {
+                              return ListView.builder(
+                                  // itemCount: snapshot.data!.length ?? 0,
+                                  // itemBuilder: (context, index)
+                                  itemCount: _filteredData.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    final tripDetailData = _filteredData[index];
+                                    sTripEndLocation = tripDetailData.sTripEndLocation;
+
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                      child: Card(
+                                        elevation: 1,
+                                        color: Colors.white,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            border: Border.all(
+                                              color: Colors.grey, // Outline border color
+                                              width: 0.2, // Outline border width
+                                            ),
                                           ),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 8, right: 8, bottom: 0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Container(
-                                                    height: 32,
-                                                    width: 32,
-                                                    child: Image.asset(
-                                                      "assets/images/triplist_1.jpeg",
-                                                      fit: BoxFit
-                                                          .contain, // or BoxFit.cover depending on the desired effect
-                                                    ),
-                                                  ),
-                                                  SizedBox(width: 10),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[
-                                                      Text(
-                                                        tripDetailData.sEmpName,
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines:
-                                                            2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow
-                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
-                                                      SizedBox(height: 2),
-                                                      Text(
-                                                        tripDetailData.sDsgName,
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font10OpenSansRegularBlackTextStyle,
-                                                        maxLines:
-                                                            2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow
-                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                              // const SizedBox(height: 5),
-                                              // Padding(
-                                              //   padding: const EdgeInsets.only(
-                                              //       left: 15, right: 15),
-                                              //   child: Container(
-                                              //     height: 0.5,
-                                              //     color: Color(0xff3f617d),
-                                              //   ),
-                                              // ),
-                                              SizedBox(height: 5),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5),
-                                                child: Row(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8, right: 8, bottom: 0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: <Widget>[
                                                     Container(
-                                                        width: 20.0,
-                                                        height: 20.0,
-                                                        child: Center(
-                                                            child: Icon(
-                                                          Icons.notes_outlined,
-                                                          size: 16,
-                                                          color:
-                                                              Color(0xFF0098a6),
-                                                        ))),
-                                                    SizedBox(width: 10),
-                                                    Flexible(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          Text(
-                                                            'Start Location',
-                                                            // item['sExpHeadName'] ?? '',
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlackTextStyle,
-                                                            maxLines:
-                                                                2, // Limits the text to 2 lines
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                            softWrap: true,
-                                                          ),
-                                                          SizedBox(
-                                                              height:
-                                                                  2), // sRemarks
-                                                          Text(
-                                                            tripDetailData
-                                                                .sStartLocation,
-                                                            // item['sExpHeadName'] ?? '',
-                                                            style: AppTextStyle
-                                                                .font10OpenSansRegularBlackTextStyle,
-                                                            maxLines:
-                                                                2, // Limits the text to 2 lines
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                            softWrap: true,
-                                                          ),
-                                                        ],
+                                                      height: 32,
+                                                      width: 32,
+                                                      child: Image.asset(
+                                                        "assets/images/triplist_1.jpeg",
+                                                        fit: BoxFit
+                                                            .contain, // or BoxFit.cover depending on the desired effect
                                                       ),
                                                     ),
+                                                    SizedBox(width: 10),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          tripDetailData.sEmpName,
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle,
+                                                          maxLines:
+                                                              2, // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
+                                                        ),
+                                                        SizedBox(height: 2),
+                                                        Text(
+                                                          tripDetailData.sDsgName,
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font10OpenSansRegularBlackTextStyle,
+                                                          maxLines:
+                                                              2, // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    )
                                                   ],
                                                 ),
-                                              ),
-                                              SizedBox(height: 5),
-                                              Container(
-                                                height: 25,
-                                                color: Colors.white,
-                                                // color: Colors.grey[300], // Light gray background
-                                                padding: EdgeInsets.symmetric(
-                                                 horizontal: 10), // Padding to give space for the content
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end, // Align text and icon at the ends
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        print(
-                                                            '---Open location ON Google map---');
-                                                        var fTripStartLat =
-                                                            tripDetailData
-                                                                .fTripStartLat;
-                                                        var fTripStartLon =
-                                                            tripDetailData
-                                                                .fTripStartLon;
-                                                        double lat = double.parse(
-                                                            '${tripDetailData.fTripStartLat}');
-                                                        double long = double.parse(
-                                                            '${tripDetailData.fTripStartLon}');
-                                                        print(
-                                                            '---614---$fTripStartLat');
-                                                        print(
-                                                            '---615---$fTripStartLon');
-
-                                                        // openGoogleMap(28.6019931,77.3561923);
-                                                        openGoogleMap(
-                                                            lat, long);
-                                                      },
-                                                      child: Container(
-                                                        child: Image.asset(
-                                                          'assets/images/map.jpeg',
-                                                          height: 25,
-                                                          width: 25,
-                                                          fit: BoxFit.cover,
+                                                // const SizedBox(height: 5),
+                                                // Padding(
+                                                //   padding: const EdgeInsets.only(
+                                                //       left: 15, right: 15),
+                                                //   child: Container(
+                                                //     height: 0.5,
+                                                //     color: Color(0xff3f617d),
+                                                //   ),
+                                                // ),
+                                                SizedBox(height: 5),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 5),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: <Widget>[
+                                                      Container(
+                                                          width: 20.0,
+                                                          height: 20.0,
+                                                          child: Center(
+                                                              child: Icon(
+                                                            Icons.notes_outlined,
+                                                            size: 16,
+                                                            color:
+                                                                Color(0xFF0098a6),
+                                                          ))),
+                                                      SizedBox(width: 10),
+                                                      Flexible(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Text(
+                                                              'Start Location',
+                                                              // item['sExpHeadName'] ?? '',
+                                                              style: AppTextStyle
+                                                                  .font12OpenSansRegularBlackTextStyle,
+                                                              maxLines:
+                                                                  2, // Limits the text to 2 lines
+                                                              overflow: TextOverflow
+                                                                  .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                              softWrap: true,
+                                                            ),
+                                                            SizedBox(
+                                                                height:
+                                                                    2), // sRemarks
+                                                            Text(
+                                                              tripDetailData
+                                                                  .sStartLocation,
+                                                              // item['sExpHeadName'] ?? '',
+                                                              style: AppTextStyle
+                                                                  .font10OpenSansRegularBlackTextStyle,
+                                                              maxLines:
+                                                                  2, // Limits the text to 2 lines
+                                                              overflow: TextOverflow
+                                                                  .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                              softWrap: true,
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Container(
-                                                        height: 25,
-                                                        width: 180,
-                                                        color: Colors.red,
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: [
-                                                            const Padding(
-                                                              padding:
-                                                                  EdgeInsets.only(left: 10),
-                                                              child: Text(
-                                                                'Dur :',
-                                                                style: TextStyle(
-                                                                  color: Colors.white,
-                                                                  fontSize: 14,
-                                                                  fontWeight:
-                                                                  FontWeight.normal,
-                                                                  fontFamily: 'Montserrat',
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+                                                Container(
+                                                  height: 25,
+                                                  color: Colors.white,
+                                                  // color: Colors.grey[300], // Light gray background
+                                                  padding: EdgeInsets.symmetric(
+                                                   horizontal: 10), // Padding to give space for the content
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end, // Align text and icon at the ends
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () async {
+                                                          print(
+                                                              '---Open location ON Google map---');
+                                                          var fTripStartLat =
+                                                              tripDetailData
+                                                                  .fTripStartLat;
+                                                          var fTripStartLon =
+                                                              tripDetailData
+                                                                  .fTripStartLon;
+                                                          double lat = double.parse(
+                                                              '${tripDetailData.fTripStartLat}');
+                                                          double long = double.parse(
+                                                              '${tripDetailData.fTripStartLon}');
+                                                          print(
+                                                              '---614---$fTripStartLat');
+                                                          print(
+                                                              '---615---$fTripStartLon');
+
+                                                          // openGoogleMap(28.6019931,77.3561923);
+                                                          openGoogleMap(
+                                                              lat, long);
+                                                        },
+                                                        child: Container(
+                                                          child: Image.asset(
+                                                            'assets/images/map.jpeg',
+                                                            height: 25,
+                                                            width: 25,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 10),
+                                                      Container(
+                                                          height: 25,
+                                                          width: 180,
+                                                          color: Colors.red,
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: [
+                                                              const Padding(
+                                                                padding:
+                                                                    EdgeInsets.only(left: 10),
+                                                                child: Text(
+                                                                  'Dur :',
+                                                                  style: TextStyle(
+                                                                    color: Colors.white,
+                                                                    fontSize: 14,
+                                                                    fontWeight:
+                                                                    FontWeight.normal,
+                                                                    fontFamily: 'Montserrat',
+                                                                  ),
                                                                 ),
                                                               ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets.only(
+                                                                        left: 5,right: 5),
+                                                                child: Text(
+                                                                  "${tripDetailData.sDuration} HH:MM" ??
+                                                                      "0",
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize: 12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .normal,
+                                                                    fontFamily:
+                                                                        'Montserrat',
+                                                                  ),
+                                                                     overflow: TextOverflow.ellipsis,
+                                                                  softWrap: false,
+
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      SizedBox(width: 10),
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          print('-----667---');
+                                                          var images =
+                                                              tripDetailData
+                                                                  .sTripStartImage;
+                                                          var dTripsStart =
+                                                              tripDetailData
+                                                                  .dTripStart;
+                                                          var tripstrat =
+                                                              'TripStart : $dTripsStart';
+
+                                                          openFullScreenDialog(
+                                                              context,
+                                                              images,
+                                                              tripstrat);
+                                                        },
+                                                        child: Container(
+                                                          child: Image.asset(
+                                                            'assets/images/triplistphoto.jpeg',
+                                                            height: 25,
+                                                            width: 25,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5),
+
+                                                /// todo visible and invisible part
+                                                Visibility(
+                                                  visible: sTripEndLocation == "",
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height: 40,
+                                                        // color: Colors.grey[300], // Light gray background
+                                                        // padding: EdgeInsets.symmetric(horizontal: 10),
+                                                        // Padding to give space for the content
+                                                        decoration: BoxDecoration(
+                                                          color: Colors
+                                                              .white, // Background color of the container
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10), // Rounded corners (optional)
+                                                          border: Border.all(
+                                                            color: Colors
+                                                                .grey, // Outline (border) color
+                                                            width:
+                                                                1.0, // Border width
+                                                          ),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween, // Align text and icon at the ends
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Trip Start At',
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                  Text(
+                                                                    tripDetailData
+                                                                        .dTripStart,
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            const VerticalDivider(
+                                                              color: Colors
+                                                                  .grey, // Color of the divider
+                                                              thickness:
+                                                                  1, // Thickness of the line
+                                                              width:
+                                                                  20, // Space around the divider
+                                                              indent:
+                                                                  10, // Top spacing of the divider
+                                                              endIndent:
+                                                                  10, // Bottom spacing of the divider
                                                             ),
                                                             Padding(
                                                               padding:
-                                                                  const EdgeInsets.only(
-                                                                      left: 5,right: 5),
-                                                              child: Text(
-                                                                "${tripDetailData.sDuration} HH:MM" ??
-                                                                    "0",
-                                                                style:
-                                                                    const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 12,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal,
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                ),
-                                                                   overflow: TextOverflow.ellipsis,
-                                                                softWrap: false,
-
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 10),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Trip End At',
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                  Text(
+                                                                    tripDetailData
+                                                                        .dTripEnd,
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
-                                                    SizedBox(width: 10),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        print('-----667---');
-                                                        var images =
-                                                            tripDetailData
-                                                                .sTripStartImage;
-                                                        var dTripsStart =
-                                                            tripDetailData
-                                                                .dTripStart;
-                                                        var tripstrat =
-                                                            'TripStart : $dTripsStart';
-
-                                                        openFullScreenDialog(
-                                                            context,
-                                                            images,
-                                                            tripstrat);
-                                                      },
-                                                      child: Container(
-                                                        child: Image.asset(
-                                                          'assets/images/triplistphoto.jpeg',
-                                                          height: 25,
-                                                          width: 25,
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(height: 5),
-
-                                              /// todo visible and invisible part
-                                              Visibility(
-                                                visible: sTripEndLocation == "",
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height: 40,
-                                                      // color: Colors.grey[300], // Light gray background
-                                                      // padding: EdgeInsets.symmetric(horizontal: 10),
-                                                      // Padding to give space for the content
-                                                      decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .white, // Background color of the container
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10), // Rounded corners (optional)
-                                                        border: Border.all(
-                                                          color: Colors
-                                                              .grey, // Outline (border) color
-                                                          width:
-                                                              1.0, // Border width
-                                                        ),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween, // Align text and icon at the ends
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 10),
-                                                            child: Column(
+                                                      SizedBox(height: 5),
+                                                      Container(
+                                                        height:
+                                                            170, // Height of the container
+                                                        padding: EdgeInsets.all(
+                                                            16), // Padding around the container
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround, // Space around columns
+                                                          children: [
+                                                            // First Column
+                                                            Column(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      .center,
                                                               children: [
-                                                                Text(
-                                                                  'Trip Start At',
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                                Text(
-                                                                  tripDetailData
-                                                                      .dTripStart,
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          const VerticalDivider(
-                                                            color: Colors
-                                                                .grey, // Color of the divider
-                                                            thickness:
-                                                                1, // Thickness of the line
-                                                            width:
-                                                                20, // Space around the divider
-                                                            indent:
-                                                                10, // Top spacing of the divider
-                                                            endIndent:
-                                                                10, // Bottom spacing of the divider
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 10),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              // crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text(
-                                                                  'Trip End At',
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                                Text(
-                                                                  tripDetailData
-                                                                      .dTripEnd,
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Container(
-                                                      height:
-                                                          170, // Height of the container
-                                                      padding: EdgeInsets.all(
-                                                          16), // Padding around the container
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround, // Space around columns
-                                                        children: [
-                                                          // First Column
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              // Circular Network Image
-                                                              ClipOval(
-                                                                child: Image
-                                                                    .network(
-                                                                  '${tripDetailData.sTripStartImage}', // Replace with your image URL
-                                                                  width:
-                                                                      110, // Width of the circular image
-                                                                  height:
-                                                                      110, // Height of the circular image
-                                                                  fit: BoxFit
-                                                                      .cover, // Ensures the image fits the circle
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                  height: 10), // Spacing between the image and text
-                                                              // TextView
-                                                              Text(
-                                                                'Start Odometer',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          // Second Column
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-
-                                              /// todo visible and invisible part
-                                              Visibility(
-                                                visible: sTripEndLocation != "",
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Container(
-                                                      height: 25,
-                                                      color: Colors.grey[
-                                                          300], // Light gray background
-                                                      padding: EdgeInsets.symmetric(
-                                                          horizontal:
-                                                              10), // Padding to give space for the content
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween, // Align text and icon at the ends
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Icon(
-                                                                  Icons
-                                                                      .av_timer_sharp,
-                                                                  size: 25),
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              Text(
-                                                                'Start Odo :',
-                                                                // item['sExpHeadName'] ?? '',
-                                                                style: AppTextStyle
-                                                                    .font10OpenSansRegularBlackTextStyle,
-                                                                maxLines:
-                                                                    2, // Limits the text to 2 lines
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                softWrap: true,
-                                                              ),
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              Text(
-                                                                // tripDetailData.fStartOdometers,
-                                                                "${tripDetailData.fStartOdometers} KM",
-                                                                // item['sExpHeadName'] ?? '',
-                                                                style: AppTextStyle
-                                                                    .font10OpenSansRegularBlackTextStyle,
-                                                                maxLines:
-                                                                    2, // Limits the text to 2 lines
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                softWrap: true,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Spacer(),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Icon(
-                                                                  Icons
-                                                                      .av_timer_sharp,
-                                                                  size: 25),
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              Text(
-                                                                'End Odo :',
-                                                                // item['sExpHeadName'] ?? '',
-                                                                style: AppTextStyle
-                                                                    .font10OpenSansRegularBlackTextStyle,
-                                                                maxLines:
-                                                                    2, // Limits the text to 2 lines
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                softWrap: true,
-                                                              ),
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              Text(
-                                                                "${tripDetailData.fEndOdometers} KM",
-                                                                // tripDetailData.fEndOdometers,
-                                                                // item['sExpHeadName'] ?? '',
-                                                                style: AppTextStyle
-                                                                    .font10OpenSansRegularBlackTextStyle,
-                                                                maxLines:
-                                                                    2, // Limits the text to 2 lines
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                softWrap: true,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5),
-
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 5),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          Container(
-                                                              width: 20.0,
-                                                              height: 20.0,
-                                                              child: Center(
-                                                                  child: Icon(
-                                                                Icons
-                                                                    .notes_outlined,
-                                                                size: 16,
-                                                                color: Color(
-                                                                    0xFF0098a6),
-                                                              ))),
-                                                          SizedBox(width: 10),
-                                                          Flexible(
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .start,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: <Widget>[
-                                                                Text(
-                                                                  'End Location',
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
+                                                                // Circular Network Image
+                                                                ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    '${tripDetailData.sTripStartImage}', // Replace with your image URL
+                                                                    width:
+                                                                        110, // Width of the circular image
+                                                                    height:
+                                                                        110, // Height of the circular image
+                                                                    fit: BoxFit
+                                                                        .cover, // Ensures the image fits the circle
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
-                                                                    height:
-                                                                        2), // sRemarks
+                                                                    height: 10), // Spacing between the image and text
+                                                                // TextView
                                                                 Text(
-                                                                  tripDetailData
-                                                                      .sTripEndLocation,
+                                                                  'Start Odometer',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            // Second Column
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                /// todo visible and invisible part
+                                                Visibility(
+                                                  visible: sTripEndLocation != "",
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        height: 25,
+                                                        color: Colors.grey[
+                                                            300], // Light gray background
+                                                        padding: EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                10), // Padding to give space for the content
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween, // Align text and icon at the ends
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Icon(
+                                                                    Icons
+                                                                        .av_timer_sharp,
+                                                                    size: 25),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                  'Start Odo :',
                                                                   // item['sExpHeadName'] ?? '',
                                                                   style: AppTextStyle
                                                                       .font10OpenSansRegularBlackTextStyle,
@@ -1060,849 +942,972 @@ class _MyHomePageState extends State<TripListPage> {
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
+                                                                  softWrap: true,
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                  // tripDetailData.fStartOdometers,
+                                                                  "${tripDetailData.fStartOdometers} KM",
+                                                                  // item['sExpHeadName'] ?? '',
+                                                                  style: AppTextStyle
+                                                                      .font10OpenSansRegularBlackTextStyle,
+                                                                  maxLines:
+                                                                      2, // Limits the text to 2 lines
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                  softWrap: true,
                                                                 ),
                                                               ],
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
-                                                    // here you apply complete distace
-                                                    Container(
-                                                      height: 25,
-                                                      color: Colors.white,
-                                                      // color: Colors.grey[300], // Light gray background
-                                                      padding: EdgeInsets.symmetric(
-                                                          horizontal:
-                                                              10), // Padding to give space for the content
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .end, // Align text and icon at the ends
-                                                        children: [
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              /// todo open google route
-                                                              ///   print('---Open location ON Google map---');
-                                                              var fTripStartLat =
-                                                                  tripDetailData
-                                                                      .fTripStartLat;
-                                                              var fTripStartLon =
-                                                                  tripDetailData
-                                                                      .fTripStartLon;
-                                                              double lat =
-                                                                  double.parse(
-                                                                      '${tripDetailData.fTripStartLat}');
-                                                              double long =
-                                                                  double.parse(
-                                                                      '${tripDetailData.fTripStartLon}');
-                                                              print(
-                                                                  '---614---$fTripStartLat');
-                                                              print(
-                                                                  '---615---$fTripStartLon');
-
-                                                              // openGoogleMap(28.6019931,77.3561923);
-                                                              openGoogleMap(
-                                                                  lat, long);
-                                                            },
-                                                            child: Container(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/map.jpeg',
-                                                                height: 25,
-                                                                width: 25,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          SizedBox(width: 10),
-                                                          Container(
-                                                            height: 25,
-                                                            width: 180,
-                                                            color: Color(
-                                                                0xFF0098a6),
-                                                            child: Row(
+                                                            Spacer(),
+                                                            Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                const Padding(
-                                                                  padding: EdgeInsets
-                                                                      .only(
-                                                                          left: 10),
-                                                                  child: Text(
-                                                                    'Dur :',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      fontFamily:
-                                                                          'Montserrat',
-                                                                    ),
-                                                                  ),
+                                                                Icon(
+                                                                    Icons
+                                                                        .av_timer_sharp,
+                                                                    size: 25),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                  'End Odo :',
+                                                                  // item['sExpHeadName'] ?? '',
+                                                                  style: AppTextStyle
+                                                                      .font10OpenSansRegularBlackTextStyle,
+                                                                  maxLines:
+                                                                      2, // Limits the text to 2 lines
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                  softWrap: true,
                                                                 ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .only(
-                                                                          left: 5,right: 5),
-                                                                        //  ${tripDetailData.sDuration} HH:MM" ??
-                                                                  child: Text(
-                                                                    "${tripDetailData.fDistance} Km" ??
-                                                                        "0",
-                                                                    // tripDetailData.sDuration,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize:
-                                                                          12,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal,
-                                                                      fontFamily:
-                                                                          'Montserrat',
-                                                                    ),
-                                                                  ),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text(
+                                                                  "${tripDetailData.fEndOdometers} KM",
+                                                                  // tripDetailData.fEndOdometers,
+                                                                  // item['sExpHeadName'] ?? '',
+                                                                  style: AppTextStyle
+                                                                      .font10OpenSansRegularBlackTextStyle,
+                                                                  maxLines:
+                                                                      2, // Limits the text to 2 lines
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                  softWrap: true,
                                                                 ),
                                                               ],
                                                             ),
-                                                          ),
-                                                          SizedBox(width: 10),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              print(
-                                                                  '-----1099---');
-
-                                                              var images =
-                                                                  tripDetailData
-                                                                      .sTripEndImage;
-                                                              var dTripsStart =
-                                                                  tripDetailData
-                                                                      .dTripEnd;
-                                                              var tripEnd =
-                                                                  'TripEnd : $dTripsStart';
-
-                                                              openFullScreenDialog(
-                                                                  context,
-                                                                  images,
-                                                                  tripEnd);
-                                                            },
-                                                            child: Container(
-                                                              child:
-                                                                  Image.asset(
-                                                                'assets/images/triplistphoto.jpeg',
-                                                                height: 25,
-                                                                width: 25,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 10),
-
-                                                    Container(
-                                                      height: 40,
-                                                      // color: Colors.grey[300], // Light gray background
-                                                      // padding: EdgeInsets.symmetric(horizontal: 10),
-                                                      // Padding to give space for the content
-                                                      decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .white, // Background color of the container
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10), // Rounded corners (optional)
-                                                        border: Border.all(
-                                                          color: Colors
-                                                              .grey, // Outline (border) color
-                                                          width:
-                                                              1.0, // Border width
+                                                          ],
                                                         ),
                                                       ),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween, // Align text and icon at the ends
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 10),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              // crossAxisAlignment: CrossAxisAlignment.start,
-                                                              children: [
-                                                                Text(
-                                                                  'Trip Start At',
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                                Text(
-                                                                  tripDetailData
-                                                                      .dTripStart,
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                              ],
+                                                      SizedBox(height: 5),
+
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                top: 5),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Container(
+                                                                width: 20.0,
+                                                                height: 20.0,
+                                                                child: Center(
+                                                                    child: Icon(
+                                                                  Icons
+                                                                      .notes_outlined,
+                                                                  size: 16,
+                                                                  color: Color(
+                                                                      0xFF0098a6),
+                                                                ))),
+                                                            SizedBox(width: 10),
+                                                            Flexible(
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: <Widget>[
+                                                                  Text(
+                                                                    'End Location',
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          2), // sRemarks
+                                                                  Text(
+                                                                    tripDetailData
+                                                                        .sTripEndLocation,
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font10OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
-                                                          ),
-                                                          VerticalDivider(
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 10),
+                                                      // here you apply complete distace
+                                                      Container(
+                                                        height: 25,
+                                                        color: Colors.white,
+                                                        // color: Colors.grey[300], // Light gray background
+                                                        padding: EdgeInsets.symmetric(
+                                                            horizontal:
+                                                                10), // Padding to give space for the content
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end, // Align text and icon at the ends
+                                                          children: [
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                /// todo open google route
+                                                                ///   print('---Open location ON Google map---');
+                                                                var fTripStartLat =
+                                                                    tripDetailData
+                                                                        .fTripStartLat;
+                                                                var fTripStartLon =
+                                                                    tripDetailData
+                                                                        .fTripStartLon;
+                                                                double lat =
+                                                                    double.parse(
+                                                                        '${tripDetailData.fTripStartLat}');
+                                                                double long =
+                                                                    double.parse(
+                                                                        '${tripDetailData.fTripStartLon}');
+                                                                print(
+                                                                    '---614---$fTripStartLat');
+                                                                print(
+                                                                    '---615---$fTripStartLon');
+
+                                                                // openGoogleMap(28.6019931,77.3561923);
+                                                                openGoogleMap(
+                                                                    lat, long);
+                                                              },
+                                                              child: Container(
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/map.jpeg',
+                                                                  height: 25,
+                                                                  width: 25,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            Container(
+                                                              height: 25,
+                                                              width: 180,
+                                                              color: Color(
+                                                                  0xFF0098a6),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  const Padding(
+                                                                    padding: EdgeInsets
+                                                                        .only(
+                                                                            left: 10),
+                                                                    child: Text(
+                                                                      'Dur :',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .normal,
+                                                                        fontFamily:
+                                                                            'Montserrat',
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets
+                                                                            .only(
+                                                                            left: 5,right: 5),
+                                                                          //  ${tripDetailData.sDuration} HH:MM" ??
+                                                                    child: Text(
+                                                                      "${tripDetailData.fDistance} Km" ??
+                                                                          "0",
+                                                                      // tripDetailData.sDuration,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            12,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .normal,
+                                                                        fontFamily:
+                                                                            'Montserrat',
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                print(
+                                                                    '-----1099---');
+
+                                                                var images =
+                                                                    tripDetailData
+                                                                        .sTripEndImage;
+                                                                var dTripsStart =
+                                                                    tripDetailData
+                                                                        .dTripEnd;
+                                                                var tripEnd =
+                                                                    'TripEnd : $dTripsStart';
+
+                                                                openFullScreenDialog(
+                                                                    context,
+                                                                    images,
+                                                                    tripEnd);
+                                                              },
+                                                              child: Container(
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/triplistphoto.jpeg',
+                                                                  height: 25,
+                                                                  width: 25,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 10),
+
+                                                      Container(
+                                                        height: 40,
+                                                        // color: Colors.grey[300], // Light gray background
+                                                        // padding: EdgeInsets.symmetric(horizontal: 10),
+                                                        // Padding to give space for the content
+                                                        decoration: BoxDecoration(
+                                                          color: Colors
+                                                              .white, // Background color of the container
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                  10), // Rounded corners (optional)
+                                                          border: Border.all(
                                                             color: Colors
-                                                                .grey, // Color of the divider
-                                                            thickness:
-                                                                1, // Thickness of the line
+                                                                .grey, // Outline (border) color
                                                             width:
-                                                                20, // Space around the divider
-                                                            indent:
-                                                                10, // Top spacing of the divider
-                                                            endIndent:
-                                                                10, // Bottom spacing of the divider
+                                                                1.0, // Border width
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    right: 10),
-                                                            child: Column(
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween, // Align text and icon at the ends
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 10),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Trip Start At',
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                  Text(
+                                                                    tripDetailData
+                                                                        .dTripStart,
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            VerticalDivider(
+                                                              color: Colors
+                                                                  .grey, // Color of the divider
+                                                              thickness:
+                                                                  1, // Thickness of the line
+                                                              width:
+                                                                  20, // Space around the divider
+                                                              indent:
+                                                                  10, // Top spacing of the divider
+                                                              endIndent:
+                                                                  10, // Bottom spacing of the divider
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 10),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    'Trip End At',
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                  Text(
+                                                                    tripDetailData
+                                                                        .dTripEnd,
+                                                                    // item['sExpHeadName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                                    maxLines:
+                                                                        2, // Limits the text to 2 lines
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap:
+                                                                        true,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      Container(
+                                                        height:
+                                                            160, // Height of the container
+                                                        padding: EdgeInsets.all(
+                                                            16), // Padding around the container
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround, // Space around columns
+                                                          children: [
+                                                            // First Column
+                                                            Column(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
-                                                                      .spaceEvenly,
-                                                              // crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      .center,
                                                               children: [
+                                                                // Circular Network Image
+                                                                ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    '${tripDetailData.sTripStartImage}', // Replace with your image URL
+                                                                    width:
+                                                                        100, // Width of the circular image
+                                                                    height:
+                                                                        100, // Height of the circular image
+                                                                    fit: BoxFit
+                                                                        .cover, // Ensures the image fits the circle
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    height:
+                                                                        10), // Spacing between the image and text
+                                                                // TextView
                                                                 Text(
-                                                                  'Trip End At',
-                                                                  // item['sExpHeadName'] ?? '',
+                                                                  'Start Odometer',
                                                                   style: AppTextStyle
                                                                       .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
-                                                                ),
-                                                                Text(
-                                                                  tripDetailData
-                                                                      .dTripEnd,
-                                                                  // item['sExpHeadName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlack45TextStyle,
-                                                                  maxLines:
-                                                                      2, // Limits the text to 2 lines
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                  softWrap:
-                                                                      true,
                                                                 ),
                                                               ],
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Container(
-                                                      height:
-                                                          160, // Height of the container
-                                                      padding: EdgeInsets.all(
-                                                          16), // Padding around the container
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround, // Space around columns
-                                                        children: [
-                                                          // First Column
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              // Circular Network Image
-                                                              ClipOval(
-                                                                child: Image
-                                                                    .network(
-                                                                  '${tripDetailData.sTripStartImage}', // Replace with your image URL
-                                                                  width:
-                                                                      100, // Width of the circular image
-                                                                  height:
-                                                                      100, // Height of the circular image
-                                                                  fit: BoxFit
-                                                                      .cover, // Ensures the image fits the circle
+                                                            // Second Column
+                                                            Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                // Circular Network Image
+                                                                ClipOval(
+                                                                  child: Image
+                                                                      .network(
+                                                                    '${tripDetailData.sTripEndImage}', // Replace with your image URL
+                                                                    width:
+                                                                        100, // Width of the circular image
+                                                                    height:
+                                                                        100, // Height of the circular image
+                                                                    fit: BoxFit
+                                                                        .cover, // Ensures the image fits the circle
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              SizedBox(
-                                                                  height:
-                                                                      10), // Spacing between the image and text
-                                                              // TextView
-                                                              Text(
-                                                                'Start Odometer',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          // Second Column
-                                                          Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              // Circular Network Image
-                                                              ClipOval(
-                                                                child: Image
-                                                                    .network(
-                                                                  '${tripDetailData.sTripEndImage}', // Replace with your image URL
-                                                                  width:
-                                                                      100, // Width of the circular image
-                                                                  height:
-                                                                      100, // Height of the circular image
-                                                                  fit: BoxFit
-                                                                      .cover, // Ensures the image fits the circle
+                                                                SizedBox(
+                                                                    height:
+                                                                        10), // Spacing between the image and text
+                                                                // TextView
+                                                                Text(
+                                                                  'End Odometer',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle,
                                                                 ),
-                                                              ),
-                                                              SizedBox(
-                                                                  height:
-                                                                      10), // Spacing between the image and text
-                                                              // TextView
-                                                              Text(
-                                                                'End Odometer',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ],
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ],
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                });
-                          }
+                                    );
+                                  });
+                            }
 
-                          /// todo in a future  uncomment this is a complete journey code
+                            /// todo in a future  uncomment this is a complete journey code
 
-                          //        Padding(
-                          //   padding: const EdgeInsets.only(left: 10, right: 10),
-                          //   child: Card(
-                          //     elevation: 1,
-                          //     color: Colors.white,
-                          //     child: Container(
-                          //       decoration: BoxDecoration(
-                          //         borderRadius: BorderRadius.circular(5.0),
-                          //         border: Border.all(
-                          //           color: Colors.grey, // Outline border color
-                          //           width: 0.2, // Outline border width
-                          //         ),
-                          //       ),
-                          //       child: Padding(
-                          //         padding:
-                          //         const EdgeInsets.only(left: 8, right: 8,bottom: 10),
-                          //         child: Column(
-                          //           mainAxisAlignment: MainAxisAlignment.start,
-                          //           crossAxisAlignment: CrossAxisAlignment.start,
-                          //           children: [
-                          //             Row(
-                          //               mainAxisAlignment: MainAxisAlignment.start,
-                          //               children: <Widget>[
-                          //                 Container(
-                          //                     width: 40.0,
-                          //                     height: 40.0,
-                          //                     decoration: BoxDecoration(
-                          //                       borderRadius:
-                          //                       BorderRadius.circular(15.0),
-                          //                       border: Border.all(
-                          //                         color: Color(0xFF255899),
-                          //                         // Outline border color
-                          //                         width:
-                          //                         0.5, // Outline border width
-                          //                       ),
-                          //                       color: Colors.white,
-                          //                     ),
-                          //                     child: Center(
-                          //                         child: Icon(Icons.account_box,size: 40,color: Color(0xFF0098a6),)
-                          //                     )),
-                          //                 SizedBox(width: 10),
-                          //                 Column(
-                          //                   mainAxisAlignment:
-                          //                   MainAxisAlignment.start,
-                          //                   crossAxisAlignment:
-                          //                   CrossAxisAlignment.start,
-                          //                   children: <Widget>[
-                          //                     Text(
-                          //                       'Jintendar Kumar Wadhawan',
-                          //                       // item['sExpHeadName'] ?? '',
-                          //                       style: AppTextStyle
-                          //                           .font12OpenSansRegularBlackTextStyle,
-                          //                       maxLines: 2, // Limits the text to 2 lines
-                          //                       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                       softWrap: true,
-                          //                     ),
-                          //                     SizedBox(height: 2),
-                          //                     Text(
-                          //                         'Deputy General Manager - Software Development',
-                          //                         // item['sExpHeadName'] ?? '',
-                          //                         style: AppTextStyle
-                          //                             .font10OpenSansRegularBlackTextStyle,
-                          //                         maxLines: 2, // Limits the text to 2 lines
-                          //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                         softWrap: true,
-                          //                       ),
-                          //                   ],
-                          //                 )
-                          //               ],
-                          //             ),
-                          //             const SizedBox(height: 10),
-                          //             Padding(
-                          //               padding: const EdgeInsets.only(
-                          //                   left: 15, right: 15),
-                          //               child: Container(
-                          //                 height: 0.5,
-                          //                 color: Color(0xff3f617d),
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Padding(
-                          //               padding: const EdgeInsets.only(top: 5),
-                          //               child: Row(
-                          //                 mainAxisAlignment:
-                          //                 MainAxisAlignment.start,
-                          //                 children: <Widget>[
-                          //                   Container(
-                          //                       width: 20.0,
-                          //                       height: 20.0,
-                          //                       child: Center(
-                          //                           child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
-                          //                       )),
-                          //                   SizedBox(width: 10),
-                          //                   Flexible(
-                          //                     child: Column(
-                          //                       mainAxisAlignment:
-                          //                       MainAxisAlignment.start,
-                          //                       crossAxisAlignment:
-                          //                       CrossAxisAlignment.start,
-                          //                       children: <Widget>[
-                          //                         Text(
-                          //                           'Start Location',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle
-                          //                               .font12OpenSansRegularBlackTextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                         SizedBox(height: 2), // sRemarks
-                          //                         Text(
-                          //                           'A6, Bishanpura Rd, Block A,Sector 57, Noida, Uttar Pradesh 201301,India',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle
-                          //                               .font10OpenSansRegularBlackTextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Container(
-                          //               height: 25,
-                          //              color: Colors.white,
-                          //              // color: Colors.grey[300], // Light gray background
-                          //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
-                          //               child: Row(
-                          //                 mainAxisAlignment: MainAxisAlignment.end, // Align text and icon at the ends
-                          //                 children: [
-                          //                   Image.asset('assets/images/map.jpeg',
-                          //                     height: 25,width: 25,
-                          //                     fit: BoxFit.cover,
-                          //                   ),
-                          //                   SizedBox(width: 10),
-                          //                   Container(
-                          //                     height: 25,
-                          //                     width: 150,
-                          //                     color: Colors.red,
-                          //                     child: const Row(
-                          //                       mainAxisAlignment: MainAxisAlignment.start,
-                          //                       children: [
-                          //                         Padding(
-                          //                           padding: EdgeInsets.only(left: 20),
-                          //                           child: Text('Dur :',style: TextStyle(
-                          //                             color: Colors.white,
-                          //                             fontSize: 14,
-                          //                             fontWeight: FontWeight.normal,
-                          //                             fontFamily: 'Montserrat',
-                          //                           ), ),
-                          //                         ),
-                          //                         Padding(
-                          //                           padding: EdgeInsets.only(left: 10),
-                          //                           child: Text('0 HH:MM',style: TextStyle(
-                          //                             color: Colors.white,
-                          //                             fontSize: 14,
-                          //                             fontWeight: FontWeight.normal,
-                          //                             fontFamily: 'Montserrat',
-                          //                           ), ),
-                          //                         ),
-                          //
-                          //                       ],
-                          //                     ),
-                          //                   ),
-                          //                   SizedBox(width: 10),
-                          //                   Image.asset('assets/images/camra.jpeg',
-                          //                     height: 25,width: 25,
-                          //                     fit: BoxFit.cover,
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Container(
-                          //               height: 25,
-                          //               color: Colors.grey[300], // Light gray background
-                          //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
-                          //               child: Row(
-                          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
-                          //                 children: [
-                          //                   Row(
-                          //                     mainAxisAlignment: MainAxisAlignment.start,
-                          //                     children: [
-                          //                       Icon(Icons.av_timer_sharp,size: 25),
-                          //                       SizedBox(width: 10),
-                          //                       Text(
-                          //                         'Start Odo :',
-                          //                         // item['sExpHeadName'] ?? '',
-                          //                         style: AppTextStyle
-                          //                             .font10OpenSansRegularBlackTextStyle,
-                          //                         maxLines: 2, // Limits the text to 2 lines
-                          //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                         softWrap: true,
-                          //                       ),
-                          //                       SizedBox(width: 10),
-                          //                       Text(
-                          //                         '835 km',
-                          //                         // item['sExpHeadName'] ?? '',
-                          //                         style: AppTextStyle
-                          //                             .font10OpenSansRegularBlackTextStyle,
-                          //                         maxLines: 2, // Limits the text to 2 lines
-                          //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                         softWrap: true,
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                   Spacer(),
-                          //                   Row(
-                          //                     mainAxisAlignment: MainAxisAlignment.start,
-                          //                     children: [
-                          //                       Icon(Icons.av_timer_sharp,size: 25),
-                          //                       SizedBox(width: 10),
-                          //                       Text(
-                          //                         'End Odo :',
-                          //                         // item['sExpHeadName'] ?? '',
-                          //                         style: AppTextStyle
-                          //                             .font10OpenSansRegularBlackTextStyle,
-                          //                         maxLines: 2, // Limits the text to 2 lines
-                          //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                         softWrap: true,
-                          //                       ),
-                          //                       SizedBox(width: 10),
-                          //                       Text(
-                          //                         '6464 km',
-                          //                         // item['sExpHeadName'] ?? '',
-                          //                         style: AppTextStyle
-                          //                             .font10OpenSansRegularBlackTextStyle,
-                          //                         maxLines: 2, // Limits the text to 2 lines
-                          //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                         softWrap: true,
-                          //                       ),
-                          //
-                          //                     ],
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Padding(
-                          //               padding: const EdgeInsets.only(top: 5),
-                          //               child: Row(
-                          //                 mainAxisAlignment:
-                          //                 MainAxisAlignment.start,
-                          //                 children: <Widget>[
-                          //                   Container(
-                          //                       width: 20.0,
-                          //                       height: 20.0,
-                          //                       child: Center(
-                          //                           child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
-                          //                       )),
-                          //                   SizedBox(width: 10),
-                          //                   Flexible(
-                          //                     child: Column(
-                          //                       mainAxisAlignment:
-                          //                       MainAxisAlignment.start,
-                          //                       crossAxisAlignment:
-                          //                       CrossAxisAlignment.start,
-                          //                       children: <Widget>[
-                          //                         Text(
-                          //                           'End Location',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                         SizedBox(height: 2), // sRemarks
-                          //                         Text(
-                          //                           'A6, Bishanpura Rd, Block A,Sector 57, Noida, Uttar Pradesh 201301,India',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle
-                          //                               .font10OpenSansRegularBlackTextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 15),
-                          //             Container(
-                          //               height: 25,
-                          //               color: Colors.white,
-                          //               // color: Colors.grey[300], // Light gray background
-                          //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
-                          //               child: Row(
-                          //                 mainAxisAlignment: MainAxisAlignment.end, // Align text and icon at the ends
-                          //                 children: [
-                          //                   Image.asset('assets/images/map.jpeg',
-                          //                     height: 25,width: 25,
-                          //                     fit: BoxFit.cover,
-                          //                   ),
-                          //                   SizedBox(width: 10),
-                          //                   Container(
-                          //                     height: 25,
-                          //                     width: 150,
-                          //                     color: Color(0xFF0098a6),
-                          //                     child: const Row(
-                          //                       mainAxisAlignment: MainAxisAlignment.start,
-                          //                       children: [
-                          //                         Padding(
-                          //                           padding: EdgeInsets.only(left: 20),
-                          //                           child: Text('Dur :',style: TextStyle(
-                          //                             color: Colors.white,
-                          //                             fontSize: 14,
-                          //                             fontWeight: FontWeight.normal,
-                          //                             fontFamily: 'Montserrat',
-                          //                           ), ),
-                          //                         ),
-                          //                         Padding(
-                          //                           padding: EdgeInsets.only(left: 10),
-                          //                           child: Text('5629 Km',style: TextStyle(
-                          //                             color: Colors.white,
-                          //                             fontSize: 14,
-                          //                             fontWeight: FontWeight.normal,
-                          //                             fontFamily: 'Montserrat',
-                          //                           ), ),
-                          //                         ),
-                          //
-                          //                       ],
-                          //                     ),
-                          //                   ),
-                          //                   SizedBox(width: 10),
-                          //                   Image.asset('assets/images/camra.jpeg',
-                          //                     height: 25,width: 25,
-                          //                     fit: BoxFit.cover,
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Container(
-                          //               height: 40,
-                          //              // color: Colors.grey[300], // Light gray background
-                          //              // padding: EdgeInsets.symmetric(horizontal: 10),
-                          //               // Padding to give space for the content
-                          //               decoration: BoxDecoration(
-                          //                 color: Colors.white, // Background color of the container
-                          //                 borderRadius: BorderRadius.circular(10), // Rounded corners (optional)
-                          //                 border: Border.all(
-                          //                   color: Colors.grey, // Outline (border) color
-                          //                   width: 1.0, // Border width
-                          //                 ),
-                          //               ),
-                          //               child: Row(
-                          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
-                          //                 children: [
-                          //                   Padding(
-                          //                     padding: const EdgeInsets.only(left: 10),
-                          //                     child: Column(
-                          //                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //                     // crossAxisAlignment: CrossAxisAlignment.start,
-                          //                      children: [
-                          //                        Text(
-                          //                          'Trip Start At',
-                          //                          // item['sExpHeadName'] ?? '',
-                          //                          style: AppTextStyle
-                          //                              .font12OpenSansRegularBlackTextStyle,
-                          //                          maxLines: 2, // Limits the text to 2 lines
-                          //                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                          softWrap: true,
-                          //                        ),
-                          //                        Text(
-                          //                          '09/Sep/2024 14:51',
-                          //                          // item['sExpHeadName'] ?? '',
-                          //                          style: AppTextStyle
-                          //                              .font12OpenSansRegularBlack45TextStyle,
-                          //                          maxLines: 2, // Limits the text to 2 lines
-                          //                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                          softWrap: true,
-                          //                        ),
-                          //                      ],
-                          //                                              ),
-                          //                   ),
-                          //                   VerticalDivider(
-                          //                     color: Colors.grey, // Color of the divider
-                          //                     thickness: 1,       // Thickness of the line
-                          //                     width: 20,          // Space around the divider
-                          //                     indent: 10,         // Top spacing of the divider
-                          //                     endIndent: 10,      // Bottom spacing of the divider
-                          //                   ),
-                          //                   Padding(
-                          //                     padding: const EdgeInsets.only(right: 10),
-                          //                     child: Column(
-                          //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          //                      // crossAxisAlignment: CrossAxisAlignment.start,
-                          //                       children: [
-                          //                         Text(
-                          //                           'Trip End At',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle
-                          //                               .font12OpenSansRegularBlackTextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                         Text(
-                          //                           '09/Sep/2024 16:21',
-                          //                           // item['sExpHeadName'] ?? '',
-                          //                           style: AppTextStyle
-                          //                               .font12OpenSansRegularBlack45TextStyle,
-                          //                           maxLines: 2, // Limits the text to 2 lines
-                          //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                          //                           softWrap: true,
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             ),
-                          //             SizedBox(height: 5),
-                          //             Container(
-                          //               height: 160, // Height of the container
-                          //               padding: EdgeInsets.all(16), // Padding around the container
-                          //               child: Row(
-                          //                 mainAxisAlignment: MainAxisAlignment.spaceAround, // Space around columns
-                          //                 children: [
-                          //                   // First Column
-                          //                   Column(
-                          //                     mainAxisAlignment: MainAxisAlignment.center,
-                          //                     children: [
-                          //                       // Circular Network Image
-                          //                       ClipOval(
-                          //                         child: Image.network(
-                          //                           'http://upegov.in/HrmsTestapis/TrackingImgs/090920240933343326.jpg', // Replace with your image URL
-                          //                           width: 100, // Width of the circular image
-                          //                           height: 100, // Height of the circular image
-                          //                           fit: BoxFit.cover, // Ensures the image fits the circle
-                          //                         ),
-                          //                       ),
-                          //                       SizedBox(height: 10), // Spacing between the image and text
-                          //                       // TextView
-                          //                       Text(
-                          //                         'Start Odometer',
-                          //                         style: AppTextStyle
-                          //                             .font12OpenSansRegularBlackTextStyle,
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                   // Second Column
-                          //                   Column(
-                          //                     mainAxisAlignment: MainAxisAlignment.center,
-                          //                     children: [
-                          //                       // Circular Network Image
-                          //                       ClipOval(
-                          //                         child: Image.network(
-                          //                           'http://upegov.in/HrmsTestapis/TrackingImgs/090920240933343326.jpg', // Replace with your image URL
-                          //                           width: 100, // Width of the circular image
-                          //                           height: 100, // Height of the circular image
-                          //                           fit: BoxFit.cover, // Ensures the image fits the circle
-                          //                         ),
-                          //                       ),
-                          //                       SizedBox(height: 10), // Spacing between the image and text
-                          //                       // TextView
-                          //                       Text(
-                          //                         'End Odometer',style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                          //                       ),
-                          //                     ],
-                          //                   ),
-                          //                 ],
-                          //               ),
-                          //             )
-                          //
-                          //
-                          //           ],
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // )
+                            //        Padding(
+                            //   padding: const EdgeInsets.only(left: 10, right: 10),
+                            //   child: Card(
+                            //     elevation: 1,
+                            //     color: Colors.white,
+                            //     child: Container(
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(5.0),
+                            //         border: Border.all(
+                            //           color: Colors.grey, // Outline border color
+                            //           width: 0.2, // Outline border width
+                            //         ),
+                            //       ),
+                            //       child: Padding(
+                            //         padding:
+                            //         const EdgeInsets.only(left: 8, right: 8,bottom: 10),
+                            //         child: Column(
+                            //           mainAxisAlignment: MainAxisAlignment.start,
+                            //           crossAxisAlignment: CrossAxisAlignment.start,
+                            //           children: [
+                            //             Row(
+                            //               mainAxisAlignment: MainAxisAlignment.start,
+                            //               children: <Widget>[
+                            //                 Container(
+                            //                     width: 40.0,
+                            //                     height: 40.0,
+                            //                     decoration: BoxDecoration(
+                            //                       borderRadius:
+                            //                       BorderRadius.circular(15.0),
+                            //                       border: Border.all(
+                            //                         color: Color(0xFF255899),
+                            //                         // Outline border color
+                            //                         width:
+                            //                         0.5, // Outline border width
+                            //                       ),
+                            //                       color: Colors.white,
+                            //                     ),
+                            //                     child: Center(
+                            //                         child: Icon(Icons.account_box,size: 40,color: Color(0xFF0098a6),)
+                            //                     )),
+                            //                 SizedBox(width: 10),
+                            //                 Column(
+                            //                   mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //                   crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //                   children: <Widget>[
+                            //                     Text(
+                            //                       'Jintendar Kumar Wadhawan',
+                            //                       // item['sExpHeadName'] ?? '',
+                            //                       style: AppTextStyle
+                            //                           .font12OpenSansRegularBlackTextStyle,
+                            //                       maxLines: 2, // Limits the text to 2 lines
+                            //                       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                       softWrap: true,
+                            //                     ),
+                            //                     SizedBox(height: 2),
+                            //                     Text(
+                            //                         'Deputy General Manager - Software Development',
+                            //                         // item['sExpHeadName'] ?? '',
+                            //                         style: AppTextStyle
+                            //                             .font10OpenSansRegularBlackTextStyle,
+                            //                         maxLines: 2, // Limits the text to 2 lines
+                            //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                         softWrap: true,
+                            //                       ),
+                            //                   ],
+                            //                 )
+                            //               ],
+                            //             ),
+                            //             const SizedBox(height: 10),
+                            //             Padding(
+                            //               padding: const EdgeInsets.only(
+                            //                   left: 15, right: 15),
+                            //               child: Container(
+                            //                 height: 0.5,
+                            //                 color: Color(0xff3f617d),
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Padding(
+                            //               padding: const EdgeInsets.only(top: 5),
+                            //               child: Row(
+                            //                 mainAxisAlignment:
+                            //                 MainAxisAlignment.start,
+                            //                 children: <Widget>[
+                            //                   Container(
+                            //                       width: 20.0,
+                            //                       height: 20.0,
+                            //                       child: Center(
+                            //                           child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
+                            //                       )),
+                            //                   SizedBox(width: 10),
+                            //                   Flexible(
+                            //                     child: Column(
+                            //                       mainAxisAlignment:
+                            //                       MainAxisAlignment.start,
+                            //                       crossAxisAlignment:
+                            //                       CrossAxisAlignment.start,
+                            //                       children: <Widget>[
+                            //                         Text(
+                            //                           'Start Location',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle
+                            //                               .font12OpenSansRegularBlackTextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                         SizedBox(height: 2), // sRemarks
+                            //                         Text(
+                            //                           'A6, Bishanpura Rd, Block A,Sector 57, Noida, Uttar Pradesh 201301,India',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle
+                            //                               .font10OpenSansRegularBlackTextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Container(
+                            //               height: 25,
+                            //              color: Colors.white,
+                            //              // color: Colors.grey[300], // Light gray background
+                            //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.end, // Align text and icon at the ends
+                            //                 children: [
+                            //                   Image.asset('assets/images/map.jpeg',
+                            //                     height: 25,width: 25,
+                            //                     fit: BoxFit.cover,
+                            //                   ),
+                            //                   SizedBox(width: 10),
+                            //                   Container(
+                            //                     height: 25,
+                            //                     width: 150,
+                            //                     color: Colors.red,
+                            //                     child: const Row(
+                            //                       mainAxisAlignment: MainAxisAlignment.start,
+                            //                       children: [
+                            //                         Padding(
+                            //                           padding: EdgeInsets.only(left: 20),
+                            //                           child: Text('Dur :',style: TextStyle(
+                            //                             color: Colors.white,
+                            //                             fontSize: 14,
+                            //                             fontWeight: FontWeight.normal,
+                            //                             fontFamily: 'Montserrat',
+                            //                           ), ),
+                            //                         ),
+                            //                         Padding(
+                            //                           padding: EdgeInsets.only(left: 10),
+                            //                           child: Text('0 HH:MM',style: TextStyle(
+                            //                             color: Colors.white,
+                            //                             fontSize: 14,
+                            //                             fontWeight: FontWeight.normal,
+                            //                             fontFamily: 'Montserrat',
+                            //                           ), ),
+                            //                         ),
+                            //
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                   SizedBox(width: 10),
+                            //                   Image.asset('assets/images/camra.jpeg',
+                            //                     height: 25,width: 25,
+                            //                     fit: BoxFit.cover,
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Container(
+                            //               height: 25,
+                            //               color: Colors.grey[300], // Light gray background
+                            //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
+                            //                 children: [
+                            //                   Row(
+                            //                     mainAxisAlignment: MainAxisAlignment.start,
+                            //                     children: [
+                            //                       Icon(Icons.av_timer_sharp,size: 25),
+                            //                       SizedBox(width: 10),
+                            //                       Text(
+                            //                         'Start Odo :',
+                            //                         // item['sExpHeadName'] ?? '',
+                            //                         style: AppTextStyle
+                            //                             .font10OpenSansRegularBlackTextStyle,
+                            //                         maxLines: 2, // Limits the text to 2 lines
+                            //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                         softWrap: true,
+                            //                       ),
+                            //                       SizedBox(width: 10),
+                            //                       Text(
+                            //                         '835 km',
+                            //                         // item['sExpHeadName'] ?? '',
+                            //                         style: AppTextStyle
+                            //                             .font10OpenSansRegularBlackTextStyle,
+                            //                         maxLines: 2, // Limits the text to 2 lines
+                            //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                         softWrap: true,
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                   Spacer(),
+                            //                   Row(
+                            //                     mainAxisAlignment: MainAxisAlignment.start,
+                            //                     children: [
+                            //                       Icon(Icons.av_timer_sharp,size: 25),
+                            //                       SizedBox(width: 10),
+                            //                       Text(
+                            //                         'End Odo :',
+                            //                         // item['sExpHeadName'] ?? '',
+                            //                         style: AppTextStyle
+                            //                             .font10OpenSansRegularBlackTextStyle,
+                            //                         maxLines: 2, // Limits the text to 2 lines
+                            //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                         softWrap: true,
+                            //                       ),
+                            //                       SizedBox(width: 10),
+                            //                       Text(
+                            //                         '6464 km',
+                            //                         // item['sExpHeadName'] ?? '',
+                            //                         style: AppTextStyle
+                            //                             .font10OpenSansRegularBlackTextStyle,
+                            //                         maxLines: 2, // Limits the text to 2 lines
+                            //                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                         softWrap: true,
+                            //                       ),
+                            //
+                            //                     ],
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Padding(
+                            //               padding: const EdgeInsets.only(top: 5),
+                            //               child: Row(
+                            //                 mainAxisAlignment:
+                            //                 MainAxisAlignment.start,
+                            //                 children: <Widget>[
+                            //                   Container(
+                            //                       width: 20.0,
+                            //                       height: 20.0,
+                            //                       child: Center(
+                            //                           child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
+                            //                       )),
+                            //                   SizedBox(width: 10),
+                            //                   Flexible(
+                            //                     child: Column(
+                            //                       mainAxisAlignment:
+                            //                       MainAxisAlignment.start,
+                            //                       crossAxisAlignment:
+                            //                       CrossAxisAlignment.start,
+                            //                       children: <Widget>[
+                            //                         Text(
+                            //                           'End Location',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                         SizedBox(height: 2), // sRemarks
+                            //                         Text(
+                            //                           'A6, Bishanpura Rd, Block A,Sector 57, Noida, Uttar Pradesh 201301,India',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle
+                            //                               .font10OpenSansRegularBlackTextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 15),
+                            //             Container(
+                            //               height: 25,
+                            //               color: Colors.white,
+                            //               // color: Colors.grey[300], // Light gray background
+                            //               padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.end, // Align text and icon at the ends
+                            //                 children: [
+                            //                   Image.asset('assets/images/map.jpeg',
+                            //                     height: 25,width: 25,
+                            //                     fit: BoxFit.cover,
+                            //                   ),
+                            //                   SizedBox(width: 10),
+                            //                   Container(
+                            //                     height: 25,
+                            //                     width: 150,
+                            //                     color: Color(0xFF0098a6),
+                            //                     child: const Row(
+                            //                       mainAxisAlignment: MainAxisAlignment.start,
+                            //                       children: [
+                            //                         Padding(
+                            //                           padding: EdgeInsets.only(left: 20),
+                            //                           child: Text('Dur :',style: TextStyle(
+                            //                             color: Colors.white,
+                            //                             fontSize: 14,
+                            //                             fontWeight: FontWeight.normal,
+                            //                             fontFamily: 'Montserrat',
+                            //                           ), ),
+                            //                         ),
+                            //                         Padding(
+                            //                           padding: EdgeInsets.only(left: 10),
+                            //                           child: Text('5629 Km',style: TextStyle(
+                            //                             color: Colors.white,
+                            //                             fontSize: 14,
+                            //                             fontWeight: FontWeight.normal,
+                            //                             fontFamily: 'Montserrat',
+                            //                           ), ),
+                            //                         ),
+                            //
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                   SizedBox(width: 10),
+                            //                   Image.asset('assets/images/camra.jpeg',
+                            //                     height: 25,width: 25,
+                            //                     fit: BoxFit.cover,
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Container(
+                            //               height: 40,
+                            //              // color: Colors.grey[300], // Light gray background
+                            //              // padding: EdgeInsets.symmetric(horizontal: 10),
+                            //               // Padding to give space for the content
+                            //               decoration: BoxDecoration(
+                            //                 color: Colors.white, // Background color of the container
+                            //                 borderRadius: BorderRadius.circular(10), // Rounded corners (optional)
+                            //                 border: Border.all(
+                            //                   color: Colors.grey, // Outline (border) color
+                            //                   width: 1.0, // Border width
+                            //                 ),
+                            //               ),
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
+                            //                 children: [
+                            //                   Padding(
+                            //                     padding: const EdgeInsets.only(left: 10),
+                            //                     child: Column(
+                            //                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            //                     // crossAxisAlignment: CrossAxisAlignment.start,
+                            //                      children: [
+                            //                        Text(
+                            //                          'Trip Start At',
+                            //                          // item['sExpHeadName'] ?? '',
+                            //                          style: AppTextStyle
+                            //                              .font12OpenSansRegularBlackTextStyle,
+                            //                          maxLines: 2, // Limits the text to 2 lines
+                            //                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                          softWrap: true,
+                            //                        ),
+                            //                        Text(
+                            //                          '09/Sep/2024 14:51',
+                            //                          // item['sExpHeadName'] ?? '',
+                            //                          style: AppTextStyle
+                            //                              .font12OpenSansRegularBlack45TextStyle,
+                            //                          maxLines: 2, // Limits the text to 2 lines
+                            //                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                          softWrap: true,
+                            //                        ),
+                            //                      ],
+                            //                                              ),
+                            //                   ),
+                            //                   VerticalDivider(
+                            //                     color: Colors.grey, // Color of the divider
+                            //                     thickness: 1,       // Thickness of the line
+                            //                     width: 20,          // Space around the divider
+                            //                     indent: 10,         // Top spacing of the divider
+                            //                     endIndent: 10,      // Bottom spacing of the divider
+                            //                   ),
+                            //                   Padding(
+                            //                     padding: const EdgeInsets.only(right: 10),
+                            //                     child: Column(
+                            //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            //                      // crossAxisAlignment: CrossAxisAlignment.start,
+                            //                       children: [
+                            //                         Text(
+                            //                           'Trip End At',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle
+                            //                               .font12OpenSansRegularBlackTextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                         Text(
+                            //                           '09/Sep/2024 16:21',
+                            //                           // item['sExpHeadName'] ?? '',
+                            //                           style: AppTextStyle
+                            //                               .font12OpenSansRegularBlack45TextStyle,
+                            //                           maxLines: 2, // Limits the text to 2 lines
+                            //                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                            //                           softWrap: true,
+                            //                         ),
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             ),
+                            //             SizedBox(height: 5),
+                            //             Container(
+                            //               height: 160, // Height of the container
+                            //               padding: EdgeInsets.all(16), // Padding around the container
+                            //               child: Row(
+                            //                 mainAxisAlignment: MainAxisAlignment.spaceAround, // Space around columns
+                            //                 children: [
+                            //                   // First Column
+                            //                   Column(
+                            //                     mainAxisAlignment: MainAxisAlignment.center,
+                            //                     children: [
+                            //                       // Circular Network Image
+                            //                       ClipOval(
+                            //                         child: Image.network(
+                            //                           'http://upegov.in/HrmsTestapis/TrackingImgs/090920240933343326.jpg', // Replace with your image URL
+                            //                           width: 100, // Width of the circular image
+                            //                           height: 100, // Height of the circular image
+                            //                           fit: BoxFit.cover, // Ensures the image fits the circle
+                            //                         ),
+                            //                       ),
+                            //                       SizedBox(height: 10), // Spacing between the image and text
+                            //                       // TextView
+                            //                       Text(
+                            //                         'Start Odometer',
+                            //                         style: AppTextStyle
+                            //                             .font12OpenSansRegularBlackTextStyle,
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                   // Second Column
+                            //                   Column(
+                            //                     mainAxisAlignment: MainAxisAlignment.center,
+                            //                     children: [
+                            //                       // Circular Network Image
+                            //                       ClipOval(
+                            //                         child: Image.network(
+                            //                           'http://upegov.in/HrmsTestapis/TrackingImgs/090920240933343326.jpg', // Replace with your image URL
+                            //                           width: 100, // Width of the circular image
+                            //                           height: 100, // Height of the circular image
+                            //                           fit: BoxFit.cover, // Ensures the image fits the circle
+                            //                         ),
+                            //                       ),
+                            //                       SizedBox(height: 10), // Spacing between the image and text
+                            //                       // TextView
+                            //                       Text(
+                            //                         'End Odometer',style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //             )
+                            //
+                            //
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // )
 
-                          )),
-                )
-              ])),
+                            )),
+                  )
+                ])),
+      ),
     );
   }
 

@@ -391,7 +391,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
-
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -529,7 +528,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                     ],
                   ),
                 ),
-
                 SizedBox(height: 10),
                 // SizedBox(height: 10),
                 Expanded(
@@ -565,6 +563,64 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: [
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.start,
+                                            //   children: <Widget>[
+                                            //     Container(
+                                            //       width: 30.0,
+                                            //       height: 30.0,
+                                            //       decoration: BoxDecoration(
+                                            //         borderRadius: BorderRadius.circular(15.0),
+                                            //         border: Border.all(
+                                            //           color: Color(0xFF255899),
+                                            //           width: 0.5,
+                                            //         ),
+                                            //         color: Colors.white,
+                                            //       ),
+                                            //       child: Center(
+                                            //         child: Icon(Icons.email, size: 20, color: Color(0xFF0098a6)),
+                                            //       ),
+                                            //     ),
+                                            //     SizedBox(width: 10),
+                                            //     Column(
+                                            //       mainAxisAlignment: MainAxisAlignment.start,
+                                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                                            //       children: <Widget>[
+                                            //         Text(
+                                            //           leaveData.sExpHeadName,
+                                            //           style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            //           maxLines: 2,
+                                            //           overflow: TextOverflow.ellipsis,
+                                            //           softWrap: true,
+                                            //         ),
+                                            //         SizedBox(height: 2),
+                                            //         Row(
+                                            //           mainAxisAlignment: MainAxisAlignment.start,
+                                            //           children: [
+                                            //             Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
+                                            //             Text(
+                                            //               'Project Name :',
+                                            //               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            //               maxLines: 1,
+                                            //               overflow: TextOverflow.ellipsis,
+                                            //             ),
+                                            //             SizedBox(width: 2),
+                                            //             Flexible(  // Make this text flexible
+                                            //               child: Text(
+                                            //                 leaveData.sProjectName,
+                                            //                 style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            //                 maxLines: 1,
+                                            //                 overflow: TextOverflow.ellipsis,
+                                            //                 softWrap: false,
+                                            //               ),
+                                            //             ),
+                                            //           ],
+                                            //         ),
+                                            //       ],
+                                            //     ),
+                                            //   ],
+                                            // ),
+
                                             Row(
                                               mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -614,8 +670,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                           overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
                                                         ),
                                                         SizedBox(width: 2),
-
-                                                        // Wrap the dynamic text in Expanded to prevent overflow
                                                          Text(
                                                             leaveData.sProjectName,
                                                             style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
@@ -625,30 +679,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                           ),
                                                       ],
                                                     )
-
-                                                    // Row(
-                                                    //   mainAxisAlignment: MainAxisAlignment.start,
-                                                    //   children: [
-                                                    //     Icon(Icons.location_on,color:Color(0xFF0098a6),size: 20),
-                                                    //     Text(
-                                                    //       'Project Name :',
-                                                    //       style: AppTextStyle
-                                                    //           .font12OpenSansRegularBlackTextStyle,
-                                                    //       maxLines: 2, // Limits the text to 2 lines
-                                                    //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                    //       softWrap: true,
-                                                    //     ),
-                                                    //     SizedBox(width: 2),
-                                                    //     Text(
-                                                    //       leaveData.sProjectName,
-                                                    //       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                    //       maxLines: 2, // Limits the text to 1 line
-                                                    //       overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                    //       //softWrap: false, // Prevents the text from wrapping to a new line
-                                                    //     ),
-                                                    //   ],
-                                                    // ),
-
 
                                                   ],
                                                 )

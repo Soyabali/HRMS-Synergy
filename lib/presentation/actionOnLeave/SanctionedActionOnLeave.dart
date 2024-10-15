@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsLeaveStatusRepo.dart';
+import '../../data/hrmsleavependingforapprovail.dart';
 import '../../data/leaveCancellationRepo.dart';
+import '../../domain/actionOnLeaveModel.dart';
 import '../../domain/leaveStatusModel.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
@@ -21,15 +23,20 @@ class _SanctionedPageState extends State<SanctionedPageActionOnLeave> {
 
   String? formDate, toDate;
   var result,msg;
-  late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
+  //late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
+
+  late Future<List<HrmsLeavePendingForApprovalModel>>
+  hrmsLeavePendingForApproval;
   GeneralFunction generalFunction = GeneralFunction();
 
   @override
   void initState() {
     // TODO: implement initState
     print('----------28-----Sanctioned----');
-    hrmsLeaveStatus = HrmsLeaveStatusRepo()
-        .hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","S");
+    hrmsLeavePendingForApproval = HrmsLeavePendingForApprovailRepo()
+        .hrmsLevePendingForApprovalList(
+        context, "${widget.formDate}", "${widget.toDate}", "S");
+    print('-----37---$hrmsLeavePendingForApproval');
     super.initState();
   }
   @override
@@ -654,7 +661,7 @@ class _SanctionedPageState extends State<SanctionedPageActionOnLeave> {
                     if(result=="1"){
                       Navigator.of(context).pop();
                       /// calla api again
-                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","S");
+                    //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","S");
 
                       showDialog(
                         context: context,

@@ -28,6 +28,7 @@ class Reimbursementstatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(
@@ -35,7 +36,7 @@ class Reimbursementstatus extends StatelessWidget {
           ),
         ),
       ),
-      debugShowCheckedModeBanner: false,
+      //debugShowCheckedModeBanner: false,
       home: ReimbursementstatusPage(),
     );
   }
@@ -331,598 +332,505 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            // statusBarColore
-            systemOverlayStyle: const SystemUiOverlayStyle(
-              // Status bar color  // 2a697b
-              statusBarColor: Color(0xFF2a697b),
-              // Status bar brightness (optional)
-              statusBarIconBrightness: Brightness.dark,
-              // For Android (dark icons)
-              statusBarBrightness: Brightness.light, // For iOS (dark icons)
-            ),
-            // backgroundColor: Colors.blu
-            backgroundColor: Color(0xFF0098a6),
-            leading: InkWell(
-              onTap: () {
-                 //Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.only(left: 5.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  size: 24,
-                  color: Colors.white,
-                ),
+      child: GestureDetector(
+        onTap: (){
+          FocusScope.of(context).unfocus();
+        },
+        child: Scaffold(
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              // statusBarColore
+              systemOverlayStyle: const SystemUiOverlayStyle(
+                // Status bar color  // 2a697b
+                statusBarColor: Color(0xFF2a697b),
+                // Status bar brightness (optional)
+                statusBarIconBrightness: Brightness.dark,
+                // For Android (dark icons)
+                statusBarBrightness: Brightness.light, // For iOS (dark icons)
               ),
-            ),
-            title: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text(
-                'Reimbursement Status',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                  fontFamily: 'Montserrat',
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ), // Removes shadow under the AppBar
-          ),
-
-          body: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  height: 45,
-                  color: Color(0xFF2a697b),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 4),
-                      Icon(Icons.calendar_month,size: 15,color: Colors.white),
-                      const SizedBox(width: 4),
-                      const Text('From',style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal
-                      ),),
-                      SizedBox(width: 4),
-
-                      GestureDetector(
-                        onTap: () async {
-                          /// TODO Open Date picke and get a date
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              firstOfMonthDay = formattedDate;
-                             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                           // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                             print('---formPicker--$firstOfMonthDay');
-                            // Call API
-                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                           // print('---formPicker--$firstOfMonthDay');
-
-                            // Display the selected date as a toast
-                            //displayToast(dExpDate.toString());
-                          } else {
-                            // Handle case where no date was selected
-                            //displayToast("No date selected");
-                          }
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$firstOfMonthDay',
-                              style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 6),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        child: Image.asset(
-                          "assets/images/reimicon_2.png",
-                          fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
-                        ),
-                      ),
-                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                      SizedBox(width: 8),
-                      Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                      SizedBox(width: 5),
-                      const Text('To',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal
-                      ),),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap: ()async{
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              lastDayOfCurrentMonth = formattedDate;
-                             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-
-                          } else {
-                          }
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$lastDayOfCurrentMonth',
-                              style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+              // backgroundColor: Colors.blu
+              backgroundColor: Color(0xFF0098a6),
+              leading: InkWell(
+                onTap: () {
+                   //Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.only(left: 5.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    size: 24,
+                    color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 10),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                    // child: SearchBar(),
-                    child: Container(
-                      height: 45,
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(
-                          color: Colors.grey, // Outline border color
-                          width: 0.2, // Outline border width
-                        ),
+              ),
+              title: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text(
+                  'Reimbursement Status',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Montserrat',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ), // Removes shadow under the AppBar
+            ),
+
+            body: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    height: 45,
+                    color: Color(0xFF2a697b),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 4),
+                        Icon(Icons.calendar_month,size: 15,color: Colors.white),
+                        const SizedBox(width: 4),
+                        const Text('From',style: TextStyle(
                         color: Colors.white,
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: TextFormField(
-                                  controller: _searchController,
-                                  autofocus: true,
-                                  decoration: const InputDecoration(
-                                    hintText: 'Enter Keywords',
-                                    prefixIcon: Icon(Icons.search),
-                                    hintStyle: TextStyle(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF707d83),
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.bold),
-                                    border: InputBorder.none,
-                                  ),
-                                  onChanged: (query) {
-                                    filterData(query);  // Call the filter function on text input change
-                                  },
+                        fontSize: 12,
+                        fontWeight: FontWeight.normal
+                        ),),
+                        SizedBox(width: 4),
+
+                        GestureDetector(
+                          onTap: () async {
+                            /// TODO Open Date picke and get a date
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            // Check if a date was picked
+                            if (pickedDate != null) {
+                              // Format the picked date
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              // Update the state with the picked date
+                              setState(() {
+                                firstOfMonthDay = formattedDate;
+                               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              });
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                               print('---formPicker--$firstOfMonthDay');
+                              // Call API
+                              //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                             // print('---formPicker--$firstOfMonthDay');
+
+                              // Display the selected date as a toast
+                              //displayToast(dExpDate.toString());
+                            } else {
+                              // Handle case where no date was selected
+                              //displayToast("No date selected");
+                            }
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$firstOfMonthDay',
+                                style: TextStyle(
+                                  color: Colors.grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
                                 ),
                               ),
-                            ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 6),
+                        Container(
+                          height: 32,
+                          width: 32,
+                          child: Image.asset(
+                            "assets/images/reimicon_2.png",
+                            fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                          ),
+                        ),
+                        //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                        SizedBox(width: 8),
+                        Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                        SizedBox(width: 5),
+                        const Text('To',style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal
+                        ),),
+                        SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: ()async{
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            // Check if a date was picked
+                            if (pickedDate != null) {
+                              // Format the picked date
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              // Update the state with the picked date
+                              setState(() {
+                                lastDayOfCurrentMonth = formattedDate;
+                               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              });
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                              print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+
+                            } else {
+                            }
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors.white, // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$lastDayOfCurrentMonth',
+                                style: TextStyle(
+                                  color: Colors.grey, // Change this to your preferred text color
+                                  fontSize: 12.0, // Adjust font size as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                      // child: SearchBar(),
+                      child: Container(
+                        height: 45,
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5.0),
+                          border: Border.all(
+                            color: Colors.grey, // Outline border color
+                            width: 0.2, // Outline border width
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _searchController,
+                                    autofocus: true,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Enter Keywords',
+                                      prefixIcon: Icon(Icons.search),
+                                      hintStyle: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold),
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (query) {
+                                      filterData(query);  // Call the filter function on text input change
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                Expanded(
-                  child: Container(
-                    child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
-                        future: reimbursementStatusV3,
-                        builder: (context, snapshot) {
-                          return ListView.builder(
-                              // itemCount: snapshot.data!.length ?? 0,
-                              // itemBuilder: (context, index)
-                              itemCount: _filteredData.length?? 0,
-                              itemBuilder: (context, index)
-                              {
-                                final leaveData = _filteredData[index];
-                               // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 10,top: 15),
-                              child: Card(
-                                elevation: 1,
-                                color: Colors.white,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    border: Border.all(
-                                      color: Colors.grey, // Outline border color
-                                      width: 0.2, // Outline border width
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Container(
+                      child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
+                          future: reimbursementStatusV3,
+                          builder: (context, snapshot) {
+                            return ListView.builder(
+                                // itemCount: snapshot.data!.length ?? 0,
+                                // itemBuilder: (context, index)
+                                itemCount: _filteredData.length?? 0,
+                                itemBuilder: (context, index)
+                                {
+                                  final leaveData = _filteredData[index];
+                                 // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 10, right: 10,top: 15),
+                                child: Card(
+                                  elevation: 1,
+                                  color: Colors.white,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      border: Border.all(
+                                        color: Colors.grey, // Outline border color
+                                        width: 0.2, // Outline border width
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding:
-                                    const EdgeInsets.only(left: 8, right: 8),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              width: 30.0,
-                                              height: 30.0,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(15.0),
-                                                border: Border.all(
-                                                  color: Color(0xFF255899),
-                                                  width: 0.5, // Outline border width
-                                                ),
-                                                color: Colors.white,
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "${1+index}",
-                                                  style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            // Wrap the column in Flexible to prevent overflow
-                                            Flexible(
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    leaveData.sExpHeadName,
-                                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                    maxLines: 2, // Limits the text to 2 lines
-                                                    overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.only(left: 8, right: 8),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                width: 30.0,
+                                                height: 30.0,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(15.0),
+                                                  border: Border.all(
+                                                    color: Color(0xFF255899),
+                                                    width: 0.5, // Outline border width
                                                   ),
-                                                  SizedBox(height: 4), // Add spacing between texts if needed
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(right: 10),
-                                                    child: Text(
-                                                      leaveData.sProjectName,
+                                                  color: Colors.white,
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "${1+index}",
+                                                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              // Wrap the column in Flexible to prevent overflow
+                                              Flexible(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      leaveData.sExpHeadName,
                                                       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                       maxLines: 2, // Limits the text to 2 lines
                                                       overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 15, right: 15),
-                                          child: Container(
-                                            height: 0.5,
-                                            color: Color(0xff3f617d),
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              height: 10.0,
-                                              width: 10.0,
-                                              decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                // Change this to your preferred color
-                                                borderRadius: BorderRadius.circular(5.0),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            //  '‣ Sector',
-                                            Text(
-                                                'Bill Date',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              leaveData.dExpDate,
-                                              //item['dExpDate'] ??'',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlack45TextStyle
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              height: 10.0,
-                                              width: 10.0,
-                                              decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                // Change this to your preferred color
-                                                borderRadius: BorderRadius.circular(5.0),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                                'Entry At',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              leaveData.dEntryAt,
-                                             // item['dEntryAt'] ?? '',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlack45TextStyle
-                                          ),
-                                        ),
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: <Widget>[
-                                            Container(
-                                              height: 10.0,
-                                              width: 10.0,
-                                              decoration: BoxDecoration(
-                                                color: Colors.black,
-                                                // Change this to your preferred color
-                                                borderRadius: BorderRadius.circular(5.0),
-                                              ),
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                                'Expense Details',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlackTextStyle
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 15),
-                                          child: Text(
-                                              leaveData.sExpDetails,
-                                             // item['sExpDetails'] ?? '',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlack45TextStyle
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Container(
-                                          height: 1,
-                                          width: MediaQuery
-                                              .of(context)
-                                              .size
-                                              .width - 40,
-                                          color: Colors.grey,
-                                        ),
-                                        SizedBox(height: 10),
-                                        Padding(
-                                          padding: const EdgeInsets.only(left: 5),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              Icon(Icons.speaker_notes, size: 20, color: Colors.black),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                  'Status',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle
-                                              ),
-                                              SizedBox(width: 5),
-                                              const Text(
-                                                ':',
-                                                style: TextStyle(
-                                                  color: Color(0xFF0098a6),
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.normal,
-                                                ),
-                                              ),
-                                              SizedBox(width: 5),
-                                              Expanded(
-                                                child: Text(
-                                                  leaveData.sStatusName,
-                                                 // item['sStatusName'] ?? '',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle,
-                                                  maxLines: 2, // Allows up to 2 lines for the text
-                                                  overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
-                                                ),
-                                              ),
-                                              // Spacer(),
-                                              Container(
-                                                height: 30,
-                                                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFF0098a6),
-                                                  borderRadius: BorderRadius.circular(15),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    leaveData.fAmount,
-                                                   // item['fAmount'] ?? '',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 14.0,
+                                                    SizedBox(height: 4), // Add spacing between texts if needed
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(right: 10),
+                                                      child: Text(
+                                                        leaveData.sProjectName,
+                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2, // Limits the text to 2 lines
+                                                        overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                                      ),
                                                     ),
-                                                    maxLines: 1, // Allows up to 2 lines for the text
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-
-                                        Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            // Space between the two columns
-                                            children: [
-                                              // First Column
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Color(0xFF0098a6),
-                                                        // Change this to your preferred color
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: GestureDetector(
-                                                        onTap: (){
-                                                          print('-----832---View Image---');
-                                                          var images =  leaveData.sExpBillPhoto;
-                                                          var dExpDate = leaveData.dExpDate;
-                                                          var billdate ='Bill Date : $dExpDate';
-                                                         // var images2 = _filteredData[index];
-                                                          print('$images');
-                                                          print('$dExpDate');
-                                                          openFullScreenDialog(
-                                                            context,
-                                                              images,
-                                                              billdate
-                                                           // 'https://your-image-url.com/image.jpg', // Replace with your image URL
-                                                           // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                          );
-
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                                            Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                          const SizedBox(height: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 15, right: 15),
+                                            child: Container(
+                                              height: 0.5,
+                                              color: Color(0xff3f617d),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                height: 10.0,
+                                                width: 10.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black,
+                                                  // Change this to your preferred color
+                                                  borderRadius: BorderRadius.circular(5.0),
                                                 ),
                                               ),
-                                              SizedBox(width: 2),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      height: 40,
-                                                      decoration: BoxDecoration(
-                                                        color: Color(0xFF0098a6),
-                                                        // Change this to your preferred color
-                                                        borderRadius: BorderRadius.circular(10),
-                                                      ),
-                                                      child: GestureDetector(
-                                                        onTap: (){
-
-                                                          print('---take action-------');
-                                                          /// todo call a take Action Dialog
-                                                          //_takeActionDialog(context);
-                                                         sTranCode  = leaveData.sTranCode;
-                                                        print('-------882----$sTranCode');
-                                                          showDialog(
-                                                          context: context,
-                              builder: (BuildContext context) {
-                              return _takeActionDialog(context);
-                              },
-                              );
-
-                                                        },
-                                                        child: Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Text('Delete',style: AppTextStyle
-                                                                .font14OpenSansRegularWhiteTextStyle),
-                                                            Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                              SizedBox(width: 5),
+                                              //  '‣ Sector',
+                                              Text(
+                                                  'Bill Date',
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle
+                                              )
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Text(
+                                                leaveData.dExpDate,
+                                                //item['dExpDate'] ??'',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlack45TextStyle
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                height: 10.0,
+                                                width: 10.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black,
+                                                  // Change this to your preferred color
+                                                  borderRadius: BorderRadius.circular(5.0),
                                                 ),
                                               ),
-                                              SizedBox(width: 2),
-                                              Expanded(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    GestureDetector(
+                                              SizedBox(width: 5),
+                                              Text(
+                                                  'Entry At',
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle
+                                              )
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Text(
+                                                leaveData.dEntryAt,
+                                               // item['dEntryAt'] ?? '',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlack45TextStyle
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                height: 10.0,
+                                                width: 10.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black,
+                                                  // Change this to your preferred color
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text(
+                                                  'Expense Details',
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle
+                                              )
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Text(
+                                                leaveData.sExpDetails,
+                                               // item['sExpDetails'] ?? '',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlack45TextStyle
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
+                                          Container(
+                                            height: 1,
+                                            width: MediaQuery
+                                                .of(context)
+                                                .size
+                                                .width - 40,
+                                            color: Colors.grey,
+                                          ),
+                                          SizedBox(height: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 5),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Icon(Icons.speaker_notes, size: 20, color: Colors.black),
+                                                SizedBox(width: 10),
+                                                Text(
+                                                    'Status',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle
+                                                ),
+                                                SizedBox(width: 5),
+                                                const Text(
+                                                  ':',
+                                                  style: TextStyle(
+                                                    color: Color(0xFF0098a6),
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.normal,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Expanded(
+                                                  child: Text(
+                                                    leaveData.sStatusName,
+                                                   // item['sStatusName'] ?? '',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle,
+                                                    maxLines: 2, // Allows up to 2 lines for the text
+                                                    overflow: TextOverflow.ellipsis, // Adds an ellipsis if the text overflows
+                                                  ),
+                                                ),
+                                                // Spacer(),
+                                                Container(
+                                                  height: 30,
+                                                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xFF0098a6),
+                                                    borderRadius: BorderRadius.circular(15),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      leaveData.fAmount,
+                                                     // item['fAmount'] ?? '',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 14.0,
+                                                      ),
+                                                      maxLines: 1, // Allows up to 2 lines for the text
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
 
-                                                      onTap :(){
-
-                                                        var projact =  leaveData.sProjectName;
-                                                        // var sTranCode =   item['sTranCode'] ?? '';
-                                                        var sTranCode =   leaveData.sTranCode;
-                                                        print('--project---$projact');
-                                                        print('--sTranCode---$sTranCode');
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
-                                                        );
-                                              },
-                                                      child: Container(
+                                          Padding(
+                                            padding: const EdgeInsets.only(bottom: 10),
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              // Space between the two columns
+                                              children: [
+                                                // First Column
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Container(
                                                         height: 40,
                                                         decoration: BoxDecoration(
                                                           color: Color(0xFF0098a6),
@@ -930,57 +838,155 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                           borderRadius: BorderRadius.circular(10),
                                                         ),
                                                         child: GestureDetector(
-                                                          onTap: () {
+                                                          onTap: (){
+                                                            print('-----832---View Image---');
+                                                            var images =  leaveData.sExpBillPhoto;
+                                                            var dExpDate = leaveData.dExpDate;
+                                                            var billdate ='Bill Date : $dExpDate';
+                                                           // var images2 = _filteredData[index];
+                                                            print('$images');
+                                                            print('$dExpDate');
+                                                            openFullScreenDialog(
+                                                              context,
+                                                                images,
+                                                                billdate
+                                                             // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                                             // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                                            );
 
-                                                           // var projact =  item['sProjectName'] ??'';
-
-
-
-                                                            // Navigator.push(
-                                                            //   context,
-                                                            //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
-                                                            // );
-                                                            // Navigator.push(
-                                                            //   context,
-                                                            //   MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
-                                                            // );
                                                           },
                                                           child: Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: [
-                                                              Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
-                                                              SizedBox(width: 10),
-                                                              Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
+                                                              Text('View Image',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                              Icon(Icons.arrow_forward_ios ,color: Colors.white,size: 16,),
                                                             ],
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
+                                                SizedBox(width: 2),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Container(
+                                                        height: 40,
+                                                        decoration: BoxDecoration(
+                                                          color: Color(0xFF0098a6),
+                                                          // Change this to your preferred color
+                                                          borderRadius: BorderRadius.circular(10),
+                                                        ),
+                                                        child: GestureDetector(
+                                                          onTap: (){
+
+                                                            print('---take action-------');
+                                                            /// todo call a take Action Dialog
+                                                            //_takeActionDialog(context);
+                                                           sTranCode  = leaveData.sTranCode;
+                                                          print('-------882----$sTranCode');
+                                                            showDialog(
+                                                            context: context,
+                                builder: (BuildContext context) {
+                                return _takeActionDialog(context);
+                                },
+                                );
+
+                                                          },
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            children: [
+                                                              Text('Delete',style: AppTextStyle
+                                                                  .font14OpenSansRegularWhiteTextStyle),
+                                                              Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2),
+                                                Expanded(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      GestureDetector(
+
+                                                        onTap :(){
+
+                                                          var projact =  leaveData.sProjectName;
+                                                          // var sTranCode =   item['sTranCode'] ?? '';
+                                                          var sTranCode =   leaveData.sTranCode;
+                                                          print('--project---$projact');
+                                                          print('--sTranCode---$sTranCode');
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
+                                                          );
+                                                },
+                                                        child: Container(
+                                                          height: 40,
+                                                          decoration: BoxDecoration(
+                                                            color: Color(0xFF0098a6),
+                                                            // Change this to your preferred color
+                                                            borderRadius: BorderRadius.circular(10),
+                                                          ),
+                                                          child: GestureDetector(
+                                                            onTap: () {
+
+                                                             // var projact =  item['sProjectName'] ??'';
 
 
-                                            ],
+
+                                                              // Navigator.push(
+                                                              //   context,
+                                                              //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
+                                                              // );
+                                                              // Navigator.push(
+                                                              //   context,
+                                                              //   MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
+                                                              // );
+                                                            },
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                Text('Log',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                                                                SizedBox(width: 10),
+                                                                Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+
+                                              ],
+                                            ),
                                           ),
-                                        ),
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
+                              );
 
-                          });
-                        }
+                            });
+                          }
 
-                          ),
+                            ),
+                    ),
                   ),
-                ),
 
-              ]
-          )),
+                ]
+            )),
+      ),
     );
   }
   // Opend Full Screen DialogbOX
