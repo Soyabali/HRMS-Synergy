@@ -200,8 +200,7 @@ class _AllPageState extends State<AllPage> {
                                     Align(
                                       alignment: Alignment.centerRight,
                                       child: DottedBorder(
-                                        color: Colors
-                                            .grey, // Color of the dotted line
+                                        color: Colors.grey, // Color of the dotted line
                                         strokeWidth:
                                         1.0, // Width of the dotted line
                                         dashPattern: const [

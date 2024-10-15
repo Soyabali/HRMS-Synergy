@@ -24,6 +24,7 @@ class Myleavestatus extends StatelessWidget {
 }
 
 class MyLeaveStatusPage extends StatefulWidget {
+
   const MyLeaveStatusPage({super.key});
 
   @override
@@ -44,21 +45,17 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
   String? toDate;
 
   getACurrentDate() {
-    // DateTime now = DateTime.now();
+
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
-
     setState(() {
-      //formDate = DateFormat('dd/MMM/yyyy').format(now);
     });
-    //
-    DateTime now2 = DateTime.now();
+
     DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
     DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
     toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
     setState(() {
-      //toDate = DateFormat('dd/MMM/yyyy').format(now2);
     });
   }
   // to Date SelectedLogic
@@ -73,7 +70,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       });
       generalFunction.displayToast("To Date can not be less than From Date");
     }
-   // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
   }
 
   void fromDateSelectLogic() {
@@ -85,8 +81,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       setState(() {
         formDate = tempDate;
       });
-     // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
-      // calculateTotalDays();
       generalFunction.displayToast("From date can not be greater than To Date");
     }
   }
@@ -182,6 +176,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                 ),
               ), // Removes shadow under the AppBar
             ),
+
             body: Column(children: [
               Expanded(
                 child: Padding(
@@ -228,9 +223,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                       lastDate: DateTime(2100),
                                     );
                                     if (pickedDate != null) {
-                                      String formattedDate =
-                                          DateFormat('dd/MMM/yyyy')
-                                              .format(pickedDate);
+                                      String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                                       setState(() {
                                         tempDate = formDate; // Save the current formDate before updating
                                         formDate = formattedDate;
@@ -243,8 +236,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                   child: Container(
                                     height: 35,
                                     padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            14.0), // Optional: Adjust padding for horizontal space
+                                        horizontal: 14.0), // Optional: Adjust padding for horizontal space
                                     decoration: BoxDecoration(
                                       color: Colors
                                           .white, // Change this to your preferred color
@@ -254,10 +246,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                       child: Text(
                                         '$formDate',
                                         style: const TextStyle(
-                                          color: Colors
-                                              .grey, // Change this to your preferred text color
-                                          fontSize:
-                                              12.0, // Adjust font size as needed
+                                          color: Colors.grey, // Change this to your preferred text color
+                                          fontSize: 12.0, // Adjust font size as needed
                                         ),
                                       ),
                                     ),
@@ -269,8 +259,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                   width: 32,
                                   child: Image.asset(
                                     "assets/images/reimicon_2.png",
-                                    fit: BoxFit
-                                        .contain, // or BoxFit.cover depending on the desired effect
+                                    fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
                                   ),
                                 ),
                                 //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
@@ -334,6 +323,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                             ),
                           ),
                           SizedBox(height: 10),
+
                           Container(
                             height: 35,
                             width: MediaQuery.of(context).size.width - 10,
@@ -342,10 +332,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                               //  color: Color(0xFF3375af), // Container background color
                               color: Colors.white,
                               borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(
-                                    0), // Adjust this value as per your preference
-                                right: Radius.circular(
-                                    0), // Adjust this value as per your preference
+                                left: Radius.circular(0), // Adjust this value as per your preference
+                                right: Radius.circular(0), // Adjust this value as per your preference
                               ),
                             ),
                             child: Padding(
@@ -356,11 +344,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                 indicatorColor: Color(0xFF0098a6),
                                 indicatorSize: TabBarIndicatorSize.label,
                                 indicatorWeight: 0.9,
-                                labelPadding:
-                                    EdgeInsets.symmetric(horizontal: 0.0),
-                                //unselectedLabelColor: Colors.white,
+                                labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
                                 unselectedLabelColor: Color(0xFF0098a6),
-                                // labelColor: Colors.black,
                                 labelColor: Colors.white,
                                 indicator: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
@@ -385,8 +370,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                               padding:
                                   const EdgeInsets.only(bottom: 0, top: 8),
                               child: Container(
-                                height:
-                                    MediaQuery.of(context).size.height - 300.0,
+                                height: MediaQuery.of(context).size.height - 300.0,
                                 // height: 400,
                                 child: TabBarView(
                                   controller: tabController,

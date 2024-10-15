@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../data/baseProjectRepo.dart';
-import '../../data/hrmsTimeScheduleRepo.dart';
 import '../../data/hrmsWorkEntryNewRepo.dart';
 import '../dashboard/dashboard.dart';
 import 'dart:convert';
@@ -203,40 +202,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
         String jsonString = jsonEncode(combinedList);
         print("-----185---$jsonString");
 
-        // for (var item in combinedList) {
-        //   combinedList_2.add({
-        //     "sProjectName": item['sProjectName'],
-        //     "sEmpWorkStatus": item['sEmpWorkStatus'],
-        //     "sHourCode": item['sHourCode']
-        //   });
-        // }
-        // print("---194---$combinedList_2");
-
-
-        // String flattenedResponse = '';
-        // for (int i = 0; i < combinedList.length; i++) {
-        //  // flattenedResponse += '${i}\n';  // Indexing starting from 0
-        //   combinedList[i].forEach((key, value) {
-        //     flattenedResponse += '"$key" : "$value"\n';
-        //     combinedList_2.add(flattenedResponse);
-        //   });
-        // }
-        // print("----192--$flattenedResponse");
-
-
-        //List<Map<String, dynamic>> fixedArray = List.unmodifiable(combinedList);
-        //print("----185----$fixedArray");
-        // Convert the combinedList to a JSON string
-      //  String combinedListString = jsonEncode(combinedList);
-        //print("----186---$combinedListString");
-
-       sendCurrentWorkNew(jsonString);
+        sendCurrentWorkNew(jsonString);
 
       } else {
         // Show a notification if all fields are empty
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Please fill in at least one field'),
+            content: Text('Kindly enter your work detail !'),
             backgroundColor: Colors.black45,
           ),
         );
@@ -374,10 +346,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                         mainAxisSize: MainAxisSize
                                                             .min, // This ensures the Row only takes up as much space as needed
                                                         children: [
-                                                          const Icon(
-                                                              Icons
-                                                                  .camera_alt_outlined,
-                                                              size: 25),
+                                                          Image.asset('assets/images/workdetail.jpeg',
+                                                          height: 25,
+                                                            width: 25,
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                          // const Icon(Icons.camera_alt_outlined,
+                                                          //     size: 25),
                                                           SizedBox(width: 5),
                                                           Flexible(
                                                             child: Text(
@@ -395,7 +370,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                 ),
                                                 SizedBox(height: 15),
                                                 Container(
-                                                  height: 65,
+                                                  height: 45,
                                                   color: Color(0xFFf2f3f5),
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(left: 0),
@@ -509,7 +484,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                           MaterialPageRoute(builder: (context) => DashBoard()),
                         );
                         //Navigator.of(context).pop();
-
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the background color to white

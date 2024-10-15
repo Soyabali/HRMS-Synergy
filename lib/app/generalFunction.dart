@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../presentation/actionOnLeave/actionOnLeave.dart';
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
 import '../presentation/login/loginScreen.dart';
 import '../presentation/myLeaveStatus/myLeaveStatus.dart';
@@ -602,19 +603,6 @@ class GeneralFunction {
           (route) => false, // Pop all routes until this page
     );
   }
-
-  // tost
-  // void displayToast(String msg){
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0
-  //   );
-  // }
   // drawerFunction
 
   drawerFunction(BuildContext context, String sName, String email) {
@@ -694,21 +682,15 @@ class GeneralFunction {
                     );
                   },
                     child: drawerItem('assets/images/triplistfirst.jpeg', "My Leave Status")),
-                // InkWell(
-                //     onTap: (){
-                //       print('---Logout---');
-                //      // _showlogoutDialog(context);
-                //
-                //       showDialog(
-                //         context: context,
-                //         builder: (BuildContext context) {
-                //           return _logoutDialog(context);
-                //         },
-                //       );
-                //
-                //     },
-                //     child: drawerItem('assets/images/logout.jpeg', "Logout")),
-                drawerItem('assets/images/tripdetails.jpeg', "Action On Leave"),
+
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Actiononleave()),
+                    );
+                  },
+                    child: drawerItem('assets/images/tripdetails.jpeg', "Action On Leave")),
                 drawerItem('assets/images/post_complaint.png', "Short Leave"),
                 drawerItem('assets/images/post_complaint.png', "Leave Cancellation Request"),
                 InkWell(
