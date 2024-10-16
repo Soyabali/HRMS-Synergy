@@ -4,10 +4,12 @@ import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/presentation/shortLeave/shortLeave.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../presentation/actionOnLeave/actionOnLeave.dart';
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
+import '../presentation/leaveCancellationRequest/leaveCancellationRequest.dart';
 import '../presentation/login/loginScreen.dart';
 import '../presentation/myLeaveStatus/myLeaveStatus.dart';
 import '../presentation/resources/app_text_style.dart';
@@ -691,8 +693,22 @@ class GeneralFunction {
                     );
                   },
                     child: drawerItem('assets/images/tripdetails.jpeg', "Action On Leave")),
-                drawerItem('assets/images/post_complaint.png', "Short Leave"),
-                drawerItem('assets/images/post_complaint.png', "Leave Cancellation Request"),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ShortLeave()),
+                    );
+                  },
+                    child: drawerItem('assets/images/post_complaint.png', "Short Leave")),
+                InkWell(
+                    onTap: (){
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LeaveCancellationRequest()),
+                      );
+                    },
+                    child: drawerItem('assets/images/post_complaint.png', "Leave Cancellation Request")),
                 InkWell(
                   onTap: (){
                     // TripDetails

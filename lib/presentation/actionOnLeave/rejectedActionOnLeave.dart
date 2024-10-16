@@ -6,6 +6,7 @@ import '../../app/generalFunction.dart';
 import '../../data/hrmsLeaveStatusRepo.dart';
 import '../../data/hrmsleavependingforapprovail.dart';
 import '../../data/leaveCancellationRepo.dart';
+import '../../data/leaveUpdateRepo.dart';
 import '../../domain/actionOnLeaveModel.dart';
 import '../../domain/leaveStatusModel.dart';
 import '../dashboard/dashboard.dart';
@@ -335,6 +336,14 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                                               onPressed: () {
                                                 /// todo take a ction functionality
 
+                                                // _takeActionDialog(context,"");
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return _takeActionDialog(context,"");
+                                                  },
+                                                );
+
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
@@ -419,7 +428,9 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
   }
 
   Widget _takeActionDialog(BuildContext context, String iTranId) {
+
     TextEditingController _queryTitleEditText = TextEditingController();
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -431,7 +442,7 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 265,
+            height: 190,
             // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
@@ -440,10 +451,11 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+             // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // TextFormField for entering data
                 // SizedBox(height: 5),
-                Text("Cancel leave Request",
+                Text("Update Leave Status",
                     style: AppTextStyle.font12OpenSansRegularBlack45TextStyle),
                 SizedBox(height: 5),
                 Padding(
@@ -460,7 +472,7 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                       // Enable background color
                       fillColor: Color(0xFFf2f3f5),
                       // Set your desired background color here
-                      hintText: 'Enter reason',
+                      hintText: 'Enter Remarks',
                       // Add your hint text here
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
@@ -468,69 +480,313 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                   ),
                 ),
                 SizedBox(height: 15),
-                SizedBox(height: 15),
                 // Submit button
-                InkWell(
-                  onTap: () async {
-                    var queryTitle = _queryTitleEditText.text.trim();
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            var queryTitle = _queryTitleEditText.text.trim();
+                            if(queryTitle != null && queryTitle != ''){
+                              // call Api
+                                        var postQuery = await LeaveUpdateRepo().leaveUpdate(context, queryTitle, iTranId);
+                                        print('--495-----$postQuery');
+                                        //
+                                        setState(() {
+                                          result = "${postQuery[0]['Result']}";
+                                          msg = "${postQuery[0]['Msg']}";
+                                        });
+                            }else{
+                              if(queryTitle == null || queryTitle == ''){
+                                generalFunction.displayToast('Enter Remarks');
+                              }else{
 
-                    // Check if the input is not empty
-                    if (queryTitle != null && queryTitle != '') {
-                      print('---Call Api-----');
 
-                      var postQuery = await LeaveCancellationRepo()
-                          .leaveCancellation(context, queryTitle, iTranId);
-                      print('--326--$postQuery');
+                              }
+                            }
 
-                      setState(() {
-                        result = "${postQuery[0]['Result']}";
-                        msg = "${postQuery[0]['Msg']}";
-                      });
-                    } else {
-                      if (queryTitle == null || queryTitle == '') {
-                        generalFunction.displayToast('Enter reason');
-                      } else {
-                        // generalFunction.displayToast('Enter Query');
-                      }
-                      print('---Api not Call -----');
-                    }
-                    if (result == "1") {
-                      Navigator.of(context).pop();
+                            // Add your logic here
+                            //         var queryTitle = _queryTitleEditText.text.trim();
+                            //
+                            //         // Check if the input is not empty
+                            //         if (queryTitle != null && queryTitle != '') {
+                            //           print('---Call Api-----');
+                            //
+                            //           var postQuery = await LeaveCancellationRepo()
+                            //               .leaveCancellation(context, queryTitle, iTranId);
+                            //           print('--326--$postQuery');
+                            //
+                            //           setState(() {
+                            //             result = "${postQuery[0]['Result']}";
+                            //             msg = "${postQuery[0]['Msg']}";
+                            //           });
+                            //         } else {
+                            //           if (queryTitle == null || queryTitle == '') {
+                            //             generalFunction.displayToast('Enter reason');
+                            //           } else {
+                            //             // generalFunction.displayToast('Enter Query');
+                            //           }
 
-                      /// calla api again
-                      //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
 
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return _buildDialogSucces2(
-                              context, msg); // A new dialog for showing success
-                        },
-                      );
-                    } else {
-                      generalFunction.displayToast(msg);
-                    }
-                  },
-                  child: Container(
-                    //width: double.infinity,
-                    // Make container fill the width of its parent
-                    height: AppSize.s45,
-                    padding: EdgeInsets.all(AppPadding.p5),
-                    decoration: BoxDecoration(
-                      color: AppColors.loginbutton,
-                      // Background color using HEX value
-                      borderRadius: BorderRadius.circular(
-                          AppMargin.m10), // Rounded corners
-                    ),
-                    //  #00b3c7
-                    child: Center(
-                      child: Text(
-                        "Submit",
-                        style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                          },
+                          child: Text('Rejected',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 2),
+                            backgroundColor: Color(0xFF0098a6), // Background color
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                    SizedBox(width: 10), // Add some space between the buttons
+                    Expanded(
+                      child: Container(
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            var queryTitle = _queryTitleEditText.text.trim();
+                            if(queryTitle != null && queryTitle != ''){
+                              // call Api
+                              var postQuery = await LeaveUpdateRepo().leaveUpdate(context, queryTitle, iTranId);
+                              print('--550-----$postQuery');
+
+                              setState(() {
+                                result = "${postQuery[0]['Result']}";
+                                msg = "${postQuery[0]['Msg']}";
+                              });
+                            }else{
+                              if(queryTitle == null || queryTitle == ''){
+                                generalFunction.displayToast('Enter Remarks');
+                              }else{
+                                generalFunction.displayToast(msg);
+                              }
+
+                            }
+
+                            // Add your logic here
+                            //         var queryTitle = _queryTitleEditText.text.trim();
+                            //
+                            //         // Check if the input is not empty
+                            //         if (queryTitle != null && queryTitle != '') {
+                            //           print('---Call Api-----');
+                            //
+                            //           var postQuery = await LeaveCancellationRepo()
+                            //               .leaveCancellation(context, queryTitle, iTranId);
+                            //           print('--326--$postQuery');
+                            //
+                            //           setState(() {
+                            //             result = "${postQuery[0]['Result']}";
+                            //             msg = "${postQuery[0]['Msg']}";
+                            //           });
+                            //         } else {
+                            //           if (queryTitle == null || queryTitle == '') {
+                            //             generalFunction.displayToast('Enter reason');
+                            //           } else {
+                            //             // generalFunction.displayToast('Enter Query');
+                            //           }
+
+
+                          },
+                          child: Text('Approved',style: AppTextStyle.font14OpenSansRegularWhiteTextStyle),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 2),
+                            backgroundColor: Color(0xFF0098a6), // Background color
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     InkWell(
+                //       onTap: () async {
+                //         var queryTitle = _queryTitleEditText.text.trim();
+                //
+                //         // Check if the input is not empty
+                //         if (queryTitle != null && queryTitle != '') {
+                //           print('---Call Api-----');
+                //
+                //           var postQuery = await LeaveCancellationRepo()
+                //               .leaveCancellation(context, queryTitle, iTranId);
+                //           print('--326--$postQuery');
+                //
+                //           setState(() {
+                //             result = "${postQuery[0]['Result']}";
+                //             msg = "${postQuery[0]['Msg']}";
+                //           });
+                //         } else {
+                //           if (queryTitle == null || queryTitle == '') {
+                //             generalFunction.displayToast('Enter reason');
+                //           } else {
+                //             // generalFunction.displayToast('Enter Query');
+                //           }
+                //           print('---Api not Call -----');
+                //         }
+                //         if (result == "1") {
+                //           Navigator.of(context).pop();
+                //
+                //           /// calla api again
+                //           //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+                //
+                //           showDialog(
+                //             context: context,
+                //             builder: (BuildContext context) {
+                //               return _buildDialogSucces2(
+                //                   context, msg); // A new dialog for showing success
+                //             },
+                //           );
+                //         } else {
+                //           generalFunction.displayToast(msg);
+                //         }
+                //       },
+                //       child: Container(
+                //         //width: double.infinity,
+                //         // Make container fill the width of its parent
+                //         height: AppSize.s45,
+                //         padding: EdgeInsets.all(AppPadding.p5),
+                //         decoration: BoxDecoration(
+                //           color: AppColors.loginbutton,
+                //           // Background color using HEX value
+                //           borderRadius: BorderRadius.circular(
+                //               AppMargin.m10), // Rounded corners
+                //         ),
+                //         //  #00b3c7
+                //         child: Center(
+                //           child: Text(
+                //             "Submit",
+                //             style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //     InkWell(
+                //       onTap: () async {
+                //         var queryTitle = _queryTitleEditText.text.trim();
+                //
+                //         // Check if the input is not empty
+                //         if (queryTitle != null && queryTitle != '') {
+                //           print('---Call Api-----');
+                //
+                //           var postQuery = await LeaveCancellationRepo()
+                //               .leaveCancellation(context, queryTitle, iTranId);
+                //           print('--326--$postQuery');
+                //
+                //           setState(() {
+                //             result = "${postQuery[0]['Result']}";
+                //             msg = "${postQuery[0]['Msg']}";
+                //           });
+                //         } else {
+                //           if (queryTitle == null || queryTitle == '') {
+                //             generalFunction.displayToast('Enter reason');
+                //           } else {
+                //             // generalFunction.displayToast('Enter Query');
+                //           }
+                //           print('---Api not Call -----');
+                //         }
+                //         if (result == "1") {
+                //           Navigator.of(context).pop();
+                //
+                //           /// calla api again
+                //           //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+                //
+                //           showDialog(
+                //             context: context,
+                //             builder: (BuildContext context) {
+                //               return _buildDialogSucces2(
+                //                   context, msg); // A new dialog for showing success
+                //             },
+                //           );
+                //         } else {
+                //           generalFunction.displayToast(msg);
+                //         }
+                //       },
+                //       child: Container(
+                //         //width: double.infinity,
+                //         // Make container fill the width of its parent
+                //         height: AppSize.s45,
+                //         padding: EdgeInsets.all(AppPadding.p5),
+                //         decoration: BoxDecoration(
+                //           color: AppColors.loginbutton,
+                //           // Background color using HEX value
+                //           borderRadius: BorderRadius.circular(
+                //               AppMargin.m10), // Rounded corners
+                //         ),
+                //         //  #00b3c7
+                //         child: Center(
+                //           child: Text(
+                //             "Submit",
+                //             style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // InkWell(
+                //   onTap: () async {
+                //     var queryTitle = _queryTitleEditText.text.trim();
+                //
+                //     // Check if the input is not empty
+                //     if (queryTitle != null && queryTitle != '') {
+                //       print('---Call Api-----');
+                //
+                //       var postQuery = await LeaveCancellationRepo()
+                //           .leaveCancellation(context, queryTitle, iTranId);
+                //       print('--326--$postQuery');
+                //
+                //       setState(() {
+                //         result = "${postQuery[0]['Result']}";
+                //         msg = "${postQuery[0]['Msg']}";
+                //       });
+                //     } else {
+                //       if (queryTitle == null || queryTitle == '') {
+                //         generalFunction.displayToast('Enter reason');
+                //       } else {
+                //         // generalFunction.displayToast('Enter Query');
+                //       }
+                //       print('---Api not Call -----');
+                //     }
+                //     if (result == "1") {
+                //       Navigator.of(context).pop();
+                //
+                //       /// calla api again
+                //       //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+                //
+                //       showDialog(
+                //         context: context,
+                //         builder: (BuildContext context) {
+                //           return _buildDialogSucces2(
+                //               context, msg); // A new dialog for showing success
+                //         },
+                //       );
+                //     } else {
+                //       generalFunction.displayToast(msg);
+                //     }
+                //   },
+                //   child: Container(
+                //     //width: double.infinity,
+                //     // Make container fill the width of its parent
+                //     height: AppSize.s45,
+                //     padding: EdgeInsets.all(AppPadding.p5),
+                //     decoration: BoxDecoration(
+                //       color: AppColors.loginbutton,
+                //       // Background color using HEX value
+                //       borderRadius: BorderRadius.circular(
+                //           AppMargin.m10), // Rounded corners
+                //     ),
+                //     //  #00b3c7
+                //     child: Center(
+                //       child: Text(
+                //         "Submit",
+                //         style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

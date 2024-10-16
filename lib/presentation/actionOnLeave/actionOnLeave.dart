@@ -85,40 +85,65 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
       generalFunction.displayToast("From date can not be greater than To Date");
     }
   }
+  // update function
+  void _updateTabContent() {
+    tabController = TabController(vsync: this, length: 4);
+    tabController?.addListener(() {
+      if (tabController != null) {
+        setState(() {
+          switch (tabController!.index) {
+            case 0:
+              PendingPageActionOnLeave(formDate: formDate, toDate: toDate);
+              break;
+            case 1:
+              SanctionedPageActionOnLeave(formDate: formDate, toDate: toDate);
+              break;
+            case 2:
+              RejectedActionOnLeave(formDate: formDate, toDate: toDate);
+              break;
+            case 3:
+              AllActionOnLeave(formDate: formDate, toDate: toDate);
+              break;
+          }
+        });
+      }
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     getACurrentDate();
     print("-----------93-----${"Action on Leave"}----");
-    tabController = TabController(vsync: this, length: 4);
-    tabController?.addListener(() {
-      if (tabController!.indexIsChanging) {
-        print('Tab ${tabController!.index + 1} is open');
-        switch(tabController!.index){
-          case 0:
-            setState(() {
-              PendingPageActionOnLeave(formDate:formDate,toDate:toDate);
-            });
-            break;
-          case 1:
-            setState(() {
-              SanctionedPageActionOnLeave(formDate:formDate,toDate:toDate);
-            });
-            break;
-          case 2:
-            setState(() {
-              RejectedActionOnLeave(formDate:formDate,toDate:toDate);
-            });
-            break;
-          case 3:
-            setState(() {
-              AllActionOnLeave(formDate:formDate,toDate:toDate);
-            });
-            break;
-        }
-      }
-    });
+    _updateTabContent();
+    // tabController = TabController(vsync: this, length: 4);
+    // tabController?.addListener(() {
+    //   if (tabController!.indexIsChanging) {
+    //
+    //     switch(tabController!.index){
+    //       case 0:
+    //         setState(() {
+    //           PendingPageActionOnLeave(formDate:formDate,toDate:toDate);
+    //         });
+    //         break;
+    //       case 1:
+    //         setState(() {
+    //           SanctionedPageActionOnLeave(formDate:formDate,toDate:toDate);
+    //         });
+    //         break;
+    //       case 2:
+    //         setState(() {
+    //           RejectedActionOnLeave(formDate:formDate,toDate:toDate);
+    //         });
+    //         break;
+    //       case 3:
+    //         setState(() {
+    //           AllActionOnLeave(formDate:formDate,toDate:toDate);
+    //         });
+    //         break;
+    //     }
+    //   }
+    // });
   }
 
   @override
@@ -229,6 +254,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                                         tempDate = formDate; // Save the current formDate before updating
                                         formDate = formattedDate;
                                         // calculateTotalDays();
+                                        _updateTabContent();
                                       });
                                       fromDateSelectLogic();
                                     }
@@ -290,6 +316,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                                             toDate; // Save the current toDate before updating
                                         toDate = formattedDate;
                                         // calculateTotalDays();
+                                        _updateTabContent();
                                       });
                                       toDateSelectLogic();
                                     }
