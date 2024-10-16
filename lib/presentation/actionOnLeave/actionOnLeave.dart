@@ -72,7 +72,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
       generalFunction.displayToast("To Date can not be less than From Date");
     }
   }
-
+  // from date SelectLogic
   void fromDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
@@ -90,6 +90,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
   void initState() {
     // TODO: implement initState
     getACurrentDate();
+    print("-----------93-----${"Action on Leave"}----");
     tabController = TabController(vsync: this, length: 4);
     tabController?.addListener(() {
       if (tabController!.indexIsChanging) {
@@ -176,8 +177,8 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                 ),
               ), // Removes shadow under the AppBar
             ),
-
-            body: Column(children: [
+            body: Column(
+             children: [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
@@ -189,7 +190,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Divider(
+                          const Divider(
                             height: 2,
                             //color: Color(0xFF0098a6),
                             color: Colors.grey,
@@ -200,7 +201,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 const SizedBox(width: 4),
-                                Icon(Icons.calendar_month,
+                                const Icon(Icons.calendar_month,
                                     size: 15,
                                     color: Colors.white),
                                 const SizedBox(width: 4),
@@ -229,7 +230,6 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                                         formDate = formattedDate;
                                         // calculateTotalDays();
                                       });
-                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       fromDateSelectLogic();
                                     }
                                   },
@@ -291,8 +291,6 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                                         toDate = formattedDate;
                                         // calculateTotalDays();
                                       });
-                                      //
-                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       toDateSelectLogic();
                                     }
                                   },
@@ -302,8 +300,7 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                                         horizontal:
                                         14.0), // Optional: Adjust padding for horizontal space
                                     decoration: BoxDecoration(
-                                      color: Colors
-                                          .white, // Change this to your preferred color
+                                      color: Colors.white, // Change this to your preferred color
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Center(
@@ -390,7 +387,10 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
                       )),
                 ),
               )
-            ])));
+            ]
+            )
+        )
+    );
   }
 
   // build

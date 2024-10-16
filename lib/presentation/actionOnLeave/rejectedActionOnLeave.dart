@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 
 import '../../app/generalFunction.dart';
 import '../../data/hrmsLeaveStatusRepo.dart';
+import '../../data/hrmsleavependingforapprovail.dart';
 import '../../data/leaveCancellationRepo.dart';
+import '../../domain/actionOnLeaveModel.dart';
 import '../../domain/leaveStatusModel.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_colors.dart';
@@ -13,648 +15,409 @@ import '../resources/values_manager.dart';
 
 class RejectedActionOnLeave extends StatefulWidget {
   String? formDate, toDate;
-  RejectedActionOnLeave({super.key, required this.formDate, required this.toDate});
 
+  RejectedActionOnLeave(
+      {super.key, required this.formDate, required this.toDate});
 
   @override
   State<RejectedActionOnLeave> createState() => _RejectedPageState();
 }
 
 class _RejectedPageState extends State<RejectedActionOnLeave> {
-  var result,msg;
+  var result, msg;
   String? formDate, toDate;
-  late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
+  late var leavePending;
+
+  late Future<List<HrmsLeavePendingForApprovalModel>>
+      hrmsLeavePendingForApproval;
   GeneralFunction generalFunction = GeneralFunction();
 
   @override
   void initState() {
     // TODO: implement initState
     print('----------28-----Rejectd----');
-    hrmsLeaveStatus = HrmsLeaveStatusRepo()
-        .hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","R");
+    print("fromdate :   ${widget.formDate}");
+    print("todate :   ${widget.toDate}");
+    print("-------38---Sanctioned-----");
+
+    hrmsLeavePendingForApproval = HrmsLeavePendingForApprovailRepo()
+        .hrmsLevePendingForApprovalList(
+            context, "${widget.formDate}", "${widget.toDate}", "R");
+    print('-----48---$hrmsLeavePendingForApproval');
 
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body:Padding(
-          padding:
-          const EdgeInsets.only(left: 5, right: 5, top: 5),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white, // Background color of the container
-                  borderRadius: BorderRadius.circular(2.0), // Rounded corners
-                  border: Border.all(color: Colors.grey, // Border color
-                    width: 1.0, // Border width
-                  ),
-                ),
-                child: Container(
-                  color: Colors.white,
-                  margin: EdgeInsets.only(left: 5, right: 5, top: 5),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        height: 40,
-                        // todo container apple left color border with 2 width
-                        decoration: const BoxDecoration(
-                          border: Border(
-                            left: BorderSide(
-                              color: Colors
-                                  .blue, // Color of the left border
-                              width:
-                              2.0, // Width of the left border
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                          children: [
+        body: Container(
+            height: MediaQuery.of(context).size.height,
+            child: FutureBuilder<List<HrmsLeavePendingForApprovalModel>>(
+                future: hrmsLeavePendingForApproval,
+                builder: (context, snapshot) {
+                  // Check if the snapshot has data and is not null
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for data
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // Handle error scenario
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // Handle the case where the data is empty or null
+                    return Center(child: Text('No Data'));
+                  }
+                  // Once data is available, build the ListView
+                  final actionOnLeavePending = snapshot.data!; // Access the resolved data
 
-                            /// todo take a two TextVIEW
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 5),
-                              child: Text(
-                                "Earned Leave",
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle,
-                              ),
-                            ),
-                            Text(
-                                "Applied At: 04/Oct/2024 13:59",
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlackTextStyle),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.account_box,
-                                size: 18,
-                              ),
-                              SizedBox(width: 5),
-                              Text('Applied by : Ashish Babu',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.notes_outlined,
-                                size: 18,
-                              ),
-                              SizedBox(width: 5),
-                              Text('Leave Reason',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Padding(
-                        padding:
-                        const EdgeInsets.only(left: 22),
-                        child: Text(
-                            "My wife has an appointment , I have to go to the doctor with wife.",
-                            style: AppTextStyle
-                                .font12OpenSansRegularBlackTextStyle),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.calendar_month,
-                                      size: 18,
-                                      color: Colors.cyan),
-                                  SizedBox(width: 4),
-                                  Text('From : 20/02/2024',
-                                      style: AppTextStyle
-                                          .font12OpenSansRegularBlackTextStyle),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.calendar_month,
-                                      size: 18,
-                                      color: Colors.cyan),
-                                  SizedBox(width: 4),
-                                  Text('TO : 22/04/2024',
-                                      style: AppTextStyle
-                                          .font12OpenSansRegularBlackTextStyle),
-                                ],
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: DottedBorder(
-                          color: Colors
-                              .grey,
-                          // Color of the dotted line
-                          strokeWidth:
-                          1.0,
-                          // Width of the dotted line
-                          dashPattern: const [
-                            4,
-                            2
-                          ],
-                          // Dash pattern for the dotted line
-                          borderType: BorderType.RRect,
-                          radius: const Radius.circular(
-                              5.0),
-                          // Rounded corners
-                          child: Padding(
-                            padding: const EdgeInsets.all(
-                                2.0), // Padding inside the dotted border
-                            child: Row(
-                              mainAxisSize: MainAxisSize
-                                  .min, // Ensures the Row takes minimum width
+                  return ListView.builder(
+                      itemCount: actionOnLeavePending.length,
+                      itemBuilder: (context, index) {
+                        leavePending = actionOnLeavePending[index];
+                        return Padding(
+                          padding:
+                              const EdgeInsets.only(left: 5, right: 5, top: 5,bottom: 5),
+                          child: SingleChildScrollView(
+                            child: Column(
                               children: [
-                                Text(
-                                  'Leave Applied For',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlack45TextStyle,
-                                ),
-                                const SizedBox(
-                                    width:
-                                    2.0),
-                                // Space between 'Leave Applied For' and ':'
-                                Text(
-                                  ' : ',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlack45TextStyle,
-                                ),
-                                const SizedBox(
-                                    width:
-                                    2.0),
-                                // Space between ':' and '1 Days'
-                                Text(
-                                  "1 Day",
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    // Background color of the container
+                                    borderRadius: BorderRadius.circular(2.0),
+                                    // Rounded corners
+                                    border: Border.all(
+                                      color: Colors.grey, // Border color
+                                      width: 1.0, // Border width
+                                    ),
+                                  ),
+                                  child: Container(
+                                    color: Colors.white,
+                                    margin: EdgeInsets.only(
+                                        left: 5, right: 5, top: 5),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          // todo container apple left color border with 2 width
+                                          decoration: const BoxDecoration(
+                                            border: Border(
+                                              left: BorderSide(
+                                                color: Colors.blue,
+                                                // Color of the left border
+                                                width:
+                                                    2.0, // Width of the left border
+                                              ),
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              /// todo take a two TextVIEW
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 5),
+                                                child: Text(
+                                                  "${leavePending.sLvDesc}",
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle,
+                                                ),
+                                              ),
+                                              Text(
+                                                  "Applied At: ${leavePending.dApplyDate}",
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.account_box,
+                                                  size: 18,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text('Applied by : ${leavePending.sEmpName}',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.notes_outlined,
+                                                  size: 18,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text('Leave Reason',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 22),
+                                          child: Text(
+                                              "${leavePending.sLeaveReason}",
+                                              style: AppTextStyle
+                                                  .font12OpenSansRegularBlackTextStyle),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Icon(Icons.calendar_month,
+                                                        size: 18,
+                                                        color: Colors.cyan),
+                                                    SizedBox(width: 4),
+                                                    Text('From : ${leavePending.dFromDate}',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Icon(Icons.calendar_month,
+                                                        size: 18,
+                                                        color: Colors.cyan),
+                                                    SizedBox(width: 4),
+                                                    Text('TO : ${leavePending.dToDate}',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: DottedBorder(
+                                            color: Colors.grey,
+                                            // Color of the dotted line
+                                            strokeWidth: 1.0,
+                                            // Width of the dotted line
+                                            dashPattern: const [4, 2],
+                                            // Dash pattern for the dotted line
+                                            borderType: BorderType.RRect,
+                                            radius: const Radius.circular(5.0),
+                                            // Rounded corners
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(2.0),
+                                              // Padding inside the dotted border
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                // Ensures the Row takes minimum width
+                                                children: [
+                                                  Text(
+                                                    'Leave Applied For',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                  ),
+                                                  const SizedBox(width: 2.0),
+                                                  // Space between 'Leave Applied For' and ':'
+                                                  Text(
+                                                    ' : ',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlack45TextStyle,
+                                                  ),
+                                                  const SizedBox(width: 2.0),
+                                                  // Space between ':' and '1 Days'
+                                                  Text(
+                                                    "${leavePending.iDays} Day",
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          // Aligns both widgets vertically centered
+                                          children: [
+                                            Expanded(
+                                              // To make DottedBorder take up most of the available width
+                                              child: DottedBorder(
+                                                color: Colors.grey,
+                                                // Color of the dotted line
+                                                strokeWidth: 1.0,
+                                                // Width of the dotted line
+                                                dashPattern: const [4, 2],
+                                                // Dash pattern for the dotted line
+                                                borderType: BorderType.RRect,
+                                                radius:
+                                                    const Radius.circular(5.0),
+                                                // Rounded corners
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  // Padding inside the dotted border
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    // Ensures Row takes full width
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    // Space between text and ':'
+                                                    children: [
+                                                      Text(
+                                                        'Leave Applied For',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlack45TextStyle,
+                                                      ),
+                                                      const SizedBox(width: 2.0),
+                                                      // Space between text and colon
+                                                      Text(
+                                                        ' : ',
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlack45TextStyle,
+                                                      ),
+                                                      const SizedBox(width: 2.0),
+                                                      // Space between colon and days
+                                                      Text(
+                                                        "${leavePending.iDays} Day",
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10.0),
+                                            // Spacing between DottedBorder and button
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                /// todo take a ction functionality
+
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Color(0xFF0098a6),
+                                                // Green background
+                                                foregroundColor: Colors.white,
+                                                // White label text
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          4), // No rounded corners
+                                                ),
+                                                padding: const EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 16,
+                                                    vertical:
+                                                        12), // Adjust button padding
+                                              ),
+                                              child: Text(
+                                                "Take Action",
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularWhiteTextStyle, // Adjust label text size
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Icon(
+                                                  Icons.punch_clock_sharp,
+                                                  size: 18,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                    'Rejected At : ${leavePending.dAppRejDate}',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlackTextStyle),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Icon(
+                                              Icons.notes_outlined,
+                                              size: 18,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Expanded(
+                                              // Prevents text from overflowing
+                                              child: Text(
+                                                'Reason : ${leavePending.sLeaveReason}',
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlackTextStyle,
+                                                overflow: TextOverflow
+                                                    .visible, // Ensures text is visible and wraps
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center, // Aligns both widgets vertically centered
-                        children: [
-                          Expanded( // To make DottedBorder take up most of the available width
-                            child: DottedBorder(
-                              color: Colors.grey, // Color of the dotted line
-                              strokeWidth: 1.0, // Width of the dotted line
-                              dashPattern: const [4, 2], // Dash pattern for the dotted line
-                              borderType: BorderType.RRect,
-                              radius: const Radius.circular(5.0), // Rounded corners
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0), // Padding inside the dotted border
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max, // Ensures Row takes full width
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between text and ':'
-                                  children: [
-                                    Text(
-                                      'Leave Applied For',
-                                      style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
-                                    ),
-                                    const SizedBox(width: 2.0), // Space between text and colon
-                                    Text(
-                                      ' : ',
-                                      style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
-                                    ),
-                                    const SizedBox(width: 2.0), // Space between colon and days
-                                    Text(
-                                      "1 Day",
-                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 10.0), // Spacing between DottedBorder and button
-                          ElevatedButton(
-                            onPressed: () {
-
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF0098a6), // Green background
-                              foregroundColor: Colors.white, // White label text
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4), // No rounded corners
-                              ),
-                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12), // Adjust button padding
-                            ),
-                            child: Text(
-                              "Take Action",
-                              style: AppTextStyle.font12OpenSansRegularWhiteTextStyle, // Adjust label text size
-                            ),
-                          )
-
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.punch_clock_sharp,
-                                size: 18,
-                              ),
-                              SizedBox(width: 5),
-                              Text('Rejected At : 01/Oct/2024/09:31',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.notes_outlined,
-                            size: 18,
-                          ),
-                          SizedBox(width: 5),
-                          Expanded( // Prevents text from overflowing
-                            child: Text(
-                              'Reason : Leave cannot be considerable in such a short notice period.',
-                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                              overflow: TextOverflow.visible, // Ensures text is visible and wraps
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-
-                      // Row(
-                      //   mainAxisAlignment:
-                      //   MainAxisAlignment.start,
-                      //   children: [
-                      //     Icon(
-                      //       Icons.notes_outlined,
-                      //       size: 18,
-                      //     ),
-                      //     SizedBox(width: 5),
-                      //     Text('Reason : Leave cannot be considerable in a such a short notice period.',
-                      //         style: AppTextStyle
-                      //             .font12OpenSansRegularBlackTextStyle),
-                      //   ],
-                      // ),
-                      // Row(
-                      //   mainAxisAlignment:
-                      //   MainAxisAlignment.start,
-                      //   children: [
-                      //
-                      //   ],
-                      // ),
-
-
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),);
-        // body: Container(
-        //     height: MediaQuery.of(context).size.height,
-        //     child: FutureBuilder<List<HrmsLeaveStatusModel>>(
-        //         future: hrmsLeaveStatus,
-        //         builder: (context, snapshot) {
-        //           // Check if the snapshot has data and is not null
-        //           if (snapshot.connectionState == ConnectionState.waiting) {
-        //             // Show a loading indicator while waiting for data
-        //             return Center(child: CircularProgressIndicator());
-        //           } else if (snapshot.hasError) {
-        //             // Handle error scenario
-        //             return Center(child: Text('Error: ${snapshot.error}'));
-        //           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        //             // Handle the case where the data is empty or null
-        //             return Center(child: Text('No Data'));
-        //           }
-        //
-        //           // Once data is available, build the ListView
-        //           final polocyDocList = snapshot.data!; // Access the resolved data
-        //
-        //           return ListView.builder(
-        //               itemCount: polocyDocList.length,
-        //               itemBuilder: (context, index) {
-        //                 final policyDocData = polocyDocList[index];
-        //                 //final randomColor = colorList[index % colorList.length];
-        //                 return Padding(
-        //                   padding:
-        //                   const EdgeInsets.only(left: 5, right: 5, top: 5),
-        //                   child: Column(
-        //                     children: [
-        //                       Container(
-        //                         decoration: BoxDecoration(
-        //                           color: Colors
-        //                               .white, // Background color of the container
-        //                           borderRadius: BorderRadius.circular(
-        //                               2.0), // Rounded corners
-        //                           border: Border.all(
-        //                             color: Colors.grey, // Border color
-        //                             width: 1.0, // Border width
-        //                           ),
-        //                         ),
-        //                         child: Container(
-        //                           color: Colors.white,
-        //                           margin: EdgeInsets.only(
-        //                               left: 5, right: 5, top: 5),
-        //                           child: Column(
-        //                             mainAxisAlignment: MainAxisAlignment.start,
-        //                             crossAxisAlignment:
-        //                             CrossAxisAlignment.start,
-        //                             children: [
-        //                               Container(
-        //                                 height: 40,
-        //                                 // todo container apple left color border with 2 width
-        //                                 decoration: const BoxDecoration(
-        //                                   border: Border(
-        //                                     left: BorderSide(
-        //                                       color: Colors
-        //                                           .blue, // Color of the left border
-        //                                       width:
-        //                                       2.0, // Width of the left border
-        //                                     ),
-        //                                   ),
-        //                                 ),
-        //                                 child: Row(
-        //                                   mainAxisAlignment:
-        //                                   MainAxisAlignment.spaceBetween,
-        //                                   children: [
-        //                                     /// todo take a two TextVIEW
-        //                                     Padding(
-        //                                       padding: const EdgeInsets.only(
-        //                                           left: 5),
-        //                                       child: Text(
-        //                                         "${policyDocData.sLvDesc}",
-        //                                         style: AppTextStyle
-        //                                             .font12OpenSansRegularBlackTextStyle,
-        //                                       ),
-        //                                     ),
-        //                                     Text(
-        //                                         "Applied At: ${policyDocData.dApplyDate}",
-        //                                         style: AppTextStyle
-        //                                             .font12OpenSansRegularBlackTextStyle),
-        //                                   ],
-        //                                 ),
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               Row(
-        //                                 mainAxisAlignment:
-        //                                 MainAxisAlignment.start,
-        //                                 children: [
-        //                                   Row(
-        //                                     mainAxisAlignment:
-        //                                     MainAxisAlignment.start,
-        //                                     children: [
-        //                                       Icon(
-        //                                         Icons.notes_outlined,
-        //                                         size: 18,
-        //                                       ),
-        //                                       SizedBox(width: 5),
-        //                                       Text('Leave Reason',
-        //                                           style: AppTextStyle
-        //                                               .font12OpenSansRegularBlackTextStyle),
-        //                                     ],
-        //                                   ),
-        //                                 ],
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               Padding(
-        //                                 padding:
-        //                                 const EdgeInsets.only(left: 22),
-        //                                 child: Text(
-        //                                     "${policyDocData.sLeaveReason}",
-        //                                     style: AppTextStyle
-        //                                         .font12OpenSansRegularBlackTextStyle),
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               Row(
-        //                                 mainAxisAlignment:
-        //                                 MainAxisAlignment.spaceBetween,
-        //                                 children: [
-        //                                   Column(
-        //                                     children: [
-        //                                       Row(
-        //                                         mainAxisAlignment:
-        //                                         MainAxisAlignment.start,
-        //                                         children: [
-        //                                           Icon(Icons.calendar_month,
-        //                                               size: 18,
-        //                                               color: Colors.cyan),
-        //                                           SizedBox(width: 4),
-        //                                           Text('From : ${policyDocData.dFromDate}',
-        //                                               style: AppTextStyle
-        //                                                   .font12OpenSansRegularBlackTextStyle),
-        //                                         ],
-        //                                       )
-        //                                     ],
-        //                                   ),
-        //                                   Column(
-        //                                     children: [
-        //                                       Row(
-        //                                         mainAxisAlignment:
-        //                                         MainAxisAlignment.start,
-        //                                         children: [
-        //                                           Icon(Icons.calendar_month,
-        //                                               size: 18,
-        //                                               color: Colors.cyan),
-        //                                           SizedBox(width: 4),
-        //                                           Text('TO : ${policyDocData.dToDate}',
-        //                                               style: AppTextStyle
-        //                                                   .font12OpenSansRegularBlackTextStyle),
-        //                                         ],
-        //                                       )
-        //                                     ],
-        //                                   ),
-        //                                 ],
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               Align(
-        //                                 alignment: Alignment.centerRight,
-        //                                 child: DottedBorder(
-        //                                   color: Colors
-        //                                       .grey, // Color of the dotted line
-        //                                   strokeWidth:
-        //                                   1.0, // Width of the dotted line
-        //                                   dashPattern: const [
-        //                                     4,
-        //                                     2
-        //                                   ], // Dash pattern for the dotted line
-        //                                   borderType: BorderType.RRect,
-        //                                   radius: const Radius.circular(
-        //                                       5.0), // Rounded corners
-        //                                   child: Padding(
-        //                                     padding: const EdgeInsets.all(
-        //                                         2.0), // Padding inside the dotted border
-        //                                     child: Row(
-        //                                       mainAxisSize: MainAxisSize
-        //                                           .min, // Ensures the Row takes minimum width
-        //                                       children: [
-        //                                         Text(
-        //                                           'Leave Applied For',
-        //                                           style: AppTextStyle
-        //                                               .font12OpenSansRegularBlack45TextStyle,
-        //                                         ),
-        //                                         const SizedBox(
-        //                                             width:
-        //                                             2.0), // Space between 'Leave Applied For' and ':'
-        //                                         Text(
-        //                                           ' : ',
-        //                                           style: AppTextStyle
-        //                                               .font12OpenSansRegularBlack45TextStyle,
-        //                                         ),
-        //                                         const SizedBox(
-        //                                             width:
-        //                                             2.0), // Space between ':' and '1 Days'
-        //                                         Text(
-        //                                           "${policyDocData.iDays} Day",
-        //                                           style: AppTextStyle
-        //                                               .font12OpenSansRegularBlackTextStyle,
-        //                                         ),
-        //                                       ],
-        //                                     ),
-        //                                   ),
-        //                                 ),
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               Column(
-        //                                 mainAxisAlignment: MainAxisAlignment.start,
-        //                                 crossAxisAlignment: CrossAxisAlignment.start,
-        //                                 children: [
-        //                                   // Conditionally show the Row if dAppRejDate is not null
-        //                                   Visibility(
-        //                                     visible: policyDocData.dAppRejDate != null && policyDocData.dAppRejDate.isNotEmpty, // Check if dAppRejDate is not null or empty
-        //                                     child: Row(
-        //                                       mainAxisAlignment: MainAxisAlignment.start,
-        //                                       children: [
-        //                                         Row(
-        //                                           mainAxisAlignment: MainAxisAlignment.start,
-        //                                           children: [
-        //                                             const Icon(
-        //                                               Icons.notes_outlined,
-        //                                               size: 18,
-        //                                             ),
-        //                                             SizedBox(width: 5),
-        //                                             Text(
-        //                                               'Sanctioned At : ${policyDocData.dAppRejDate}',
-        //                                               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-        //                                             ),
-        //                                           ],
-        //                                         ),
-        //                                       ],
-        //                                     ),
-        //                                   ),
-        //                                   SizedBox(height: 5),
-        //                                   // Conditionally show the Padding widget if sAppRejReason is not null
-        //                                   Visibility(
-        //                                     visible: policyDocData.sAppRejReason != null && policyDocData.sAppRejReason.isNotEmpty, // Check if sAppRejReason is not null or empty
-        //                                     child: Padding(
-        //                                       padding: const EdgeInsets.only(left: 22),
-        //                                       child: Text(
-        //                                         'Reason : ${policyDocData.sAppRejReason}',
-        //                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-        //                                       ),
-        //                                     ),
-        //                                   ),
-        //                                 ],
-        //                               ),
-        //                               SizedBox(height: 5),
-        //                               // Container(
-        //                               //   height: 35, // Set the height for the button
-        //                               //   width: MediaQuery.of(context).size.width - 30,
-        //                               //   child: ElevatedButton(
-        //                               //     onPressed: () async {
-        //                               //       var iTranId = "${policyDocData.iTranId}";
-        //                               //
-        //                               //       showDialog(
-        //                               //         context: context,
-        //                               //         builder: (BuildContext context) {
-        //                               //           return _takeActionDialog(context,iTranId);
-        //                               //         },
-        //                               //       );
-        //                               //     },
-        //                               //     style: ElevatedButton.styleFrom(
-        //                               //       backgroundColor: const Color(0xFFe8878e), // Button color
-        //                               //       padding: const EdgeInsets.symmetric(
-        //                               //         horizontal: 24, // Horizontal padding
-        //                               //         vertical: 0,    // Adjust vertical padding to 0 for a smaller height
-        //                               //       ),
-        //                               //       shape: RoundedRectangleBorder(
-        //                               //         borderRadius: BorderRadius.circular(2),
-        //                               //       ),
-        //                               //     ),
-        //                               //     child: Text(
-        //                               //       'Cancel Leave Request',
-        //                               //       style: AppTextStyle.font12OpenSansRegularWhiteTextStyle, // Make sure this text style is not too large
-        //                               //     ),
-        //                               //   ),
-        //                               // )
-        //                             ],
-        //                           ),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 );
-        //               });
-        //         })));
+                        );
+                      });
+                })));
   }
+
   Widget _takeActionDialog(BuildContext context, String iTranId) {
     TextEditingController _queryTitleEditText = TextEditingController();
     return Dialog(
@@ -668,7 +431,8 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 265, // Adjusted height to accommodate the TextFormField and Submit button
+            height: 265,
+            // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -680,8 +444,7 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                 // TextFormField for entering data
                 // SizedBox(height: 5),
                 Text("Cancel leave Request",
-                    style: AppTextStyle
-                        .font12OpenSansRegularBlack45TextStyle),
+                    style: AppTextStyle.font12OpenSansRegularBlack45TextStyle),
                 SizedBox(height: 5),
                 Padding(
                   padding: const EdgeInsets.only(left: 0),
@@ -691,10 +454,14 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                      filled: true, // Enable background color
-                      fillColor: Color(0xFFf2f3f5), // Set your desired background color here
-                      hintText: 'Enter reason', // Add your hint text here
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10.0),
+                      filled: true,
+                      // Enable background color
+                      fillColor: Color(0xFFf2f3f5),
+                      // Set your desired background color here
+                      hintText: 'Enter reason',
+                      // Add your hint text here
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -704,41 +471,43 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                 SizedBox(height: 15),
                 // Submit button
                 InkWell(
-                  onTap: ()async{
+                  onTap: () async {
                     var queryTitle = _queryTitleEditText.text.trim();
 
                     // Check if the input is not empty
                     if (queryTitle != null && queryTitle != '') {
                       print('---Call Api-----');
 
-                      var postQuery = await LeaveCancellationRepo().leaveCancellation(context,queryTitle,iTranId);
+                      var postQuery = await LeaveCancellationRepo()
+                          .leaveCancellation(context, queryTitle, iTranId);
                       print('--326--$postQuery');
 
                       setState(() {
                         result = "${postQuery[0]['Result']}";
                         msg = "${postQuery[0]['Msg']}";
                       });
-
-                    } else{
-                      if(queryTitle==null || queryTitle==''){
+                    } else {
+                      if (queryTitle == null || queryTitle == '') {
                         generalFunction.displayToast('Enter reason');
-                      }else{
+                      } else {
                         // generalFunction.displayToast('Enter Query');
                       }
                       print('---Api not Call -----');
                     }
-                    if(result=="1"){
+                    if (result == "1") {
                       Navigator.of(context).pop();
+
                       /// calla api again
-                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+                      //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
 
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                          return _buildDialogSucces2(
+                              context, msg); // A new dialog for showing success
                         },
                       );
-                    }else{
+                    } else {
                       generalFunction.displayToast(msg);
                     }
                   },
@@ -750,7 +519,8 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                     decoration: BoxDecoration(
                       color: AppColors.loginbutton,
                       // Background color using HEX value
-                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                      borderRadius: BorderRadius.circular(
+                          AppMargin.m10), // Rounded corners
                     ),
                     //  #00b3c7
                     child: Center(
@@ -771,7 +541,8 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  'assets/images/addreimbursement.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -783,8 +554,9 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
       ),
     );
   }
+
   // build diaog success
-  Widget _buildDialogSucces2(BuildContext context,String msg) {
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -806,10 +578,8 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 Text(
                   msg,
@@ -833,13 +603,16 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
                         //   context,
                         //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
                         // );
-
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -853,7 +626,8 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -866,4 +640,3 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
     );
   }
 }
-

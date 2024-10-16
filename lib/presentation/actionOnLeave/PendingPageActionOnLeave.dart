@@ -8,6 +8,7 @@ import '../../domain/actionOnLeaveModel.dart';
 import '../resources/app_text_style.dart';
 
 class PendingPageActionOnLeave extends StatefulWidget {
+
   String? formDate, toDate;
 
   PendingPageActionOnLeave(
@@ -18,9 +19,9 @@ class PendingPageActionOnLeave extends StatefulWidget {
 }
 
 class _PendingPageState extends State<PendingPageActionOnLeave> {
+
   var result, msg;
-  late Future<List<HrmsLeavePendingForApprovalModel>>
-      hrmsLeavePendingForApproval;
+  late Future<List<HrmsLeavePendingForApprovalModel>> hrmsLeavePendingForApproval;
   GeneralFunction generalFunction = GeneralFunction();
   late var leavePending;
 
@@ -58,8 +59,7 @@ class _PendingPageState extends State<PendingPageActionOnLeave> {
                   return Center(child: Text('No Data'));
                 }
                 // Once data is available, build the ListView
-                final actionOnLeavePending =
-                    snapshot.data!; // Access the resolved data
+                final actionOnLeavePending = snapshot.data!; // Access the resolved data
 
                 return ListView.builder(
                     itemCount: actionOnLeavePending.length,
@@ -445,18 +445,14 @@ class _PendingPageState extends State<PendingPageActionOnLeave> {
                           generalFunction.displayToast("Enter remarks");
                         }
                       },
-
-
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 40, vertical: 8),
                         // Adjust vertical padding to reduce height
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              15), // Rounded corners for the button
+                          borderRadius: BorderRadius.circular(15), // Rounded corners for the button
                         ),
-                        backgroundColor:
-                            Color(0xFF0098a6), // Button background color
+                        backgroundColor: Color(0xFF0098a6), // Button background color
                       ),
                       child: Text(
                         'Rejected',
