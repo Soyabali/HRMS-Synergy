@@ -2,7 +2,9 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../app/generalFunction.dart';
+import '../../data/postShortLeaveRepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
@@ -28,10 +30,24 @@ class ShortLeaveScreen extends StatefulWidget {
 }
 
 class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
+  var result,msg;
   String? dExpDate;
   TextEditingController _expenseController = TextEditingController();
 
   FocusNode _owenerfocus = FocusNode();
+  String? formattedDate;
+  GeneralFunction generalfunction = GeneralFunction();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    DateTime currentDate = DateTime.now();
+    // Format the current date
+    formattedDate = DateFormat('dd/MMM/yyyy').format(currentDate);
+    // Print the formatted date
+    print('Current Date: $formattedDate');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,34 +163,6 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                           ),
                           SizedBox(height: 10),
                           InkWell(
-                            onTap: () async {
-                              print('---pick a date---');
-
-                              // Set current date
-                              DateTime today = DateTime.now();
-
-                              // Show date picker and store the picked date
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: today, // Set the initial date to today
-                                firstDate: today,   // Restrict selection to today as the earliest date
-                                lastDate: today,    // Restrict selection to today as the latest date
-                              );
-
-                              // Check if a date was picked
-                              if (pickedDate != null) {
-                                // Format the picked date
-                                String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-
-                                // Update the state with the picked date
-                                setState(() {
-                                  dExpDate = formattedDate;
-                                });
-                                print('$dExpDate');
-                              } else {
-                                print('---no date is selected----');
-                              }
-                            },
                             child: Container(
                               height: 30,
                               child: DottedBorder(
@@ -197,9 +185,9 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                       SizedBox(width: 5.0),
                                       // Display the selected date or a placeholder if no date is selected
                                       Text(
-                                        dExpDate == null
-                                            ? 'Select Short Leave Date'
-                                            : '$dExpDate',
+                                        formattedDate == null
+                                            ? 'No Date Selected'
+                                            : '$formattedDate',
                                         style: AppTextStyle
                                             .font16OpenSansRegularBlack45TextStyle,
                                       ),
@@ -268,20 +256,46 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                             height: 35,
                             width: 120,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Add your onPressed functionality here
+                              onPressed: () async {
                                 var reason = _expenseController.text;
-                                print("-----274---$reason");
-                                print("----275---$dExpDate");
-                                if((reason!=null && reason!="") && dExpDate!=null){
+                               // to get a emp code from a sharedPreference.
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                String? sEmpCode = prefs.getString('sEmpCode');
+
+                                print("-----274-reason--$reason");
+                                print("----275-date--$formattedDate");
+                                print("----263-Emp code--$sEmpCode");
+
+                                if((reason!=null && reason!="") && formattedDate!=null){
                                   print("---Api call---");
-                                  /// TO CALL A API
-                                  ///
+                                  /// TOdo CALL A API
+                                   var shortLeave = await PostShortLeaveRepo().shortLeave(context,sEmpCode,formattedDate,reason);
+                                   print('--269----$shortLeave');
+                                   if(shortLeave!=null){
+                                      setState(() {
+                                        result = "${shortLeave[0]['Result']}";
+                                        msg = "${shortLeave[0]['Msg']}";
+                                      });
+                                      print('--Result---$result');
+                                      print('--msg---$msg');
+                                   }else{
+                                   }
+
+
                                 }else{
                                   // to give a toast
                                   print("---Api  not call---");
                                 }
+                                if(result=="1"){
+                                  print('-----Success----1--');
+                                  /// todo show success Dialog
+                                  generalfunction.successDialog(context, msg);
+                                }else{
+                                  print('-----Failed --0----');
+                                  /// todo give only notification
+                                   generalfunction.displayToast(msg);
 
+                                }
 
                               },
                               style: ElevatedButton.styleFrom(

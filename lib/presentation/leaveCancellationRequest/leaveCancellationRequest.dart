@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -18,13 +17,15 @@ import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../data/reimbursementStatusTakeAction.dart';
 import '../../data/allLeaveStatusRepo.dart';
+import '../../data/leaveCancellationListRepo.dart';
+import '../../data/leaveCancellationRequestRepo.dart';
 import '../../domain/allLeaveStatusModel.dart';
+import '../../domain/leaveCancellationListModel.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class LeaveCancellationRequest extends StatelessWidget {
-
   const LeaveCancellationRequest({super.key});
 
   @override
@@ -44,7 +45,6 @@ class LeaveCancellationRequest extends StatelessWidget {
 }
 
 class LeaveCancellationRequestPage extends StatefulWidget {
-
   const LeaveCancellationRequestPage({super.key});
 
   @override
@@ -54,9 +54,11 @@ class LeaveCancellationRequestPage extends StatefulWidget {
 class _MyHomePageState extends State<LeaveCancellationRequestPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
+
   // List<Map<String, dynamic>> _filteredData = [];
   ///List<dynamic>  hrmsReimbursementList;
   TextEditingController _searchController = TextEditingController();
+
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
@@ -68,30 +70,32 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
-  late Future<List<LeaveStatusModel>> reimbursementStatusV3;
-  List<LeaveStatusModel> _allData = []; // Holds original data
-  List<LeaveStatusModel> _filteredData = []; // Holds filtered data
+  late Future<List<LeaveCancellationListModel>> reimbursementStatusV3;
+  List<LeaveCancellationListModel> _allData = []; // Holds original data
+  List<LeaveCancellationListModel> _filteredData = []; // Holds filtered data
   TextEditingController _takeActionController = TextEditingController();
   // Distic List
-  hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
+  hrmsReimbursementStatus(
+      String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
-    reimbursementStatusV3 = HrmsAllLeaveStatusRepo()
-        .allleaveStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
+    reimbursementStatusV3 = LeaveCancellationListRepo()
+        .leaveCancellationList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
-    reimbursementStatusV3.then((data) {
-      setState(() {
-        _allData = data; // Store the data
-        _filteredData = _allData; // Initially, no filter applied
-      });
-    });
+    // reimbursementStatusV3.then((data) {
+    //   setState(() {
+    //     _allData = data; // Store the data
+    //     _filteredData = _allData; // Initially, no filter applied
+    //   });
+    // });
     // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
     // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
 
     print(
-        " -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
+        " -----xxxxx-  reimbursementStatusV3--90-----> $reimbursementStatusV3");
     // setState(() {});
   }
+
   // filter data
   void filterData(String query) {
     setState(() {
@@ -99,24 +103,26 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
         _filteredData = _allData; // Show all data if search query is empty
       } else {
         _filteredData = _allData.where((item) {
-          return item.sName
-              .toLowerCase()
-              .contains(query.toLowerCase()) || // Filter by project name
-              item.sDesg.toLowerCase().contains(query.toLowerCase()) ||
-              item.sLeaveStatus.toLowerCase().contains(query.toLowerCase());
+          return item.sEmpName
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) || // Filter by project name
+              item.sDsgName.toLowerCase().contains(query.toLowerCase()) ||
+              item.sEmpCode.toLowerCase().contains(query.toLowerCase());
           // Filter by employee name
         }).toList();
       }
     });
   }
+
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
     var postimageResponse =
-    await PostImageRepo().postImage(context, _imageFile);
+        await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
+
   String? _chosenValue;
 
   var msg;
@@ -293,6 +299,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
       //toDate = DateFormat('dd/MMM/yyyy').format(now2);
     });
   }
+
   // to Date SelectedLogic
   void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
@@ -306,6 +313,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
       displayToast("To Date can not be less than From Date");
     }
   }
+
   void fromDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
@@ -319,6 +327,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
       displayToast("From date can not be greater than To Date");
     }
   }
+
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -368,6 +377,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
     _landMarkfocus.dispose();
     _addressfocus.dispose();
   }
+
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -375,7 +385,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
@@ -433,7 +443,8 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(width: 4),
-                        Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                        Icon(Icons.calendar_month,
+                            size: 15, color: Colors.white),
                         const SizedBox(width: 4),
                         const Text(
                           'From',
@@ -443,7 +454,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                               fontWeight: FontWeight.normal),
                         ),
                         SizedBox(width: 4),
-
                         GestureDetector(
                           onTap: () async {
                             /// TODO Open Date picke and get a date
@@ -454,12 +464,16 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                               lastDate: DateTime(2100),
                             );
                             if (pickedDate != null) {
-                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              String formattedDate =
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
-                                tempDate = formDate; // Save the current formDate before updating
+                                tempDate =
+                                    formDate; // Save the current formDate before updating
                                 formDate = formattedDate;
                                 // calculateTotalDays();
+                                hrmsReimbursementStatus(formDate!, toDate!);
                               });
+
                               fromDateSelectLogic();
                             }
                           },
@@ -467,7 +481,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                             height: 35,
                             padding: EdgeInsets.symmetric(
                                 horizontal:
-                                14.0), // Optional: Adjust padding for horizontal space
+                                    14.0), // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
                               color: Colors
                                   .white, // Change this to your preferred color
@@ -497,7 +511,8 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                         ),
                         //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                         SizedBox(width: 8),
-                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                        Icon(Icons.calendar_month,
+                            size: 16, color: Colors.white),
                         SizedBox(width: 5),
                         const Text(
                           'To',
@@ -517,13 +532,15 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                             );
                             if (pickedDate != null) {
                               String formattedDate =
-                              DateFormat('dd/MMM/yyyy')
-                                  .format(pickedDate);
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
-                                tempDate = toDate; // Save the current toDate before updating
+                                tempDate =
+                                    toDate; // Save the current toDate before updating
                                 toDate = formattedDate;
                                 // calculateTotalDays();
+                                hrmsReimbursementStatus(formDate!, toDate!);
                               });
+
                               toDateSelectLogic();
                             }
                           },
@@ -531,7 +548,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                             height: 35,
                             padding: EdgeInsets.symmetric(
                                 horizontal:
-                                14.0), // Optional: Adjust padding for horizontal space
+                                    14.0), // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
                               color: Colors
                                   .white, // Change this to your preferred color
@@ -607,343 +624,402 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                   SizedBox(height: 10),
                   Expanded(
                     child: Container(
-                      child: FutureBuilder<List<LeaveStatusModel>>(
+                      child: FutureBuilder<List<LeaveCancellationListModel>>(
                           future: reimbursementStatusV3,
                           builder: (context, snapshot) {
-                            return ListView.builder(
-                              // itemCount: snapshot.data!.length ?? 0,
-                              // itemBuilder: (context, index)
-                                itemCount: _filteredData.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  final leaveStatus = _filteredData[index];
-                                  final randomColor =
-                                  colorList[index % colorList.length];
-                                  status = leaveStatus.sLeaveStatus;
-                                  containerColor;
-                                  if (status == "Sanctioned") {
-                                    containerColor = Color(0xFF689F38);
-                                  } else if (status ==
-                                      "Request For Cancellation") {
-                                    containerColor = Colors.redAccent;
-                                  } else {
-                                    containerColor = Color(0xFFFFD700);
-                                  }
+                            // check the current state of the Future
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return Center(
+                                child:
+                                    CircularProgressIndicator(), // Loading indicator
+                              );
+                            } else if (snapshot.hasError) {
+                              return Center(
+                                child: Text(
+                                    'An error occurred: ${snapshot.error}'),
+                              );
+                            } else if (!snapshot.hasData ||
+                                snapshot.data!.isEmpty) {
+                              return Center(
+                                child: Text('No data available'),
+                              );
+                            } else {
+                              return ListView.builder(
+                                  itemCount: snapshot.data!.length ?? 0,
+                                  // itemBuilder: (context, index)
+                                  // itemCount: _filteredData.length ?? 0,
+                                  itemBuilder: (context, index) {
+                                    //final leaveStatus = _filteredData[index];
+                                    final leaveStatus = snapshot.data![index];
+                                    // final randomColor =
+                                    // colorList[index % colorList.length];
+                                    // status = leaveStatus.sLeaveStatus;
+                                    // containerColor;
+                                    // if (status == "Sanctioned") {
+                                    //   containerColor = Color(0xFF689F38);
+                                    // } else if (status ==
+                                    //     "Request For Cancellation") {
+                                    //   containerColor = Colors.redAccent;
+                                    // } else {
+                                    //   containerColor = Color(0xFFFFD700);
+                                    // }
 
-                                  return Card(
-                                    elevation: 1,
-                                    color: Colors.white,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(0.0),
-                                        border: Border.all(
-                                          color:
-                                          Colors.grey, // Outline border color
-                                          width: 0.2, // Outline border width
+                                    return Card(
+                                      elevation: 1,
+                                      color: Colors.white,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          border: Border.all(
+                                            color: Colors
+                                                .grey, // Outline border color
+                                            width: 0.2, // Outline border width
+                                          ),
                                         ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 5, right: 8, top: 8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                              const EdgeInsets.only(left: 8),
-                                              child: Row(
-                                                mainAxisAlignment:
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 5, right: 8, top: 8),
+                                          child: Column(
+                                            mainAxisAlignment:
                                                 MainAxisAlignment.start,
-                                                crossAxisAlignment:
+                                            crossAxisAlignment:
                                                 CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      var images =
-                                                          leaveStatus.sImageLink;
-                                                      var designation =
-                                                          leaveStatus.sDesg;
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 8),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        var images = leaveStatus
+                                                            .sImageLink;
+                                                        var designation =
+                                                            leaveStatus
+                                                                .sDsgName;
 
-                                                      openFullScreenDialog(
-                                                          context,
-                                                          images,
-                                                          designation
-                                                        // 'https://your-image-url.com/image.jpg', // Replace with your image URL
-                                                        // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                      );
-                                                    },
-                                                    child: Center(
-                                                      child: ClipOval(
-                                                        // Clip the image to make it circular
-                                                        child: Container(
-                                                          child: Image.network(
-                                                            leaveStatus.sImageLink, // Replace with your image URL
-                                                            height:
-                                                            35, // Adjust height as needed
-                                                            width:
-                                                            35, // Adjust width as needed
-                                                            fit: BoxFit
-                                                                .cover, // Make the image cover the container
+                                                        openFullScreenDialog(
+                                                            context,
+                                                            images,
+                                                            designation
+                                                            // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                                            // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                                            );
+                                                      },
+                                                      child: Center(
+                                                        child: ClipOval(
+                                                          // Clip the image to make it circular
+                                                          child: Container(
+                                                            child:
+                                                                Image.network(
+                                                              leaveStatus
+                                                                  .sImageLink,
+                                                              // Replace with your image URL
+                                                              height: 35,
+                                                              // Adjust height as needed
+                                                              width: 35,
+                                                              // Adjust width as needed
+                                                              fit: BoxFit
+                                                                  .cover, // Make the image cover the container
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-
-                                                  SizedBox(width: 10),
-                                                  // Wrap the column in Flexible to prevent overflow
-                                                  Flexible(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          leaveStatus.sName,
-                                                          //'Prabhat Yadav',
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlackTextStyle,
-                                                          maxLines:
-                                                          2, // Limits the text to 2 lines
-                                                          overflow: TextOverflow
-                                                              .ellipsis, // Truncates with an ellipsis if too long
-                                                        ),
-                                                        // SizedBox(height: 4), // Add spacing between texts if needed
-                                                        Padding(
-                                                          padding:
-                                                          const EdgeInsets
-                                                              .only(
-                                                              right: 10),
-                                                          child: Text(
-                                                            leaveStatus.sDesg,
-                                                            //leaveData.sProjectName,
+                                                    SizedBox(width: 10),
+                                                    // Wrap the column in Flexible to prevent overflow
+                                                    Flexible(
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Text(
+                                                            leaveStatus
+                                                                .sEmpName,
+                                                            //'Prabhat Yadav',
                                                             style: AppTextStyle
-                                                                .font12OpenSansRegularBlack45TextStyle,
-                                                            maxLines:
-                                                            2, // Limits the text to 2 lines
+                                                                .font12OpenSansRegularBlackTextStyle,
+                                                            maxLines: 2,
+                                                            // Limits the text to 2 lines
                                                             overflow: TextOverflow
                                                                 .ellipsis, // Truncates with an ellipsis if too long
                                                           ),
+                                                          // SizedBox(height: 4), // Add spacing between texts if needed
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    right: 10),
+                                                            child: Text(
+                                                              leaveStatus
+                                                                  .sDsgName,
+                                                              //leaveData.sProjectName,
+                                                              style: AppTextStyle
+                                                                  .font12OpenSansRegularBlack45TextStyle,
+                                                              maxLines: 2,
+                                                              // Limits the text to 2 lines
+                                                              overflow: TextOverflow
+                                                                  .ellipsis, // Truncates with an ellipsis if too long
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Icon(
+                                                    Icons.lock_clock,
+                                                    size: 18,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                      'Leave Cancel At : ${leaveStatus.dCancellationTime}',
+                                                      style: AppTextStyle
+                                                          .font12OpenSansRegularBlackTextStyle),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.notes_outlined,
+                                                    size: 18,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                      'Reason : ${leaveStatus.sCancellationReasion}',
+                                                      style: AppTextStyle
+                                                          .font12OpenSansRegularBlackTextStyle),
+                                                ],
+                                              ),
+                                              SizedBox(height: 5),
+                                              // Padding(
+                                              // SizedBox(height: 5),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 0),
+                                                child: Container(
+                                                    height: 25.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey[200], // Background color
+                                                      border: const Border(
+                                                        left: BorderSide(
+                                                          // color: randomColor,
+                                                          color: Colors.grey,
+                                                          // Left border color
+                                                          width:
+                                                              3.0, // Left border width
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Icon(
+                                                                  Icons
+                                                                      .calendar_month,
+                                                                  size: 16),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      left: 5),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      'From : ${leaveStatus.dFromDate}',
+                                                                      style: AppTextStyle
+                                                                          .font12OpenSansRegularBlack45TextStyle),
+                                                                  // Text(
+                                                                  //     leaveStatus
+                                                                  //         .dLeaveAt,
+                                                                  //     style: AppTextStyle
+                                                                  //         .font12OpenSansRegularBlackTextStyle),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            const Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(2.0),
+                                                              child: Icon(
+                                                                  Icons
+                                                                      .calendar_month,
+                                                                  size: 16),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      right: 5),
+                                                              child: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                      'To : ${leaveStatus.dToDate}',
+                                                                      style: AppTextStyle
+                                                                          .font12OpenSansRegularBlack45TextStyle),
+                                                                  //sLeaveApplyFor
+                                                                  // Text(
+                                                                  //     leaveStatus
+                                                                  //         .sLeaveApplyFor,
+                                                                  //     style: AppTextStyle
+                                                                  //         .font12OpenSansRegularBlackTextStyle),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
+                                                    )),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: DottedBorder(
+                                                      color: Colors.grey,
+                                                      // Color of the dotted line
+                                                      strokeWidth: 1.0,
+                                                      // Width of the dotted line
+                                                      dashPattern: [4, 2],
+                                                      // Dash pattern for the dotted line
+                                                      borderType:
+                                                          BorderType.RRect,
+                                                      radius:
+                                                          Radius.circular(5.0),
+                                                      // Optional: rounded corners
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(2.0),
+                                                        // Equal padding on all sides
+                                                        child: Row(
+                                                          // Center the row contents
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .calendar_month,
+                                                              size: 14,
+                                                              color: Color(
+                                                                  0xFF0098a6),
+                                                            ),
+                                                            SizedBox(
+                                                                width: 2.0),
+                                                            // Display the selected date or a placeholder if no date is selected
+                                                            Text(
+                                                              'Leave Applied For : ${leaveStatus.iDays} Days',
+                                                              style: AppTextStyle
+                                                                  .font10OpenSansRegularBlack45TextStyle,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 16),
+                                                  // Space between the buttons
+                                                  Expanded(
+                                                    child: GestureDetector(
+                                                      onTap: (){
+                                                        var iTranId = "${leaveStatus.iTranId}";
+                                                        print("-----973--$iTranId");
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext context) {
+                                                            return _takeActionDialog(context,iTranId);
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: double.infinity,
+                                                        // Make container fill the width of its parent
+                                                        height: 35,
+                                                        padding: EdgeInsets.all(
+                                                            AppPadding.p5),
+                                                        decoration: BoxDecoration(
+                                                          color: AppColors
+                                                              .loginbutton,
+                                                          // Background color using HEX value
+                                                          borderRadius: BorderRadius
+                                                              .circular(AppMargin
+                                                                  .m10), // Rounded corners
+                                                        ),
+                                                        //  #00b3c7
+                                                        child: Center(
+                                                          child: Text(
+                                                            "TAKE ACTION",
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularWhiteTextStyle,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                              children: [
-                                                Icon(
-                                                  Icons.lock_clock,
-                                                  size: 18,
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text('Leave Cancel At : 26/Sep/2024 23:31',
-                                                    style: AppTextStyle
-                                                        .font12OpenSansRegularBlackTextStyle),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 5),
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                              children: [
-                                                const Icon(
-                                                  Icons.notes_outlined,
-                                                  size: 18,
-                                                ),
-                                                SizedBox(width: 5),
-                                                Text('Reason : sry sir',
-                                                    style: AppTextStyle
-                                                        .font12OpenSansRegularBlackTextStyle),
-                                              ],
-                                            ),
-                                            SizedBox(height: 5),
-                                            // Padding(
-                                            // SizedBox(height: 5),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
-                                              child: Container(
-                                                  height: 40.0,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[
-                                                    200], // Background color
-                                                    border: Border(
-                                                      left: BorderSide(
-                                                        color: randomColor,
-                                                        // color: Colors.grey, // Left border color
-                                                        width:
-                                                        3.0, // Left border width
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          const Padding(
-                                                            padding:
-                                                            EdgeInsets
-                                                                .all(2.0),
-                                                            child: Icon(
-                                                                Icons
-                                                                    .calendar_month,
-                                                                size: 16),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 5),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: [
-                                                                Text('From : 26/Sep/2024',
-                                                                    style: AppTextStyle
-                                                                        .font12OpenSansRegularBlack45TextStyle),
-                                                                // Text(
-                                                                //     leaveStatus
-                                                                //         .dLeaveAt,
-                                                                //     style: AppTextStyle
-                                                                //         .font12OpenSansRegularBlackTextStyle),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .all(2.0),
-                                                            child: Icon(
-                                                                Icons
-                                                                    .calendar_month,
-                                                                size: 16),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                right: 5),
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                              crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                              children: [
-                                                                Text(
-                                                                    'To : 26/Sep/2024',
-                                                                    style: AppTextStyle
-                                                                        .font12OpenSansRegularBlack45TextStyle),
-                                                                //sLeaveApplyFor
-                                                                // Text(
-                                                                //     leaveStatus
-                                                                //         .sLeaveApplyFor,
-                                                                //     style: AppTextStyle
-                                                                //         .font12OpenSansRegularBlackTextStyle),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  )),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: DottedBorder(
-                                                    color: Colors.grey, // Color of the dotted line
-                                                    strokeWidth: 1.0, // Width of the dotted line
-                                                    dashPattern: [4, 2], // Dash pattern for the dotted line
-                                                    borderType: BorderType.RRect,
-                                                    radius: Radius.circular(5.0), // Optional: rounded corners
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(2.0), // Equal padding on all sides
-                                                      child: Row(
-                                                        // Center the row contents
-                                                        mainAxisSize: MainAxisSize.min,
-                                                        children: [
-                                                          const Icon(
-                                                            Icons.calendar_month,
-                                                            size: 14,
-                                                            color: Color(0xFF0098a6),
-                                                          ),
-                                                          SizedBox(width: 2.0),
-                                                          // Display the selected date or a placeholder if no date is selected
-                                                          Text(
-                                                            'Leave Applied For : 1 Days',
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlack45TextStyle,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 16), // Space between the buttons
-                                                Expanded(
-                                                  child: Container(
-
-                                                    width: double.infinity,
-                                                    // Make container fill the width of its parent
-                                                    height: 35,
-                                                    padding: EdgeInsets.all(AppPadding.p5),
-                                                    decoration: BoxDecoration(
-                                                      color: AppColors.loginbutton,
-                                                      // Background color using HEX value
-                                                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
-                                                    ),
-                                                    //  #00b3c7
-                                                    child: Center(
-                                                      child: Text(
-                                                        "TAKE ACTION",
-                                                        style: AppTextStyle.font12OpenSansRegularWhiteTextStyle,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(height: 5),
-                                          ],
+                                              SizedBox(height: 5),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                });
+                                    );
+                                  });
+                            }
                           }),
                     ),
                   ),
@@ -986,7 +1062,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                         child: Text(
                           billDate,
                           style:
-                          AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                              AppTextStyle.font12OpenSansRegularBlackTextStyle,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -1024,9 +1100,9 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   }
 
   // take a action Dialog
-  Widget _takeActionDialog(BuildContext context) {
+  Widget _takeActionDialog(BuildContext context, String iTranId) {
     TextEditingController _takeAction =
-    TextEditingController(); // Text controller for the TextFormField
+        TextEditingController(); // Text controller for the TextFormField
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -1040,7 +1116,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
         children: [
           Container(
             height:
-            220, // Adjusted height to accommodate the TextFormField and Submit button
+                220, // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -1050,7 +1126,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Remove Reimbursement',
+                  'Leave Cancellation',
                   style: AppTextStyle.font16OpenSansRegularRedTextStyle,
                 ),
                 SizedBox(height: 10),
@@ -1090,17 +1166,17 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                   onTap: () async {
                     var takeAction = _takeAction.text.trim();
                     print('-----1102--$takeAction');
-                    print(sTranCode);
+                    print('----1162---$iTranId');
 
                     // Check if the input is not empty
                     if (takeAction != null && takeAction != '') {
                       print('---Call Api-----');
 
                       // Make API call here
-                      var loginMap = await Reimbursementstatustakeaction()
-                          .reimbursementTakeAction(context, sTranCode);
+                      var loginMap = await LeaveCancellationRequestRepo()
+                          .leaveCancellationRequest(context, iTranId,takeAction);
 
-                      print('---418----$loginMap');
+                      print('---1173----$loginMap');
 
                       setState(() {
                         result = "${loginMap[0]['Result']}";
@@ -1114,7 +1190,8 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                       if (result == "1") {
                         // Close the current dialog and show a success dialog
                         Navigator.of(context).pop();
-
+                        // call api again to update
+                        hrmsReimbursementStatus(formDate!, toDate!);
                         // Show the success dialog
                         showDialog(
                           context: context,
@@ -1127,8 +1204,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                       } else if (result == "0") {
                         // Keep the dialog open and show an error message (if needed)
                         // You can display an error message in the same dialog without dismissing it
-                        displayToast(
-                            msg); // Optionally, show a toast message to indicate failure
+                        displayToast(msg); // Optionally, show a toast message to indicate failure
 
                         // Optionally clear the input field if needed
                         // _takeAction.clear();  // Do not clear to allow retrying
@@ -1258,13 +1334,13 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
-                        Colors.white, // Set the background color to white
+                            Colors.white, // Set the background color to white
                         foregroundColor:
-                        Colors.black, // Set the text color to black
+                            Colors.black, // Set the text color to black
                       ),
                       child: Text('Ok',
                           style:
-                          AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
