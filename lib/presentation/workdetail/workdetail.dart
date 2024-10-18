@@ -102,6 +102,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
       // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
     }
   }
+
   sendCurrentWorkNew(String combinedList) async{
     var workEntryNew =
         await HrmsWorkEntryNewRepo().hrmsWorkEntryNew(
@@ -370,7 +371,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                 ),
                                                 SizedBox(height: 15),
                                                 Container(
-                                                  height: 45,
+                                                //  height: 65,
                                                   color: Color(0xFFf2f3f5),
                                                   child: Padding(
                                                     padding: const EdgeInsets.only(left: 0),
@@ -379,24 +380,43 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                       controller: _controllers[index],
                                                       textInputAction: TextInputAction.next,
                                                       onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                                      maxLines:
-                                                          null, // Allows multiple lines
-                                                      expands:
-                                                          true, // Makes the TextFormField fill the height
-                                                      decoration:
-                                                          InputDecoration(
-                                                        labelText:
-                                                            "Enter work detail",
-                                                        labelStyle: AppTextStyle
-                                                            .font14OpenSansRegularBlack45TextStyle,
+                                                      maxLines: null, // Allows for multiline input and auto-adjusts height
+                                                      keyboardType: TextInputType.multiline, // Enables multiline input from keyboard
+                                                      decoration: InputDecoration(
+                                                        labelText: "Enter work detail",
+                                                        labelStyle: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
                                                         border: const OutlineInputBorder(),
                                                         contentPadding: const EdgeInsets.symmetric(
-                                                          vertical: 10, // Adjust vertical padding as needed
+                                                          vertical: 10, // Adjust vertical padding for better layout
                                                           horizontal: 10,
                                                         ),
                                                       ),
                                                       autovalidateMode: AutovalidateMode.onUserInteraction,
                                                     ),
+
+                                                    // child: TextFormField(
+                                                    //   focusNode: FocusNode(),
+                                                    //   controller: _controllers[index],
+                                                    //   textInputAction: TextInputAction.next,
+                                                    //   onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                                    //   maxLines:
+                                                    //       null, // Allows multiple lines
+                                                    //   expands:
+                                                    //       true, // Makes the TextFormField fill the height
+                                                    //   decoration:
+                                                    //       InputDecoration(
+                                                    //     labelText:
+                                                    //         "Enter work detail",
+                                                    //     labelStyle: AppTextStyle
+                                                    //         .font14OpenSansRegularBlack45TextStyle,
+                                                    //     border: const OutlineInputBorder(),
+                                                    //     contentPadding: const EdgeInsets.symmetric(
+                                                    //       vertical: 10, // Adjust vertical padding as needed
+                                                    //       horizontal: 10,
+                                                    //     ),
+                                                    //   ),
+                                                    //   autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                    // ),
                                                   ),
                                                 ),
                                               ],

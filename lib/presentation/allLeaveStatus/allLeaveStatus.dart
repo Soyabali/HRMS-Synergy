@@ -437,7 +437,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-
                   Container(
                     height: 45,
                     color: Color(0xFF2a697b),
@@ -611,7 +610,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                       ],
                     ),
                   ),
-
                   SizedBox(height: 10),
                   Center(
                     child: Padding(

@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../presentation/actionOnLeave/actionOnLeave.dart';
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
+import '../presentation/employeeList/employeelist.dart';
 import '../presentation/leaveCancellationRequest/leaveCancellationRequest.dart';
 import '../presentation/login/loginScreen.dart';
 import '../presentation/myLeaveStatus/myLeaveStatus.dart';
@@ -24,6 +25,7 @@ String? sCompEmailId;
 
 class GeneralFunction {
   TextEditingController _takeActionController = TextEditingController();
+
   void logout(BuildContext context)async {
        /// TODO LOGOUT CODE
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -728,7 +730,14 @@ class GeneralFunction {
                     );
                   },
                     child: drawerItem('assets/images/triplistfirst.jpeg', "Trip List")),
-                drawerItem('assets/images/post_complaint.png', "Employee List"),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EmployeeList()),
+                    );
+                  },
+                    child: drawerItem('assets/images/post_complaint.png', "Employee List")),
                 // drawerItem('assets/images/post_complaint.png', "Family Details (Dependents)"),
                 // drawerItem('assets/images/post_complaint.png', "Employees Nomination Details"),
                 // drawerItem('assets/images/post_complaint.png', "Emergency Contact List"),
@@ -1348,6 +1357,172 @@ class GeneralFunction {
         ],
       ),
     );
+  }
+  // build dialogSucess
+  Widget buildDialogCall(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 170,
+            padding: EdgeInsets.fromLTRB(20, 30, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Space for the image
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.phone, // Exclamation icon
+                      color: Colors.red, // Color of the icon
+                      size: 22, // Size of the icon
+                    ),
+                    SizedBox(width: 8), // Spacing between the icon and text
+                    Text(
+                      'Phone Call',
+                      style: TextStyle(
+                        fontSize: 16, // Adjust font size
+                        fontWeight: FontWeight.bold, // Make the text bold
+                        color: Colors.black, // Text color
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Expanded( // Wrap the text in Expanded to allow it to take available space and wrap
+                 child: Text.rich(
+                   TextSpan(
+                     text: 'Do you want to call ', // Regular text
+                     style: TextStyle(
+                         fontSize: 12,
+                         color: Colors.grey[600]), // Default text style
+                     children: const <TextSpan>[
+                       TextSpan(
+                         text: 'Abhay Rajawat', // Highlighted text
+                         style: TextStyle(
+                           fontWeight: FontWeight.bold, // Bold only for the name
+                           color: Color(0xff3f617d), // Optional: Change color for the name
+                         ),
+                       ),
+                       TextSpan(
+                         text: '?', // Regular text after the name
+                       ),
+                     ],
+                   ),
+                 ),
+                  // child: Text(
+                  //   "Do you want to call Ashish Babu",
+                  //   style: TextStyle(
+                  //     fontSize: 12,
+                  //     color: Colors.grey[600],
+                  //   ),
+                  //   textAlign: TextAlign.left, // Align the text to the left
+                  //   softWrap: true, // Allow text to wrap
+                  //   maxLines: 2, // Set the maximum number of lines the text can take
+                  //   overflow: TextOverflow.ellipsis, // Add ellipsis if the text exceeds the available space
+                  // ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  height: 35, // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust padding as needed
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Container background color
+                    borderRadius: BorderRadius.circular(15), // Rounded corners
+                    border: Border.all(color: Colors.grey), // Border color
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+
+                            //generalFunction.logout(context);
+                            Navigator.of(context).pop();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            minimumSize: Size(0, 0), // Remove minimum size constraints
+                            backgroundColor: Colors.white, // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'No',
+                            style: GoogleFonts.openSans(
+                              color: Colors.red, // Text color for "Yes"
+                              fontSize: 12, // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey, // Divider color
+                        width: 20, // Space between buttons
+                        thickness: 1, // Thickness of the divider
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                           // getLocation();
+                           // Navigator.of(context).pop();
+                            _makePhoneCall("987150881");
+
+                            print("----Phone call----");
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero, // Remove default padding
+                            minimumSize: Size(0, 0), // Remove minimum size constraints
+                            backgroundColor: Colors.white, // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'Yes',
+                            style: GoogleFonts.openSans(
+                              color: Colors.green, // Text color for "No"
+                              fontSize: 12, // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  // phoneCall method
+  void _makePhoneCall(String phoneNumber) async {
+    final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+    if (await canLaunchUrl(phoneUri)) {
+      await launchUrl(phoneUri);
+    } else {
+      throw 'Could not launch $phoneUri';
+    }
   }
 
 }

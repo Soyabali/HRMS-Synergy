@@ -18,6 +18,7 @@ import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
+import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
 
@@ -74,7 +75,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
-
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -997,11 +997,11 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---Profle----');
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                              // );
+                             // print('---Pay Slip ------');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const Setpin()),
+                              );
                             },
                             child: Container(
                               height: 100.0,

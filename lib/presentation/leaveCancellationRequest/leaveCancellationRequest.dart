@@ -820,7 +820,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                                                       border: const Border(
                                                         left: BorderSide(
                                                           // color: randomColor,
-                                                          color: Colors.grey,
+                                                          color: Colors.white,
                                                           // Left border color
                                                           width:
                                                               3.0, // Left border width

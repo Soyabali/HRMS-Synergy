@@ -38,8 +38,7 @@ class HrmsWorkEntryNewRepo {
 
       var request = http.Request(
           'POST',
-          Uri.parse(
-              'https://upegov.in/hrmstestApis/api/hrmsworkstatusentrynew/hrmsworkstatusentrynew'));
+          Uri.parse('$hrmsWorkStatusApi'));
       request.body = jsonResponse; // Assign the JSON string to the request body
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();

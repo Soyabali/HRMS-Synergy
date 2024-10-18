@@ -27,7 +27,6 @@ class _SplashViewState extends State<SplashView> {
   bool activeConnection = false;
   String T = "";
 
-
   Future checkUserConnection() async {
     try {
       final result = await InternetAddress.lookup('google.com');
@@ -98,7 +97,7 @@ class _SplashViewState extends State<SplashView> {
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
-    var loginMap = await AppVersionRepo().appversion(context,'16');
+    var loginMap = await AppVersionRepo().appversion(context,'18');  // local version 18
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
