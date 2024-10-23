@@ -11,6 +11,7 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class Userquery extends StatelessWidget {
+
   const Userquery({super.key});
 
   @override
@@ -37,12 +38,30 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
 
   GeneralFunction generalfunction = GeneralFunction();
 
+  TextEditingController _queryTitleEditText = TextEditingController();
+  TextEditingController _enterYourQuery = TextEditingController();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     queryResponsemodel = QueryResponseRepo().quryList(context);
     print('----45----$queryResponsemodel');
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _queryTitleEditText.dispose();
+    _enterYourQuery.dispose();
+    FocusScope.of(context).unfocus();
+    super.dispose();
   }
 
   @override
@@ -305,7 +324,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 5,bottom: 5), // Adjust padding as necessary
+                  padding: const EdgeInsets.only(top: 5,bottom: 15), // Adjust padding as necessary
                   child: ElevatedButton(
                     onPressed: () async {
                      // open dialogBox
@@ -344,8 +363,6 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
   //
   //Open Dialog
   Widget _takeActionDialog(BuildContext context) {
-    TextEditingController _queryTitleEditText = TextEditingController();
-    TextEditingController _enterYourQuery = TextEditingController();
 
     return Dialog(
       shape: RoundedRectangleBorder(

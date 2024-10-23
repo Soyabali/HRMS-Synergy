@@ -31,6 +31,13 @@ class _ProfilePageState extends State<ProfileEducationPage> {
   late Future<List<JobDetailmodel>> jobDetailRes;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     jobDetailRes = JobDetailRepo().jobDetailList(context);

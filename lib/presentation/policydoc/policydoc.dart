@@ -46,6 +46,13 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
   ];
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();

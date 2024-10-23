@@ -78,6 +78,13 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     getCurrentMonthandPreviousMonth();

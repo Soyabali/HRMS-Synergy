@@ -10,6 +10,7 @@ import '../presentation/splash/splash.dart';
 
 
 class MyApp extends StatefulWidget {
+
   MyApp._internal(); // private named constructor
   int appState = 0;
   static final MyApp instance = MyApp._internal(); // single instance -- singleton
@@ -22,6 +23,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    print('------MyApp-------30------');
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {

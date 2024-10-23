@@ -61,6 +61,13 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   DateTime? _date;
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
 
   List stateList = [];
   List hrmsReimbursementList = [];
@@ -325,6 +332,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     _contactfocus.dispose();
     _landMarkfocus.dispose();
     _addressfocus.dispose();
+    _searchController.dispose();
+    FocusScope.of(context).unfocus();
   }
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 

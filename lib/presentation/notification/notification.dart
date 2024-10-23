@@ -23,6 +23,13 @@ class _NotificationPageState extends State<NotificationPage> {
   var iTranId;
   late Future<List<NotificationModel>> _notificationList;
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   // deleteDialogBox
   Widget _deleteItemDialog(BuildContext context) {
     return Dialog(

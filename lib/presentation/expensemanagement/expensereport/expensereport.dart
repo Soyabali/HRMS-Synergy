@@ -77,6 +77,15 @@ class _MyHomePageState extends State<ExpenseReportPage> {
   var result2, msg2;
 
   // Distic List
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
   updatedSector() async {
     distList = await ProjectRepo().projectList();
     print(" -----xxxxx-  list Data--65---> $distList");

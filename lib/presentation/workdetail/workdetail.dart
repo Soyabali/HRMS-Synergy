@@ -133,11 +133,20 @@ class _MyHomePageState extends State<WorkDetailPage> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
+  @override
   void dispose() {
     // dispose all Controller
     for (var controller in _controllers) {
       controller.dispose();
     }
+    FocusScope.of(context).unfocus();
     super.dispose();
   }
   // submit Form

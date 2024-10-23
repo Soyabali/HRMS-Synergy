@@ -41,7 +41,6 @@ class ShopSurvey extends StatelessWidget {
           ),
         ),
       ),
-
       home: MyHomePage(),
     );
   }
@@ -338,6 +337,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // datepicker
   // InitState
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused) {
+  //     FocusScope.of(context).unfocus();  // Unfocus when app is paused
+  //   }
+  // }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -351,6 +357,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _contactfocus = FocusNode();
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
+   // FocusScope.of(context).unfocus();
   }
   // location
   void getLocation() async {
@@ -401,6 +408,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _addressfocus.dispose();
     _amountController.dispose();
     _expenseController.dispose();
+    FocusScope.of(context).unfocus();  //
   }
 
   // Todo bind sector code

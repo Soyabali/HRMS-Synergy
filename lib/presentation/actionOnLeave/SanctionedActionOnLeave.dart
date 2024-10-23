@@ -45,6 +45,15 @@ class _SanctionedPageState extends State<SanctionedPageActionOnLeave> {
     super.initState();
   }
 
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

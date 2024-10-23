@@ -3,7 +3,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'app/app.dart';
 
-void main() {
+void main()
+{
   runApp(MyApp());
   configLoading();
 }

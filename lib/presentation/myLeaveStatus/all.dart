@@ -29,6 +29,13 @@ class _AllPageState extends State<AllPage> {
   GeneralFunction generalFunction = GeneralFunction();
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     print('----------28-----All----');
@@ -37,6 +44,9 @@ class _AllPageState extends State<AllPage> {
 
     super.initState();
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

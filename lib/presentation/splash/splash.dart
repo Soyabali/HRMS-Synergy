@@ -90,6 +90,7 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
     //checkUserConnection();
+    print("-------93---------Splash");
     getLocalDataInfo();
   }
 

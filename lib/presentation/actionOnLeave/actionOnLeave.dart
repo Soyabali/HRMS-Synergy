@@ -45,6 +45,13 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
   String? formDate;
   String? toDate;
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   getACurrentDate() {
 
     DateTime now = DateTime.now();

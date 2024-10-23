@@ -58,6 +58,14 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
   DateTime? _date;
 
   Future<void> _selectDate(BuildContext context) async {

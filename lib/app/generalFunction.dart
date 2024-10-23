@@ -75,6 +75,7 @@ class GeneralFunction {
 
     prefs.remove("sMngrContactNo");
     prefs.remove("iIsEligibleShLv");
+    prefs.remove("setPin");
 
     goNext(context);
   }
@@ -1359,7 +1360,7 @@ class GeneralFunction {
     );
   }
   // build dialogSucess
-  Widget buildDialogCall(BuildContext context) {
+  Widget buildDialogCall(BuildContext context, String sEmpName, String sContactNo) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -1381,7 +1382,7 @@ class GeneralFunction {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // Space for the image
-                const Row(
+                Row(
                   children: [
                     Icon(
                       Icons.phone, // Exclamation icon
@@ -1407,9 +1408,9 @@ class GeneralFunction {
                      style: TextStyle(
                          fontSize: 12,
                          color: Colors.grey[600]), // Default text style
-                     children: const <TextSpan>[
+                     children: <TextSpan>[
                        TextSpan(
-                         text: 'Abhay Rajawat', // Highlighted text
+                         text: '$sEmpName', // Highlighted text
                          style: TextStyle(
                            fontWeight: FontWeight.bold, // Bold only for the name
                            color: Color(0xff3f617d), // Optional: Change color for the name
@@ -1480,7 +1481,7 @@ class GeneralFunction {
                           onPressed: () {
                            // getLocation();
                            // Navigator.of(context).pop();
-                            _makePhoneCall("987150881");
+                            _makePhoneCall("${sContactNo}");
 
                             print("----Phone call----");
                           },

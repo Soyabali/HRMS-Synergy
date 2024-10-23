@@ -302,6 +302,14 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     print('Total days:----114---: $displayText');
   }
 
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -310,6 +318,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     _addressfocus.dispose();
     _reasonController.dispose();
     _addressController.dispose();
+    FocusScope.of(context).unfocus();
   }
 
   getACurrentDate() {

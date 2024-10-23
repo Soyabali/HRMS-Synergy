@@ -233,6 +233,14 @@ class _MyHomePageState extends State<WorkDetailPage> {
     // TODO: implement dispose
     super.dispose();
     _takeAction.dispose();
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
   }
 
   @override

@@ -25,6 +25,13 @@ class _SanctionedPageState extends State<SanctionedPage> {
   GeneralFunction generalFunction = GeneralFunction();
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     // TODO: implement initState
     print('----------28-----Sanctioned----');

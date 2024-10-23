@@ -5,6 +5,7 @@ import '../../domain/holidaylist_model.dart';
 import '../dashboard/dashboard.dart';
 
 class Holidaylist extends StatelessWidget {
+
   const Holidaylist({super.key});
 
   @override
@@ -17,6 +18,7 @@ class Holidaylist extends StatelessWidget {
 }
 
 class HolidaylistScreen extends StatefulWidget {
+
   const HolidaylistScreen({super.key});
 
   @override
@@ -43,6 +45,7 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     'Nov',
     'Dec'
   ];
+
 
   final List<Color> colorList = [
     Color(0xFF4DB6AC),
@@ -79,6 +82,13 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
   }
 
   // convet month name

@@ -368,6 +368,14 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   // didUpdateWidget
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
+  @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
@@ -376,6 +384,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     _contactfocus.dispose();
     _landMarkfocus.dispose();
     _addressfocus.dispose();
+    _searchController.dispose();
+    FocusScope.of(context).unfocus();
   }
 
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.

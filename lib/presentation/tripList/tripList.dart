@@ -225,6 +225,7 @@ class _MyHomePageState extends State<TripListPage> {
   @override
   void dispose() {
     // TODO: implement dispose
+    FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -236,6 +237,13 @@ class _MyHomePageState extends State<TripListPage> {
       await launch(googleUrl);
     } else {
       throw 'Could not open Google Maps';
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
     }
   }
 

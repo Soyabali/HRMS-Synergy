@@ -50,12 +50,16 @@ class DashBoardHomePage extends StatefulWidget {
   State<DashBoardHomePage> createState() => _DashBoardHomePageState();
 }
 
+
 class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   GeneralFunction generalFunction = GeneralFunction();
   double? lat, long;
   var sFirstName,sCompEmailId,sLastName,fullName;
+
    // DialogBox
+
+
 
   Widget _buildDialogSucces(BuildContext context) {
     return Dialog(
@@ -557,6 +561,13 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     // TODO: implement initState
      getLocalDataInfo();
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
   }
 
   @override

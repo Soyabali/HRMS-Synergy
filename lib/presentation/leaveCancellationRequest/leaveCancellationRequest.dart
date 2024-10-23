@@ -376,7 +376,16 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
     _contactfocus.dispose();
     _landMarkfocus.dispose();
     _addressfocus.dispose();
+    FocusScope.of(context).unfocus();
   }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
 
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 

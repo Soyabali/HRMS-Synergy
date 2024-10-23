@@ -32,6 +32,14 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
   var sEmpName,sGender,dDOB,sFatherName,sMotherName,sMaritalStatus,sEmpImage,
       sPersonalEmailId,sPermanentAddr,sAdharCardNo,sPanNo,sPassportNo,sVoterId;
 
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState

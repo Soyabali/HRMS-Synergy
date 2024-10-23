@@ -33,6 +33,13 @@ class _LeaveScreenState extends State<Applyleave> {
   ];
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     futureLeaveData = Hrmsleavebalacev2Repo().getHrmsleavebalacev2(context);

@@ -69,6 +69,14 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     setState(() {});
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');

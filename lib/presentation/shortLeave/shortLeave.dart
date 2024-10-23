@@ -39,6 +39,14 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
   GeneralFunction generalfunction = GeneralFunction();
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
+
+  @override
   void initState() {
     // TODO: implement initState
     DateTime currentDate = DateTime.now();
@@ -47,6 +55,13 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
     // Print the formatted date
     print('Current Date: $formattedDate');
     super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _expenseController.dispose();
+    FocusScope.of(context).unfocus();
+    super.dispose();
   }
 
   @override

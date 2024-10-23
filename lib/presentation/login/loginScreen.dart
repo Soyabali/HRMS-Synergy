@@ -132,6 +132,13 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
+
   // request location permission
   // location Permission
   Future<void> requestLocationPermission() async {

@@ -36,6 +36,12 @@ class _ProfilePageState extends State<ProfilePage> {
       sEmergencyContactPerson,sEmergencyContactNo,sEmergencyContactRelation,
       sBankName,sBankAcNo,sISFCode,sCompEmpCode
   ;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+    }
+  }
 
   @override
   initState() {

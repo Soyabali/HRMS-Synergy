@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../resources/app_text_style.dart';
-import '../setpin/setpin.dart';
+import 'setpin.dart';
 
 class PaySlip extends StatelessWidget {
 
