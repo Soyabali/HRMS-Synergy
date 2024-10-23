@@ -29,7 +29,7 @@ class SetPinScren extends StatefulWidget {
 class _setPinScrenState extends State<SetPinScren> {
 
   TextEditingController pinController = TextEditingController();
-  var storedPin;
+ var storedPin;
 
   // Example function to handle button press
   void onNumberPressed(String value) {
@@ -48,18 +48,20 @@ class _setPinScrenState extends State<SetPinScren> {
   void initState() {
     fetchStoreLocalPin();
     // TODO: implement initState
+
     pinController.addListener(() {
       // Check if the length is 4
       if (pinController.text.length == 4) {
         // Check if the entered value matches the stored value
-         var setPin = pinController.text;
+         var pin = pinController.text;
          print('-----setPin------');
         ///TODO HERE YOU SHOULD STORE pin code
+         storePinInaLocalDatabase(pin) ;
 
-        if (pinController.text == "1234") {
+        if (pinController.text == storedPin) {
           // Navigate to the next screen
           //   PaySlip
-          storePinInaLocalDatabase(setPin);
+         // storePinInaLocalDatabase(pin);
           print('PIN matched! Navigate to next screen');
           // Here you can use Navigator.push to navigate to the next screen
           Navigator.push(
@@ -81,7 +83,17 @@ class _setPinScrenState extends State<SetPinScren> {
   storePinInaLocalDatabase(pin) async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('setPin',pin);
-    print('----83---store value--$pin');
+    print("---Data is store---");
+    // clear the edit text
+    pinController.clear();
+    // fetch the store value
+    storedPin = prefs.getString('setPin');
+    print('----91---$storedPin');
+    setState(() {
+    });
+    // to change the textvalue according to storePin
+
+
     //prefs.setInt('setPin',pin);
   }
   fetchStoreLocalPin() async {
@@ -193,6 +205,11 @@ class _setPinScrenState extends State<SetPinScren> {
           ],
       ),
           SizedBox(height: 15),
+           Center(child: Text(
+               storedPin == null ? 'Set PIN code' : 'Enter PIN code Again',
+               style: AppTextStyle
+               .font16OpenSansRegularBlack45TextStyle)),
+          SizedBox(height: 15),
 
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
@@ -205,10 +222,10 @@ class _setPinScrenState extends State<SetPinScren> {
               style: TextStyle(fontSize: 24,color: Color(0xFF0098a6)),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-               hintText: storedPin == null ? 'Set Pin Code' : 'Enter Pin Again',
+              // hintText: storedPin == null ? 'Set Pin Code' : 'Enter Pin Again',
                 //hintText: 'Set Pin Code',
                // hintStyle: TextStyle(color: Colors.green,fontSize: 16,fontWeight: FontWeight.normal),
-                hintStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+               // hintStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                 contentPadding: EdgeInsets.symmetric(vertical: 12), // Adjust vertical padding to control height
               ),
               // Set the height of the TextField

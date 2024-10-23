@@ -12,6 +12,7 @@ import '../../data/loader_helper.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../holiday/holidaylist.dart';
+import '../login/loginScreen.dart';
 import '../notification/notification.dart';
 import '../policydoc/policydoc.dart';
 import '../resources/app_colors.dart';
@@ -245,6 +246,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         child: TextButton(
                           onPressed: () {
                             generalFunction.logout(context);
+
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(

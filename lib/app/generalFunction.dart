@@ -76,6 +76,7 @@ class GeneralFunction {
     prefs.remove("sMngrContactNo");
     prefs.remove("iIsEligibleShLv");
     prefs.remove("setPin");
+    prefs.clear();
 
     goNext(context);
   }

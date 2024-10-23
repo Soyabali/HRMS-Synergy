@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/resources/values_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -91,14 +92,64 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     //checkUserConnection();
     print("-------93---------Splash");
+   // _checkPermissions();
     getLocalDataInfo();
   }
+  //
+  Future<void> _checkPermissions() async {
+    //var status = await Permission.location.status;
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      // Permission is granted, continue with your logic.
+      print("Location permission granted.");
+    } else if (status.isDenied) {
+      // Request permission.
+      var newStatus = await Permission.location.request();
+      if (newStatus.isGranted) {
+        // Permission granted, continue.
+        print("Location permission granted.");
+      } else if (newStatus.isPermanentlyDenied) {
+        // Show a message directing users to settings.
+        _showPermissionDeniedDialog();
+      }
+    } else if (status.isPermanentlyDenied) {
+      // Show a message directing users to settings.
+      _showPermissionDeniedDialog();
+    }
+  }
+  // show permissinDialog
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Permission Denied"),
+        content: Text("Please enable location permissions in settings."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings(); // Redirects to app settings.
+            },
+            child: Text("Settings"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
-    var loginMap = await AppVersionRepo().appversion(context,'18');  // local version 18
+    var loginMap = await AppVersionRepo().appversion(context,'16');  // local version 19
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');

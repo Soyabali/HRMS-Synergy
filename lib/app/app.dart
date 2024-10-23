@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
 import 'package:untitled/presentation/login/loginScreen.dart';
 
@@ -24,10 +25,59 @@ class _MyAppState extends State<MyApp> {
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
+
+  Future<void> checkPermissions() async {
+    //var status = await Permission.location.status;
+    var status = await Permission.location.status;
+
+    if (status.isGranted) {
+      // Permission is granted, continue with your logic.
+      print("Location permission granted.");
+    } else if (status.isDenied) {
+      // Request permission.
+      var newStatus = await Permission.location.request();
+      if (newStatus.isGranted) {
+        // Permission granted, continue.
+        print("Location permission granted.");
+      } else if (newStatus.isPermanentlyDenied) {
+        // Show a message directing users to settings.
+        _showPermissionDeniedDialog();
+      }
+    } else if (status.isPermanentlyDenied) {
+      // Show a message directing users to settings.
+      _showPermissionDeniedDialog();
+    }
+  }
+  // show permissinDialog
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Permission Denied"),
+        content: Text("Please enable location permissions in settings."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings(); // Redirects to app settings.
+            },
+            child: Text("Settings"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text("Cancel"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
-    print('------MyApp-------30------');
+    checkPermissions();
     super.initState();
   }
   @override
@@ -43,13 +93,6 @@ class _MyAppState extends State<MyApp> {
         // dashboardScreen
         '/dashBoard': (context) => const DashBoard(),
       },
-
-      // routes: {
-      //   '/': (context) => SplashView(),
-      //   '/loginScreen': (context) => LoginScreen(),
-      //   '/dashBoard': (context) => DashBoardHomePage(),
-      // },
-
 
      // localizationsDelegates: context.localizationDelegates,
       //supportedLocales: context.supportedLocales,
