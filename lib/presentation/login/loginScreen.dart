@@ -124,12 +124,12 @@ class _LoginPageState extends State<LoginPage> {
     print('---login---Screen---');
     super.initState();
     // getLocation();
-    Future.delayed(const Duration(milliseconds: 100), () {
-      requestLocationPermission();
-      setState(() {
-        // Here you can write your code for open new view
-      });
-    });
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   requestLocationPermission();
+    //   setState(() {
+    //     // Here you can write your code for open new view
+    //   });
+    // });
   }
 
   @override
@@ -138,7 +138,6 @@ class _LoginPageState extends State<LoginPage> {
       FocusScope.of(context).unfocus();  // Unfocus when app is paused
     }
   }
-
   // request location permission
   // location Permission
   Future<void> requestLocationPermission() async {
@@ -254,7 +253,7 @@ class _LoginPageState extends State<LoginPage> {
             body: SingleChildScrollView(
               child: Padding(
                 //padding: const EdgeInsets.only(top: AppPadding.p25),
-                padding: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 0),
                 child: Column(
                   children: <Widget>[
                     Stack(

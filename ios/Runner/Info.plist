@@ -34,10 +34,17 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera Usage Description</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+     <string>Need location when in use</string>
+      <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+     <string>Always and when in use!</string>
+      <key>NSLocationUsageDescription</key>
+      <string>Older devices need location.</string>
+     <key>NSLocationAlwaysUsageDescription</key>
+     <string>Can I have location always?</string>
+
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>We need your location to provide better services.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>We need your location to track your activities.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Your location is required for some functionality to work.</string>
 	<key>NSMicrophoneUsageDescription</key>

@@ -55,12 +55,11 @@ class DashBoardHomePage extends StatefulWidget {
 class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   GeneralFunction generalFunction = GeneralFunction();
+
   double? lat, long;
   var sFirstName,sCompEmailId,sLastName,fullName;
 
-   // DialogBox
-
-
+  // DialogBo
 
   Widget _buildDialogSucces(BuildContext context) {
     return Dialog(
@@ -131,7 +130,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-
                             //generalFunction.logout(context);
                             Navigator.of(context).pop();
                           },
@@ -153,7 +151,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                         ),
                       ),
-                      VerticalDivider(
+                      const VerticalDivider(
                         color: Colors.grey, // Divider color
                         width: 20, // Space between buttons
                         thickness: 1, // Thickness of the divider
@@ -189,7 +187,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -421,7 +418,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       hideLoader();
       return Future.error('Location services are disabled.');
     }
-
     // Check and request location permissions
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -431,13 +427,10 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         return Future.error('Location permissions are denied.');
       }
     }
-
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
-
     // Get the current location
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -447,73 +440,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       lat = position.latitude;
       long = position.longitude;
     });
-
+    hideLoader();
     if (lat != null && long != null) {
-      var location = 'Latitude: $lat, Longitude: $long';
-      attendaceapi(lat, long); // Call your attendance API
       hideLoader();
+      print('----452---call api---');
+      attendaceapi(lat, long); // Call your attendance API
+
     } else {
+      hideLoader();
       displayToast("Please pick location");
     }
-
+    hideLoader();
     print('Latitude: $lat, Longitude: $long');
   }
 
+  attendaceapi(double? lat, double? long) async {
 
-
-  // void getLocation() async {
-  //   showLoader();
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     hideLoader();
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     hideLoader();
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       hideLoader();
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     hideLoader();
-  //     // Permissions are denied forever, handle appropriately.
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-  //   debugPrint("-------------Position-----------------");
-  //   debugPrint(position.latitude.toString());
-  //
-  //   setState(() {
-  //     lat = position.latitude;
-  //     long = position.longitude;
-  //   });
-  //   if(lat!=null && long !=null){
-  //      var location = '{$lat$long}';
-  //    //  displayToast(location);
-  //      attendaceapi(lat,long);
-  //     print('---call Api---xxxxxxxxx--');
-  //     hideLoader();
-  //   }else{
-  //     displayToast("Please pick location");
-  //   }
-  //
-  //   print('-----------105----$lat');
-  //   print('-----------106----$long');
-  //   // setState(() {
-  //   // });
-  //   debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-  //   debugPrint(position.toString());
-  // }
-
-   attendaceapi(double? lat, double? long) async{
-    print('----lat--162--$lat');
-    print('----long----163--$long');
+    print('----lat--459--$lat');
+    print('----long----460--$long');
 
     var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
     print('-----99---$attendance');
@@ -535,7 +479,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       displayToast("Attendance not confirmed.");
     }
   }
-
   // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(
@@ -649,7 +592,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
             ),
           // drawer
           drawer: generalFunction.drawerFunction(context,'$fullName','$sCompEmailId'),
-
           body: Column(
               children: [
                 Stack(
@@ -693,7 +635,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: (){
-                              print('---Profle----');
+                             // print('---Profle----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const Profile()),
@@ -755,21 +697,16 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-
                               print('---Mark Attendance----');
-
-                            //  _showConfirmationDialog(context);
-
+                              //  _showConfirmationDialog(context);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                 return _buildDialogSucces(context);
                               },
                               );
-
                               /// TODO TO OPEN DIALOG AND THEN GET A LOCATION
                               //getLocation();
-
                             },
                             child: Container(
                               height: 100.0,

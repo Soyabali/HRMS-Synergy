@@ -93,6 +93,7 @@ class _SplashViewState extends State<SplashView> {
     //checkUserConnection();
     print("-------93---------Splash");
    // _checkPermissions();
+    checkUserConnection();
     getLocalDataInfo();
   }
   //
@@ -144,12 +145,11 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
-
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
-    var loginMap = await AppVersionRepo().appversion(context,'16');  // local version 19
+    var loginMap = await AppVersionRepo().appversion(context,'19');  //  16
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
@@ -202,7 +202,7 @@ class _SplashViewState extends State<SplashView> {
           MaterialPageRoute(builder: (context) => const DashBoard()));
     } else {
       print('----check user Connection and go LoginScreen-');
-      checkUserConnection();
+      //checkUserConnection();
     }
   }
 
