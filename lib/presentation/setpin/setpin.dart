@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../dashboard/dashboard.dart';
+import '../resources/assets_manager.dart';
+import '../resources/values_manager.dart';
 import 'payslip.dart';
 import '../resources/app_text_style.dart';
 
@@ -188,10 +190,27 @@ class _setPinScrenState extends State<SetPinScren> {
               right: 0,
               child: Column(
                 children: [
-                  Image.asset(
-                    'assets/images/camra.jpeg', // Replace with your image path
-                    height: 60, // Adjust size as needed
+                  Container(
+                    width: 70,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      image: const DecorationImage(
+                        image: AssetImage(ImageAssets.passwordlogin),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(AppPadding.p10),
+                      // Rounded corners
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.transparent,
+                          spreadRadius: AppPadding.p5,
+                          blurRadius: AppPadding.p7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
                   ),
+
                   SizedBox(height: 10),
                   Text('HRMS',style: AppTextStyle
                       .font16OpenSansRegularWhiteTextStyle
