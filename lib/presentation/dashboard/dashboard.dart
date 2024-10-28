@@ -9,6 +9,8 @@ import 'package:untitled/presentation/profile/profile.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
+import '../attandanceCalendar/attandanceCalendar.dart';
+import '../attandanceCalendar/customCalendarScreen.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../holiday/holidaylist.dart';
@@ -24,6 +26,7 @@ import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
 
 class DashBoard extends StatelessWidget {
+
   const DashBoard({super.key});
 
   @override
@@ -640,8 +643,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                 context,
                                 MaterialPageRoute(builder: (context) => const Profile()),
                               );
-
-                            },
+                              },
                             child: Container(
                               height: 100.0,
                               decoration: BoxDecoration(
@@ -825,11 +827,11 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           // Second Part
                           GestureDetector(
                             onTap: (){
-                              print('-------');
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => const DummyScreen(title: 'Apply Leave')),
-                              // );
+                              print('------Attendance----');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CustomCalendarScreen()),
+                              );
                             },
                             child: Container(
                               height: 100.0,

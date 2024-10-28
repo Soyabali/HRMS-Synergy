@@ -50,7 +50,6 @@ class _setPinScrenState extends State<SetPinScren> {
   void initState() {
     fetchStoreLocalPin();
     // TODO: implement initState
-
     pinController.addListener(() {
       // Check if the length is 4
       if (pinController.text.length == 4) {
@@ -73,9 +72,7 @@ class _setPinScrenState extends State<SetPinScren> {
           pinController.clear();
         } else {
           pinController.clear();
-          // Show validation message
           print('Wrong PIN number');
-          // You can display a Snackbar or set validation error in the UI
           _showValidationError();
         }
       }
@@ -172,7 +169,7 @@ class _setPinScrenState extends State<SetPinScren> {
 
       body: ListView(
         children: [
-            Stack(
+          Stack(
           children: [
             Container(
               height: 220, // Set the desired height
