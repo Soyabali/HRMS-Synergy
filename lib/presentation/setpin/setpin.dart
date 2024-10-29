@@ -48,8 +48,11 @@ class _setPinScrenState extends State<SetPinScren> {
 
   @override
   void initState() {
-    fetchStoreLocalPin();
+   // fetchStoreLocalPin();
     // TODO: implement initState
+    storedPin = loadPinFromLocalDatabase();
+    print("-------54--localDataBase----$storedPin");
+
     pinController.addListener(() {
       // Check if the length is 4
       if (pinController.text.length == 4) {
@@ -57,26 +60,49 @@ class _setPinScrenState extends State<SetPinScren> {
          var pin = pinController.text;
          print('-----setPin------');
         ///TODO HERE YOU SHOULD STORE pin code
-         storePinInaLocalDatabase(pin) ;
+       //  storePinInaLocalDatabase(pin) ;
+        if(storedPin==null){
+          // store the pin a local database
+          storePinInaLocalDatabase(pin) ;
+          storedPin = pin;
+          print('---saved for firstTime----');
+          pinController.clear();
+        }else{
+          //print already saved
+          if(pin==storedPin)
+          {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const PaySlip()),
+              );
+              pinController.clear();
+          }else{
 
-        if (pinController.text == storedPin) {
-          // Navigate to the next screen
-          //   PaySlip
-         // storePinInaLocalDatabase(pin);
-          print('PIN matched! Navigate to next screen');
-          // Here you can use Navigator.push to navigate to the next screen
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const PaySlip()),
-          );
-          pinController.clear();
-        } else {
-          pinController.clear();
-          print('Wrong PIN number');
-          _showValidationError();
+            print('Wrong PIN number');
+            _showValidationError();
+            pinController.clear();
+          }
         }
+
+        // if (pinController.text == storedPin) {
+        //   // Navigate to the next screen
+        //   //   PaySlip
+        //  // storePinInaLocalDatabase(pin);
+        //   print('PIN matched! Navigate to next screen');
+        //   // Here you can use Navigator.push to navigate to the next screen
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (context) => const PaySlip()),
+        //   );
+        //   pinController.clear();
+        // } else {
+        //   pinController.clear();
+        //   print('Wrong PIN number');
+        //   _showValidationError();
+        // }
       }
     });
+
     super.initState();
   }
   storePinInaLocalDatabase(pin) async{
@@ -87,7 +113,6 @@ class _setPinScrenState extends State<SetPinScren> {
     pinController.clear();
     // fetch the store value
     storedPin = prefs.getString('setPin');
-    print('----91---$storedPin');
     setState(() {
     });
     // to change the textvalue according to storePin
@@ -95,6 +120,15 @@ class _setPinScrenState extends State<SetPinScren> {
 
     //prefs.setInt('setPin',pin);
   }
+
+  Future<String?> loadPinFromLocalDatabase()async {
+    // Add your logic to load the stored PIN from local database, if any
+    // Return the stored PIN or null if it hasn't been set
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    storedPin = prefs.getString('setPin');
+    return storedPin;
+  }
+
   fetchStoreLocalPin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     storedPin = prefs.getString('setPin');
@@ -222,11 +256,10 @@ class _setPinScrenState extends State<SetPinScren> {
       ),
           SizedBox(height: 15),
            Center(child: Text(
-               storedPin == null ? 'Set PIN code' : 'Enter PIN code Again',
+               storedPin == null ? 'Set Pin code' : 'Enter Pin code Again',
                style: AppTextStyle
                .font16OpenSansRegularBlack45TextStyle)),
           SizedBox(height: 15),
-
           Padding(
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: TextField(

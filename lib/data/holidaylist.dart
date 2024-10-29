@@ -16,6 +16,7 @@ class HolidayListRepo {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
+    String? sContactNo = prefs.getString('sContactNo');
     showLoader();
     //  String defaultFromDate = "01/Sep/2024";
     //String defaultToDate = "30/Sep/2024";
@@ -23,8 +24,8 @@ class HolidayListRepo {
     //String toDate = lastDayOfCurrentMonth ?? defaultToDate;
 
     var baseURL = BaseRepo().baseurl;
-    var endPoint = "hrmsHolidayList/hrmsHolidayList";
-    var holidayList = "$baseURL$endPoint";
+    var endPoint = "BindHolidayListNew/BindHolidayListNew";
+    var bindholidaylist = "$baseURL$endPoint";
 
     try {
       var headers = {
@@ -32,19 +33,14 @@ class HolidayListRepo {
         'Content-Type': 'application/json'
       };
 
-      var request = http.Request('GET', Uri.parse('$holidayList'));
+      var request = http.Request('POST', Uri.parse('$bindholidaylist'));
+      request.body = json.encode({
+        "sContactNo": sContactNo,
 
-      // request.body = json.encode({
-      //   "sType": "A",
-      //   "dFromDate": firstOfMonthDay,
-      //   "sUserId": contactNo,
-      //   "iPage": "1",
-      //   "iPageSize": "10",
-      //   "dToDate": lastDayOfCurrentMonth,
-      // });
-
+      });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+
       if (response.statusCode == 200) {
         hideLoader();
         // Convert the response stream to a string

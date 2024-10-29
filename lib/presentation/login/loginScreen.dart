@@ -9,6 +9,7 @@ import 'package:untitled/presentation/resources/app_colors.dart';
 import '../../app/generalFunction.dart';
 import '../../data/loginrepo.dart';
 import '../dashboard/dashboard.dart';
+import '../forgotpassword/forgotPassword.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
@@ -575,12 +576,22 @@ class _LoginPageState extends State<LoginPage> {
                                         .font16OpenSansRegularBlack45TextStyle,
                                   ),
                                   Spacer(),
-                                  Padding(
-                                    padding: EdgeInsets.only(right: 14),
-                                    child: Text(
-                                      AppStrings.txtForgetPassword,
-                                      style: AppTextStyle
-                                          .font16OpenSansRegularBlack45TextStyle,
+                                  GestureDetector(
+                                    onTap: (){
+                                      print('----Forgot Password----');
+                                      // Navigator.pop(context);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => ForgotPassword()),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(right: 14),
+                                      child: Text(
+                                        AppStrings.txtForgetPassword,
+                                        style: AppTextStyle
+                                            .font16OpenSansRegularBlack45TextStyle,
+                                      ),
                                     ),
                                   ),
                                 ],

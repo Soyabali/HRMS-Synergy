@@ -90,6 +90,12 @@ class _NotificationPageState extends State<NotificationPage> {
                             var  msg = "${hrmsPopWarning[0]['Msg']}";
                             generalFunction.displayToast(msg);
                             Navigator.of(context).pop();
+                            //
+                            setState(() {
+                              _notificationList = NotificationRepo().notificationList(context);
+                            });
+
+
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero, // Remove default padding

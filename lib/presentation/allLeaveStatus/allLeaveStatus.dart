@@ -24,6 +24,7 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class AllLeaveStatus extends StatelessWidget {
+
   const AllLeaveStatus({super.key});
 
   @override
@@ -443,7 +444,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
-
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[

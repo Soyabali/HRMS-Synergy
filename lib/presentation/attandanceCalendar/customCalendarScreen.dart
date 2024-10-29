@@ -5,8 +5,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../data/attendaceStatusRepo.dart';
 import '../../data/hrmsAttendanceRepo.dart';
 import '../dashboard/dashboard.dart';
-import 'dart:convert';
-
 import '../resources/app_text_style.dart';
 
 class CustomCalendarScreen extends StatefulWidget {
@@ -79,7 +77,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     DateTime now = DateTime.now(); // Get the current date and time
     return months[now.month - 1]; // Return the current month as a string
   }
-
   void _scrollToCurrentMonth() {
     int selectedIndex = months.indexOf(selectedMonth);
     // Assuming each item is approximately 80 pixels wide, adjust based on actual width
@@ -98,10 +95,14 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     }
   }
 
+  // String getCurrentMonthFirstDate() {
+  //   DateTime now = DateTime.now();
+  //   DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+  //   return DateFormat("d/MMM/yyyy").format(firstDayOfMonth);
+  // }
   String getCurrentMonthFirstDate() {
     DateTime now = DateTime.now();
-    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-    return DateFormat("d/MMM/yyyy").format(firstDayOfMonth);
+    return DateFormat("d/MMM/yyyy").format(now);
   }
 
 
@@ -394,7 +395,11 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                     onTap: () {
                       // currect date
                       clearList();
-        
+                      // to pick a current date
+                      DateTime now = DateTime.now();
+                      // Store the current date in a variable
+                      String currentDate = DateFormat("d/MMM/yyyy").format(now);
+                     // responseStatus(currentDate);
                       setState(() {
                         _onMonthSelected(index);
                         selectedMonth = months[index];
@@ -1001,11 +1006,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                 ),
               ),
             ),
-
-
-
-
-
 
           ],
         ),
