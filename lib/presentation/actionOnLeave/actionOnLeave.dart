@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:untitled/presentation/actionOnLeave/rejectedActionOnLeave.dart';
 import '../../app/generalFunction.dart';
-import '../../data/hrmsLeaveStatusRepo.dart';
 import '../../domain/leaveStatusModel.dart';
 import '../dashboard/dashboard.dart';
 import 'PendingPageActionOnLeave.dart';
@@ -77,6 +76,8 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
         toDate = tempDate;
       });
       generalFunction.displayToast("To Date can not be less than From Date");
+    }else{
+      _updateTabContent();
     }
   }
   // from date SelectLogic
@@ -90,6 +91,8 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
         formDate = tempDate;
       });
       generalFunction.displayToast("From date can not be greater than To Date");
+    }else{
+      _updateTabContent();
     }
   }
   // update function

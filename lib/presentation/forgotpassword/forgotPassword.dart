@@ -64,9 +64,10 @@ class _MyHomePageState extends State<MyHomePage> {
         leading: InkWell(
           onTap: () {
             // Navigator.pop(context);
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  (Route<dynamic> route) => false,  // This condition removes all previous routes
             );
           },
           child: const Padding(

@@ -69,9 +69,38 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
         toDate = tempDate;
       });
       generalFunction.displayToast("To Date can not be less than From Date");
+    }else{
+      /// here you change a tab and update date on a ispecific tab
+      // tabController = TabController(vsync: this, length: 4);
+      // tabController?.addListener(() {
+      //   if (tabController!.indexIsChanging) {
+      //     print('Tab ${tabController!.index + 1} is open');
+      //     switch(tabController!.index){
+      //       case 0:
+      //         setState(() {
+      //           PendingPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 1:
+      //         setState(() {
+      //           SanctionedPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 2:
+      //         setState(() {
+      //           RejectedPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 3:
+      //         setState(() {
+      //           AllPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //     }
+      //   }
+      // });
     }
   }
-
   void fromDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
@@ -82,6 +111,36 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
         formDate = tempDate;
       });
       generalFunction.displayToast("From date can not be greater than To Date");
+    }else{
+      // here apply logic to change tab and update date
+      // tabController = TabController(vsync: this, length: 4);
+      // tabController?.addListener(() {
+      //   if (tabController!.indexIsChanging) {
+      //     print('Tab ${tabController!.index + 1} is open');
+      //     switch(tabController!.index){
+      //       case 0:
+      //         setState(() {
+      //           PendingPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 1:
+      //         setState(() {
+      //           SanctionedPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 2:
+      //         setState(() {
+      //           RejectedPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //       case 3:
+      //         setState(() {
+      //           AllPage(formDate:formDate,toDate:toDate);
+      //         });
+      //         break;
+      //     }
+      //   }
+      // });
     }
   }
 
@@ -176,8 +235,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                 ),
               ), // Removes shadow under the AppBar
             ),
-
-            body: Column(children: [
+            body: Column(
+            children: [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
@@ -194,6 +253,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                             //color: Color(0xFF0098a6),
                             color: Colors.grey,
                           ),
+
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Row(
@@ -229,7 +289,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                         formDate = formattedDate;
                                         // calculateTotalDays();
                                       });
-                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                                      print("-----237---$formDate");
+                                    //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       fromDateSelectLogic();
                                     }
                                   },
@@ -238,8 +299,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 14.0), // Optional: Adjust padding for horizontal space
                                     decoration: BoxDecoration(
-                                      color: Colors
-                                          .white, // Change this to your preferred color
+                                      color: Colors.white, // Change this to your preferred color
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Center(
@@ -286,13 +346,13 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                     if (pickedDate != null) {
                                       String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                                       setState(() {
-                                        tempDate =
-                                            toDate; // Save the current toDate before updating
+                                        tempDate = toDate; // Save the current toDate before updating
                                         toDate = formattedDate;
                                         // calculateTotalDays();
                                       });
                                       //
-                                      hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                                      print("-------300----$toDate");
+                                     // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       toDateSelectLogic();
                                     }
                                   },

@@ -335,55 +335,105 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
               ),
             ),
             // Calendar Widget
-            Container(
-              height: 328,
-              child: TableCalendar(
-                firstDay: DateTime.utc(2020, 1, 1),
-                lastDay: DateTime.utc(2030, 12, 31),
-                focusedDay: _focusedDate,
-                calendarFormat: _calendarFormat,
-                headerVisible: false,
-                selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDate = selectedDay;
-                    _focusedDate = focusedDay;
-                  });
-                  formatDate =  getFormattedDate(selectedDay);
-                  print("Selected Date: xxxx $selectedDay");
-                  print("----289---"+formatDate);
-                  /// todo  call api here
-                  responseStatus(formatDate);
-                },
-                calendarBuilders: CalendarBuilders(
-                  // Customize the day cells
-                  defaultBuilder: (context, day, focusedDay) {
-                    if (sPresents!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF689F38));
-                    } else if (sAbsent!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF7C0A02));
-                    } else if (sLeave!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF1157C3));
-                    } else if (sHalfDay!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFFCFB203));
-                    } else if (sHolidays!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF0097A7));
-                    } else if (sLateComing!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFFFFA000));
-                    } else if (sEarlyGoing!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFFd93124));
-                    } else if (sLcEg!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFFF57C00));
-                    } else if (sOnSite!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF006064));
-                    } else if (sWeeklyOff!.contains(day.day)) {
-                      return _buildCalendarDay(day, Color(0xFF006064));
-                    }
-                    return _buildCalendarDay(day, null);
-                  },
-                ),
-              ),
-            ),
+      Container(
+        height: 328,
+        child: TableCalendar(
+          firstDay: DateTime.utc(2020, 1, 1),
+          lastDay: DateTime.utc(2030, 12, 31),
+          focusedDay: _focusedDate,
+          calendarFormat: _calendarFormat,
+          headerVisible: false,
+          availableGestures: AvailableGestures.none, // Disable all scrolling gestures
+          selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+          onDaySelected: (selectedDay, focusedDay) {
+            setState(() {
+              _selectedDate = selectedDay;
+              _focusedDate = focusedDay;
+            });
+            formatDate = getFormattedDate(selectedDay);
+            print("Selected Date: xxxx $selectedDay");
+            print("----289---" + formatDate);
+            /// todo call api here
+            responseStatus(formatDate);
+          },
+          calendarBuilders: CalendarBuilders(
+            defaultBuilder: (context, day, focusedDay) {
+              if (sPresents!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF689F38));
+              } else if (sAbsent!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF7C0A02));
+              } else if (sLeave!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF1157C3));
+              } else if (sHalfDay!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFFCFB203));
+              } else if (sHolidays!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF0097A7));
+              } else if (sLateComing!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFFFFA000));
+              } else if (sEarlyGoing!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFFd93124));
+              } else if (sLcEg!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFFF57C00));
+              } else if (sOnSite!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF006064));
+              } else if (sWeeklyOff!.contains(day.day)) {
+                return _buildCalendarDay(day, Color(0xFF006064));
+              }
+              return _buildCalendarDay(day, null);
+            },
+          ),
+        ),
+      ),
+
+      // Container(
+            //   height: 328,
+            //   child: TableCalendar(
+            //     firstDay: DateTime.utc(2020, 1, 1),
+            //     lastDay: DateTime.utc(2030, 12, 31),
+            //     focusedDay: _focusedDate,
+            //     calendarFormat: _calendarFormat,
+            //     headerVisible: false,
+            //     selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
+            //     onDaySelected: (selectedDay, focusedDay) {
+            //       setState(() {
+            //         _selectedDate = selectedDay;
+            //         _focusedDate = focusedDay;
+            //       });
+            //       formatDate =  getFormattedDate(selectedDay);
+            //       print("Selected Date: xxxx $selectedDay");
+            //       print("----289---"+formatDate);
+            //       /// todo  call api here
+            //       responseStatus(formatDate);
+            //     },
+            //     calendarBuilders: CalendarBuilders(
+            //       // Customize the day cells
+            //       defaultBuilder: (context, day, focusedDay) {
+            //         if (sPresents!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF689F38));
+            //         } else if (sAbsent!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF7C0A02));
+            //         } else if (sLeave!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF1157C3));
+            //         } else if (sHalfDay!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFFCFB203));
+            //         } else if (sHolidays!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF0097A7));
+            //         } else if (sLateComing!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFFFFA000));
+            //         } else if (sEarlyGoing!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFFd93124));
+            //         } else if (sLcEg!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFFF57C00));
+            //         } else if (sOnSite!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF006064));
+            //         } else if (sWeeklyOff!.contains(day.day)) {
+            //           return _buildCalendarDay(day, Color(0xFF006064));
+            //         }
+            //         return _buildCalendarDay(day, null);
+            //       },
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               height: 60,
               child: ListView.builder(
@@ -480,7 +530,40 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                     children: [
                       cellContent("Half Day (${sHalfDay?.length})"),
                       cellContent("Weekly Off (${sWeeklyOff?.length})"),
-                      cellContent("Late Entry + Early Exit (${sLateComing?.length})"),
+                     // cellContent("Late Entry + Early Exit (${sLcEg?.length})"),
+                      //
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Container(
+                  width: 16,
+                  height: 16,
+                  color: Color(0xFF7B1FA2),
+                ),
+              ),
+              SizedBox(height: 8),
+              Center(
+                child: Text(
+                  "Late Entry + Early Exit (${sLcEg?.length})",
+                  style: TextStyle(
+                    color: Color(0xFF7B1FA2),
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center, // Centers the text horizontally
+                  softWrap: true, // Allows text to wrap if too long
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+
                     ],
                   ),
                 ],
@@ -706,7 +789,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                       SizedBox(width: 10),
                       Flexible(
                         child: Text(
-                          (sLateComing == null || sLateComing == "0" || sLateComing!.isEmpty) ? "There is no Late Entry in this month." : sLeaveText!,
+                          (sLateComing == null || sLateComing == "0" || sLateComing!.isEmpty) ? "There is no Late Entry in this month." : sLateComingText!,
                           style: TextStyle(
                             color: Color(0xFFFFA000),
                             fontSize: 14,
@@ -965,7 +1048,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                           height: 40,
                           width: 110,
                           decoration: BoxDecoration(
-                            color: Color(0xFFFFA000),
+                            color: Color(0xFF7B1FA2),
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(25), // Top-right radius of 25
                               bottomRight: Radius.circular(25), // Bottom-right radius of 25
@@ -983,15 +1066,15 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                       ),
                       Icon(
                         Icons.calendar_month,
-                        color:Color(0xFFFFA000),
+                        color:Color(0xFF7B1FA2),
                         size: 18,
                       ),
                       SizedBox(width: 10),
                       Flexible(
                         child: Text(
-                          (sLateComing == null || sLateComing == "0" || sLateComing!.isEmpty) ? "There is no Late Entry + Early Exit in this month." : sLateComingText!,
+                          (sLcEg == null || sLcEg == "0" || sLcEg!.isEmpty) ? "There is no Late Entry + Early Exit in this month." : sLcEgText!,
                           style: TextStyle(
-                            color: Color(0xFFFFA000),
+                            color: Color(0xFF7B1FA2),
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
                           ),
@@ -1041,8 +1124,8 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
        color = Color(0xFF006064);
        txtColor = Color(0xFF006064);
      }else if(textValue.contains("Late Entry + Early Exit")){
-       color = Color(0xFFFFA000);
-       txtColor =Color(0xFFFFA000);
+       color = Color(0xFF7B1FA2);
+       txtColor =Color(0xFF7B1FA2);
      }
     return Padding(
       padding: const EdgeInsets.all(8.0),

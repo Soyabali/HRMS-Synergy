@@ -4,11 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/profile/profile.dart';
 import '../../data/personalDetail.dart';
-import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
-import 'dart:convert';
 
 class ProfilePersonal extends StatelessWidget {
+
   const ProfilePersonal({super.key});
 
   @override
@@ -49,7 +48,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
   }
   personalDetailResponse() async{
   var   res = await PersonaldetailRepo().personal_detail(context);
-    print('---47---$res');
+    print('---51-------xx-----$res');
     setState(() {
       sEmpName = "${res[0]['sEmpName']}";
       sGender = "${res[0]['sGender']}";
@@ -468,9 +467,8 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             padding:
                                             const EdgeInsets.only(left: 22),
                                             child: Text(
-                                              '$sPassportNo',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlackTextStyle,
+                                              (sPassportNo?.isEmpty ?? true) ? 'No Value' : sPassportNo,
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
                                         ],
@@ -508,13 +506,17 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(left: 25),
+                                             EdgeInsets.only(left: 25),
                                             child: Text(
-                                              '8787',
-                                              //'$sVoterId',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlackTextStyle,
+                                              (sVoterId?.isEmpty ?? true) ? 'No Value' : sVoterId,
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
+                                            // child: Text(
+                                            //   '8787',
+                                            //   //'$sVoterId',
+                                            //   style: AppTextStyle
+                                            //       .font12OpenSansRegularBlackTextStyle,
+                                            // ),
                                           ),
                                         ],
                                       ),

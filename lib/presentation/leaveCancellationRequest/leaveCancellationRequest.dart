@@ -15,17 +15,15 @@ import 'package:untitled/presentation/dashboard/dashboard.dart';
 import '../../../app/generalFunction.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/reimbursementStatusTakeAction.dart';
-import '../../data/allLeaveStatusRepo.dart';
 import '../../data/leaveCancellationListRepo.dart';
 import '../../data/leaveCancellationRequestRepo.dart';
-import '../../domain/allLeaveStatusModel.dart';
 import '../../domain/leaveCancellationListModel.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class LeaveCancellationRequest extends StatelessWidget {
+
   const LeaveCancellationRequest({super.key});
 
   @override
@@ -45,6 +43,7 @@ class LeaveCancellationRequest extends StatelessWidget {
 }
 
 class LeaveCancellationRequestPage extends StatefulWidget {
+
   const LeaveCancellationRequestPage({super.key});
 
   @override
@@ -75,25 +74,11 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   List<LeaveCancellationListModel> _filteredData = []; // Holds filtered data
   TextEditingController _takeActionController = TextEditingController();
   // Distic List
-  hrmsReimbursementStatus(
-      String firstOfMonthDay, String lastDayOfCurrentMonth) async {
-    // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
+  hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     reimbursementStatusV3 = LeaveCancellationListRepo()
         .leaveCancellationList(context, firstOfMonthDay, lastDayOfCurrentMonth);
-
-    // reimbursementStatusV3.then((data) {
-    //   setState(() {
-    //     _allData = data; // Store the data
-    //     _filteredData = _allData; // Initially, no filter applied
-    //   });
-    // });
-    // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
-    // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-
-    print(
-        " -----xxxxx-  reimbursementStatusV3--90-----> $reimbursementStatusV3");
-    // setState(() {});
+    print(" -----xxxxx-  reimbursementStatusV3--90-----> $reimbursementStatusV3");
   }
 
   // filter data
@@ -117,8 +102,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
-    var postimageResponse =
-        await PostImageRepo().postImage(context, _imageFile);
+    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
@@ -137,8 +121,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   FocusNode _contactfocus = FocusNode();
   FocusNode _landMarkfocus = FocusNode();
   FocusNode _addressfocus = FocusNode();
-
-  // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
 
   List? data;
@@ -311,6 +293,8 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
         toDate = tempDate;
       });
       displayToast("To Date can not be less than From Date");
+    }else{
+      hrmsReimbursementStatus(formDate!, toDate!);
     }
   }
 
@@ -325,6 +309,8 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
       });
       // calculateTotalDays();
       displayToast("From date can not be greater than To Date");
+    }else{
+      hrmsReimbursementStatus(formDate!, toDate!);
     }
   }
 

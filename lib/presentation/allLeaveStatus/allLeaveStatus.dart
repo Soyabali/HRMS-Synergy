@@ -4,7 +4,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
@@ -24,7 +23,6 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class AllLeaveStatus extends StatelessWidget {
-
   const AllLeaveStatus({super.key});
 
   @override
@@ -51,16 +49,16 @@ class AllLeaveStatusPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<AllLeaveStatusPage> {
+
   List<Map<String, dynamic>>? reimbursementStatusList;
+
   // List<Map<String, dynamic>> _filteredData = [];
   ///List<dynamic>  hrmsReimbursementList;
   TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
   DateTime? _date;
-
   List stateList = [];
   List hrmsReimbursementList = [];
   List blockList = [];
@@ -70,9 +68,9 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   List<LeaveStatusModel> _allData = []; // Holds original data
   List<LeaveStatusModel> _filteredData = []; // Holds filtered data
   TextEditingController _takeActionController = TextEditingController();
+
   // Distic List
-  hrmsReimbursementStatus(
-      String firstOfMonthDay, String lastDayOfCurrentMonth) async {
+  hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
     reimbursementStatusV3 = HrmsAllLeaveStatusRepo()
@@ -84,12 +82,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
         _filteredData = _allData; // Initially, no filter applied
       });
     });
-    // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
-    // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-
-    print(
-        " -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
-    // setState(() {});
+    print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
   }
 
   // filter data
@@ -109,6 +102,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       }
     });
   }
+
   // postImage
 
   postimage() async {
@@ -126,6 +120,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   var SectorData;
   var stateblank;
   final stateDropdownFocus = GlobalKey();
+
   // focus
   // FocusNode locationfocus = FocusNode();
   FocusNode _shopfocus = FocusNode();
@@ -250,8 +245,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     print('---155----$responseData');
   }
 
-
-
   // leave type
   final List<Color> colorList = [
     Color(0xFF4DB6AC),
@@ -266,12 +259,10 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   @override
   void initState() {
     // TODO: implement initState
-    getLocation();
-   // getCurrentdate();
+    //getLocation();
+    // getCurrentdate();
     getACurrentDate();
-
     hrmsReimbursementStatus(formDate!, toDate!);
-
     super.initState();
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -279,26 +270,30 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
   }
+
   // date logic
 
   getACurrentDate() {
-   // DateTime now = DateTime.now();
-      DateTime now = DateTime.now();
-      DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
-      formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    // DateTime now = DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+    formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    print("------288--fromDate--$formDate");
 
     setState(() {
       //formDate = DateFormat('dd/MMM/yyyy').format(now);
     });
     //
     DateTime now2 = DateTime.now();
-        DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
-        DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
-        toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    print("--------296----ToDate---$toDate");
     setState(() {
       //toDate = DateFormat('dd/MMM/yyyy').format(now2);
     });
   }
+
   // to Date SelectedLogic
   void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
@@ -309,7 +304,10 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       setState(() {
         toDate = tempDate;
       });
+      print('----------307----$toDate');
       displayToast("To Date can not be less than From Date");
+    } else {
+      hrmsReimbursementStatus(formDate!, toDate!);
     }
   }
 
@@ -322,59 +320,20 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       setState(() {
         formDate = tempDate;
       });
-     // calculateTotalDays();
+
+      // calculateTotalDays();
       displayToast("From date can not be greater than To Date");
+    } else {
+      hrmsReimbursementStatus(formDate!, toDate!);
     }
   }
-
-
-
-  // location
-  void getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    debugPrint("-------------Position-----------------");
-    debugPrint(position.latitude.toString());
-
-    setState(() {
-      lat = position.latitude;
-      long = position.longitude;
-    });
-
-    print('-----------105----$lat');
-    print('-----------106----$long');
-    // setState(() {
-    // });
-    debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-    debugPrint(position.toString());
-  }
-  // didUpdateWidget
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+      FocusScope.of(context).unfocus(); // Unfocus when app is paused
     }
   }
-
 
   @override
   void dispose() {
@@ -396,7 +355,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
@@ -454,7 +413,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(width: 4),
-                        Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                        Icon(Icons.calendar_month,
+                            size: 15, color: Colors.white),
                         const SizedBox(width: 4),
                         const Text(
                           'From',
@@ -475,44 +435,21 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                               lastDate: DateTime(2100),
                             );
                             if (pickedDate != null) {
-                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              String formattedDate =
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
-                                tempDate = formDate; // Save the current formDate before updating
+                                tempDate =
+                                    formDate; // Save the current formDate before updating
                                 formDate = formattedDate;
-                               // calculateTotalDays();
+                                // calculateTotalDays();
                               });
                               fromDateSelectLogic();
                             }
-                            // DateTime? pickedDate = await showDatePicker(
-                            //   context: context,
-                            //   initialDate: DateTime.now(),
-                            //   firstDate: DateTime(2000),
-                            //   lastDate: DateTime(2100),
-                            // );
-                            // // Check if a date was picked
-                            // if (pickedDate != null) {
-                            //   // Format the picked date
-                            //   String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            //   print('----FromDate----433---$formattedDate');
-                            //   // Update the state with the picked date
-                            //   setState(() {
-                            //     firstOfMonthDay = formattedDate;
-                            //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            //   });
-                            //   // call Ai
-                            //   hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //   // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //   print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                            //   //hrmsReimbursementStatus(firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //  // print('---formPicker--$firstOfMonthDay');
-                            // } else {}
                           },
-
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    14.0), // Optional: Adjust padding for horizontal space
+                            padding: EdgeInsets.symmetric(horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
                               color: Colors
                                   .white, // Change this to your preferred color
@@ -522,8 +459,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                               child: Text(
                                 '$formDate',
                                 style: TextStyle(
-                                  color: Colors
-                                      .grey, // Change this to your preferred text color
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
                                   fontSize: 12.0, // Adjust font size as needed
                                 ),
                               ),
@@ -542,7 +479,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                         ),
                         //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                         SizedBox(width: 8),
-                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                        Icon(Icons.calendar_month,
+                            size: 16, color: Colors.white),
                         SizedBox(width: 5),
                         const Text(
                           'To',
@@ -562,44 +500,20 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                             );
                             if (pickedDate != null) {
                               String formattedDate =
-                              DateFormat('dd/MMM/yyyy')
-                                  .format(pickedDate);
+                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
                                 tempDate =
                                     toDate; // Save the current toDate before updating
                                 toDate = formattedDate;
-                               // calculateTotalDays();
+                                // calculateTotalDays();
                               });
                               toDateSelectLogic();
                             }
-                            // DateTime? pickedDate = await showDatePicker(
-                            //   context: context,
-                            //   initialDate: DateTime.now(),
-                            //   firstDate: DateTime(2000),
-                            //   lastDate: DateTime(2100),
-                            // );
-                            // // Check if a date was picked
-                            // if (pickedDate != null) {
-                            //   // Format the picked date
-                            //   String formattedDate =
-                            //       DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            //   print('----504--$formattedDate');
-                            //   // Update the state with the picked date
-                            //   setState(() {
-                            //     lastDayOfCurrentMonth = formattedDate;
-                            //     // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            //   });
-                            //   hrmsReimbursementStatus(
-                            //       firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //   //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            //   print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                            // } else {}
                           },
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    14.0), // Optional: Adjust padding for horizontal space
+                            padding: EdgeInsets.symmetric(horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
                               color: Colors
                                   .white, // Change this to your preferred color
@@ -609,8 +523,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                               child: Text(
                                 '$toDate',
                                 style: TextStyle(
-                                  color: Colors
-                                      .grey, // Change this to your preferred text color
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
                                   fontSize: 12.0, // Adjust font size as needed
                                 ),
                               ),
@@ -699,10 +613,11 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                     color: Colors.white,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(0.0),
+                                        borderRadius:
+                                            BorderRadius.circular(0.0),
                                         border: Border.all(
-                                          color:
-                                              Colors.grey, // Outline border color
+                                          color: Colors
+                                              .grey, // Outline border color
                                           width: 0.2, // Outline border width
                                         ),
                                       ),
@@ -716,8 +631,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(left: 8),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8),
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
@@ -726,8 +641,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                 children: <Widget>[
                                                   GestureDetector(
                                                     onTap: () {
-                                                      var images =
-                                                          leaveStatus.sImageLink;
+                                                      var images = leaveStatus
+                                                          .sImageLink;
                                                       var designation =
                                                           leaveStatus.sDesg;
 
@@ -745,11 +660,12 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                         child: Container(
                                                           child: Image.network(
                                                             leaveStatus
-                                                                .sImageLink, // Replace with your image URL
-                                                            height:
-                                                                35, // Adjust height as needed
-                                                            width:
-                                                                35, // Adjust width as needed
+                                                                .sImageLink,
+                                                            // Replace with your image URL
+                                                            height: 35,
+                                                            // Adjust height as needed
+                                                            width: 35,
+                                                            // Adjust width as needed
                                                             fit: BoxFit
                                                                 .cover, // Make the image cover the container
                                                           ),
@@ -771,8 +687,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                           //'Prabhat Yadav',
                                                           style: AppTextStyle
                                                               .font12OpenSansRegularBlackTextStyle,
-                                                          maxLines:
-                                                              2, // Limits the text to 2 lines
+                                                          maxLines: 2,
+                                                          // Limits the text to 2 lines
                                                           overflow: TextOverflow
                                                               .ellipsis, // Truncates with an ellipsis if too long
                                                         ),
@@ -787,8 +703,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                             //leaveData.sProjectName,
                                                             style: AppTextStyle
                                                                 .font12OpenSansRegularBlack45TextStyle,
-                                                            maxLines:
-                                                                2, // Limits the text to 2 lines
+                                                            maxLines: 2,
+                                                            // Limits the text to 2 lines
                                                             overflow: TextOverflow
                                                                 .ellipsis, // Truncates with an ellipsis if too long
                                                           ),
@@ -824,7 +740,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                   children: [
                                                     Text(
                                                       'Leave Status :',
-                                                      style: GoogleFonts.openSans(
+                                                      style:
+                                                          GoogleFonts.openSans(
                                                         color: containerColor,
                                                         fontSize: 8,
                                                         fontWeight:
@@ -835,19 +752,22 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                     // Wrap long text with Flexible
                                                     Flexible(
                                                       child: Text(
-                                                        leaveStatus.sLeaveStatus,
-                                                        style:
-                                                            GoogleFonts.openSans(
+                                                        leaveStatus
+                                                            .sLeaveStatus,
+                                                        style: GoogleFonts
+                                                            .openSans(
                                                           color: containerColor,
                                                           fontSize: 8,
                                                           fontWeight:
                                                               FontWeight.w400,
-                                                        ), // This d
+                                                        ),
+                                                        // This d
                                                         // style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
                                                         overflow: TextOverflow
-                                                            .ellipsis, // Adds "..." if the text is too long
-                                                        maxLines:
-                                                            1, // Ensures the text stays on one line
+                                                            .ellipsis,
+                                                        // Adds "..." if the text is too long
+                                                        maxLines: 1,
+                                                        // Ensures the text stays on one line
                                                         softWrap:
                                                             false, // Prevents the text from wrapping
                                                       ),
@@ -859,26 +779,29 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                       child: Container(
                                                         height: 25,
                                                         child: DottedBorder(
-                                                          color: Colors
-                                                              .grey, // Color of the dotted line
-                                                          strokeWidth:
-                                                              1.0, // Width of the dotted line
-                                                          dashPattern: [
-                                                            4,
-                                                            2
-                                                          ], // Dash pattern for the dotted line
+                                                          color: Colors.grey,
+                                                          // Color of the dotted line
+                                                          strokeWidth: 1.0,
+                                                          // Width of the dotted line
+                                                          dashPattern: [4, 2],
+                                                          // Dash pattern for the dotted line
                                                           borderType:
                                                               BorderType.RRect,
-                                                          radius: Radius.circular(
-                                                              5.0), // Optional: rounded corners
+                                                          radius:
+                                                              Radius.circular(
+                                                                  5.0),
+                                                          // Optional: rounded corners
                                                           child: Padding(
-                                                            padding: EdgeInsets.all(
-                                                                2.0), // Equal padding on all sides
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    2.0),
+                                                            // Equal padding on all sides
                                                             child: Center(
                                                               child: Row(
                                                                 mainAxisSize:
                                                                     MainAxisSize
-                                                                        .min, // Center the row contents
+                                                                        .min,
+                                                                // Center the row contents
                                                                 children: [
                                                                   Text(
                                                                     'Leave Type',
@@ -887,25 +810,17 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                                   ),
                                                                   SizedBox(
                                                                       width:
-                                                                          2.0), // Space between 'Day' and ':'
+                                                                          2.0),
+                                                                  // Space between 'Day' and ':'
                                                                   Text(
                                                                     ' : ',
                                                                     style: AppTextStyle
                                                                         .font8OpenSansRegularBlack45TextStyle,
                                                                   ),
                                                                   SizedBox(
-                                                                      width: 2.0), // Space between ':' and 'leave type'
-
-                                                                  // Wrap this Text widget with Flexible to handle long text
-                                                                  // Flexible(
-                                                                  //   child: Text(
-                                                                  //     leaveStatus.sLeaveType,
-                                                                  //     style: AppTextStyle.font10OpenSansRegularBlackTextStyle,
-                                                                  //     overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                                  //     maxLines: 1, // Ensures the text remains on one line
-                                                                  //     softWrap: false, // Prevents the text from wrapping
-                                                                  //   ),
-                                                                  // ),
+                                                                      width:
+                                                                          2.0),
+                                                                  // Space between ':' and 'leave type'
                                                                   Text(
                                                                     leaveStatus
                                                                         .sLeaveType,
@@ -947,7 +862,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Row(
                                                         mainAxisAlignment:
@@ -979,7 +895,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                                   CrossAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                Text('Applied At',
+                                                                Text(
+                                                                    'Applied At',
                                                                     style: AppTextStyle
                                                                         .font12OpenSansRegularBlack45TextStyle),
                                                                 Text(
@@ -1141,8 +1058,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
         alignment: Alignment.center,
         children: [
           Container(
-            height:
-                220, // Adjusted height to accommodate the TextFormField and Submit button
+            height: 220,
+            // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -1260,31 +1177,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                     ),
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     String enteredText = _textController.text;
-                //     if (enteredText.isNotEmpty) {
-                //       print('Submitted: $enteredText');
-                //     }
-                //     // Perform any action you need on submit
-                //    // Navigator.of(context).pop(); // Close the dialog
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
-                //     ),
-                //     backgroundColor: Colors.blue, // Button background color
-                //   ),
-                //   child: Text(
-                //     'Submit',
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 14,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -1295,7 +1187,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  'assets/images/addreimbursement.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -1380,7 +1273,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,

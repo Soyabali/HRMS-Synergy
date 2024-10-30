@@ -18,6 +18,7 @@ import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
 class TripList extends StatelessWidget {
+
   const TripList({super.key});
 
   @override
@@ -37,6 +38,7 @@ class TripList extends StatelessWidget {
 }
 
 class TripListPage extends StatefulWidget {
+
   const TripListPage({super.key});
 
   @override
@@ -302,7 +304,6 @@ class _MyHomePageState extends State<TripListPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
-
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
