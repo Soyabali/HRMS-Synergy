@@ -7,7 +7,7 @@ import 'app/app.dart';
 void main()
 {
   /// TOD0  RUNTIME PERMISSION ON
-
+  WidgetsFlutterBinding.ensureInitialized();
   _requestPermissions();
   runApp(MyApp());
   configLoading();

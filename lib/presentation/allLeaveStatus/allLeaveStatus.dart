@@ -538,7 +538,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                   Center(
                     child: Padding(
                       padding:
-                          const EdgeInsets.only(left: 15, right: 15, top: 10),
+                          const EdgeInsets.only(left: 10, right: 10, top: 10),
                       // child: SearchBar(),
                       child: Container(
                         height: 45,
@@ -613,17 +613,15 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                     color: Colors.white,
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(0.0),
+                                        borderRadius: BorderRadius.circular(0.0),
                                         border: Border.all(
-                                          color: Colors
-                                              .grey, // Outline border color
+                                          color: Colors.grey, // Outline border color
                                           width: 0.2, // Outline border width
                                         ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsets.only(
-                                            left: 0, right: 8, top: 8),
+                                            left: 0, right: 0, top: 5),
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
@@ -633,87 +631,201 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                             Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 8),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      var images = leaveStatus
-                                                          .sImageLink;
-                                                      var designation =
-                                                          leaveStatus.sDesg;
-
-                                                      openFullScreenDialog(
-                                                          context,
-                                                          images,
-                                                          designation
-                                                          // 'https://your-image-url.com/image.jpg', // Replace with your image URL
-                                                          // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                          );
-                                                    },
-                                                    child: Center(
-                                                      child: ClipOval(
-                                                        // Clip the image to make it circular
-                                                        child: Container(
-                                                          child: Image.network(
-                                                            leaveStatus
-                                                                .sImageLink,
-                                                            // Replace with your image URL
-                                                            height: 35,
-                                                            // Adjust height as needed
-                                                            width: 35,
-                                                            // Adjust width as needed
-                                                            fit: BoxFit
-                                                                .cover, // Make the image cover the container
-                                                          ),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 80, // 85% of the available space
+                                                      child: Container(
+                                                       // color: Colors.blue, // Example styling for visualization
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment.start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment.start,
+                                                          children: <Widget>[
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                var images = leaveStatus
+                                                                    .sImageLink;
+                                                                var designation =
+                                                                    leaveStatus.sDesg;
+                                                                openFullScreenDialog(
+                                                                    context,
+                                                                    images,
+                                                                    designation
+                                                                    // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                                                    // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                                                    );
+                                                              },
+                                                              child: Center(
+                                                                child: ClipOval(
+                                                                  child: Container(
+                                                                    child: leaveStatus.sImageLink != null && leaveStatus.sImageLink.isNotEmpty
+                                                                        ? Image.network(
+                                                                      leaveStatus.sImageLink,
+                                                                      height: 35, // Adjust height as needed
+                                                                      width: 35,  // Adjust width as needed
+                                                                      fit: BoxFit.cover, // Make the image cover the container
+                                                                    )
+                                                                        : Text(
+                                                                      'No image',
+                                                                      style: TextStyle(fontSize: 16), // Optional: adjust text style as needed
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 10),
+                                                            // Wrap the column in Flexible to prevent overflow
+                                                            Flexible(
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: <Widget>[
+                                                                  Text(
+                                                                    leaveStatus.sName,
+                                                                    //'Prabhat Yadav',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines: 2,
+                                                                    // Limits the text to 2 lines
+                                                                    overflow: TextOverflow
+                                                                        .ellipsis, // Truncates with an ellipsis if too long
+                                                                  ),
+                                                                  // SizedBox(height: 4), // Add spacing between texts if needed
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                         right: 10),
+                                                                    child: Text(
+                                                                      leaveStatus.sDesg,
+                                                                      //leaveData.sProjectName,
+                                                                      style: AppTextStyle
+                                                                          .font12OpenSansRegularBlack45TextStyle,
+                                                                      maxLines: 2,
+                                                                      // Limits the text to 2 lines
+                                                                      overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-
-                                                  SizedBox(width: 10),
-                                                  // Wrap the column in Flexible to prevent overflow
-                                                  Flexible(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          leaveStatus.sName,
-                                                          //'Prabhat Yadav',
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlackTextStyle,
-                                                          maxLines: 2,
-                                                          // Limits the text to 2 lines
-                                                          overflow: TextOverflow
-                                                              .ellipsis, // Truncates with an ellipsis if too long
-                                                        ),
-                                                        // SizedBox(height: 4), // Add spacing between texts if needed
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  right: 10),
-                                                          child: Text(
-                                                            leaveStatus.sDesg,
-                                                            //leaveData.sProjectName,
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlack45TextStyle,
-                                                            maxLines: 2,
-                                                            // Limits the text to 2 lines
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Truncates with an ellipsis if too long
+                                                    Expanded(
+                                                      flex: 20, // 15% of the available space
+                                                      child: Align(
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(right: 5),
+                                                          child: Container(
+                                                            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4), // Padding for spacing inside the container
+                                                            decoration: BoxDecoration(
+                                                              color: Color(0xFFD3D3D3), // Light gray color
+                                                              borderRadius: BorderRadius.circular(10), // Rounded corners on both sides
+                                                            ),
+                                                            child: Center( // Centers the text inside the container
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(left: 10,right: 5),
+                                                                child: Text(
+                                                                  leaveStatus.sLeaveTypeStatus, // Example text
+                                                                  style: TextStyle(
+                                                                    color: Colors.black45,
+                                                                    fontSize: 12,
+                                                                  ),
+                                                                  maxLines: 1, // Allows the text to wrap to a second line if needed
+                                                                  overflow: TextOverflow.visible, // Ensures text can wrap instead of being clipped
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                )
+
+                                              // child: Row(
+                                              //   mainAxisAlignment:
+                                              //       MainAxisAlignment.start,
+                                              //   crossAxisAlignment:
+                                              //       CrossAxisAlignment.start,
+                                              //   children: <Widget>[
+                                              //     GestureDetector(
+                                              //       onTap: () {
+                                              //         var images = leaveStatus
+                                              //             .sImageLink;
+                                              //         var designation =
+                                              //             leaveStatus.sDesg;
+                                              //
+                                              //         openFullScreenDialog(
+                                              //             context,
+                                              //             images,
+                                              //             designation
+                                              //             // 'https://your-image-url.com/image.jpg', // Replace with your image URL
+                                              //             // 'Bill Date: 01-01-2024', // Replace with your bill date
+                                              //             );
+                                              //       },
+                                              //       child: Center(
+                                              //         child: ClipOval(
+                                              //           child: Container(
+                                              //             child: leaveStatus.sImageLink != null && leaveStatus.sImageLink.isNotEmpty
+                                              //                 ? Image.network(
+                                              //               leaveStatus.sImageLink,
+                                              //               height: 35, // Adjust height as needed
+                                              //               width: 35,  // Adjust width as needed
+                                              //               fit: BoxFit.cover, // Make the image cover the container
+                                              //             )
+                                              //                 : Text(
+                                              //               'No image',
+                                              //               style: TextStyle(fontSize: 16), // Optional: adjust text style as needed
+                                              //             ),
+                                              //           ),
+                                              //         ),
+                                              //       ),
+                                              //     ),
+                                              //     SizedBox(width: 10),
+                                              //     // Wrap the column in Flexible to prevent overflow
+                                              //     Flexible(
+                                              //       child: Column(
+                                              //         crossAxisAlignment: CrossAxisAlignment.start,
+                                              //         children: <Widget>[
+                                              //           Text(
+                                              //             leaveStatus.sName,
+                                              //             //'Prabhat Yadav',
+                                              //             style: AppTextStyle
+                                              //                 .font12OpenSansRegularBlackTextStyle,
+                                              //             maxLines: 2,
+                                              //             // Limits the text to 2 lines
+                                              //             overflow: TextOverflow
+                                              //                 .ellipsis, // Truncates with an ellipsis if too long
+                                              //           ),
+                                              //           // SizedBox(height: 4), // Add spacing between texts if needed
+                                              //           Padding(
+                                              //             padding: const EdgeInsets
+                                              //                 .only(
+                                              //                  right: 10),
+                                              //             child: Text(
+                                              //               leaveStatus.sDesg,
+                                              //               //leaveData.sProjectName,
+                                              //               style: AppTextStyle
+                                              //                   .font12OpenSansRegularBlack45TextStyle,
+                                              //               maxLines: 2,
+                                              //               // Limits the text to 2 lines
+                                              //               overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
+                                              //             ),
+                                              //           ),
+                                              //         ],
+                                              //       ),
+                                              //     ),
+                                              //     Spacer(),
+                                              //     Text("1 Day Leave",style: TextStyle(
+                                              //         color: Colors.black45,
+                                              //         fontSize: 12
+                                              //     ),
+                                              //     ),
+                                              //   ],
+                                              // ),
                                             ),
                                             const SizedBox(height: 5),
                                             Row(
@@ -732,151 +844,99 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                             ),
                                             SizedBox(height: 5),
                                             Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 25),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      'Leave Status :',
-                                                      style:
-                                                          GoogleFonts.openSans(
+                                              padding: const EdgeInsets.only(left: 25),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    'Leave Status :',
+                                                    style: GoogleFonts.openSans(
+                                                      color: containerColor,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 2),
+                                                  Flexible(
+                                                    child: Text(
+                                                      leaveStatus.sLeaveStatus,
+                                                      style: GoogleFonts.openSans(
                                                         color: containerColor,
-                                                        fontSize: 8,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      ), // This directly returns a TextStyle
-                                                    ),
-                                                    SizedBox(width: 2),
-                                                    // Wrap long text with Flexible
-                                                    Flexible(
-                                                      child: Text(
-                                                        leaveStatus
-                                                            .sLeaveStatus,
-                                                        style: GoogleFonts
-                                                            .openSans(
-                                                          color: containerColor,
-                                                          fontSize: 8,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                        ),
-                                                        // This d
-                                                        // style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        // Adds "..." if the text is too long
-                                                        maxLines: 1,
-                                                        // Ensures the text stays on one line
-                                                        softWrap:
-                                                            false, // Prevents the text from wrapping
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w400,
                                                       ),
+                                                      overflow: TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      softWrap: false,
                                                     ),
-                                                    Spacer(),
-                                                    Align(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      child: Container(
-                                                        height: 25,
-                                                        child: DottedBorder(
-                                                          color: Colors.grey,
-                                                          // Color of the dotted line
-                                                          strokeWidth: 1.0,
-                                                          // Width of the dotted line
-                                                          dashPattern: [4, 2],
-                                                          // Dash pattern for the dotted line
-                                                          borderType:
-                                                              BorderType.RRect,
-                                                          radius:
-                                                              Radius.circular(
-                                                                  5.0),
-                                                          // Optional: rounded corners
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    2.0),
-                                                            // Equal padding on all sides
-                                                            child: Center(
-                                                              child: Row(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                // Center the row contents
-                                                                children: [
-                                                                  Text(
-                                                                    'Leave Type',
-                                                                    style: AppTextStyle
-                                                                        .font8OpenSansRegularBlack45TextStyle,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          2.0),
-                                                                  // Space between 'Day' and ':'
-                                                                  Text(
-                                                                    ' : ',
-                                                                    style: AppTextStyle
-                                                                        .font8OpenSansRegularBlack45TextStyle,
-                                                                  ),
-                                                                  SizedBox(
-                                                                      width:
-                                                                          2.0),
-                                                                  // Space between ':' and 'leave type'
-                                                                  Text(
-                                                                    leaveStatus
-                                                                        .sLeaveType,
-                                                                    style: AppTextStyle
-                                                                        .font8OpenSansRegularBlackTextStyle,
-                                                                    // overflow: TextOverflow.ellipsis, // Adds "..." if the text is too long
-                                                                    // maxLines: 1, // Ensures the text remains on one line
-                                                                    //softWrap: false, // Prevents the text from wrapping
-                                                                  ),
-                                                                ],
+                                                  ),
+                                                  Spacer(), // Pushes the DottedBorder to the right side
+                                                  Container(
+                                                    alignment: Alignment.centerRight,
+                                                    height: 25,
+                                                    child: DottedBorder(
+                                                      color: Colors.grey,
+                                                      strokeWidth: 1.0,
+                                                      dashPattern: [4, 2],
+                                                      borderType: BorderType.RRect,
+                                                      radius: Radius.circular(5.0),
+                                                      child: Padding(
+                                                        padding: EdgeInsets.all(2.0),
+                                                        child: Center(
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Text(
+                                                                'Leave Type',
+                                                                style: AppTextStyle.font8OpenSansRegularBlack45TextStyle,
                                                               ),
-                                                            ),
+                                                              SizedBox(width: 2.0),
+                                                              Text(
+                                                                ' : ',
+                                                                style: AppTextStyle.font8OpenSansRegularBlack45TextStyle,
+                                                              ),
+                                                              SizedBox(width: 2.0),
+                                                              Text(
+                                                                leaveStatus.sLeaveType,
+                                                                style: AppTextStyle.font8OpenSansRegularBlackTextStyle,
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ],
-                                                )),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                             SizedBox(height: 5),
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  bottom: 0),
+                                              padding: const EdgeInsets.only(bottom: 0),
                                               child: Container(
                                                   height: 40.0,
                                                   decoration: BoxDecoration(
-                                                    color: Colors.grey[
-                                                        200], // Background color
+                                                    color: Colors.grey[200], // Background color
                                                     border: Border(
                                                       left: BorderSide(
                                                         color: randomColor,
                                                         // color: Colors.grey, // Left border color
-                                                        width:
-                                                            3.0, // Left border width
+                                                        width: 3.0, // Left border width
                                                       ),
                                                     ),
                                                   ),
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                        MainAxisAlignment.spaceBetween,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    CrossAxisAlignment.start,
                                                     children: [
                                                       Row(
                                                         mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .start,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                    .all(2.0),
+                                                                const EdgeInsets.all(2.0),
                                                             child: Icon(
                                                                 Icons
                                                                     .calendar_month,
@@ -930,7 +990,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                             padding:
                                                                 const EdgeInsets
                                                                     .only(
-                                                                    right: 10),
+                                                                    right: 5),
                                                             child: Column(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment

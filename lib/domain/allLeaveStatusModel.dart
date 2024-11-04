@@ -6,6 +6,7 @@ class LeaveStatusModel {
   final String dLeaveAt;
   final String sLeaveApplyFor;
   final String sLeaveStatus;
+  final String sLeaveTypeStatus;
 
   LeaveStatusModel({
     required this.sName,
@@ -15,6 +16,7 @@ class LeaveStatusModel {
     required this.dLeaveAt,
     required this.sLeaveApplyFor,
     required this.sLeaveStatus,
+    required this.sLeaveTypeStatus,
   });
 
   factory LeaveStatusModel.fromJson(Map<String,dynamic> json) {
@@ -26,6 +28,7 @@ class LeaveStatusModel {
       dLeaveAt: json['dLeaveAt'].toString(),
       sLeaveApplyFor: json['sLeaveApplyFor'].toString(),
       sLeaveStatus: json['sLeaveStatus'].toString(),
+      sLeaveTypeStatus:json['sLeaveTypeStatus'].toString()
     );
   }
 // Extract the month part from the sDate (e.g., "Jan", "Feb", etc.)

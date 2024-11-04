@@ -30,6 +30,7 @@ class ShortLeaveScreen extends StatefulWidget {
 }
 
 class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
+
   var result,msg;
   String? dExpDate;
   TextEditingController _expenseController = TextEditingController();
@@ -56,6 +57,7 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
     print('Current Date: $formattedDate');
     super.initState();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -166,12 +168,6 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                 child: Text('Fill the below details',
                                     style: AppTextStyle
                                         .font16OpenSansRegularBlack45TextStyle
-                                  // style: TextStyle(
-                                  //     fontFamily: 'Montserrat',
-                                  //     color: Color(0xFF707d83),
-                                  //     fontSize: 14.0,
-                                  //     fontWeight: FontWeight.bold)
-
                                 ),
                               ),
                             ],
@@ -238,7 +234,7 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10, right: 0),
                             child: Container(
-                              height: 42,
+                              //height: 42,
                               color: Colors.white,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 0),
@@ -246,23 +242,24 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                   focusNode: _owenerfocus,
                                   controller: _expenseController,
                                   textInputAction: TextInputAction.next,
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context).nextFocus(),
+                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                  keyboardType: TextInputType.multiline, // Allows multiline input
+                                  maxLines: null, // Allows the field to expand as text increases
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
                                     filled: true, // Enable background color
-                                    fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                                    fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                   ),
-                                  autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   // validator: (value) {
-                                  //   if (value !=null && value =="0") {
+                                  //   if (value != null && value == "0") {
                                   //     return 'Enter an amount greater than 0';
                                   //   }
                                   //   return null;
                                   // },
                                 ),
+
                               ),
                             ),
                           ),
@@ -281,11 +278,13 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                 print("----275-date--$formattedDate");
                                 print("----263-Emp code--$sEmpCode");
 
-                                if((reason!=null && reason!="") && formattedDate!=null){
+                                if((reason!=null && reason!="") && formattedDate!=null)
+                                {
                                   print("---Api call---");
                                   /// TOdo CALL A API
                                    var shortLeave = await PostShortLeaveRepo().shortLeave(context,sEmpCode,formattedDate,reason);
                                    print('--269----$shortLeave');
+
                                    if(shortLeave!=null){
                                       setState(() {
                                         result = "${shortLeave[0]['Result']}";
@@ -298,14 +297,26 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
 
 
                                 }else{
+                                  generalfunction.displayToast("Please Enter Reason");
                                   // to give a toast
                                   print("---Api  not call---");
                                 }
                                 if(result=="1"){
+                                  /// todo show the success DialogBox as a Attendane
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildDialogSucces2(context,msg);
+                                    },
+                                  );
+                                  generalfunction.displayToast(msg);
+                                  _expenseController.clear();
                                   print('-----Success----1--');
                                   /// todo show success Dialog
                                   generalfunction.successDialog(context, msg);
                                 }else{
+
+                                  _expenseController.clear();
                                   print('-----Failed --0----');
                                   /// todo give only notification
                                    generalfunction.displayToast(msg);
@@ -313,8 +324,10 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                 }
 
                               },
+
                               style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), backgroundColor: AppColors.loginbutton, // Set the button background color
+                                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                backgroundColor: AppColors.loginbutton, // Set the button background color
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
                                 ),
@@ -338,6 +351,96 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+  // dialogSuccess
+  Widget _buildDialogSucces2(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // todo close the
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const DashBoard()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     getLocation();
+                    //     Navigator.of(context).pop();
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.white, // Set the background color to white
+                    //     foregroundColor: Colors.black, // Set the text color to black
+                    //   ),
+                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    // )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

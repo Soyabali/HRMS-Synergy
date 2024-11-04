@@ -20,6 +20,10 @@ class PostShortLeaveRepo {
       var endPoint = "PostShortLeave/PostShortLeave";
       var shortleaveApi = "$baseURL$endPoint";
 
+      print("------23----sEmpCode--$sEmpCode");
+      print("------24----formattedDate--$formattedDate");
+      print("------25----reason--$reason");
+
       showLoader();
 
       var headers = {

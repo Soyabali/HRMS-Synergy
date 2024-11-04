@@ -5,7 +5,6 @@ import 'package:untitled/presentation/myLeaveStatus/pending.dart';
 import 'package:untitled/presentation/myLeaveStatus/rejected.dart';
 import 'package:untitled/presentation/myLeaveStatus/sanctioned.dart';
 import '../../app/generalFunction.dart';
-import '../../data/hrmsLeaveStatusRepo.dart';
 import '../../domain/leaveStatusModel.dart';
 import '../dashboard/dashboard.dart';
 import 'all.dart';
@@ -33,7 +32,8 @@ class MyLeaveStatusPage extends StatefulWidget {
 
 class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
 
-    with SingleTickerProviderStateMixin {
+   with TickerProviderStateMixin {
+// with SingleTickerProviderStateMixin {
   //
   late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
   String status = 'P';
@@ -58,97 +58,8 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
     setState(() {
     });
   }
-  // to Date SelectedLogic
-  void toDateSelectLogic() {
-    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
-    DateTime? fromDate2 = dateFormat.parse(formDate!);
-    DateTime? toDate2 = dateFormat.parse(toDate!);
 
-    if (toDate2.isBefore(fromDate2)) {
-      setState(() {
-        toDate = tempDate;
-      });
-      generalFunction.displayToast("To Date can not be less than From Date");
-    }else{
-      /// here you change a tab and update date on a ispecific tab
-      // tabController = TabController(vsync: this, length: 4);
-      // tabController?.addListener(() {
-      //   if (tabController!.indexIsChanging) {
-      //     print('Tab ${tabController!.index + 1} is open');
-      //     switch(tabController!.index){
-      //       case 0:
-      //         setState(() {
-      //           PendingPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 1:
-      //         setState(() {
-      //           SanctionedPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 2:
-      //         setState(() {
-      //           RejectedPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 3:
-      //         setState(() {
-      //           AllPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //     }
-      //   }
-      // });
-    }
-  }
-  void fromDateSelectLogic() {
-    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
-    DateTime? fromDate2 = dateFormat.parse(formDate!);
-    DateTime? toDate2 = dateFormat.parse(toDate!);
-
-    if (fromDate2.isAfter(toDate2)) {
-      setState(() {
-        formDate = tempDate;
-      });
-      generalFunction.displayToast("From date can not be greater than To Date");
-    }else{
-      // here apply logic to change tab and update date
-      // tabController = TabController(vsync: this, length: 4);
-      // tabController?.addListener(() {
-      //   if (tabController!.indexIsChanging) {
-      //     print('Tab ${tabController!.index + 1} is open');
-      //     switch(tabController!.index){
-      //       case 0:
-      //         setState(() {
-      //           PendingPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 1:
-      //         setState(() {
-      //           SanctionedPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 2:
-      //         setState(() {
-      //           RejectedPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //       case 3:
-      //         setState(() {
-      //           AllPage(formDate:formDate,toDate:toDate);
-      //         });
-      //         break;
-      //     }
-      //   }
-      // });
-    }
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    getACurrentDate();
-
+  void _handleTabSelection() {
     tabController = TabController(vsync: this, length: 4);
     tabController?.addListener(() {
       if (tabController!.indexIsChanging) {
@@ -178,10 +89,53 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
       }
     });
   }
+  // to Date SelectedLogic
+  void toDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (toDate2.isBefore(fromDate2)) {
+      setState(() {
+        toDate = tempDate;
+      });
+      generalFunction.displayToast("To Date can not be less than From Date");
+    }else{
+      _handleTabSelection();
+      /// here you change a tab and update date on a ispecific tab
+
+    }
+  }
+  void fromDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        formDate = tempDate;
+      });
+      generalFunction.displayToast("From date can not be greater than To Date");
+    }else{
+      //here apply logic to change tab and update date
+      _handleTabSelection();
+    }
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getACurrentDate();
+    tabController = TabController(length: 4, vsync: this);
+    tabController?.addListener(_handleTabSelection);
+
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    tabController?.removeListener(_handleTabSelection);
     tabController?.dispose();
     super.dispose();
   }
@@ -235,6 +189,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                 ),
               ), // Removes shadow under the AppBar
             ),
+
             body: Column(
             children: [
               Expanded(
@@ -253,7 +208,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                             //color: Color(0xFF0098a6),
                             color: Colors.grey,
                           ),
-
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Row(
@@ -287,9 +241,43 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                       setState(() {
                                         tempDate = formDate; // Save the current formDate before updating
                                         formDate = formattedDate;
-                                        // calculateTotalDays();
+                                        // --
+                                        tabController = TabController(vsync: this, length: 4);
+                                        tabController?.addListener(() {
+                                          if (tabController!.indexIsChanging) {
+                                            print('Tab ${tabController!.index + 1} is open');
+                                            switch(tabController!.index){
+                                              case 0:
+                                                print('------282------0----index---');
+                                                setState(() {
+                                                  PendingPage(formDate:formDate,toDate:toDate);
+                                                });
+                                                break;
+                                              case 1:
+                                                print('------288------1----index---');
+                                                setState(() {
+                                                  SanctionedPage(formDate:formDate,toDate:toDate);
+                                                });
+                                                break;
+                                              case 2:
+                                                print('------294------2----index---');
+                                                setState(() {
+                                                  RejectedPage(formDate:formDate,toDate:toDate);
+                                                });
+                                                break;
+                                              case 3:
+                                                print('------300------3----index---');
+                                                setState(() {
+                                                  AllPage(formDate:formDate,toDate:toDate);
+                                                });
+                                                break;
+                                            }
+                                          }
+                                        });
+
                                       });
                                       print("-----237---$formDate");
+
                                     //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                                       fromDateSelectLogic();
                                     }
@@ -403,7 +391,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                 controller: tabController,
                                 indicatorColor: Color(0xFF0098a6),
                                 indicatorSize: TabBarIndicatorSize.label,
-                                indicatorWeight: 0.9,
+                                indicatorWeight: 0,
                                 labelPadding: EdgeInsets.symmetric(horizontal: 0.0),
                                 unselectedLabelColor: Color(0xFF0098a6),
                                 labelColor: Colors.white,

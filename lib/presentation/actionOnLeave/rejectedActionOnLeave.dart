@@ -15,6 +15,7 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class RejectedActionOnLeave extends StatefulWidget {
+
   String? formDate, toDate;
 
   RejectedActionOnLeave(
@@ -37,9 +38,9 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
   void initState() {
     // TODO: implement initState
     print('----------28-----Rejectd----');
-    print("fromdate :   ${widget.formDate}");
-    print("todate :   ${widget.toDate}");
-    print("-------38---Sanctioned-----");
+    print("------40---R--- :   ${widget.formDate}");
+    print("----41--R-- :   ${widget.toDate}");
+    print("-------38---Rejected-----");
 
     hrmsLeavePendingForApproval = HrmsLeavePendingForApprovailRepo()
         .hrmsLevePendingForApprovalList(

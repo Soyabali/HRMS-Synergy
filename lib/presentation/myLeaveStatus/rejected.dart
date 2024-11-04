@@ -34,6 +34,10 @@ class _RejectedPageState extends State<RejectedPage> {
         .hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","R");
 
     super.initState();
+    print('----------41-----Pending');
+    print("------42----fromDate---${widget.formDate}");
+    print("------43----toDate---${widget.toDate}");
+    print("------44----R---");
   }
 
   @override
@@ -99,16 +103,16 @@ class _RejectedPageState extends State<RejectedPage> {
                                   children: [
                                     Container(
                                       height: 40,
-                                      // todo container apple left color border with 2 width
-                                      decoration: const BoxDecoration(
+                                      padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4), // Padding for spacing inside the container
+                                      decoration: BoxDecoration(
                                         border: Border(
                                           left: BorderSide(
-                                            color: Colors
-                                                .blue, // Color of the left border
-                                            width:
-                                            2.0, // Width of the left border
+                                            color: Colors.blue, // Color of the left border
+                                            width: 2.0, // Width of the left border
                                           ),
                                         ),
+                                        color: Color(0xFFD3D3D3), // Light gray color
+                                        borderRadius: BorderRadius.circular(0), // Rounded corners on both sides
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
@@ -124,10 +128,25 @@ class _RejectedPageState extends State<RejectedPage> {
                                                   .font12OpenSansRegularBlackTextStyle,
                                             ),
                                           ),
-                                          Text(
-                                              "Applied At: ${policyDocData.dApplyDate}",
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlackTextStyle),
+                                          Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 2, vertical: 4), // Padding for spacing inside the container
+                                            margin: EdgeInsets.only(right: 5), // Gap on the right side
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFFFFFFFF), // White background color
+                                              borderRadius: BorderRadius.horizontal( // Rounded corners on left and right sides
+                                                left: Radius.circular(15), // Adjust as needed for rounding
+                                                right: Radius.circular(15), // Adjust as needed for rounding
+                                              ),
+                                            ),
+
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+                                              child: Text(
+                                                  "Applied At: ${policyDocData.dApplyDate}",
+                                                  style: AppTextStyle
+                                                      .font12OpenSansRegularBlackTextStyle),
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -270,7 +289,7 @@ class _RejectedPageState extends State<RejectedPage> {
                                                   ),
                                                   SizedBox(width: 5),
                                                   Text(
-                                                    'Sanctioned At : ${policyDocData.dAppRejDate}',
+                                                    'Rejected At : ${policyDocData.dAppRejDate}',
                                                     style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                   ),
                                                 ],

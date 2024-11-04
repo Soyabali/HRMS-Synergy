@@ -149,7 +149,7 @@ class _SplashViewState extends State<SplashView> {
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
-    var loginMap = await AppVersionRepo().appversion(context,'19');  //  16
+    var loginMap = await AppVersionRepo().appversion(context,'16');  //  19
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
