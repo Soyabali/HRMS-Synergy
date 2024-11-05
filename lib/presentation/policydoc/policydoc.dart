@@ -14,7 +14,6 @@ import '../resources/values_manager.dart';
 class PolicyDoc extends StatelessWidget {
 
   const PolicyDoc({super.key});
-
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -127,7 +126,6 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                        // Handle the case where the data is empty or null
                        return Center(child: Text('No notifications found'));
                      }
-
                      // Once data is available, build the ListView
                      final polocyDocList = snapshot.data!; // Access the resolved data
 
@@ -475,17 +473,32 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
             top: -30, // Position the image at the top center
             child: CircleAvatar(
               radius: 30,
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.white,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
+                  'assets/images/policydocrecect.jpeg', // Replace with your asset image path
+                  fit: BoxFit.fill,
+                  width: 40,
+                  height: 40,
                 ),
               ),
             ),
           ),
+          // Positioned(
+          //   top: -30, // Position the image at the top center
+          //   child: CircleAvatar(
+          //     radius: 25,
+          //     backgroundColor: Colors.white,
+          //     child: ClipOval(
+          //       child: Image.asset(
+          //         'assets/images/policydocrecect.jpeg', // Replace with your asset image path
+          //         fit: BoxFit.fill,
+          //         width: 35,
+          //         height: 35,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

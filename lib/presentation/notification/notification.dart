@@ -95,8 +95,7 @@ class _NotificationPageState extends State<NotificationPage> {
                               _notificationList = NotificationRepo().notificationList(context);
                             });
 
-
-                          },
+                            },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.zero, // Remove default padding
                             minimumSize: Size(0, 0), // Remove minimum size constraints
@@ -150,16 +149,31 @@ class _NotificationPageState extends State<NotificationPage> {
               ],
             ),
           ),
+          // Positioned(
+          //   top: -30, // Position the image at the top center
+          //   child: CircleAvatar(
+          //     radius: 30,
+          //     backgroundColor: Colors.blueAccent,
+          //     child: ClipOval(
+          //       child: Image.asset('assets/images/delete.jpeg', // Replace with your asset image path
+          //         fit: BoxFit.cover,
+          //         width: 60,
+          //         height: 60,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             top: -30, // Position the image at the top center
             child: CircleAvatar(
               radius: 30,
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.white,
               child: ClipOval(
-                child: Image.asset('assets/images/logoutnew.jpeg', // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
+                child: Image.asset(
+                  'assets/images/delete.jpeg', // Replace with your asset image path
+                  fit: BoxFit.fill,
+                  width: 40,
+                  height: 40,
                 ),
               ),
             ),

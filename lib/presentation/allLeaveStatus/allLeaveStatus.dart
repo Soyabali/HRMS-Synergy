@@ -634,7 +634,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                 child: Row(
                                                   children: [
                                                     Expanded(
-                                                      flex: 80, // 85% of the available space
+                                                      flex: 70, // 85% of the available space
                                                       child: Container(
                                                        // color: Colors.blue, // Example styling for visualization
                                                         child: Row(
@@ -714,7 +714,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                       ),
                                                     ),
                                                     Expanded(
-                                                      flex: 20, // 15% of the available space
+                                                      flex: 30, // 15% of the available space
                                                       child: Align(
                                                         child: Padding(
                                                           padding: const EdgeInsets.only(right: 5),
@@ -733,7 +733,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                                     color: Colors.black45,
                                                                     fontSize: 12,
                                                                   ),
-                                                                  maxLines: 1, // Allows the text to wrap to a second line if needed
+                                                                  maxLines: null, // Allows the text to wrap to a second line if needed
                                                                   overflow: TextOverflow.visible, // Ensures text can wrap instead of being clipped
                                                                 ),
                                                               ),

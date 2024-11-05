@@ -533,7 +533,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                     //  #00b3c7
                     child: Center(
                       child: Text(
-                        "Post query",
+                        "Post Query",
                         style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
                       ),
                     ),
@@ -574,7 +574,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/addreimbursement.jpeg', // Replace with your asset image path
+                  'assets/images/userquery.jpeg', // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,

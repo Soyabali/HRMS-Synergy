@@ -13,7 +13,6 @@ import '../../data/hrmsTripStartEnd_Repo.dart';
 import '../../data/loader_helper.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
-import 'package:flutter/services.dart';
 import 'dart:math';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -381,7 +380,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                     FilteringTextInputFormatter.allow(RegExp(
                                         r'^\d*\.?\d{0,2}')), // Allow only numbers with optional decimal point
                                     LengthLimitingTextInputFormatter(
-                                        5), // Limit input to 10 characters
+                                        10), // Limit input to 10 characters
                                   ],
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {

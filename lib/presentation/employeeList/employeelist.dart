@@ -13,7 +13,6 @@ import '../resources/app_text_style.dart';
 
 
 class EmployeeList extends StatelessWidget {
-
   const EmployeeList({super.key});
 
   @override
@@ -133,6 +132,7 @@ class _MyHomePageState extends State<EmployeelistPage> {
         fontSize: 16.0);
   }
   // InitState
+
   @override
   void initState() {
     hrmsReimbursementStatus();
@@ -198,7 +198,6 @@ class _MyHomePageState extends State<EmployeelistPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
-
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -328,19 +327,21 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                                             width: 35, // Adjust width as needed
                                                             fit: BoxFit.cover, // Make the image cover the container
                                                           )
-                                                              : const Center(
-                                                            child: Text(
-                                                              'No image', // Display this text if the image is null
-                                                              style: TextStyle(
-                                                                fontSize: 12, // Adjust font size as needed
-                                                                color: Colors.grey, // Optional: Customize the text color
-                                                              ),
-                                                            ),
+                                                              : Container(
+                                                          height: 50, // Set the height of the container
+                                                          width: 50,  // Set the width of the container
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.grey.shade400, // Background color
+                                                            borderRadius: BorderRadius.circular(50), // Make the corners rounded
+                                                          ),
+                                                          child: ClipOval( // Clip the child to a circle
+                                                          ),
+                                                        )
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
+
                                                   SizedBox(width: 10),
                                                   // Wrap the column in Flexible to prevent overflow
                                                   Flexible(

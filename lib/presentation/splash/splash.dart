@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/presentation/login/loginScreen.dart';
 import 'package:untitled/presentation/resources/values_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/appversionrepo.dart';
@@ -86,6 +87,25 @@ class _SplashViewState extends State<SplashView> {
     }
     });
   }
+  //
+  Future<void> getUserValueFromLocalDataBase() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sEmpCode = prefs.getString('sEmpCode');
+
+    if (sEmpCode != null && sEmpCode.isNotEmpty) {
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const DashBoard()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+  }
+
 
   @override
   void initState() {
@@ -93,9 +113,11 @@ class _SplashViewState extends State<SplashView> {
     //checkUserConnection();
     print("-------93---------Splash");
    // _checkPermissions();
+    Future.microtask(() => getUserValueFromLocalDataBase());
     checkUserConnection();
     getLocalDataInfo();
   }
+
   //
   Future<void> _checkPermissions() async {
     //var status = await Permission.location.status;
@@ -149,7 +171,7 @@ class _SplashViewState extends State<SplashView> {
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
-    var loginMap = await AppVersionRepo().appversion(context,'16');  //  19
+    var loginMap = await AppVersionRepo().appversion(context,'19');  //  16
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
@@ -194,17 +216,17 @@ class _SplashViewState extends State<SplashView> {
     super.dispose();
   }
   // get a localdatabase
-  getUserValueFromaLocalDataBase() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    sContactNo = prefs.getString('sContactNo').toString();
-    if (sContactNo != null) {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const DashBoard()));
-    } else {
-      print('----check user Connection and go LoginScreen-');
-      //checkUserConnection();
-    }
-  }
+  // getUserValueFromaLocalDataBase() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   sContactNo = prefs.getString('sContactNo').toString();
+  //   if (sContactNo != null) {
+  //     Navigator.pushReplacement(context,
+  //         MaterialPageRoute(builder: (context) => const DashBoard()));
+  //   } else {
+  //     print('----check user Connection and go LoginScreen-');
+  //     //checkUserConnection();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -309,15 +309,18 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                                       return _buildDialogSucces2(context,msg);
                                     },
                                   );
-                                  generalfunction.displayToast(msg);
                                   _expenseController.clear();
-                                  print('-----Success----1--');
-                                  /// todo show success Dialog
-                                  generalfunction.successDialog(context, msg);
+
                                 }else{
 
-                                  _expenseController.clear();
-                                  print('-----Failed --0----');
+                                  // showDialog(
+                                  //   context: context,
+                                  //   builder: (BuildContext context) {
+                                  //     return _buildDialogInfo(context,msg);
+                                  //   },
+                                  // );
+
+                                 // print('-----Failed --0----');
                                   /// todo give only notification
                                    generalfunction.displayToast(msg);
 
@@ -437,6 +440,94 @@ class _ShortLeaveScreenState extends State<ShortLeaveScreen> {
                   width: 60,
                   height: 60,
                 ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildDialogInfo(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        // call api again
+                        /// todo here you uncomment of the api link
+                        ///
+                        //  hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                        // );
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                  child: Image.asset('assets/images/dialogimg.jpeg',
+                    fit: BoxFit.cover,
+                    width: 60,
+                    height: 60,
+                  )
+                // child: Image.asset('assets/images/sussess.jpeg', // Replace with your asset image path
+                //   fit: BoxFit.cover,
+                //   width: 60,
+                //   height: 60,
+                // ),
               ),
             ),
           ),

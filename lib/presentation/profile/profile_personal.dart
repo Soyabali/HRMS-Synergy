@@ -20,6 +20,7 @@ class ProfilePersonal extends StatelessWidget {
 }
 
 class ProfilePersonalPage extends StatefulWidget {
+
   const ProfilePersonalPage({super.key});
 
   @override
@@ -46,6 +47,47 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
     toGetLocalImages();
     super.initState();
   }
+  // Personal image of the detail page
+  Widget internetImage(String imageUrl, {double size = 80.0, BoxFit fit = BoxFit.cover}) {
+    return ClipOval(
+      child: Image.network(
+        imageUrl,
+        width: size,
+        height: size,
+        fit: fit,
+        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+          if (loadingProgress == null) {
+            return child; // Image is fully loaded, so display it
+          } else {
+            // Show a CircularProgressIndicator while the image is loading
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          }
+        },
+        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+          // Show an error icon if the image fails to load
+          return Container(
+            height: 50, // Set the height of the container
+            width: 50,  // Set the width of the container
+            decoration: BoxDecoration(
+              color: Colors.grey.shade400, // Background color
+              borderRadius: BorderRadius.circular(50), // Make the corners rounded
+            ),
+            child: ClipOval( // Clip the child to a circle
+            ),
+          );
+           //return Icon(Icons.error, color: Colors.red, size: size / 2);
+        },
+      ),
+    );
+  }
+
+
   personalDetailResponse() async{
   var   res = await PersonaldetailRepo().personal_detail(context);
     print('---51-------xx-----$res');
@@ -122,6 +164,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
+
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -134,18 +177,23 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 20, // Adjust the size as needed
-                        backgroundImage: NetworkImage(
-                          (sEmpImage != null && sEmpImage.isNotEmpty)
-                              ? sEmpImage
-                              : 'https://via.placeholder.com/150', // Dummy image URL
-                        ),
+                      internetImage(
+                        '$sEmpImage',
+                        fit: BoxFit.cover,
                       ),
+                      // CircleAvatar(
+                      //   radius: 20, // Adjust the size as needed
+                      //   backgroundImage: NetworkImage(
+                      //     (sEmpImage != null && sEmpImage.isNotEmpty)
+                      //         ? sEmpImage
+                      //         : 'https://via.placeholder.com/150', // Dummy image URL
+                      //   ),
+                      // ),
                       // CircleAvatar(
                       //   radius: 20, // Adjust the size as needed
                       //   backgroundImage: NetworkImage(sEmpImage ?? 'https://via.placeholder.com/150'), // Replace with your image URL or use AssetImage
                       // ),
+
                       SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,7 +231,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                           Text('$dDOB',
                               style: AppTextStyle
                                   .font12OpenSansRegularBlackTextStyle),
-
                         ],
                       ),
                     ),
@@ -281,7 +328,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                       ],
                     ),
                   ),
-
                   Padding(
                     padding:
                         const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -304,20 +350,16 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                         .font12OpenSansRegularBlack45TextStyle),
                                 SizedBox(height: 2),
                                 Text('$sPersonalEmailId',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle),
+                                    style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 Text('Permanent Addresss',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlack45TextStyle),
+                                    style: AppTextStyle.font12OpenSansRegularBlack45TextStyle),
                                 SizedBox(height: 2),
                                 Flexible(
                                   child: Text(
-                                    '$sPermanentAddr',
-                                    style: AppTextStyle
-                                        .font12OpenSansRegularBlackTextStyle,
+                                    '$sPermanentAddr', style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                     overflow: TextOverflow.visible,
                                   ),
                                 ),
@@ -372,7 +414,12 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard, size: 16),
+                                              //Icon(Icons.card_giftcard, size: 16),
+                                              Image.asset("assets/images/aadhar.jpeg",
+                                               height: 20,
+                                                width: 20,
+                                                fit: BoxFit.cover,
+                                              ),
                                               SizedBox(width: 8), // Space between icon and text
                                               Text('Aadhar No.',
                                                 style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
@@ -383,12 +430,13 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(right: 20),
-                                            child: Text(
-                                              '$sAdharCardNo',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlackTextStyle,
+                                                const EdgeInsets.only(left: 0),
+                                            child: Text((sAdharCardNo?.isEmpty ?? true) ? 'Not Specified' : sAdharCardNo,
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
+                                            // child: Text('$sAdharCardNo', style: AppTextStyle
+                                            //       .font12OpenSansRegularBlackTextStyle,
+                                            // ),
                                           ),
                                         ],
                                       ),
@@ -405,13 +453,14 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard, size: 16),
-                                              SizedBox(width: 8), // Space between icon and text
-                                              Text(
-                                                'Pan No.',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlack45TextStyle,
+                                              Image.asset("assets/images/aadhar.jpeg",
+                                                height: 20,
+                                                width: 20,
+                                                fit: BoxFit.cover,
                                               ),
+                                              //Icon(Icons.card_giftcard, size: 16),
+                                              SizedBox(width: 8), // Space between icon and text
+                                              Text('Pan No.', style: AppTextStyle.font12OpenSansRegularBlack45TextStyle),
                                             ],
                                           ),
                                           SizedBox(
@@ -421,10 +470,14 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             padding:
                                             const EdgeInsets.only(right: 45),
                                             child: Text(
-                                              '$sPanNo',
-                                              style: AppTextStyle
-                                                  .font12OpenSansRegularBlackTextStyle,
+                                              (sPanNo?.isEmpty ?? true) ? 'Not Specified' : sPanNo,
+                                              style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
+                                            // child: Text(
+                                            //   (sPanNo?.isEmpty ?? true) ? 'Not Specified' : sPanNo,
+                                            //   style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            // ),
+                                           // child: Text('$sPanNo', style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
                                           ),
                                         ],
                                       ),
@@ -452,7 +505,12 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard, size: 16),
+                                              Image.asset("assets/images/aadhar.jpeg",
+                                                height: 20,
+                                                width: 20,
+                                                fit: BoxFit.cover,
+                                              ),
+                                             // Icon(Icons.card_giftcard, size: 16),
                                               SizedBox(width: 8), // Space between icon and text
                                               Text(
                                                 'Passport No.',
@@ -465,11 +523,16 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                           // Text below the Row
                                           Padding(
                                             padding:
-                                            const EdgeInsets.only(left: 22),
+                                            const EdgeInsets.only(left: 24),
                                             child: Text(
-                                              (sPassportNo?.isEmpty ?? true) ? 'No Value' : sPassportNo,
+                                              (sPassportNo?.isEmpty ?? true) ? 'Not Specified' : sPassportNo,
                                               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
+                                            // child: Text(
+                                            //   (sPanNo?.isEmpty ?? true) ? 'Not Specified' : sPanNo,
+                                            //   style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                                            // ),
+                                            // child: Text('$sPanNo', style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
                                           ),
                                         ],
                                       ),
@@ -489,8 +552,12 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             MainAxisAlignment.start,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Icon(Icons.card_giftcard,
-                                                  size: 18),
+                                              Image.asset("assets/images/aadhar.jpeg",
+                                                height: 20,
+                                                width: 20,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            //  Icon(Icons.card_giftcard, size: 18),
                                               SizedBox(
                                                   width:
                                                   8), // Space between icon and text
@@ -508,7 +575,7 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                             padding:
                                              EdgeInsets.only(left: 25),
                                             child: Text(
-                                              (sVoterId?.isEmpty ?? true) ? 'No Value' : sVoterId,
+                                              (sVoterId?.isEmpty ?? true) ? 'Not Specified' : sVoterId,
                                               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
                                             // child: Text(

@@ -71,18 +71,25 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     return months[now.month - 1]; // Return the current month as a string
   }
 
+  // void _scrollToCurrentMonth() {
+  //   int selectedIndex = months.indexOf(selectedMonth);
+  //   // Assuming each item is approximately 80 pixels wide, adjust based on actual width
+  //   double offset = selectedIndex * 80.0;
+  //
+  //   _scrollController.animateTo(
+  //     offset,
+  //     duration: Duration(milliseconds: 1),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
+
   void _scrollToCurrentMonth() {
     int selectedIndex = months.indexOf(selectedMonth);
-
     // Assuming each item is approximately 80 pixels wide, adjust based on actual width
     double offset = selectedIndex * 80.0;
-
-    _scrollController.animateTo(
-      offset,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeInOut,
-    );
+    _scrollController.jumpTo(offset); // No animation, instant scroll
   }
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -103,6 +110,7 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     super.initState();
     holidayList = HolidayListRepo().holidayList(context);
      selectedMonth = getCurrentMonth();
+
     capitalizeFirstLetter(selectedMonth);
     selectedMonth = capitalizeFirstLetter(selectedMonth);
     print('----82---$selectedMonth');

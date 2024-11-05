@@ -304,6 +304,7 @@ class _MyHomePageState extends State<TripListPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
+
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -475,7 +476,7 @@ class _MyHomePageState extends State<TripListPage> {
                                     sTripEndLocation = tripDetailData.sTripEndLocation;
 
                                     return Padding(
-                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                      padding: const EdgeInsets.only(left: 10, right: 10,top: 0),
                                       child: Card(
                                         elevation: 1,
                                         color: Colors.white,
@@ -490,7 +491,7 @@ class _MyHomePageState extends State<TripListPage> {
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.only(
-                                                left: 8, right: 8, bottom: 0),
+                                                left: 8, right: 8, bottom: 0,top: 5),
                                             child: Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
@@ -684,23 +685,43 @@ class _MyHomePageState extends State<TripListPage> {
                                                                     const EdgeInsets.only(
                                                                         left: 5,right: 5),
                                                                 child: Text(
-                                                                  "${tripDetailData.sDuration} HH:MM" ??
-                                                                      "0",
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize: 12,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .normal,
-                                                                    fontFamily:
-                                                                        'Montserrat',
-                                                                  ),
-                                                                     overflow: TextOverflow.ellipsis,
-                                                                  softWrap: false,
+                                                                  tripDetailData.sDuration == null || tripDetailData.sDuration!.isEmpty
+                                                                      ? '0 HH : MM'
+                                                                      : tripDetailData.sDuration! + " HH : MM",
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize: 12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal,
+                                                                      fontFamily:
+                                                                          'Montserrat',
+                                                                    ),
+                                                                       overflow: TextOverflow.ellipsis,
+                                                                    softWrap: false,
 
-                                                                ),
+                                                                  ),  // You can adjust the font size or other styles here
+                                                                //),
+                                                                // child: Text(
+                                                                //   "${tripDetailData.sDuration} HH:MM" ??
+                                                                //       "0",
+                                                                //   style:
+                                                                //       const TextStyle(
+                                                                //     color: Colors
+                                                                //         .white,
+                                                                //     fontSize: 12,
+                                                                //     fontWeight:
+                                                                //         FontWeight
+                                                                //             .normal,
+                                                                //     fontFamily:
+                                                                //         'Montserrat',
+                                                                //   ),
+                                                                //      overflow: TextOverflow.ellipsis,
+                                                                //   softWrap: false,
+                                                                //
+                                                                // ),
                                                               ),
                                                             ],
                                                           ),
@@ -844,19 +865,27 @@ class _MyHomePageState extends State<TripListPage> {
                                                                         true,
                                                                   ),
                                                                   Text(
-                                                                    tripDetailData
-                                                                        .dTripEnd,
-                                                                    // item['sExpHeadName'] ?? '',
-                                                                    style: AppTextStyle
-                                                                        .font12OpenSansRegularBlack45TextStyle,
-                                                                    maxLines:
-                                                                        2, // Limits the text to 2 lines
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                                    softWrap:
-                                                                        true,
+                                                                    tripDetailData.dTripEnd?.isEmpty ?? true
+                                                                        ? 'Not Specified'
+                                                                        : tripDetailData.dTripEnd,
+                                                                    style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                                                    maxLines: 2, // Limits the text to 2 lines
+                                                                    overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                    softWrap: true,
                                                                   ),
+                                                                  // Text(
+                                                                  //   tripDetailData.dTripEnd,
+                                                                  //   // item['sExpHeadName'] ?? '',
+                                                                  //   style: AppTextStyle
+                                                                  //       .font12OpenSansRegularBlack45TextStyle,
+                                                                  //   maxLines:
+                                                                  //       2, // Limits the text to 2 lines
+                                                                  //   overflow:
+                                                                  //       TextOverflow
+                                                                  //           .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                                  //   softWrap:
+                                                                  //       true,
+                                                                  // ),
                                                                 ],
                                                               ),
                                                             ),
@@ -935,14 +964,15 @@ class _MyHomePageState extends State<TripListPage> {
                                                                   MainAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                Icon(
-                                                                    Icons
-                                                                        .av_timer_sharp,
-                                                                    size: 25),
+                                                                Icon(Icons.av_timer_sharp, size: 25),
+                                                                // Image.asset("assets/images/meter.jpeg",
+                                                                // height: 25,
+                                                                //   width: 25,
+                                                                //   fit: BoxFit.cover,
+                                                                // ),
                                                                 SizedBox(
                                                                     width: 10),
-                                                                Text(
-                                                                  'Start Odo :',
+                                                                Text('Start Odo :',
                                                                   // item['sExpHeadName'] ?? '',
                                                                   style: AppTextStyle
                                                                       .font10OpenSansRegularBlackTextStyle,
@@ -976,10 +1006,12 @@ class _MyHomePageState extends State<TripListPage> {
                                                                   MainAxisAlignment
                                                                       .start,
                                                               children: [
-                                                                Icon(
-                                                                    Icons
-                                                                        .av_timer_sharp,
-                                                                    size: 25),
+                                                                // Image.asset("assets/images/meter.jpeg",
+                                                                //   height: 25,
+                                                                //   width: 25,
+                                                                //   fit: BoxFit.cover,
+                                                                // ),
+                                                                Icon(Icons.av_timer_sharp, size: 25),
                                                                 SizedBox(
                                                                     width: 10),
                                                                 Text(

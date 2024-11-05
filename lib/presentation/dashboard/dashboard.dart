@@ -612,7 +612,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           bottom: 20, // Position from the bottom
                           right: 20,  // Position from the right
                           child: Text(
-                            'Version 1.5.9',
+                            'Version 1.6.3',
                             style: TextStyle(
                               color: Colors.white, // Text color
                               fontSize: 16,        // Text size
@@ -798,7 +798,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                       child: Container(
                                         margin: EdgeInsets.all(10.0),
                                         child: Image.asset(
-                                          'assets/images/ic_attendance_dashboard.PNG', // Replace with your SVG asset
+                                          'assets/images/attendancelist.jpeg', // Replace with your SVG asset
                                           fit: BoxFit.contain, // Ensure the SVG fits within the container
                                         ),
                                       ),
