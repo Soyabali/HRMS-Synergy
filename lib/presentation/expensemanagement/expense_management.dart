@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:untitled/presentation/expensemanagement/pendingteamreimb/pendingteamreimb.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementstatus.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementclarification/reimbursementclarification.dart';
+import 'package:untitled/presentation/expensemanagement/teamreimstatus/teamreimstatus.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 import 'addReimbursement/addReimbursement.dart';
@@ -30,6 +32,7 @@ class ExpenseManagement extends StatelessWidget {
 }
 
 class ExpenseManagementHome extends StatefulWidget {
+
   const ExpenseManagementHome({super.key});
 
   @override
@@ -303,61 +306,116 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                       ),
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => ExpenseReport()),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     height: 100.0,  // Set the height to 100
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(10.0),
-                  //       border: Border.all(
-                  //         color: Colors.grey.withOpacity(0.2),
-                  //         style: BorderStyle.solid,
-                  //         width: 1.0,
-                  //       ),
-                  //     ),
-                  //     child: Column(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: <Widget>[
-                  //         Container(
-                  //           height: 50,
-                  //           width: 50,
-                  //           decoration: BoxDecoration(
-                  //             border: Border.all(
-                  //               color: Colors.grey,
-                  //               width: 1.0,
-                  //             ),
-                  //             shape: BoxShape.circle,
-                  //           ),
-                  //           child: Center(
-                  //             child: Container(
-                  //               margin: EdgeInsets.all(8.0),
-                  //               child: Image.asset(
-                  //                 'assets/images/ic_attendance_dashboard.PNG',
-                  //                 fit: BoxFit.contain,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         SizedBox(height: 8.0),
-                  //         Padding(
-                  //           padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                  //           child: Center(
-                  //             child: Text(
-                  //               "Expense Report",
-                  //               textAlign: TextAlign.center,
-                  //               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PendingTeamReimb()),
+                      );
+                    },
+                    child: Container(
+                      height: 100.0,  // Set the height to 100
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(0.2),
+                          style: BorderStyle.solid,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Container(
+                                margin: EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  'assets/images/ic_attendance_dashboard.PNG',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Center(
+                              child: Text(
+                                "Pending Team Reimb",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => TeamReimStatus()),
+                      );
+                    },
+                    child: Container(
+                      height: 100.0,  // Set the height to 100
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Colors.grey.withOpacity(0.2),
+                          style: BorderStyle.solid,
+                          width: 1.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Container(
+                                margin: EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  'assets/images/ic_attendance_dashboard.PNG',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 8.0),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Center(
+                              child: Text(
+                                "Team Reim Status",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
