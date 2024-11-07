@@ -1349,7 +1349,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
                     var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
                         _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,"Testing"
-                    );
+                   "","","","","");
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";

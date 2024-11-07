@@ -385,55 +385,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
         ),
       ),
 
-      // Container(
-            //   height: 328,
-            //   child: TableCalendar(
-            //     firstDay: DateTime.utc(2020, 1, 1),
-            //     lastDay: DateTime.utc(2030, 12, 31),
-            //     focusedDay: _focusedDate,
-            //     calendarFormat: _calendarFormat,
-            //     headerVisible: false,
-            //     selectedDayPredicate: (day) => isSameDay(_selectedDate, day),
-            //     onDaySelected: (selectedDay, focusedDay) {
-            //       setState(() {
-            //         _selectedDate = selectedDay;
-            //         _focusedDate = focusedDay;
-            //       });
-            //       formatDate =  getFormattedDate(selectedDay);
-            //       print("Selected Date: xxxx $selectedDay");
-            //       print("----289---"+formatDate);
-            //       /// todo  call api here
-            //       responseStatus(formatDate);
-            //     },
-            //     calendarBuilders: CalendarBuilders(
-            //       // Customize the day cells
-            //       defaultBuilder: (context, day, focusedDay) {
-            //         if (sPresents!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF689F38));
-            //         } else if (sAbsent!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF7C0A02));
-            //         } else if (sLeave!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF1157C3));
-            //         } else if (sHalfDay!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFFCFB203));
-            //         } else if (sHolidays!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF0097A7));
-            //         } else if (sLateComing!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFFFFA000));
-            //         } else if (sEarlyGoing!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFFd93124));
-            //         } else if (sLcEg!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFFF57C00));
-            //         } else if (sOnSite!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF006064));
-            //         } else if (sWeeklyOff!.contains(day.day)) {
-            //           return _buildCalendarDay(day, Color(0xFF006064));
-            //         }
-            //         return _buildCalendarDay(day, null);
-            //       },
-            //     ),
-            //   ),
-            // ),
             SizedBox(
               height: 60,
               child: ListView.builder(
@@ -615,7 +566,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                             fontSize: 14,
                             fontWeight: FontWeight.normal,
                           ),
-                          maxLines: 2, // Limits to 2 lines
+                          maxLines: 3, // Limits to 2 lines
                           overflow: TextOverflow.ellipsis, // Adds "..." if text overflows
                           softWrap: true, // Allows text to wrap to the next line
                         ),

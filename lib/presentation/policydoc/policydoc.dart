@@ -14,6 +14,7 @@ import '../resources/values_manager.dart';
 class PolicyDoc extends StatelessWidget {
 
   const PolicyDoc({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -23,6 +24,7 @@ class PolicyDoc extends StatelessWidget {
   }
 }
 class PolicydocScreen extends StatefulWidget {
+
   const PolicydocScreen({super.key});
 
   @override
@@ -110,212 +112,218 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
 
         body: ListView(
         children: [
-         Container(
-               height: MediaQuery.of(context).size.height,
-               child: FutureBuilder<List<PolicyDocModel>>(
-                   future: polocyDocList,
-                   builder: (context, snapshot) {
-                     // Check if the snapshot has data and is not null
-                     if (snapshot.connectionState == ConnectionState.waiting) {
-                       // Show a loading indicator while waiting for data
-                       return Center(child: CircularProgressIndicator());
-                     } else if (snapshot.hasError) {
-                       // Handle error scenario
-                       return Center(child: Text('Error: ${snapshot.error}'));
-                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                       // Handle the case where the data is empty or null
-                       return Center(child: Text('No notifications found'));
-                     }
-                     // Once data is available, build the ListView
-                     final polocyDocList = snapshot.data!; // Access the resolved data
-
-                     return ListView.builder(
-                         itemCount: polocyDocList.length,
-                         itemBuilder: (context, index) {
-                           final policyDocData = polocyDocList[index];
-                           final randomColor = colorList[index % colorList.length];
-                           return
-                             Padding(
-                                 padding: const EdgeInsets.only(left: 5, right: 5),
-                                 child: Card(
-                                   elevation: 5, // Elevation for shadow effect
-                                   shape: RoundedRectangleBorder(
-                                       borderRadius: BorderRadius.circular(5),
-                                       // Rounded corners
-                                       side: BorderSide(color: Colors.grey)),
-                                   child: Padding(
-                                     padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
-                                     child: Container(
-                                       color: Colors.white,
-                                       child: Padding(
-                                         padding: const EdgeInsets.only(left: 5),
-                                         child: Column(
-                                           mainAxisAlignment: MainAxisAlignment.start,
-                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                           children: [
-                                             Row(
-                                               children: [
-                                                 // First Column: Takes 80% of the width
-                                                 Expanded(
-                                                   flex: 8, // 80% of width
-                                                   child: Column(
-                                                     crossAxisAlignment: CrossAxisAlignment
-                                                         .start,
-                                                     children: [
-                                                       Row(
-                                                         mainAxisAlignment: MainAxisAlignment
-                                                             .start,
-                                                         children: <Widget>[
-                                                           Container(
-                                                             height: 10,
-                                                             width: 10,
-                                                             decoration: BoxDecoration(
-                                                               color: randomColor, // Red color
-                                                               borderRadius: BorderRadius
-                                                                   .circular(5), // Radius of 5
+               Container(
+                       height: MediaQuery.of(context).size.height-110,
+                       child: FutureBuilder<List<PolicyDocModel>>(
+                           future: polocyDocList,
+                           builder: (context, snapshot) {
+                             // Check if the snapshot has data and is not null
+                             if (snapshot.connectionState == ConnectionState.waiting) {
+                               // Show a loading indicator while waiting for data
+                               return Center(child: CircularProgressIndicator());
+                             } else if (snapshot.hasError) {
+                               // Handle error scenario
+                               return Center(child: Text('Error: ${snapshot.error}'));
+                             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                               // Handle the case where the data is empty or null
+                               return Center(child: Text('No notifications found'));
+                             }
+                             // Once data is available, build the ListView
+                             final polocyDocList = snapshot.data!; // Access the resolved data
+                 
+                             return ListView.builder(
+                                 itemCount: polocyDocList.length,
+                                 itemBuilder: (context, index) {
+                                   final policyDocData = polocyDocList[index];
+                                   final randomColor = colorList[index % colorList.length];
+                                   return
+                                     Column(
+                                       children: [
+                                         Padding(
+                                             padding: const EdgeInsets.only(left: 5, right: 5),
+                                             child: Card(
+                                               elevation: 5, // Elevation for shadow effect
+                                               shape: RoundedRectangleBorder(
+                                                   borderRadius: BorderRadius.circular(5),
+                                                   // Rounded corners
+                                                   side: BorderSide(color: Colors.grey)),
+                                               child: Padding(
+                                                 padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
+                                                 child: Container(
+                                                   color: Colors.white,
+                                                   child: Padding(
+                                                     padding: const EdgeInsets.only(left: 5),
+                                                     child: Column(
+                                                       mainAxisAlignment: MainAxisAlignment.start,
+                                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                                       children: [
+                                                         Row(
+                                                           children: [
+                                                             // First Column: Takes 80% of the width
+                                                             Expanded(
+                                                               flex: 8, // 80% of width
+                                                               child: Column(
+                                                                 crossAxisAlignment: CrossAxisAlignment
+                                                                     .start,
+                                                                 children: [
+                                                                   Row(
+                                                                     mainAxisAlignment: MainAxisAlignment
+                                                                         .start,
+                                                                     children: <Widget>[
+                                                                       Container(
+                                                                         height: 10,
+                                                                         width: 10,
+                                                                         decoration: BoxDecoration(
+                                                                           color: randomColor, // Red color
+                                                                           borderRadius: BorderRadius
+                                                                               .circular(5), // Radius of 5
+                                                                         ),
+                                                                       ),
+                                                                       SizedBox(width: 5),
+                                                                       Text(
+                                                                         policyDocData.dUploadDate,
+                                                                         style: AppTextStyle
+                                                                             .font12OpenSansRegularBlackTextStyle,
+                                                                       ),
+                 
+                                                                     ],
+                                                                   ),
+                                                                   const SizedBox(height: 4),
+                                                                   // Spacing between the two texts
+                                                                   Text(
+                                                                     policyDocData.sPolictyTitle,
+                                                                     style: AppTextStyle
+                                                                         .font12OpenSansRegularBlackTextStyle,
+                 
+                                                                   ),
+                                                                 ],
+                                                               ),
                                                              ),
-                                                           ),
-                                                           SizedBox(width: 5),
-                                                           Text(
-                                                             policyDocData.dUploadDate,
-                                                             style: AppTextStyle
-                                                                 .font12OpenSansRegularBlackTextStyle,
-                                                           ),
-
-                                                         ],
-                                                       ),
-                                                       const SizedBox(height: 4),
-                                                       // Spacing between the two texts
-                                                       Text(
-                                                         policyDocData.sPolictyTitle,
-                                                         style: AppTextStyle
-                                                             .font12OpenSansRegularBlackTextStyle,
-
-                                                       ),
-                                                     ],
-                                                   ),
-                                                 ),
-
-                                                 Expanded(
-                                                   flex: 2, // 20% of width
-                                                   child: Align(
-                                                     alignment: Alignment.centerRight,
-                                                     child: Transform.rotate(
-                                                       angle: 45 * (3.1415927 / 180),
-                                                       // Rotate by 90 degrees (convert degrees to radians)
-                                                       child: GestureDetector(
-                                                         child: IconButton(
-                                                           icon: Icon(Icons.attach_file),
-                                                           onPressed: () {
-
-                                                             var pdfFile =  policyDocData.sPolicyFile;
-                                                             print('---Downlode pdf ---195------$pdfFile');
-                                                             Navigator.push(
-                                                               context,
-                                                               MaterialPageRoute(builder: (context) =>  PolicydocPdfScreen(pdfFile:pdfFile)),
-                                                             );
-                                          // Handle onPressed for icon here
-                                                           },
+                 
+                                                             Expanded(
+                                                               flex: 2, // 20% of width
+                                                               child: Align(
+                                                                 alignment: Alignment.centerRight,
+                                                                 child: Transform.rotate(
+                                                                   angle: 45 * (3.1415927 / 180),
+                                                                   // Rotate by 90 degrees (convert degrees to radians)
+                                                                   child: GestureDetector(
+                                                                     child: IconButton(
+                                                                       icon: Icon(Icons.attach_file),
+                                                                       onPressed: () {
+                 
+                                                                         var pdfFile =  policyDocData.sPolicyFile;
+                                                                         print('---Downlode pdf ---195------$pdfFile');
+                                                                         Navigator.push(
+                                                                           context,
+                                                                           MaterialPageRoute(builder: (context) =>  PolicydocPdfScreen(pdfFile:pdfFile)),
+                                                                         );
+                                                      // Handle onPressed for icon here
+                                                                       },
+                                                                     ),
+                                                                   ),
+                                                                 ),
+                                                               ),
+                                                             )
+                 
+                                                           ],
                                                          ),
-                                                       ),
+                                                         SizedBox(height: 5),
+                                                         Text(
+                                                           policyDocData.sPolictyDescription,
+                                                           style: AppTextStyle
+                                                               .font10OpenSansRegularBlackTextStyle,
+                                                         ),
+                                                         SizedBox(height: 5),
+                                                         Row(
+                                                           mainAxisAlignment: MainAxisAlignment.end,
+                                                           // Aligns Row to the right
+                                                           children: [
+                                                             // Accept text with iOS forward icon
+                                                             GestureDetector(
+                                                               onTap: () async {
+                                                                 print('---ACCEPT---');
+                                                                 // call api
+                                                                 var sPolicyCode = policyDocData.sPolicyCode;
+                                                                 print('---sPolicyCode---$sPolicyCode');
+                                                                 var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
+                                                                 print('---232---$projectDocAccept');
+                                                                 setState(() {
+                                                                   msg = "${projectDocAccept[0]['Msg']}";
+                                                                 });
+                                                                 if(msg!=null && msg!=''){
+                                                                   showDialog(
+                                                                     context: context,
+                                                                     builder: (BuildContext context) {
+                                                                       return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                                                                     },
+                                                                   );
+                                                                 }else{
+                                                                   generalFunction.displayToast("Not Response");
+                                                                 }
+                 
+                 
+                                                               },
+                                                               child: Row(
+                                                                 children: [
+                                                                   Text('ACCEPT', style: AppTextStyle
+                                                                       .font12OpenSansRegularGreenTextStyle,
+                                                                   ),
+                                                                   SizedBox(width: 8),
+                                                                   // Space between text and icon
+                                                                   Icon(Icons.arrow_forward_ios, size: 12),
+                                                                 ],
+                                                               ),
+                                                             ),
+                                                             SizedBox(width: 20),
+                                                             // Space between "Accept" and "Reject"
+                 
+                                                             // Reject text with iOS forward icon
+                                                             GestureDetector(
+                                                               onTap: (){
+                                                                 print('---REJECT---');
+                                                                 //_takeActionDialog(context);
+                                                                 var sPolicyCode = policyDocData.sPolicyCode;
+                                                                 print('---PoliceCode---$sPolicyCode');
+                 
+                                                                 showDialog(
+                                                                   context: context,
+                                                                   builder: (BuildContext context) {
+                                                                     return _takeActionDialog(context,sPolicyCode);
+                                                                   },
+                                                                 );
+                                                               },
+                                                               child: Row(
+                                                                 children: [
+                                                                   Text('REJECT', style: AppTextStyle
+                                                                       .font12OpenSansRegularRedTextStyle),
+                                                                   SizedBox(width: 8),
+                                                                   // Space between text and icon
+                                                                   Icon(Icons.arrow_forward_ios, size: 12),
+                                                                 ],
+                                                               ),
+                                                             ),
+                                                           ],
+                                                         ),
+                                                         SizedBox(height: 5),
+                                                       ],
                                                      ),
                                                    ),
-                                                 )
-
-                                               ],
-                                             ),
-                                             SizedBox(height: 5),
-                                             Text(
-                                               policyDocData.sPolictyDescription,
-                                               style: AppTextStyle
-                                                   .font10OpenSansRegularBlackTextStyle,
-                                             ),
-                                             SizedBox(height: 5),
-                                             Row(
-                                               mainAxisAlignment: MainAxisAlignment.end,
-                                               // Aligns Row to the right
-                                               children: [
-                                                 // Accept text with iOS forward icon
-                                                 GestureDetector(
-                                                   onTap: () async {
-                                                     print('---ACCEPT---');
-                                                     // call api
-                                                     var sPolicyCode = policyDocData.sPolicyCode;
-                                                     print('---sPolicyCode---$sPolicyCode');
-                                                     var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
-                                                     print('---232---$projectDocAccept');
-                                                     setState(() {
-                                                       msg = "${projectDocAccept[0]['Msg']}";
-                                                     });
-                                                     if(msg!=null && msg!=''){
-                                                       showDialog(
-                                                         context: context,
-                                                         builder: (BuildContext context) {
-                                                           return _buildDialogSucces2(context, msg); // A new dialog for showing success
-                                                         },
-                                                       );
-                                                     }else{
-                                                       generalFunction.displayToast("Not Response");
-                                                     }
-
-
-                                                   },
-                                                   child: Row(
-                                                     children: [
-                                                       Text('ACCEPT', style: AppTextStyle
-                                                           .font12OpenSansRegularGreenTextStyle,
-                                                       ),
-                                                       SizedBox(width: 8),
-                                                       // Space between text and icon
-                                                       Icon(Icons.arrow_forward_ios, size: 12),
-                                                     ],
-                                                   ),
                                                  ),
-                                                 SizedBox(width: 20),
-                                                 // Space between "Accept" and "Reject"
-
-                                                 // Reject text with iOS forward icon
-                                                 GestureDetector(
-                                                   onTap: (){
-                                                     print('---REJECT---');
-                                                     //_takeActionDialog(context);
-                                                     var sPolicyCode = policyDocData.sPolicyCode;
-                                                     print('---PoliceCode---$sPolicyCode');
-
-                                                     showDialog(
-                                                       context: context,
-                                                       builder: (BuildContext context) {
-                                                         return _takeActionDialog(context,sPolicyCode);
-                                                       },
-                                                     );
-                                                   },
-                                                   child: Row(
-                                                     children: [
-                                                       Text('REJECT', style: AppTextStyle
-                                                           .font12OpenSansRegularRedTextStyle),
-                                                       SizedBox(width: 8),
-                                                       // Space between text and icon
-                                                       Icon(Icons.arrow_forward_ios, size: 12),
-                                                     ],
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                             SizedBox(height: 5),
-                                           ],
+                                               ),
+                                             )
                                          ),
-                                       ),
-                                     ),
-                                   ),
-                                 )
+                                       ],
+                                     );
+                                 }
                              );
-                         }
-                     );
-                   }
-               ),
-             ),
+                           }
+                       ),
+                     ),
+
         ],
-      )
+           ),
+
     );
   }
   // Open DIALOG

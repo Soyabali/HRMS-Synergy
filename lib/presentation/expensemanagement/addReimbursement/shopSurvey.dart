@@ -27,6 +27,7 @@ import 'dart:math';
 import '../expense_management.dart';
 
 class ShopSurvey extends StatelessWidget {
+
   const ShopSurvey({super.key});
 
   @override
@@ -46,6 +47,7 @@ class ShopSurvey extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+
   const MyHomePage({super.key});
 
   @override
@@ -53,6 +55,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   DateTime? _date;
   DateTime? _selectedDate;
 
@@ -122,7 +125,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
-
+  String? consumableList;
+  int count = 0;
   List? data;
   List? listCon;
   var _dropDownValueDistric;
@@ -601,6 +605,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Map<String, dynamic>> _itemsList = [];
 
   void _onFormSubmit() {
+    count++;
     // Retrieve values from controllers and dropdown
     var itemDescription = _itemDescriptionController.text.trim();
     var quantity = _quantityController.text.trim();
@@ -627,12 +632,15 @@ class _MyHomePageState extends State<MyHomePage> {
     // Add the item as an object to the list
     setState(() {
       _itemsList.add({
-        'itemDescription': itemDescription,
-        'quantity': quantity,
-        'amount': amount,
-        'selectedReimType': selectedReimType,
+        'SrNo':count,
+        'sItemName': itemDescription,
+        'fQty': quantity,
+        'fAmount': amount,
+        'sUoM': selectedReimType,
       });
     });
+    consumableList = jsonEncode(_itemsList);
+
     // Optionally clear the form fields after adding
     _itemDescriptionController.clear();
     _quantityController.clear();
@@ -644,6 +652,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('-------611---$quantity');
     print('-------612---$amount');
     print('-------613---$selectedReimType');
+    print('-----650----${consumableList}');
     // If all fields are valid, call the API
     print('------call Api----');
     // displayToast("All fields filled. Submitting form...");
@@ -1029,8 +1038,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey
-                                .withOpacity(0.5), // Color of the shadow
+                            color: Colors.grey.withOpacity(0.5), // Color of the shadow
                             spreadRadius: 5, // Spread radius
                             blurRadius: 7, // Blur radius
                             offset: Offset(0, 3), // Offset of the shadow
@@ -1397,12 +1405,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                             Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Text(item['itemDescription'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                                 Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                               ],
                                             ),
                                             Spacer(),
-                                            Text('Quantity: ${item['quantity']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                            Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                           ],
                                         ),
                                         Divider(),
@@ -1426,7 +1434,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                           ),
                                                         ),
                                                         SizedBox(width: 5),
-                                                        Text(item['selectedReimType'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
+                                                        Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
                                                       ],
                                                     ),
                                                     Padding(
@@ -1441,7 +1449,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 color: Color(0xFF0098a6),
                                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                                 child: Text(
-                                                  '₹ ${item['amount']}',
+                                                  '₹ ${item['fAmount']}',
                                                   style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
                                                   textAlign: TextAlign.center,
                                                 ),
@@ -1454,177 +1462,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   );
                                 },
                               ),
-
-
-                              //   Container(
-                              //   margin: const EdgeInsets.only(top: 10.0),
-                              //   padding: const EdgeInsets.all(16.0),
-                              //   decoration: BoxDecoration(
-                              //     color: Colors.white,
-                              //     borderRadius: BorderRadius.circular(12),
-                              //     boxShadow: [
-                              //       BoxShadow(
-                              //         color: Colors.grey.withOpacity(0.9),
-                              //         spreadRadius: 1,
-                              //         blurRadius: 2,
-                              //       ),
-                              //     ],
-                              //   ),
-                              //   child: ListView.builder(
-                              //       shrinkWrap: true, // Makes ListView take up only the needed height
-                              //       physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling
-                              //       itemCount: _itemsList.length,
-                              //       itemBuilder: (context, index) {
-                              //         final item = _itemsList[index];
-                              //         return Card(
-                              //           margin:
-                              //               EdgeInsets.symmetric(vertical: 2),
-                              //           child: Padding(
-                              //             padding: const EdgeInsets.all(0.0),
-                              //             child: Column(
-                              //               crossAxisAlignment:
-                              //                   CrossAxisAlignment.start,
-                              //               children: [
-                              //                 Row(
-                              //                   mainAxisAlignment:
-                              //                       MainAxisAlignment.start,
-                              //                   children: [
-                              //                     Container(
-                              //                       height: 25,
-                              //                       width: 25,
-                              //                       child: Image.asset(
-                              //                         'assets/images/aadhar.jpeg', // Ensure this path is correct
-                              //                         fit: BoxFit.fill,
-                              //                         errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              //                           return Icon(Icons.error, size: 25); // Display an error icon if image fails to load
-                              //                         },
-                              //                       ),
-                              //                     ),
-                              //                     SizedBox(width: 10),
-                              //                     Column(
-                              //                       mainAxisAlignment:
-                              //                           MainAxisAlignment.start,
-                              //                       crossAxisAlignment:
-                              //                           CrossAxisAlignment
-                              //                               .start,
-                              //                       children: [
-                              //                         Text(item['itemDescription'],
-                              //                             style: AppTextStyle
-                              //                                 .font14OpenSansRegularBlack45TextStyle),
-                              //                         Text('Item Description',
-                              //                             style: AppTextStyle
-                              //                                 .font14OpenSansRegularBlack45TextStyle),
-                              //                       ],
-                              //                     ),
-                              //                     Spacer(),
-                              //                     Text('Quantity :  ${item['quantity']}',
-                              //                         style: AppTextStyle
-                              //                             .font14OpenSansRegularBlack45TextStyle),
-                              //                   ],
-                              //                 ),
-                              //                 Divider(),
-                              //                 Container(
-                              //                   height: 45,
-                              //                   child: Row(
-                              //                     mainAxisAlignment: MainAxisAlignment.start,
-                              //                     children: [
-                              //                       Padding(
-                              //                         padding:
-                              //                             const EdgeInsets.only(
-                              //                                 left: 25),
-                              //                         child: Column(
-                              //                           mainAxisAlignment:
-                              //                               MainAxisAlignment
-                              //                                   .start,
-                              //                           crossAxisAlignment:
-                              //                               CrossAxisAlignment
-                              //                                   .start,
-                              //                           children: [
-                              //                             Row(
-                              //                               mainAxisAlignment: MainAxisAlignment.start,
-                              //                               crossAxisAlignment: CrossAxisAlignment.start,
-                              //                               children: [
-                              //                                 Padding(padding: const EdgeInsets.only(
-                              //                                           top: 5),
-                              //                                   child: Container(
-                              //                                     height: 14,
-                              //                                     width: 14,
-                              //                                     decoration:
-                              //                                         BoxDecoration(
-                              //                                       color: Colors
-                              //                                           .black,
-                              //                                       borderRadius:
-                              //                                           BorderRadius
-                              //                                               .circular(
-                              //                                                   7),
-                              //                                     ),
-                              //                                   ),
-                              //                                 ),
-                              //                                 SizedBox(width: 0),
-                              //                                 Padding(
-                              //                                   padding: const EdgeInsets.only(left: 15),
-                              //                                   child: Text(item['selectedReimType'], style: AppTextStyle
-                              //                                           .font14OpenSansRegularBlackTextStyle),
-                              //                                 ),
-                              //                               ],
-                              //                             ),
-                              //                             Padding(
-                              //                               padding: const EdgeInsets.only(left: 30),
-                              //                               child: Text('UOM', style: AppTextStyle
-                              //                                       .font14OpenSansRegularBlack45TextStyle),
-                              //                             ),
-                              //                           ],
-                              //                         ),
-                              //                       ),
-                              //                       Spacer(),
-                              //                       Container(
-                              //                         color: Color(0xFF0098a6),
-                              //                         padding: const EdgeInsets.symmetric(vertical: 10), // Optional padding for top/bottom spacing
-                              //                         child: Center(
-                              //                           child: Padding(
-                              //                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                              //                             child: Text(
-                              //                               '₹ ${item['amount']}', // Replace with a longer text to test
-                              //                               style: AppTextStyle
-                              //                                   .font14OpenSansRegularWhiteTextStyle,
-                              //                               textAlign: TextAlign.center, // Center align text within the container
-                              //                             ),
-                              //                           ),
-                              //                         ),
-                              //                       ),
-                              //                     ]
-                              //                   ),
-                              //                 ),
-                              //
-                              //                 // ListTile(
-                              //                 //   leading:Image.asset('assets/images/workdetail.jpeg',
-                              //                 //     height: 25,
-                              //                 //     width: 25,
-                              //                 //     fit: BoxFit.fill,
-                              //                 //   ),
-                              //                 //   title: Text(item['itemDescription']),
-                              //                 //   subtitle: Text(item['selectedReimType']),
-                              //                 //   trailing: Text(
-                              //                 //     item['quantity'],
-                              //                 //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                              //                 //   ),
-                              //                 // ),
-                              //                 // Text("Item Description: ${item['itemDescription']}"),
-                              //                 // Text("Reimbursement Type: ${item['selectedReimType']}"),
-                              //                 // Text("Quantity: ${item['quantity']}"),
-                              //                 // Text("Amount: ${item['amount']}"),
-                              //               ],
-                              //             ),
-                              //           ),
-                              //         );
-                              //       }),
-                              // ),
-
                               // SizedBox(height: 10),
                               /// todo apply logic if then create a form
-                              if (_dropDownValueShopeType ==
-                                  "Consumable/Material Purchase")
-                                Container(
+                              if (_dropDownValueShopeType == "Consumable/Material Purchase")
+                              Container(
                                   margin: const EdgeInsets.only(top: 16.0),
                                   padding: const EdgeInsets.all(16.0),
                                   decoration: BoxDecoration(
@@ -1640,8 +1481,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -1650,12 +1490,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                           // height: 20,
                                           // fit: BoxFit.fill,
                                           // ),
-                                          Icon(Icons.shopping_cart,
-                                              color: Colors.blue),
+                                          Icon(Icons.shopping_cart, color: Colors.blue),
                                           SizedBox(width: 8.0),
                                           Expanded(
                                               child: Text(
-                                                  "Uploaded Consumable Item [2]",
+                                                  "Uploaded Consumable Item $count",
                                                   style: AppTextStyle
                                                       .font16OpenSansRegularBlack45TextStyle)),
                                           Icon(Icons.arrow_forward_ios,
@@ -1666,13 +1505,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       Container(
                                         height: 45,
                                         child: TextFormField(
-                                          controller:
-                                              _itemDescriptionController,
+                                          controller: _itemDescriptionController,
                                           decoration: InputDecoration(
                                             labelText: "Item Description",
                                             border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
+                                              borderRadius: BorderRadius.circular(8.0),
                                             ),
                                           ),
                                         ),
@@ -1747,7 +1584,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 ),
-
                               Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 5, top: 5),
@@ -2407,18 +2243,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               SizedBox(height: 10),
                               InkWell(
                                 onTap: () async {
-                                  SharedPreferences prefs =
-                                      await SharedPreferences.getInstance();
-                                  String? sEmpCode =
-                                      prefs.getString('sEmpCode');
-                                  String? sContactNo =
-                                      prefs.getString('sContactNo');
-                                  print('----sEmpCode--15---$sEmpCode');
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  String? sEmpCode = prefs.getString('sEmpCode');
+                                  String? sContactNo = prefs.getString('sContactNo');
 
+                                  print('----sEmpCode--15---$sEmpCode');
                                   /// TODO GET A RANDOM NUMBER
                                   Random random = Random();
-                                  int sTranCode =
-                                      10000000 + random.nextInt(90000000);
+                                  int sTranCode = 10000000 + random.nextInt(90000000);
 
                                   // print('--1001--sTranCode---$sTranCode');
                                   // print('--1002--sEmpCode---$sEmpCode');
@@ -2433,8 +2265,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   // print('--1011--sResult---$result');
 
                                   var amount = '${_amountController.text}';
-                                  var expenseDetails =
-                                      '${_expenseController.text}';
+                                  var expenseDetails = '${_expenseController.text}';
 
                                   // print('----964--amount----$amount');
                                   // print('----965--expenseDetails----$expenseDetails');
@@ -2453,11 +2284,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     print('---call Api---');
 
                                     var hrmsPopWarning =
-                                        await HrmsPopUpWarningRepo()
-                                            .hrmsPopUpWarnging(context,
-                                                sEmpCode, dExpDate, amount);
-                                    print(
-                                        '--------1097----xxx--$hrmsPopWarning');
+                                        await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
+                                    print('--------1097----xxx--$hrmsPopWarning');
                                     result = "${hrmsPopWarning[0]['Result']}";
                                     msg = "${hrmsPopWarning[0]['Msg']}";
                                   } else {
@@ -2468,25 +2296,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                     } else if (_selectedSectorId == null) {
                                       displayToast('Please Select Project');
                                     } else if (_selectedShopId == null) {
-                                      displayToast(
-                                          'Please Select Expense Category');
+                                      displayToast('Please Select Expense Category');
                                     } else if (dExpDate == null) {
                                       displayToast('Select Expense Date');
                                     } else if (amount == null || amount == '') {
                                       displayToast('Please Enter Amount');
                                     } else if (expenseDetails == null ||
                                         expenseDetails == '') {
-                                      displayToast(
-                                          'Please Enter Expense Details');
+                                      displayToast('Please Enter Expense Details');
                                     } else if (uplodedImage == null) {
                                       displayToast('Please pick a photo');
                                     } else if (sContactNo == null) {
-                                      displayToast(
-                                          'Please get a contact number');
+                                      displayToast('Please get a contact number');
                                     }
                                   } // condition to fetch a response form a api
                                   if (result == "0") {
                                     // CALL API HRMS Reimbursement
+
                                     var hrmsPostReimbursement =
                                         await HrmsPostReimbursementRepo()
                                             .hrmsPostReimbursement(
@@ -2501,7 +2327,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 uplodedImage,
                                                 sContactNo,
                                                 result,
-                                                remarks);
+                                                remarks,
+                                          uplodedImage2,
+                                          uplodedImage3,
+                                          uplodedImage4,
+                                          consumableList
+
+
+                                  );
                                     print('---1050--$hrmsPostReimbursement');
                                     result =
                                         "${hrmsPostReimbursement[0]['Result']}";
@@ -2617,7 +2450,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             uplodedImage,
                             sContactNo,
                             result,
-                            remarks);
+                            remarks,
+                            uplodedImage2,
+                            uplodedImage3,
+                            uplodedImage4,
+                            consumableList
+                        );
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";

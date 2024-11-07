@@ -10,6 +10,7 @@ class HrmsPostReimbursementRepo {
 
   Future hrmsPostReimbursement(
       BuildContext context,
+
       int sTranCode,
       String? sEmpCode,
       selectedSectorId,
@@ -20,10 +21,14 @@ class HrmsPostReimbursementRepo {
       uplodedImage,
       String? sContactNo,
       result,
-      String remarks) async {
+      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList,
+
+      ) async {
     try {
+      //uplodedImage2, uplodedImage3, uplodedImage4
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
+
       print('----sToken--18---$sToken');
       print('----sTranCode--15---$sTranCode');
       print('----sEmpCode--15---$sEmpCode');
@@ -36,12 +41,16 @@ class HrmsPostReimbursementRepo {
       print('----sContactNo--15---$sContactNo');
       print('----sRemarks--15---${remarks}');
       print('----result--15---$result');
+      print('----uplode image 2--44---$uplodedImage2');
+      print('----uplode image 3--45---$uplodedImage3');
+      print('----uplode image 4--46---$uplodedImage4');
+      print('----ConsumaleList --46---$consumableList');
+
 
       var baseURL = BaseRepo().baseurl;
-      var endPoint = "hrmsPostReimbursement/hrmsPostReimbursement";
+      var endPoint = "hrmsPostReimbursementNew/hrmsPostReimbursementNew";
       var hrmsPostReimbursementApi = "$baseURL$endPoint";
-      print(
-          '------------17---hrmsPostReimbursementApi---$hrmsPostReimbursementApi');
+      print('------------17---hrmsPostReimbursementApi---$hrmsPostReimbursementApi');
 
       showLoader();
       var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
@@ -49,17 +58,23 @@ class HrmsPostReimbursementRepo {
           http.Request('POST', Uri.parse('$hrmsPostReimbursementApi'));
 
       request.body = json.encode({
-        "sTranCode": sTranCode,
-        "sEmpCode": sEmpCode,
-        "sProjectCode": selectedSectorId,
-        "sExpHeadCode": selectedShopId,
-        "dExpDate": dExpDate,
         "fAmount": amount,
         "sExpDetails": expenseDetails,
-        "sExpBillPhoto": uplodedImage,
-        "sEntryBy": sContactNo,
+        "sExpBillPhoto2":uplodedImage2 ?? "",
+        "sExpBillPhoto3":uplodedImage3 ?? "",
+        "sExpBillPhoto4":uplodedImage4 ?? "",
         "sRemarks": remarks,
         "sResult": result,
+        "sTranCode": sTranCode,
+        "dExpDate": dExpDate,
+        "sEntryBy": sContactNo,
+        "sExpBillPhoto": uplodedImage,
+        "sExpHeadCode": selectedShopId,
+        "sProjectCode": selectedSectorId,
+        "sItemArray":consumableList ?? "",
+       // "sItemArray":'[{"SrNo":"1","sItemName":"Pencil Box","sUoM":"Box","fQty":"4","fAmount":"400"},{"SrNo":"2","sItemName":"Laptop Bag","sUoM":"Bags","fQty":"2","fAmount":"4400"}]',
+        "sEmpCode": sEmpCode,
+
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
