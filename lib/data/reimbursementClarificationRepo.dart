@@ -12,7 +12,7 @@ class HrmsreimbursementClarificationRepo {
 
   var hrmsleavebalacev2List = [];
 
-  Future<List<HrmsReimbursementClarificationModel>>  hrmsReimbursementClarificationList(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth) async{
+  Future<List<HrmsReimbursementClarificationModel>>  hrmsReimbursementClarificationList(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -21,10 +21,6 @@ class HrmsreimbursementClarificationRepo {
     print('--16 --lastDayOfCurrentMonth--$lastDayOfCurrentMonth');
     print('--17 --contactNo--$contactNo');
     showLoader();
-    //  String defaultFromDate = "01/Sep/2024";
-    //String defaultToDate = "30/Sep/2024";
-    // String fromDate = firstOfMonthDay ?? defaultFromDate;
-    //String toDate = lastDayOfCurrentMonth ?? defaultToDate;
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsreimbursementstatusV3/hrmsreimbursementstatusV3";
@@ -48,7 +44,6 @@ class HrmsreimbursementClarificationRepo {
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         hideLoader();
-
         // Convert the response stream to a string
         String responseBody = await response.stream.bytesToString();
         // Decode the response body

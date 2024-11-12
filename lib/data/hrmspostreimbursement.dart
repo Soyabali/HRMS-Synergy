@@ -10,7 +10,6 @@ class HrmsPostReimbursementRepo {
 
   Future hrmsPostReimbursement(
       BuildContext context,
-
       int sTranCode,
       String? sEmpCode,
       selectedSectorId,
@@ -22,7 +21,6 @@ class HrmsPostReimbursementRepo {
       String? sContactNo,
       result,
       String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList,
-
       ) async {
     try {
       //uplodedImage2, uplodedImage3, uplodedImage4
@@ -54,8 +52,7 @@ class HrmsPostReimbursementRepo {
 
       showLoader();
       var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
-      var request =
-          http.Request('POST', Uri.parse('$hrmsPostReimbursementApi'));
+      var request = http.Request('POST', Uri.parse('$hrmsPostReimbursementApi'));
 
       request.body = json.encode({
         "fAmount": amount,

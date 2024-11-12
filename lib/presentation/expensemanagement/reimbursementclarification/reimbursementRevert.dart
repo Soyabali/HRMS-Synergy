@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -13,27 +14,54 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementclarification/reimbursementclarification.dart';
 import '../../../data/baseurl.dart';
+import '../../../data/bindReimUoMRepo.dart';
+import '../../../data/consuamableItemRepo2.dart';
 import '../../../data/district_repo.dart';
 import '../../../data/expensecategory_repo.dart';
 import '../../../data/hrmsPopUpWarning_repo.dart';
 import '../../../data/hrmspostreimbursement.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/reimbursementClarificationRevert.dart';
 import '../../../data/shopTypeRepo.dart';
-import '../../dashboard/dashboard.dart';
+import '../../../domain/GetConsumablesReimbItem_Model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 import 'dart:math';
 
-import '../expense_management.dart';
-
-
 class ReimbursementrevertPage extends StatefulWidget {
 
-  final sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode;
-  ReimbursementrevertPage(this.sProjectName, this.sExpHeadName,this.dEntryAt, this.fAmount,this.sExpDetails, this.sExpBillPhoto, this.sProjectCode, this.sExpHeadCode, {super.key});
+  final sProjectName,
+      sExpHeadName,
+      dEntryAt,
+      fAmount,
+      sExpDetails,
+      sExpBillPhoto,
+      sProjectCode,
+      sExpHeadCode,
+      sExpBillPhoto2,
+      sExpBillPhoto3,
+      sExpBillPhoto4,
+      sTranCode,
+      dExpDate,
+      sRemarks;
+
+  ReimbursementrevertPage(
+      this.sProjectName,
+      this.sExpHeadName,
+      this.dEntryAt,
+      this.fAmount,
+      this.sExpDetails,
+      this.sExpBillPhoto,
+      this.sProjectCode,
+      this.sExpHeadCode,
+      this.sExpBillPhoto2,
+      this.sExpBillPhoto3,
+      this.sExpBillPhoto4,
+      this.sTranCode,
+      this.dExpDate,
+      this.sRemarks,
+      {super.key});
 
   @override
   State<ReimbursementrevertPage> createState() => _MyHomePageState();
@@ -49,6 +77,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
+  int count = 0;
 
   // Distic List
   updatedSector() async {
@@ -72,15 +101,15 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+      FocusScope.of(context).unfocus(); // Unfocus when app is paused
     }
   }
-
 
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
-    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
+    var postimageResponse =
+        await PostImageRepo().postImage(context, _imageFile);
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
@@ -95,6 +124,10 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   TextEditingController _expenseController = TextEditingController();
   TextEditingController _remarkController = TextEditingController();
 
+  TextEditingController _itemDescriptionController = TextEditingController();
+  TextEditingController _quantityController = TextEditingController();
+  TextEditingController _amountController2 = TextEditingController();
+
   // focus
   // FocusNode locationfocus = FocusNode();
   FocusNode _shopfocus = FocusNode();
@@ -106,7 +139,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
   // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
-
   List? data;
   var _dropDownValueDistric;
   var _dropDownValueShopeType;
@@ -127,17 +159,53 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   var userId;
   var slat;
   var slong;
-  File? image;
+  File? image, image2, image3, image4;
   var uplodedImage;
+  var uplodedImage2;
+  var uplodedImage3;
+  var uplodedImage4;
   double? lat, long;
+  String? consumableList;
+  List<dynamic>? consuambleItemList;
+
   //var dExpDate;
   String? dExpDate;
   var billPhoto;
   var remarks;
+  List<dynamic> bindreimouList = [];
+  var _dropDownValueBindReimType;
 
+  // var dExpDate2;
+
+  late Future<List<GetConsumableSreimbitemModel>> consumableItem;
+
+  // consumableItemlist(String stranCode) async {
+  //   consumableItem = ConsumableItemRepo().consumableList(context, stranCode);
+  //  // print(" -----xx--xx--xx----xx--conssumable ITem--148-----> $consumableItem");
+  //   // setState(() {});
+  // }
+  //
+
+  Future<void> monthAttendance(String stranCode) async {
+    // Clear the list and update UI immediately
+    setState(() {
+      consuambleItemList = [];
+    });
+
+    try {
+      // Fetch the new data and assign it to the list
+      final newItems =
+          await ConsuamableItemRepo_2().consuambleItem(context, stranCode);
+      setState(() {
+        consuambleItemList = newItems;
+      });
+      print("Fetched consumable items: $consuambleItemList");
+    } catch (e) {
+      print("Error fetching consumable items: $e");
+    }
+  }
 
   // Uplode Id Proof with gallary
-
   // pick image from a Camera
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -158,7 +226,71 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       }
     } catch (e) {}
   }
-  // pick image from a Gallery
+
+  // uplode image 2
+  Future pickImage2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        image2 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage2(sToken!, image2!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // pickimage 3
+  Future pickImage3() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        image3 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage3(sToken!, image3!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // pickimage 4
+  Future pickImage4() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      if (pickFileid != null) {
+        image4 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image');
+        // multipartProdecudre();
+        uploadImage4(sToken!, image4!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // pick image from a Gallery 1
   Future pickImageGallery() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -177,6 +309,283 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
         print('no image selected');
       }
     } catch (e) {}
+  }
+
+  // pick Imge gallery 2
+  Future pickImageGallery2() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image2 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image2');
+        // multipartProdecudre();
+        uploadImage2(sToken!, image2!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // pick image gallery 3
+  Future pickImageGallery3() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image3 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image3');
+        // multipartProdecudre();
+        uploadImage3(sToken!, image3!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // pick image Gallery 4
+  Future pickImageGallery4() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sToken = prefs.getString('sToken');
+    print('---Token----113--$sToken');
+
+    try {
+      final pickFileid = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 65);
+      if (pickFileid != null) {
+        image4 = File(pickFileid.path);
+        setState(() {});
+        print('Image File path Id Proof-------167----->$image4');
+        // multipartProdecudre();
+        uploadImage4(sToken!, image4!);
+      } else {
+        print('no image selected');
+      }
+    } catch (e) {}
+  }
+
+  // submit Form  Reusable ITem
+  List<Map<String, dynamic>> _itemsList = [];
+
+  void _onFormSubmit() {
+    count++;
+
+    // Retrieve values from controllers and dropdown
+    var itemDescription = _itemDescriptionController.text.trim();
+    var quantity = _quantityController.text.trim();
+    var amount = _amountController2.text.trim();
+    var selectedReimType = _dropDownValueBindReimType;
+
+    // Check each field and display an error if any are empty
+    if (itemDescription.isEmpty) {
+      displayToast("Please enter Item Description");
+      return;
+    }
+    if (selectedReimType == null || selectedReimType.isEmpty) {
+      displayToast("Please choose a reimbursement type");
+      return;
+    }
+    if (quantity.isEmpty) {
+      displayToast("Please enter Quantity");
+      return;
+    }
+    if (amount.isEmpty) {
+      displayToast("Please enter Amount");
+      return;
+    }
+
+    // Add the item as a map in the consumable item list
+    setState(() {
+      consuambleItemList ??= []; // Initialize the list if it's null
+      consuambleItemList!.add({
+        'SrNo': count,
+        'sItemName': itemDescription,
+        'fQty': quantity,
+        'fAmount': amount,
+        'sUoM': selectedReimType,
+      });
+    });
+
+    // Optionally encode to JSON if needed
+    consumableList = jsonEncode(consuambleItemList);
+
+    // Clear form fields after adding
+    _itemDescriptionController.clear();
+    _quantityController.clear();
+    _amountController2.clear();
+    _dropDownValueBindReimType = null;
+
+    // Display success message and print data for verification
+    displayToast("Item added successfully.");
+    print('Item Description: $itemDescription');
+    print('Quantity: $quantity');
+    print('Amount: $amount');
+    print('Reimbursement Type: $selectedReimType');
+    print('Consumable List JSON: $consumableList');
+
+    // Optionally call the API here if needed
+    print('Calling API...');
+  }
+
+  // delete the data on a list
+
+  Widget _deleteItemDialog(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 160,
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text('Delete',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                SizedBox(height: 10),
+                Text(
+                  "Do you want to Delete ?",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15),
+                Container(
+                  height: 35,
+                  // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  // Adjust padding as needed
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Container background color
+                    borderRadius: BorderRadius.circular(15), // Rounded corners
+                    border: Border.all(color: Colors.grey), // Border color
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () async {
+                            // generalFunction.logout(context);
+                            /// todo heere you shold call a delete item api
+
+                            // var  hrmsPopWarning = await NotificatindeleteRepo().notification(context,iTranId);
+                            // print('---80--$hrmsPopWarning');
+                            // var  result = "${hrmsPopWarning[0]['Result']}";
+                            // var  msg = "${hrmsPopWarning[0]['Msg']}";
+                            // generalFunction.displayToast(msg);
+                            // Navigator.of(context).pop();
+                            //
+                            setState(() {
+                              // _notificationList = NotificationRepo().notificationList(context);
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'Yes',
+                            style: GoogleFonts.openSans(
+                              color: Colors.green,
+                              // Text color for "Yes"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey, // Divider color
+                        width: 20, // Space between buttons
+                        thickness: 1, // Thickness of the divider
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'No',
+                            style: GoogleFonts.openSans(
+                              color: Colors.red,
+                              // Text color for "No"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/delete.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.fill,
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   // multifilepath
@@ -210,7 +619,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
-        'sImagePath', imageFile.path,
+        'sImagePath',
+        imageFile.path,
       ));
 
       // Send the request
@@ -236,6 +646,149 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     }
   }
 
+  // uplodeImage-2
+  Future<void> uploadImage2(String token, File imageFile) async {
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "UploadTrackingImage/UploadTrackingImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+    try {
+      print('-----xx-x----214----');
+      showLoader();
+      // Create a multipart request
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$uplodeImageApi'),
+      );
+      // Add headers
+      request.headers['token'] = token;
+
+      // Add the image file as a part of the request
+      request.files.add(await http.MultipartFile.fromPath(
+        'sImagePath',
+        imageFile.path,
+      ));
+
+      // Send the request
+      var streamedResponse = await request.send();
+
+      // Get the response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Parse the response JSON
+      List<dynamic> responseData = json.decode(response.body);
+
+      // Extracting the image path
+      setState(() {
+        uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
+      });
+
+      //print('Uploaded Image Path----245--: $uplodedImage');
+
+      hideLoader();
+    } catch (error) {
+      hideLoader();
+      print('Error uploading image: $error');
+    }
+  }
+
+  // uplodeiMAGE 3
+  Future<void> uploadImage3(String token, File imageFile) async {
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "UploadTrackingImage/UploadTrackingImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+    try {
+      print('-----xx-x----214----');
+      showLoader();
+      // Create a multipart request
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$uplodeImageApi'),
+      );
+      // Add headers
+      request.headers['token'] = token;
+
+      // Add the image file as a part of the request
+      request.files.add(await http.MultipartFile.fromPath(
+        'sImagePath',
+        imageFile.path,
+      ));
+
+      // Send the request
+      var streamedResponse = await request.send();
+
+      // Get the response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Parse the response JSON
+      List<dynamic> responseData = json.decode(response.body);
+
+      // Extracting the image path
+      setState(() {
+        uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
+      });
+
+      //print('Uploaded Image Path----245--: $uplodedImage');
+
+      hideLoader();
+    } catch (error) {
+      hideLoader();
+      print('Error uploading image: $error');
+    }
+  }
+
+  // iuplode image 4
+  Future<void> uploadImage4(String token, File imageFile) async {
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "UploadTrackingImage/UploadTrackingImage";
+    var uplodeImageApi = "$baseURL$endPoint";
+    try {
+      print('-----xx-x----214----');
+      showLoader();
+      // Create a multipart request
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse('$uplodeImageApi'),
+      );
+      // Add headers
+      request.headers['token'] = token;
+
+      // Add the image file as a part of the request
+      request.files.add(await http.MultipartFile.fromPath(
+        'sImagePath',
+        imageFile.path,
+      ));
+
+      // Send the request
+      var streamedResponse = await request.send();
+
+      // Get the response
+      var response = await http.Response.fromStream(streamedResponse);
+
+      // Parse the response JSON
+      List<dynamic> responseData = json.decode(response.body);
+
+      // Extracting the image path
+      setState(() {
+        uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
+      });
+
+      //print('Uploaded Image Path----245--: $uplodedImage');
+
+      hideLoader();
+    } catch (error) {
+      hideLoader();
+      print('Error uploading image: $error');
+    }
+  }
+
+  // ---
+
+  bindreimUom() async {
+    bindreimouList = await BindreimuomRepo().bindReimouList();
+    print(" -----xx----xx--609--xxx---> $bindreimouList");
+    setState(() {});
+  }
+
   multipartProdecudre() async {
     print('----139--$image');
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -254,8 +807,84 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     print('---155----$responseData');
   }
 
+  // dropdown
+  Widget _bindReimout() {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        width: MediaQuery.of(context).size.width - 50,
+        height: 42,
+        color: Color(0xFFf2f3f5),
+        child: DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButton(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              hint: RichText(
+                text: TextSpan(
+                  text: "UOM",
+                  style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+                  // style: TextStyle(
+                  //     color: Colors.black,
+                  //     fontSize: 16,
+                  //     fontWeight: FontWeight.normal),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              // Not necessary for Option 1
+              value: _dropDownValueBindReimType,
+              // key: distDropdownFocus,
+              onChanged: (newValue) {
+                setState(() {
+                  _dropDownValueBindReimType = newValue;
+                  print('---837-------$_dropDownValueBindReimType');
+                  //  _isShowChosenDistError = false;
+                  // Iterate the List
+                  bindreimouList.forEach((element) {
+                    if (element["sUoM"] == _dropDownValueShopeType) {
+                      setState(() {
+                        // _selectedShopId = element['sUoM'];
+                        //print('----349--sExpHeadCode id ------$_selectedShopId');
+                      });
+                      //print('-----Point id----241---$_selectedShopId');
+                      if (_selectedShopId != null) {
+                        // updatedBlock();
+                      } else {
+                        print('-------');
+                      }
+                      // print("Distic Id value xxxxx.... $_selectedDisticId");
+                      // print("Distic Name xxxxxxx.... $_dropDownValueDistric");
+                      //print("Block list Ali xxxxxxxxx.... $blockList");
+                    }
+                  });
+                });
+              },
+              items: bindreimouList.map((dynamic item) {
+                return DropdownMenuItem(
+                  child: Text(item['sUoM'].toString(),
+                      style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                  value: item["sUoM"].toString(),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   // build dialog sucess
-  Widget _buildDialogSucces2(BuildContext context,String msg) {
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -277,10 +906,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 Text(
                   msg,
@@ -300,15 +927,20 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                         // Navigator.of(context).pop();
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const ReimbursementClarification()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ReimbursementClarification()),
                         );
-
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -322,7 +954,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -345,10 +978,26 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     getLocation();
     expenseCategory();
     super.initState();
-    print('xxxx---355--${widget.sProjectCode}');
-    print('xxxx---356--${widget.sExpHeadCode}');
+    bindreimUom();
+    print('xxxx---977--${widget.sProjectName}');
+    print('xxxx---978--${widget.sExpHeadName}');
+    print('xxxx---979--${widget.dEntryAt}');
+    print('xxxx---980--${widget.fAmount}');
+    print('xxxx---981--${widget.sExpDetails}');
+    print('xxxx---982--${widget.sExpBillPhoto}');
+    print('xxxx---983--${widget.sProjectCode}');
+    print('xxxx---984--${widget.sExpHeadCode}');
+    print('xxxx---985--${widget.sExpBillPhoto2}');
+    print('xxxx---986--${widget.sExpBillPhoto3}');
+    print('xxxx---987--${widget.sExpBillPhoto4}');
+    print('xxxx---988--${widget.sTranCode}');
+    print('xxxx---988--Remarks--${widget.sRemarks}');
+    print('xxxx---9977 xx--dExpDate--${widget.dExpDate}');
+    dExpDate = '${widget.dExpDate}';
+//  sTranCode
+    var sTranCode = '${widget.sTranCode}';
+    monthAttendance(sTranCode);
     // widget.dEntryAt}
-    print('xxxx---359--${widget.dEntryAt}');
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
     _contactfocus = FocusNode();
@@ -356,9 +1005,17 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     _addressfocus = FocusNode();
     _amountController = TextEditingController(text: widget.fAmount);
     _expenseController = TextEditingController(text: widget.sExpDetails);
+    _remarkController = TextEditingController(text: widget.sRemarks);
+    _itemDescriptionController = TextEditingController();
+    _quantityController = TextEditingController();
+    _amountController2 = TextEditingController();
     uplodedImage = "${widget.sExpBillPhoto}";
+    uplodedImage2 = "${widget.sExpBillPhoto2}";
+    uplodedImage3 = "${widget.sExpBillPhoto3}";
+    uplodedImage4 = "${widget.sExpBillPhoto4}";
     print('---360--$billPhoto');
   }
+
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -409,6 +1066,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     _amountController.dispose();
     _expenseController.dispose();
     _remarkController.dispose();
+    _itemDescriptionController.dispose();
+    _quantityController.dispose();
+    _amountController2.dispose();
   }
 
   // Todo bind sector code
@@ -424,32 +1084,41 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
           child: ButtonTheme(
             alignedDropdown: true,
             child: DropdownButton(
-              isDense: true, // Helps to control the vertical size of the button
-              isExpanded: true, // Allows the DropdownButton to take full width
+              isDense: true,
+              // Helps to control the vertical size of the button
+              isExpanded: true,
+              // Allows the DropdownButton to take full width
               onTap: () {
                 FocusScope.of(context).unfocus();
               },
               hint: RichText(
-                text:TextSpan(
+                text: TextSpan(
                     text: "${widget.sProjectName}",
                     style: AppTextStyle.font16OpenSansRegularBlack45TextStyle
-                  // style: TextStyle(
-                  //     color: Colors.black,
-                  //     fontSize: 16,
-                  //     fontWeight: FontWeight.normal),
-                ),
+                    // style: TextStyle(
+                    //     color: Colors.black,
+                    //     fontSize: 16,
+                    //     fontWeight: FontWeight.normal),
+                    ),
               ),
-              value: _dropDownSector,
+              // value: _dropDownSector,
+              value: _dropDownSector ?? widget.sProjectName,
               key: sectorFocus,
               onChanged: (newValue) {
                 setState(() {
-                  _dropDownSector = newValue ;
-                  distList.forEach((element) {
-                    if (element["sProjectName"] == _dropDownSector) {
-                      _selectedSectorId = element['sProjectCode'];
-                      setState(() {});
-                    }
-                  });
+                  //_dropDownSector = newValue;
+                  //   _dropDownSector = newValue ?? widget.sProjectName;
+                  //   distList.forEach((element) {
+                  //     if (element["sProjectName"] == _dropDownSector) {
+                  //       _selectedSectorId = element['sProjectCode'];
+                  //       setState(() {});
+                  //     }
+                  //   });
+                  _dropDownSector = newValue ?? widget.sProjectName;
+                  _selectedSectorId = distList.firstWhere(
+                    (element) => element["sProjectName"] == _dropDownSector,
+                    orElse: () => {"sProjectCode": widget.sProjectCode},
+                  )["sProjectCode"];
                 });
               },
               items: distList.map((dynamic item) {
@@ -460,7 +1129,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                         child: Text(
                           item['sProjectName'].toString(),
                           overflow: TextOverflow.ellipsis, // Handles long text
-                          style:AppTextStyle.font16OpenSansRegularBlackTextStyle,
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle,
                           // style: TextStyle(
                           //   fontSize: 16,
                           //   fontWeight: FontWeight.normal,
@@ -498,7 +1168,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               hint: RichText(
                 text: TextSpan(
                   text: "${widget.sExpHeadName}",
-                  style:  AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+                  style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                   // style: TextStyle(
                   //     color: Colors.black,
                   //     fontSize: 16,
@@ -544,7 +1214,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               },
               items: expenseList.map((dynamic item) {
                 return DropdownMenuItem(
-                  child: Text(item['sExpHeadName'].toString(),style:AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                  child: Text(item['sExpHeadName'].toString(),
+                      style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                   value: item["sExpHeadName"].toString(),
                 );
               }).toList(),
@@ -569,7 +1240,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
             // Status bar color  // 2a697b
             statusBarColor: Color(0xFF2a697b),
             // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarIconBrightness: Brightness.dark,
+            // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           // backgroundColor: Colors.blu
@@ -578,10 +1250,10 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
             onTap: () {
               // Navigator.pop(context);
 
-              var projectName =
-              Navigator.push(
+              var projectName = Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ReimbursementClarification()),
+                MaterialPageRoute(
+                    builder: (context) => const ReimbursementClarification()),
               );
             },
             child: const Padding(
@@ -622,7 +1294,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     child: Image.asset(
                       'assets/images/addreimbursement.jpeg',
                       // Replace 'image_name.png' with your asset image path
-                      fit: BoxFit.cover, // Adjust the image fit to cover the container
+                      fit: BoxFit
+                          .cover, // Adjust the image fit to cover the container
                     ),
                   ),
                 ),
@@ -636,10 +1309,12 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color:
-                          Colors.grey.withOpacity(0.5), // Color of the shadow
-                          spreadRadius: 5, // Spread radius
-                          blurRadius: 7, // Blur radius
+                          color: Colors.grey.withOpacity(0.5),
+                          // Color of the shadow
+                          spreadRadius: 5,
+                          // Spread radius
+                          blurRadius: 7,
+                          // Blur radius
                           offset: Offset(0, 3), // Offset of the shadow
                         ),
                       ]),
@@ -672,13 +1347,13 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   child: Text('Fill the below details',
                                       style: AppTextStyle
                                           .font16OpenSansRegularBlack45TextStyle
-                                    // style: TextStyle(
-                                    //     fontFamily: 'Montserrat',
-                                    //     color: Color(0xFF707d83),
-                                    //     fontSize: 14.0,
-                                    //     fontWeight: FontWeight.bold)
+                                      // style: TextStyle(
+                                      //     fontFamily: 'Montserrat',
+                                      //     color: Color(0xFF707d83),
+                                      //     fontSize: 14.0,
+                                      //     fontWeight: FontWeight.bold)
 
-                                  ),
+                                      ),
                                 ),
                               ],
                             ),
@@ -694,18 +1369,22 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 DateTime? pickedDate = await showDatePicker(
                                   context: context,
                                   initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),  // Adjust this to your desired start date
-                                  lastDate: DateTime.now(),   // Restrict selection to today or past dates
+                                  firstDate: DateTime(2000),
+                                  // Adjust this to your desired start date
+                                  lastDate: DateTime
+                                      .now(), // Restrict selection to today or past dates
                                 );
                                 // Check if a date was picked
                                 if (pickedDate != null) {
                                   // Format the picked date
-                                  String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                                  String formattedDate =
+                                      DateFormat('dd/MMM/yyyy')
+                                          .format(pickedDate);
                                   // Update the state with the picked date
                                   setState(() {
                                     dExpDate = formattedDate;
                                   });
-                                  print('$dExpDate');
+                                  print('----1344---x--$dExpDate');
                                   // Display the selected date as a toast (optional)
                                   //displayToast(dExpDate.toString());
                                 } else {
@@ -714,17 +1393,21 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   //displayToast("No date selected");
                                 }
                               },
-
                               child: Container(
                                 height: 30,
                                 child: DottedBorder(
-                                  color: Colors.grey, // Color of the dotted line
-                                  strokeWidth: 1.0, // Width of the dotted line
-                                  dashPattern: [4, 2], // Dash pattern for the dotted line
+                                  color: Colors.grey,
+                                  // Color of the dotted line
+                                  strokeWidth: 1.0,
+                                  // Width of the dotted line
+                                  dashPattern: [4, 2],
+                                  // Dash pattern for the dotted line
                                   borderType: BorderType.RRect,
-                                  radius: Radius.circular(5.0), // Optional: rounded corners
+                                  radius: Radius.circular(5.0),
+                                  // Optional: rounded corners
                                   child: Padding(
-                                    padding: EdgeInsets.all(2.0), // Equal padding on all sides
+                                    padding: EdgeInsets.all(2.0),
+                                    // Equal padding on all sides
                                     child: Row(
                                       // Center the row contents
                                       mainAxisSize: MainAxisSize.min,
@@ -738,7 +1421,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                         // Display the selected date or a placeholder if no date is selected
                                         Text(
                                           dExpDate == null
-                                              ? '${widget.dEntryAt}'
+                                              ? '${widget.dExpDate}'
                                               : '$dExpDate',
                                           style: AppTextStyle
                                               .font16OpenSansRegularBlack45TextStyle,
@@ -756,7 +1439,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                      margin: EdgeInsets.only(left: 0, right: 2),
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
                                       child: const Icon(
                                         Icons.forward_sharp,
                                         size: 12,
@@ -773,9 +1457,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                             ),
                             // this is my TextFormFoield
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 0),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 0),
                               child: Container(
-                                height: 70, // Increased height to accommodate error message without resizing
+                                height: 70,
+                                // Increased height to accommodate error message without resizing
                                 color: Colors.white,
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 0),
@@ -786,41 +1472,57 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                           focusNode: _shopfocus,
                                           controller: _amountController,
                                           textInputAction: TextInputAction.next,
-                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                          onEditingComplete: () =>
+                                              FocusScope.of(context)
+                                                  .nextFocus(),
+                                          keyboardType: const TextInputType
+                                              .numberWithOptions(decimal: true),
                                           inputFormatters: [
                                             FilteringTextInputFormatter.allow(
-                                              RegExp(r'^\d{0,5}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
+                                              RegExp(
+                                                  r'^\d{0,5}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
                                             ),
                                             //FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')), // Allow up to 2 decimal places
                                           ],
                                           decoration: const InputDecoration(
                                             border: OutlineInputBorder(),
-                                            contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                            filled: true, // Enable background color
-                                            fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 10.0,
+                                                    horizontal: 10.0),
+                                            filled: true,
+                                            // Enable background color
+                                            fillColor: Color(
+                                                0xFFf2f3f5), // Set your desired background color here
                                           ),
-                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          autovalidateMode: AutovalidateMode
+                                              .onUserInteraction,
                                           validator: (value) {
-                                            if (value == null || value.isEmpty) {
+                                            if (value == null ||
+                                                value.isEmpty) {
                                               return 'Please enter a value';
                                             }
-                                            final doubleValue = double.tryParse(value);
-                                            if (doubleValue == null || doubleValue <= 0) {
+                                            final doubleValue =
+                                                double.tryParse(value);
+                                            if (doubleValue == null ||
+                                                doubleValue <= 0) {
                                               return 'Enter an amount greater than 0';
                                             }
                                             return null;
                                           },
                                         ),
-
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 10),
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
                                         child: Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
-                                            '', // Placeholder for error message space
-                                            style: TextStyle(fontSize: 0), // Keeps the size unchanged when no error
+                                            '',
+                                            // Placeholder for error message space
+                                            style: TextStyle(
+                                                fontSize:
+                                                    0), // Keeps the size unchanged when no error
                                           ),
                                         ),
                                       ),
@@ -835,7 +1537,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                      margin: EdgeInsets.only(left: 0, right: 2),
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
                                       child: const Icon(
                                         Icons.forward_sharp,
                                         size: 12,
@@ -851,7 +1554,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 0),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 0),
                               child: Container(
                                 height: 42,
                                 color: Colors.white,
@@ -865,12 +1569,14 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                         FocusScope.of(context).nextFocus(),
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 10.0),
                                       filled: true, // Enable background color
-                                      fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                                      fillColor: Color(
+                                          0xFFf2f3f5), // Set your desired background color here
                                     ),
                                     autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
+                                        AutovalidateMode.onUserInteraction,
                                     // validator: (value) {
                                     //   if (value !=null && value =="0") {
                                     //     return 'Enter an amount greater than 0';
@@ -888,7 +1594,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                      margin: EdgeInsets.only(left: 0, right: 2),
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
                                       child: const Icon(
                                         Icons.forward_sharp,
                                         size: 12,
@@ -904,7 +1611,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 10, right: 0),
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 0),
                               child: Container(
                                 height: 42,
                                 color: Colors.white,
@@ -918,12 +1626,14 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                         FocusScope.of(context).nextFocus(),
                                     decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
-                                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 10.0),
                                       filled: true, // Enable background color
-                                      fillColor: Color(0xFFf2f3f5),// Set your desired background color here
+                                      fillColor: Color(
+                                          0xFFf2f3f5), // Set your desired background color here
                                     ),
                                     autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
+                                        AutovalidateMode.onUserInteraction,
                                     // validator: (value) {
                                     //   if (value !=null && value =="0") {
                                     //     return 'Enter an amount greater than 0';
@@ -934,19 +1644,323 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 ),
                               ),
                             ),
+                            SizedBox(height: 10),
+
+                            /// todo here we add a custom list according to cosumabnleItem
+                            if (consuambleItemList!.isNotEmpty)
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/workdetail.jpeg',
+                                        height: 25,
+                                        width: 25,
+                                        fit: BoxFit.fill,
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text('Consumable Item List',
+                                          style: AppTextStyle
+                                              .font14OpenSansRegularBlack45TextStyle),
+                                    ],
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    // Makes ListView take up only the needed height
+                                    physics: NeverScrollableScrollPhysics(),
+                                    // Disable ListView scrolling if the outer widget scrolls
+                                    itemCount: consuambleItemList?.length ?? 0,
+                                    itemBuilder: (context, index) {
+                                      final item = consuambleItemList![index];
+                                      return GestureDetector(
+                                        onLongPress: () {
+                                          setState(() {
+                                            // iTranId = notificationData.iTranId;
+                                          });
+
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return _deleteItemDialog(context);
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 10.0),
+                                          padding: const EdgeInsets.all(16.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey,
+                                                spreadRadius: 1,
+                                                blurRadius: 3,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 25,
+                                                    width: 25,
+                                                    child: Image.asset(
+                                                      'assets/images/aadhar.jpeg',
+                                                      fit: BoxFit.fill,
+                                                      errorBuilder:
+                                                          (BuildContext context,
+                                                              Object exception,
+                                                              StackTrace?
+                                                                  stackTrace) {
+                                                        return Icon(Icons.error,
+                                                            size: 25);
+                                                      },
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(item['sItemName'],
+                                                          style: AppTextStyle
+                                                              .font14OpenSansRegularBlack45TextStyle),
+                                                      Text('Item Description',
+                                                          style: AppTextStyle
+                                                              .font14OpenSansRegularBlack45TextStyle),
+                                                    ],
+                                                  ),
+                                                  Spacer(),
+                                                  Text(
+                                                      'Quantity: ${item['fQty']}',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                ],
+                                              ),
+                                              Divider(),
+                                              Container(
+                                                height: 45,
+                                                child: Row(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 25),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Container(
+                                                                height: 14,
+                                                                width: 14,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              7),
+                                                                ),
+                                                              ),
+                                                              SizedBox(
+                                                                  width: 5),
+                                                              Text(item['sUoM'],
+                                                                  style: AppTextStyle
+                                                                      .font14OpenSansRegularBlackTextStyle),
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    left: 15),
+                                                            child: Text('UOM',
+                                                                style: AppTextStyle
+                                                                    .font14OpenSansRegularBlack45TextStyle),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Spacer(),
+                                                    Container(
+                                                      color: Color(0xFF0098a6),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 10),
+                                                      child: Text(
+                                                        '₹ ${item['fAmount']}',
+                                                        style: AppTextStyle
+                                                            .font14OpenSansRegularWhiteTextStyle,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+
+                            SizedBox(height: 10),
+                            if (_dropDownValueShopeType ==
+                                "Consumable/Material Purchase")
+                              Container(
+                                margin: const EdgeInsets.only(top: 16.0),
+                                padding: const EdgeInsets.all(16.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.9),
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                    ),
+                                  ],
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        // Image.asset("assets/images/uplodeConsum.jpeg",
+                                        // width: 20,
+                                        // height: 20,
+                                        // fit: BoxFit.fill,
+                                        // ),
+                                        Icon(Icons.shopping_cart,
+                                            color: Colors.blue),
+                                        SizedBox(width: 8.0),
+                                        Expanded(
+                                            child: Text(
+                                                "Uploaded Consumable Item ",
+                                                style: AppTextStyle
+                                                    .font16OpenSansRegularBlack45TextStyle)),
+                                        Icon(Icons.arrow_forward_ios,
+                                            color: Colors.grey),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    Container(
+                                      height: 45,
+                                      child: TextFormField(
+                                        controller: _itemDescriptionController,
+                                        decoration: InputDecoration(
+                                          labelText: "Item Description",
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    _bindReimout(),
+                                    SizedBox(height: 10.0),
+                                    Container(
+                                      height: 45,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              controller: _quantityController,
+                                              decoration: InputDecoration(
+                                                labelText: "Quantity",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ),
+                                          SizedBox(width: 16.0),
+                                          Expanded(
+                                            child: TextFormField(
+                                              controller: _amountController2,
+                                              decoration: InputDecoration(
+                                                labelText: "Amount",
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                              keyboardType:
+                                                  TextInputType.number,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 10.0),
+                                    InkWell(
+                                      onTap: _onFormSubmit,
+                                      child: Container(
+                                        width: double.infinity,
+                                        // Make container fill the width of its parent
+                                        height: AppSize.s45,
+                                        padding: EdgeInsets.all(AppPadding.p5),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.loginbutton,
+                                          // Background color using HEX value
+                                          borderRadius: BorderRadius.circular(
+                                              AppMargin.m10), // Rounded corners
+                                        ),
+                                        //  #00b3c7
+                                        child: Center(
+                                          child: Text(
+                                            "Add Item",
+                                            style: AppTextStyle
+                                                .font16OpenSansRegularWhiteTextStyle,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            // heding
                             Padding(
                               padding: const EdgeInsets.only(bottom: 5, top: 5),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   Container(
-                                      margin: EdgeInsets.only(left: 0, right: 2),
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
                                       child: const Icon(
                                         Icons.forward_sharp,
                                         size: 12,
                                         color: Colors.black54,
                                       )),
-                                  const Text('Supporting Documents',
+                                  const Text('Supporting Documents - 1',
                                       style: TextStyle(
                                           fontFamily: 'Montserrat',
                                           color: Color(0xFF707d83),
@@ -956,6 +1970,68 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                               ),
                             ),
                             SizedBox(height: 10),
+                            // todo implement image seto on a imageView
+                            Center(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    uplodedImage != null && uplodedImage!=""
+                                        ? Stack(
+                                            children: [
+                                              GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  // Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (context) =>
+                                                  //             FullScreenPage(
+                                                  //               child: image!,
+                                                  //               dark: true,
+                                                  //             )));
+                                                },
+                                                child: Container(
+                                                  color:
+                                                      Colors.lightGreenAccent,
+                                                  height: 120,
+                                                  width: 100,
+                                                  child: Image.network(
+                                                    '$uplodedImage',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  // child: Image.file(
+                                                  //   image!,
+                                                  //   fit: BoxFit.fill,
+                                                  // )
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 80,
+                                                  left: 60,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      uplodedImage = null;
+                                                      setState(() {});
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                      size: 30,
+                                                    ),
+                                                  ))
+                                            ],
+                                          )
+                                        : Text(
+                                            "",
+                                            style: TextStyle(
+                                                color: Colors.red[700]),
+                                          )
+                                  ]),
+                            ),
+                            SizedBox(height: 10),
+                            // DottedBorder
                             Center(
                               child: DottedBorder(
                                 color: Colors.grey,
@@ -965,19 +2041,20 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 dashPattern: [4, 2],
                                 // Dash pattern for the dotted line
                                 borderType: BorderType.RRect,
-                                radius:  Radius.circular(5.0),
+                                radius: Radius.circular(5.0),
                                 // Optional: rounded corners
                                 child: Padding(
                                   padding: EdgeInsets.all(2.0),
                                   // Equal padding on all sides
                                   child: Center(
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       // Center the row contents
                                       children: [
                                         Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             InkWell(
                                               onTap: () {
@@ -987,9 +2064,10 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                               },
                                               child: const Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                 children: <Widget>[
-                                                  Icon(Icons.camera_alt_outlined,
+                                                  Icon(
+                                                      Icons.camera_alt_outlined,
                                                       size: 25),
                                                   SizedBox(width: 5),
                                                   Text(
@@ -1006,16 +2084,16 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                         SizedBox(width: 10),
                                         Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: <Widget>[
                                             InkWell(
-                                              onTap: (){
+                                              onTap: () {
                                                 print('--pick a Gallery---');
                                                 pickImageGallery();
                                               },
                                               child: const Row(
                                                 mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                    MainAxisAlignment.start,
                                                 children: <Widget>[
                                                   Icon(
                                                       Icons
@@ -1040,233 +2118,739 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                               ),
                             ),
                             SizedBox(height: 10),
-                            // todo implement image seto on a imageView
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // image - 2
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
-                                  uplodedImage != null
-                                      ? Stack(
-                                    children: [
-                                      GestureDetector(
-                                        behavior:
-                                        HitTestBehavior.translucent,
-                                        onTap: () {
-                                          // Navigator.push(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             FullScreenPage(
-                                          //               child: image!,
-                                          //               dark: true,
-                                          //             )));
-                                        },
-                                        child: Container(
-                                            color: Colors.lightGreenAccent,
-                                            height: 100,
-                                            width: 70,
-                                            child: Image.network('$uplodedImage',
-                                                  fit: BoxFit.fill,
-                                            ),
-                                            // child: Image.file(
-                                            //   image!,
-                                            //   fit: BoxFit.fill,
-                                            // )
-
-                                        ),
-                                      ),
-                                      Positioned(
-                                          bottom: 65,
-                                          left: 35,
-                                          child: IconButton(
-                                            onPressed: () {
-                                              uplodedImage = null;
-                                              setState(() {});
-                                            },
-                                            icon: const Icon(
-                                              Icons.close,
-                                              color: Colors.red,
-                                              size: 30,
-                                            ),
-                                          ))
-                                    ],
-                                  )
-                                      : Text(
-                                    "",
-                                    style:
-                                    TextStyle(color: Colors.red[700]),
-                                  )
-                                ]),
+                                  Container(
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
+                                      child: const Icon(
+                                        Icons.forward_sharp,
+                                        size: 12,
+                                        color: Colors.black54,
+                                      )),
+                                  const Text('Supporting Documents - 2',
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
                             SizedBox(height: 10),
+                            Center(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    uplodedImage2 != null && uplodedImage2!=""
+                                        ? Stack(
+                                            children: [
+                                              GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  // Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (context) =>
+                                                  //             FullScreenPage(
+                                                  //               child: image!,
+                                                  //               dark: true,
+                                                  //             )));
+                                                },
+                                                child: Container(
+                                                  color:
+                                                      Colors.lightGreenAccent,
+                                                  height: 120,
+                                                  width: 100,
+                                                  child: Image.network(
+                                                    '$uplodedImage2',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  // child: Image.file(
+                                                  //   image!,
+                                                  //   fit: BoxFit.fill,
+                                                  // )
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 80,
+                                                  left: 60,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      uplodedImage2 = null;
+                                                      setState(() {});
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                      size: 30,
+                                                    ),
+                                                  ))
+                                            ],
+                                          )
+                                        : Text(
+                                            "",
+                                            style: TextStyle(
+                                                color: Colors.red[700]),
+                                          )
+                                  ]),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: DottedBorder(
+                                color: Colors.grey,
+                                // Color of the dotted line
+                                strokeWidth: 1.0,
+                                // Width of the dotted line
+                                dashPattern: [4, 2],
+                                // Dash pattern for the dotted line
+                                borderType: BorderType.RRect,
+                                radius: Radius.circular(5.0),
+                                // Optional: rounded corners
+                                child: Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  // Equal padding on all sides
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      // Center the row contents
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                // Your onTap logic here
+                                                print('--pick a Camra pick---');
+                                                pickImage2();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons.camera_alt_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Click Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                print('--pick a Gallery---');
+                                                pickImageGallery2();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons
+                                                          .photo_camera_back_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Select Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            // image - 3
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
+                                      child: const Icon(
+                                        Icons.forward_sharp,
+                                        size: 12,
+                                        color: Colors.black54,
+                                      )),
+                                  const Text('Supporting Documents - 3',
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    uplodedImage3 != null && uplodedImage3!=""
+                                        ? Stack(
+                                            children: [
+                                              GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  // Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (context) =>
+                                                  //             FullScreenPage(
+                                                  //               child: image!,
+                                                  //               dark: true,
+                                                  //             )));
+                                                },
+                                                child: Container(
+                                                  color:
+                                                      Colors.lightGreenAccent,
+                                                  height: 120,
+                                                  width: 100,
+                                                  child: Image.network(
+                                                    '$uplodedImage3',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  // child: Image.file(
+                                                  //   image!,
+                                                  //   fit: BoxFit.fill,
+                                                  // )
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 80,
+                                                  left: 60,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      uplodedImage3 = null;
+                                                      setState(() {});
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                      size: 30,
+                                                    ),
+                                                  ))
+                                            ],
+                                          )
+                                        : Text(
+                                            "",
+                                            style: TextStyle(
+                                                color: Colors.red[700]),
+                                          )
+                                  ]),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: DottedBorder(
+                                color: Colors.grey,
+                                // Color of the dotted line
+                                strokeWidth: 1.0,
+                                // Width of the dotted line
+                                dashPattern: [4, 2],
+                                // Dash pattern for the dotted line
+                                borderType: BorderType.RRect,
+                                radius: Radius.circular(5.0),
+                                // Optional: rounded corners
+                                child: Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  // Equal padding on all sides
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      // Center the row contents
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                // Your onTap logic here
+                                                print('--pick a Camra pick---');
+                                                pickImage3();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons.camera_alt_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Click Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                print('--pick a Gallery---');
+                                                pickImageGallery3();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons
+                                                          .photo_camera_back_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Select Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            // image -4
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                      margin:
+                                          EdgeInsets.only(left: 0, right: 2),
+                                      child: const Icon(
+                                        Icons.forward_sharp,
+                                        size: 12,
+                                        color: Colors.black54,
+                                      )),
+                                  const Text('Supporting Documents - 4',
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    uplodedImage4 != null && uplodedImage4!=""
+                                        ? Stack(
+                                            children: [
+                                              GestureDetector(
+                                                behavior:
+                                                    HitTestBehavior.translucent,
+                                                onTap: () {
+                                                  // Navigator.push(
+                                                  //     context,
+                                                  //     MaterialPageRoute(
+                                                  //         builder: (context) =>
+                                                  //             FullScreenPage(
+                                                  //               child: image!,
+                                                  //               dark: true,
+                                                  //             )));
+                                                },
+                                                child: Container(
+                                                  color:
+                                                      Colors.lightGreenAccent,
+                                                  height: 120,
+                                                  width: 100,
+                                                  child: Image.network(
+                                                    '$uplodedImage4',
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                  // child: Image.file(
+                                                  //   image!,
+                                                  //   fit: BoxFit.fill,
+                                                  // )
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 80,
+                                                  left: 60,
+                                                  child: IconButton(
+                                                    onPressed: () {
+                                                      uplodedImage4 = null;
+                                                      setState(() {});
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                      size: 30,
+                                                    ),
+                                                  ))
+                                            ],
+                                          )
+                                        : Text(
+                                            "",
+                                            style: TextStyle(
+                                                color: Colors.red[700]),
+                                          )
+                                  ]),
+                            ),
+                            SizedBox(height: 10),
+                            Center(
+                              child: DottedBorder(
+                                color: Colors.grey,
+                                // Color of the dotted line
+                                strokeWidth: 1.0,
+                                // Width of the dotted line
+                                dashPattern: [4, 2],
+                                // Dash pattern for the dotted line
+                                borderType: BorderType.RRect,
+                                radius: Radius.circular(5.0),
+                                // Optional: rounded corners
+                                child: Padding(
+                                  padding: EdgeInsets.all(2.0),
+                                  // Equal padding on all sides
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      // Center the row contents
+                                      children: [
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                // Your onTap logic here
+                                                print('--pick a Camra pick---');
+                                                pickImage4();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons.camera_alt_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Click Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: <Widget>[
+                                            InkWell(
+                                              onTap: () {
+                                                print('--pick a Gallery---');
+                                                pickImageGallery4();
+                                              },
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Icon(
+                                                      Icons
+                                                          .photo_camera_back_outlined,
+                                                      size: 25),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    'Select Photo',
+                                                    style: TextStyle(
+                                                        color: Colors.black45,
+                                                        fontSize: 16),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+
                             InkWell(
                               onTap: () async {
-                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
                                 String? sEmpCode = prefs.getString('sEmpCode');
-                                String? sContactNo = prefs.getString('sContactNo');
+                                String? sContactNo =
+                                    prefs.getString('sContactNo');
 
-                                // Generate random transaction code
+                                print('----sEmpCode--15---$sEmpCode');
+
+                                /// TODO GET A RANDOM NUMBER
                                 Random random = Random();
-                                int sTranCode = 10000000 + random.nextInt(90000000);
+                                int sTranCode =
+                                    10000000 + random.nextInt(90000000);
 
-                                var amount = _amountController.text.trim();
-                                var expenseDetails = _expenseController.text.trim();
-                                var remarks = _remarkController.text.trim();
+                                var amount = '${_amountController.text}';
+                                var expenseDetails =
+                                    '${_expenseController.text}';
+                                remarks = '${_remarkController.text}';
 
-                                // Project code and expense category from widget
-                                _selectedSectorId = widget.sProjectCode;
-                                _selectedShopId = widget.sExpHeadCode;
-                                dExpDate = widget.dEntryAt;
+                                if (_formKey.currentState!.validate() &&
+                                    sTranCode != null &&
+                                    sEmpCode != null &&
+                                    _selectedSectorId != null &&
+                                    _selectedShopId != null &&
+                                    amount != null &&
+                                    expenseDetails != null &&
+                                    uplodedImage != null &&
+                                    sContactNo != null) {
+                                  // Call Api
+                                  print('---call Api---');
 
-                                // Validate all fields
-                                if (amount.isEmpty) {
-                                  displayToast('Please enter amount');
-                                } else if (expenseDetails.isEmpty) {
-                                  displayToast('Please enter expense details');
-                                } else if (_selectedSectorId == null) {
-                                  displayToast('Please select project');
-                                } else if (_selectedShopId == null) {
-                                  displayToast('Please select expense category');
-                                } else if (dExpDate == null) {
-                                  displayToast('Please select expense date');
-                                } else if (uplodedImage == null) {
-                                  displayToast('Please pick a photo');
-                                } else if (remarks.isEmpty) {
-                                  displayToast('Please enter remarks');
-                                } else if (sEmpCode == null) {
-                                  displayToast('Employee code missing');
-                                } else if (sContactNo == null) {
-                                  displayToast('Contact number missing');
-                                } else {
-                                  // All validations passed, call the first API
-                                  var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate!, amount);
-                                  print('---API Response: $hrmsPopWarning');
+                                  var dExpDate = '${widget.dExpDate}';
+                                  print("---Date---$dExpDate");
+                                  print("---Emp Code---$sEmpCode");
+                                  print("---Amount---$amount");
 
+                                  var hrmsPopWarning =
+                                      await HrmsPopUpWarningRepo()
+                                          .hrmsPopUpWarnging(context, sEmpCode,
+                                              dExpDate, amount);
+                                  print('--------1097----xxx--$hrmsPopWarning');
                                   result = "${hrmsPopWarning[0]['Result']}";
                                   msg = "${hrmsPopWarning[0]['Msg']}";
-
-                                  // If result is "0", call the second API
-                                  if (result == "0") {
-                                    var hrmsPostReimbursement = await HrmsPostReimbursementRevertRepo().hrmsPostReimbursementRevert(
-                                        context, sTranCode, sEmpCode, _selectedSectorId!, _selectedShopId!, dExpDate!, amount, expenseDetails, uplodedImage, sContactNo!, result, remarks
-                                    );
-
-                                    result = "${hrmsPostReimbursement[0]['Result']}";
-                                    msg = "${hrmsPostReimbursement[0]['Msg']}";
-
-                                    // Show success dialog
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return _buildDialogSucces2(context, msg);
-                                      },
-                                    );
-                                  } else {
-                                    showCustomDialog(context, msg);
+                                } else {
+                                  if (sTranCode == null) {
+                                    displayToast('Genrate Random Number');
+                                  } else if (sEmpCode == null) {
+                                    displayToast('Enter sEmpCode');
+                                  } else if (_selectedSectorId == null) {
+                                    displayToast('Please Select Project');
+                                  } else if (_selectedShopId == null) {
+                                    displayToast(
+                                        'Please Select Expense Category');
+                                  } else if (dExpDate == null) {
+                                    displayToast('Select Expense Date');
+                                  } else if (amount == null || amount == '') {
+                                    displayToast('Please Enter Amount');
+                                  } else if (expenseDetails == null ||
+                                      expenseDetails == '') {
+                                    displayToast(
+                                        'Please Enter Expense Details');
+                                  } else if (uplodedImage == null) {
+                                    displayToast('Please pick a photo');
+                                  } else if (sContactNo == null) {
+                                    displayToast('Please get a contact number');
                                   }
+                                } // condition to fetch a response form a api
+                                if (result == "0") {
+                                  // CALL API HRMS Reimbursement
+
+                                  print('----sTranCode--2616---$sTranCode');
+                                  print('----sEmpCode--2617---$sEmpCode');
+                                  print(
+                                      '----selectedSectorId--15---$_selectedSectorId');
+                                  print(
+                                      '----selectedShopId--15---$_selectedShopId');
+                                  print('----dExpDate--15---$dExpDate');
+                                  print('----amount--15---$amount');
+                                  print(
+                                      '----expenseDetails--15---$expenseDetails');
+                                  print('----uplodedImage--15---$uplodedImage');
+                                  print('----sContactNo--15---$sContactNo');
+                                  print('----sRemarks--15---${remarks}');
+                                  print('----result--15---$result');
+                                  print(
+                                      '----uplode image 2--44---$uplodedImage2');
+                                  print(
+                                      '----uplode image 3--45---$uplodedImage3');
+                                  print(
+                                      '----uplode image 4--46---$uplodedImage4');
+                                  print(
+                                      '----ConsumaleList --2630---$consumableList');
+
+                                  var hrmsPostReimbursement =
+                                      await HrmsPostReimbursementRepo()
+                                          .hrmsPostReimbursement(
+                                              context,
+                                              sTranCode,
+                                              sEmpCode,
+                                              _selectedSectorId,
+                                              _selectedShopId,
+                                              dExpDate,
+                                              amount,
+                                              expenseDetails,
+                                              uplodedImage,
+                                              sContactNo,
+                                              result,
+                                              remarks,
+                                              uplodedImage2,
+                                              uplodedImage3,
+                                              uplodedImage4,
+                                              consumableList);
+                                  print('---1050--$hrmsPostReimbursement');
+                                  result =
+                                      "${hrmsPostReimbursement[0]['Result']}";
+                                  msg = "${hrmsPostReimbursement[0]['Msg']}";
+
+                                  // displayToast(msg);
+                                  /// todo here to show the dialog sucess
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildDialogSucces2(context, msg);
+                                    },
+                                  );
+                                } else {
+                                  showCustomDialog(context, msg);
+                                  //displayToast(msg);
+                                  print('---diaplay dialog --');
                                 }
                               },
-
                               // onTap: () async {
-                              //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //   SharedPreferences prefs =
+                              //       await SharedPreferences.getInstance();
                               //   String? sEmpCode = prefs.getString('sEmpCode');
                               //   String? sContactNo = prefs.getString('sContactNo');
-                              //   print('----sEmpCode--15---$sEmpCode');
-                              //   /// TODO GET A RANDOM NUMBER
+                              //
+                              //   // Generate random transaction code
                               //   Random random = Random();
-                              //   int sTranCode = 10000000 + random.nextInt(90000000);
+                              //   int sTranCode =
+                              //       10000000 + random.nextInt(90000000);
                               //
-                              //   print('--1001--sTranCode---$sTranCode');
-                              //   print('--1002--sEmpCode---$sEmpCode');
-                              //   print('--1003--sProjectCode---$_selectedSectorId');
-                              //   print('--1004--sExpHeadCode---$_selectedShopId');
-                              //   print('--1005--dExpDate---${widget.dEntryAt}');
-                              //   print('--1006--fAmount---${_amountController.text}');
-                              //   print('--1007--sExpDetails---${_expenseController.text}');
-                              //   print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
-                              //   print('--1009--sEntryBy---$sContactNo');
-                              //   print('--1011--sResult---$result');
+                              //   var amount = _amountController.text.trim();
+                              //   var expenseDetails = _expenseController.text.trim();
+                              //   var remarks = _remarkController.text.trim();
                               //
-                              //   var amount = '${_amountController.text}';
-                              //   var expenseDetails ='${_expenseController.text}';
-                              //   remarks = '${_remarkController.text}'.trim();
+                              //   // Project code and expense category from widget
+                              //   _selectedSectorId = widget.sProjectCode;
+                              //   _selectedShopId = widget.sExpHeadCode;
+                              //   dExpDate = widget.dEntryAt;
                               //
-                              //   print('-----1135---$remarks');
-                              //   print('-----1136---$expenseDetails');
+                              //   // Validate all fields
+                              //   if (amount.isEmpty) {
+                              //     displayToast('Please enter amount');
+                              //   } else if (expenseDetails.isEmpty) {
+                              //     displayToast('Please enter expense details');
+                              //   } else if (_selectedSectorId == null) {
+                              //     displayToast('Please select project');
+                              //   } else if (_selectedShopId == null) {
+                              //     displayToast(
+                              //         'Please select expense category');
+                              //   } else if (dExpDate == null) {
+                              //     displayToast('Please select expense date');
+                              //   } else if (uplodedImage == null) {
+                              //     displayToast('Please pick a photo');
+                              //   } else if (remarks.isEmpty) {
+                              //     displayToast('Please enter remarks');
+                              //   } else if (sEmpCode == null) {
+                              //     displayToast('Employee code missing');
+                              //   } else if (sContactNo == null) {
+                              //     displayToast('Contact number missing');
+                              //   } else {
+                              //     // All validations passed, call the first API
+                              //     var hrmsPopWarning =
+                              //         await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!,
+                              //                 dExpDate!, amount);
+                              //     print('---API Response: $hrmsPopWarning');
                               //
-                              //   print('xxxx---355--${widget.sProjectCode}');
-                              //   print('xxxx---356--${widget.sExpHeadCode}');
-                              //   _selectedSectorId = '${widget.sProjectCode}';
-                              //   _selectedShopId = '${widget.sExpHeadCode}';
-                              //   dExpDate   = '${widget.dEntryAt}';
-                              //   print('xxxx---1138--${dExpDate}');
-                              //
-                              //   //   _selectedSectorId!=null && _selectedShopId!=null &&
-                              //
-                              //   if(_formKey.currentState!.validate() && sTranCode!=null && sEmpCode != null &&
-                              //       dExpDate!=null && amount !=null && expenseDetails!=null || expenseDetails !='' &&
-                              //       uplodedImage!=null && sContactNo!=null && remarks!=null){
-                              //
-                              //     // Call Api
-                              //     var  hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!,dExpDate,amount);
-                              //     print('---975--$hrmsPopWarning');
                               //     result = "${hrmsPopWarning[0]['Result']}";
                               //     msg = "${hrmsPopWarning[0]['Msg']}";
                               //
-                              //     print('---Api is calling---');
+                              //     // If result is "0", call the second API
+                              //     if (result == "0") {
                               //
-                              //   }else{
-                              //     if(sTranCode==null){
-                              //       displayToast('Genrate Random Number');
-                              //     }else if(sEmpCode==null){
-                              //       displayToast('Enter sEmpCode');
-                              //     }else if(_selectedSectorId==null){
-                              //       displayToast('Please Select Project');
-                              //     }else if(_selectedShopId==null){
-                              //       displayToast('Please Select Expense Category');
-                              //     }else if(dExpDate==null){
-                              //       displayToast('Select Expense Date');
-                              //     }else if(amount==null || amount==''){
-                              //       displayToast('Please Enter Amount');
+                              //       var hrmsPostReimbursement =
+                              //           await HrmsPostReimbursementRevertRepo()
+                              //               .hrmsPostReimbursementRevert(
+                              //                   context,
+                              //                   sTranCode,
+                              //                   sEmpCode,
+                              //                   _selectedSectorId!,
+                              //                   _selectedShopId!,
+                              //                   dExpDate!,
+                              //                   amount,
+                              //                   expenseDetails,
+                              //                   uplodedImage,
+                              //                   sContactNo!,
+                              //                   result,
+                              //                   remarks,
+                              //               uplodedImage2,
+                              //               uplodedImage3,
+                              //               uplodedImage4,
+                              //               consumableList
+                              //           );
+                              //
+                              //
+                              //       result =
+                              //           "${hrmsPostReimbursement[0]['Result']}";
+                              //       msg = "${hrmsPostReimbursement[0]['Msg']}";
+                              //
+                              //       // Show success dialog
+                              //       showDialog(
+                              //         context: context,
+                              //         builder: (BuildContext context) {
+                              //           return _buildDialogSucces2(
+                              //               context, msg);
+                              //         },
+                              //       );
+                              //     } else {
+                              //       showCustomDialog(context, msg);
                               //     }
-                              //     else if(expenseDetails==null || expenseDetails==''){
-                              //       displayToast('Please Enter Expense Details');
-                              //     }else if(uplodedImage==null){
-                              //       displayToast('Please pick a photo');
-                              //     }else if(sContactNo==null){
-                              //       displayToast('Please get a contact number');
-                              //     }else if(remarks==null || remarks==''){
-                              //       displayToast('Please Remarks');
-                              //     }
-                              //
-                              //   } // condition to fetch a response form a api
-                              //   //showCustomDialog(context,msg);
-                              //
-                              //   if(result=="0"){
-                              //     // CALL API HRMS Reimbursement
-                              //     // var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                              //     //     _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
-                              //     // );
-                              //
-                              //     var  hrmsPostReimbursement = await HrmsPostReimbursementRevertRepo().hrmsPostReimbursementRevert(context,sTranCode,sEmpCode,
-                              //         _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,remarks
-                              //     );
-                              //
-                              //     print('---1185--$hrmsPostReimbursement');
-                              //     result = "${hrmsPostReimbursement[0]['Result']}";
-                              //     msg = "${hrmsPostReimbursement[0]['Msg']}";
-                              //
-                              //     // displayToast(msg);
-                              //     /// todo here to show the dialog sucess
-                              //     showDialog(
-                              //       context: context,
-                              //       builder: (BuildContext context) {
-                              //         return _buildDialogSucces2(context,msg);
-                              //       },
-                              //     );
-                              //
-                              //   }else{
-                              //     showCustomDialog(context,msg);
-                              //     //displayToast(msg);
-                              //     print('---diaplay dialog --');
                               //   }
                               // },
 
@@ -1278,19 +2862,19 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 decoration: BoxDecoration(
                                   color: AppColors.loginbutton,
                                   // Background color using HEX value
-                                  borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                                  borderRadius: BorderRadius.circular(
+                                      AppMargin.m10), // Rounded corners
                                 ),
                                 //  #00b3c7
                                 child: Center(
                                   child: Text(
                                     "Send Reimbursement",
-                                    style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                                    style: AppTextStyle
+                                        .font16OpenSansRegularWhiteTextStyle,
                                   ),
                                 ),
                               ),
                             ),
-
-
                           ],
                         ),
                       ),
@@ -1304,6 +2888,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       ),
     );
   }
+
   // alert dialog box
   void showCustomDialog(BuildContext context, String dynamicValue) {
     showDialog(
@@ -1319,7 +2904,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                 children: [
                   Icon(Icons.warning, color: Colors.red),
                   SizedBox(width: 8),
-                  Text('Duplicate Entry', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Duplicate Entry',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(height: 16),
@@ -1338,18 +2924,54 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
                     String? sEmpCode = prefs.getString('sEmpCode');
                     String? sContactNo = prefs.getString('sContactNo');
+
                     /// TODO GET A RANDOM NUMBER
                     Random random = Random();
                     int sTranCode = 10000000 + random.nextInt(90000000);
                     var amount = '${_amountController.text}';
                     var expenseDetails = '${_expenseController.text}';
+                    remarks = '${_remarkController.text}';
 
-                    var  hrmsPostReimbursement = await HrmsPostReimbursementRepo().hrmsPostReimbursement(context,sTranCode,sEmpCode,
-                        _selectedSectorId,_selectedShopId,dExpDate,amount,expenseDetails,uplodedImage,sContactNo,result,"Testing"
-                   "","","","","");
+                    //---------
+
+                    print('----sTranCode--15---$sTranCode');
+                    print('----sEmpCode--15---$sEmpCode');
+                    print('----selectedSectorId--15---$_selectedSectorId');
+                    print('----selectedShopId--15---$_selectedShopId');
+                    print('----dExpDate--15---$dExpDate');
+                    print('----amount--15---$amount');
+                    print('----expenseDetails--15---$expenseDetails');
+                    print('----uplodedImage--15---$uplodedImage');
+                    print('----sContactNo--15---$sContactNo');
+                    print('----sRemarks--15---${remarks}');
+                    print('----result--15---$result');
+                    print('----uplode image 2--44---$uplodedImage2');
+                    print('----uplode image 3--45---$uplodedImage3');
+                    print('----uplode image 4--46---$uplodedImage4');
+                    print('----ConsumaleList --46---$consumableList');
+
+                    var hrmsPostReimbursement =
+                        await HrmsPostReimbursementRepo().hrmsPostReimbursement(
+                            context,
+                            sTranCode,
+                            sEmpCode,
+                            _selectedSectorId!,
+                            _selectedShopId!,
+                            dExpDate!,
+                            amount,
+                            expenseDetails,
+                            uplodedImage,
+                            sContactNo!,
+                            result,
+                            remarks,
+                            uplodedImage2,
+                            uplodedImage3,
+                            uplodedImage4,
+                            consumableList);
                     print('---1050--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";
@@ -1358,7 +2980,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return _buildDialogSucces2(context,msg);
+                        return _buildDialogSucces2(context, msg);
                       },
                     );
                     //Navigator.of(context).pop();

@@ -9,18 +9,14 @@ import 'package:untitled/presentation/profile/profile.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsattendance.dart';
 import '../../data/loader_helper.dart';
-import '../attandanceCalendar/attandanceCalendar.dart';
 import '../attandanceCalendar/customCalendarScreen.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../holiday/holidaylist.dart';
-import '../login/loginScreen.dart';
 import '../notification/notification.dart';
 import '../policydoc/policydoc.dart';
-import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
-import '../resources/routes_manager.dart';
 import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
@@ -53,7 +49,6 @@ class DashBoardHomePage extends StatefulWidget {
   @override
   State<DashBoardHomePage> createState() => _DashBoardHomePageState();
 }
-
 
 class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
@@ -521,7 +516,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   @override
   Widget build(BuildContext context) {
     // change status bar colore
-
     return WillPopScope(
       onWillPop: () async => false,
       child: GestureDetector(
@@ -578,16 +572,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       ),
                     ),
 
-                    // child: Container(
-                    //  // color: Colors.white,
-                    //   margin: EdgeInsets.all(12.0), // Apply margin around the image
-                    //   child: Image.asset(
-                    //     'assets/images/logout2.jpeg',
-                    //     width: 25,
-                    //     height: 25,
-                    //     fit: BoxFit.fill,
-                    //   ),
-                    // ),
                   )
                 ),
               ],
@@ -632,7 +616,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         crossAxisCount: 3,
                         primary: false,
                         crossAxisSpacing: 5.0,
-                        childAspectRatio: 0.85,
+                        childAspectRatio: 0.95,
                         mainAxisSpacing: 5.0,
                         shrinkWrap: true,
                         children: <Widget>[
@@ -645,7 +629,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                               },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -711,7 +695,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               //getLocation();
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -772,7 +756,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -834,7 +818,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -895,7 +879,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -956,7 +940,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1020,7 +1004,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1083,7 +1067,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             },
 
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1144,7 +1128,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1206,7 +1190,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1265,7 +1249,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(
@@ -1325,7 +1309,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               );
                             },
                             child: Container(
-                              height: 100.0,
+                              height: 85.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 border: Border.all(

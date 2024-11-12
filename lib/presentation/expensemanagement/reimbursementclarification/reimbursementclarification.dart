@@ -10,19 +10,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementlog.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementclarification/reimbursementRevert.dart';
 import '../../../app/generalFunction.dart';
-import '../../../data/hrmsreimbursementstatusV3_repo.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../data/reimbursementClarificationRepo.dart';
-import '../../../domain/hrmsreimbursementstatusV3Model.dart';
 import '../../../domain/rimbursementclarificationmodel.dart';
 import '../../resources/app_text_style.dart';
 import '../expense_management.dart';
 
 class ReimbursementClarification extends StatelessWidget {
+
   const ReimbursementClarification({super.key});
 
   @override
@@ -42,6 +40,7 @@ class ReimbursementClarification extends StatelessWidget {
 }
 
 class ReimbursementClarificationPage extends StatefulWidget {
+
   const ReimbursementClarificationPage({super.key});
 
   @override
@@ -65,9 +64,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     }
   }
 
-
   DateTime? _date;
-
   Future<void> _selectDate(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -95,7 +92,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
 
   // Distic List
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
-
     reimbursementStatusV3 = HrmsreimbursementClarificationRepo().hrmsReimbursementClarificationList(context, firstOfMonthDay, lastDayOfCurrentMonth);
     print('-----91---$reimbursementStatusV3');
 
@@ -107,7 +103,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     });
     // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
     // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-
     print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
     // setState(() {});
   }
@@ -121,13 +116,11 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
           return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
               item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
               item.sStatusName.toLowerCase().contains(query.toLowerCase());
-
           // Filter by employee name
         }).toList();
       }
     });
   }
-
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
@@ -170,7 +163,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   String? lastDayOfCurrentMonth;
   var fromPicker;
   var toPicker;
-
   // Uplode Id Proof with gallary
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -191,7 +183,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
       }
     } catch (e) {}
   }
-
   // multifilepath
   // toast
   void displayToast(String msg) {
@@ -260,7 +251,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     final responseData = json.decode(responsed.body);
     print('---155----$responseData');
   }
-
   getCurrentdate() async{
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -298,7 +288,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
   }
-
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -694,8 +683,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                             ),
                                             const SizedBox(height: 10),
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 15, right: 15),
+                                              padding: const EdgeInsets.only(left: 15, right: 15),
                                               child: Container(
                                                 height: 0.5,
                                                 color: Color(0xff3f617d),
@@ -703,8 +691,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                             ),
                                             SizedBox(height: 5),
                                             Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: <Widget>[
                                                 Container(
                                                   height: 10.0,
@@ -717,10 +704,8 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                 ),
                                                 SizedBox(width: 5),
                                                 //  '‣ Sector',
-                                                Text(
-                                                    'Expense Details',
-                                                    style: AppTextStyle
-                                                        .font14OpenSansRegularBlackTextStyle
+                                                Text('Expense Details',
+                                                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle
                                                 )
                                               ],
                                             ),
@@ -729,8 +714,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                               child: Text(
                                                   leaveData.sExpDetails,
                                                   //item['dExpDate'] ??'',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlack45TextStyle
+                                                  style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
                                               ),
                                             ),
                                             SizedBox(height: 5),
@@ -743,7 +727,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   Container(
                                                       width: 20.0,
                                                       height: 20.0,
-
                                                       child: Center(
                                                           child: Icon(Icons.calendar_today,size: 16,color: Color(0xFF0098a6),)
                                                       )),
@@ -757,8 +740,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       Text(
                                                         leaveData.dEntryAt,
                                                         // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                                         maxLines: 2, // Limits the text to 2 lines
                                                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
                                                         softWrap: true,
@@ -794,8 +776,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       ),
                                                     ),
                                                   )
-
-
                                                 ],
                                               ),
                                             ),
@@ -817,7 +797,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   Container(
                                                       width: 20.0,
                                                       height: 20.0,
-
                                                       child: Center(
                                                           child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
                                                       )),
@@ -847,9 +826,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
                                                         softWrap: true,
                                                       ),
-
-
-
                                                     ],
                                                   ),
                                                   Spacer(),
@@ -858,22 +834,16 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                     child: Row(
                                                       mainAxisAlignment: MainAxisAlignment.end,
                                                       children: [
-                                                      Text(
-                                                            'Bill Date :', // Replace with your text
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlackTextStyle
+                                                      Text('Bill Date :', // Replace with your text
+                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                                         ),
                                                       SizedBox(width: 5),
-                                                      Text(
-                                                            '${leaveData.dRemarksAt}', // Replace with your text
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlackTextStyle
+                                                      Text('${leaveData.dRemarksAt}', // Replace with your text
+                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                                         ),
                                                       ],
                                                     ),
                                                   )
-
-
                                                 ],
                                               ),
                                             ),
@@ -888,13 +858,28 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   var fAmount = leaveData.fAmount;
                                                   var sExpDetails = leaveData.sExpDetails;
                                                   var sExpBillPhoto = leaveData.sExpBillPhoto;
+                                                  var sExpBillPhoto2 = leaveData.sExpBillPhoto2;
+                                                  var sExpBillPhoto3 = leaveData.sExpBillPhoto3;
+                                                  var sExpBillPhoto4 = leaveData.sExpBillPhoto4;
                                                  var sProjectCode = leaveData.sProjectCode;
                                                   var sExpHeadCode = leaveData.sExpHeadCode;
+                                                  var sTranCode = leaveData.sTranCode;
+                                                  var dExpDate = leaveData.dExpDate;
+                                                  // sRemarks
+                                                  var sRemarks = leaveData.sRemarks;
+
+                                                  print('--sExpBillPhoto-------$sExpBillPhoto');
+                                                  print('--sExpBillPhoto2-------$sExpBillPhoto2');
+                                                  print('--sExpBillPhoto3-------$sExpBillPhoto3');
+                                                  print('--sExpBillPhoto4-------$sExpBillPhoto4');
+                                                  print('--sTranCode-------$sTranCode');
+                                                  print('--dExpDate-------$dExpDate');
 
                                                   Navigator.push(
                                                   context,
-                                                  MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode)),
+                                                  MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode,sExpBillPhoto2,sExpBillPhoto3,sExpBillPhoto4,sTranCode,dExpDate,sRemarks)),
                                                 );
+
                                               },
                                               child: Container(
                                                 height: 40,
@@ -922,9 +907,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                               ),
                                             ),
                                             SizedBox(height: 15),
-
-
-
                                           ],
                                         ),
                                       ),

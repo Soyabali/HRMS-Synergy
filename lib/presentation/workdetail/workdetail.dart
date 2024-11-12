@@ -98,7 +98,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
       // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
     }
   }
-
   sendCurrentWorkNew(String combinedList) async {
     var workEntryNew = await HrmsWorkEntryNewRepo().hrmsWorkEntryNew(context, combinedList);
     print('-----111---$workEntryNew');

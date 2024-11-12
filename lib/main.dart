@@ -42,6 +42,5 @@ Future<void> _requestPermissions() async {
     // Request camera permission
     await Permission.camera.request();
   }
-
   // You can request other permissions similarly
 }

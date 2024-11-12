@@ -15,9 +15,9 @@ class HrmsPopUpWarningRepo {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
-      print('----sEmpCode--15---$sEmpCode');
-      print('----dExpDate--15---$dExpDate');
-      print('----amount--15---$amount');
+      print('----sEmpCode--18---$sEmpCode');
+      print('----dExpDate--19---$dExpDate');
+      print('----amount--20---$amount');
 
 
       var baseURL = BaseRepo().baseurl;

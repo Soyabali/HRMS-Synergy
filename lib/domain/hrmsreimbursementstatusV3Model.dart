@@ -7,6 +7,9 @@ class Hrmsreimbursementstatusv3model {
   final String fAmount;
   final String sExpDetails;
   final String sExpBillPhoto;
+  final String sExpBillPhoto2;
+  final String sExpBillPhoto3;
+  final String sExpBillPhoto4;
   final String sStatusName;
   final String sEmpName;
   final String sRemarks;
@@ -14,6 +17,7 @@ class Hrmsreimbursementstatusv3model {
   final String sProjectCode;
   final String sExpHeadCode;
   final String dExpDate;
+  final String iStatus;
 
   Hrmsreimbursementstatusv3model({
     required this.sTranCode,
@@ -24,6 +28,9 @@ class Hrmsreimbursementstatusv3model {
     required this.fAmount,
     required this.sExpDetails,
     required this.sExpBillPhoto,
+    required this.sExpBillPhoto2,
+    required this.sExpBillPhoto3,
+    required this.sExpBillPhoto4,
     required this.sStatusName,
     required this.sEmpName,
     required this.sRemarks,
@@ -31,6 +38,7 @@ class Hrmsreimbursementstatusv3model {
     required this.sProjectCode,
     required this.sExpHeadCode,
     required this.dExpDate,
+    required this.iStatus,
   });
 
   // Factory constructor to create an instance from JSON
@@ -44,6 +52,9 @@ class Hrmsreimbursementstatusv3model {
       fAmount: json['fAmount'],
       sExpDetails: json['sExpDetails'],
       sExpBillPhoto: json['sExpBillPhoto'],
+      sExpBillPhoto2: json['sExpBillPhoto2'],
+      sExpBillPhoto3: json['sExpBillPhoto3'],
+      sExpBillPhoto4: json['sExpBillPhoto4'],
       sStatusName: json['sStatusName'],
       sEmpName: json['sEmpName'],
       sRemarks: json['sRemarks'],
@@ -51,6 +62,7 @@ class Hrmsreimbursementstatusv3model {
       sProjectCode: json['sProjectCode'],
       sExpHeadCode: json['sExpHeadCode'],
       dExpDate: json['dExpDate'],
+      iStatus:json['iStatus']
     );
   }
 }

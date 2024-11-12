@@ -7,6 +7,9 @@ class HrmsReimbursementClarificationModel {
   String fAmount;
   String sExpDetails;
   String sExpBillPhoto;
+  String sExpBillPhoto2;
+  String sExpBillPhoto3;
+  String sExpBillPhoto4;
   String sStatusName;
   String sEmpName;
   String sRemarks;
@@ -24,6 +27,9 @@ class HrmsReimbursementClarificationModel {
     required this.fAmount,
     required this.sExpDetails,
     required this.sExpBillPhoto,
+    required this.sExpBillPhoto2,
+    required this.sExpBillPhoto3,
+    required this.sExpBillPhoto4,
     required this.sStatusName,
     required this.sEmpName,
     required this.sRemarks,
@@ -44,6 +50,9 @@ class HrmsReimbursementClarificationModel {
       fAmount: json['fAmount'] as String,
       sExpDetails: json['sExpDetails'] as String,
       sExpBillPhoto: json['sExpBillPhoto'] as String,
+      sExpBillPhoto2: json['sExpBillPhoto2'] as String,
+      sExpBillPhoto3: json['sExpBillPhoto3'] as String,
+      sExpBillPhoto4: json['sExpBillPhoto4'] as String,
       sStatusName: json['sStatusName'] as String,
       sEmpName: json['sEmpName'] as String,
       sRemarks: json['sRemarks'] as String,
@@ -53,8 +62,8 @@ class HrmsReimbursementClarificationModel {
       dExpDate: json['dExpDate'] as String,
     );
   }
-
   // Method to convert the object back to JSON
+
   Map<String, dynamic> toJson() {
     return {
       'sTranCode': sTranCode,
@@ -65,6 +74,9 @@ class HrmsReimbursementClarificationModel {
       'fAmount': fAmount,
       'sExpDetails': sExpDetails,
       'sExpBillPhoto': sExpBillPhoto,
+      'sExpBillPhoto2': sExpBillPhoto2,
+      'sExpBillPhoto3': sExpBillPhoto3,
+      'sExpBillPhoto4': sExpBillPhoto4,
       'sStatusName': sStatusName,
       'sEmpName': sEmpName,
       'sRemarks': sRemarks,

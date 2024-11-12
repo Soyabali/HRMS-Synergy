@@ -21,8 +21,10 @@ import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 import '../expense_management.dart';
+import 'consumableItem.dart';
 
 class Reimbursementstatus extends StatelessWidget {
+
   const Reimbursementstatus({super.key});
 
   @override
@@ -43,6 +45,7 @@ class Reimbursementstatus extends StatelessWidget {
 }
 
 class ReimbursementstatusPage extends StatefulWidget {
+
   const ReimbursementstatusPage({super.key});
 
   @override
@@ -79,6 +82,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   List<Hrmsreimbursementstatusv3model> _filteredData = [];  // Holds filtered data
   TextEditingController _takeActionController = TextEditingController();
   // Distic List
+
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
 
     reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
@@ -92,7 +96,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
      // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
    // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
 
-    print(" -----xxxxx-  reimbursementStatusList--90-----> $reimbursementStatusList");
+    print(" -----xxxxx-  reimbursementStatusList--98-----> $reimbursementStatusList");
     // setState(() {});
   }
   // filter data
@@ -100,6 +104,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     setState(() {
       if (query.isEmpty) {
         _filteredData = _allData;  // Show all data if search query is empty
+
       } else {
         _filteredData = _allData.where((item) {
           return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
@@ -246,7 +251,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     print('---155----$responseData');
   }
 
-  getCurrentdate() async{
+  getCurrentdate() async {
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
@@ -275,7 +280,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     getLocation();
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-
     super.initState();
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -283,7 +287,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
   }
-
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -304,8 +307,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     debugPrint("-------------Position-----------------");
     debugPrint(position.latitude.toString());
 
@@ -390,7 +392,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
-
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -409,7 +410,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         fontWeight: FontWeight.normal
                         ),),
                         SizedBox(width: 4),
-
                         GestureDetector(
                           onTap: () async {
                             /// TODO Open Date picke and get a date
@@ -573,7 +573,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 0),
                   Expanded(
                     child: Container(
                       child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
@@ -588,7 +588,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                   final leaveData = _filteredData[index];
                                  // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
                               return Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10,top: 15),
+                                padding: const EdgeInsets.only(left: 10, right: 10,top: 10),
                                 child: Card(
                                   elevation: 1,
                                   color: Colors.white,
@@ -602,7 +602,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                     ),
                                     child: Padding(
                                       padding:
-                                      const EdgeInsets.only(left: 8, right: 8),
+                                      const EdgeInsets.only(left: 8, right: 8,top: 8),
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment:
@@ -655,12 +655,46 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                   ],
                                                 ),
                                               ),
+                                              /// todo here you should add a icon on a right hand side
+                                              Spacer(),
+                                              Padding(
+                                                padding: const EdgeInsets.only(top: 10),
+                                                child: InkWell(
+                                                  onTap: (){
+                                                    print('----print----');
+                                                    var sTranCode =  leaveData.sTranCode;
+                                                    print("----670----$sTranCode");
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(builder: (context) => ConsumableItemPage(sTranCode:sTranCode)),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end, // Aligns the child to the right
+                                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                                    children: [
+                                                      Image.asset(
+                                                        "assets/images/aadhar.jpeg",
+                                                        width: 20,
+                                                        height: 20,
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+
+                                              // Image.asset("assets/images/uplodeConsum.jpeg",
+                                              // width: 20,
+                                              // height: 20,
+                                              // fit: BoxFit.fill,
+                                              // ),
+
                                             ],
                                           ),
                                           const SizedBox(height: 10),
                                           Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 15, right: 15),
+                                            padding: const EdgeInsets.only(left: 15, right: 15),
                                             child: Container(
                                               height: 0.5,
                                               color: Color(0xff3f617d),
@@ -668,8 +702,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                           ),
                                           SizedBox(height: 5),
                                           Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
                                               Container(
                                                 height: 10.0,
@@ -683,8 +716,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                               SizedBox(width: 5),
                                               //  '‣ Sector',
                                               Text(
-                                                  'Bill Date',
-                                                  style: AppTextStyle
+                                                  'Bill Date', style: AppTextStyle
                                                       .font12OpenSansRegularBlackTextStyle
                                               )
                                             ],
@@ -700,8 +732,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                           ),
                                           SizedBox(height: 5),
                                           Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
                                               Container(
                                                 height: 10.0,
@@ -715,8 +746,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                               SizedBox(width: 5),
                                               Text(
                                                   'Entry At',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle
+                                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                               )
                                             ],
                                           ),
@@ -744,10 +774,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                 ),
                                               ),
                                               SizedBox(width: 5),
-                                              Text(
-                                                  'Expense Details',
-                                                  style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle
+                                              Text('Expense Details',
+                                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                               )
                                             ],
                                           ),
@@ -756,17 +784,13 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                             child: Text(
                                                 leaveData.sExpDetails,
                                                // item['sExpDetails'] ?? '',
-                                                style: AppTextStyle
-                                                    .font12OpenSansRegularBlack45TextStyle
+                                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
                                             ),
                                           ),
                                           SizedBox(height: 10),
                                           Container(
                                             height: 1,
-                                            width: MediaQuery
-                                                .of(context)
-                                                .size
-                                                .width - 40,
+                                            width: MediaQuery.of(context).size.width - 40,
                                             color: Colors.grey,
                                           ),
                                           SizedBox(height: 10),
@@ -775,7 +799,9 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
-                                                Icon(Icons.speaker_notes, size: 20, color: Colors.black),
+                                                Icon(Icons.speaker_notes,
+                                                    size: 20,
+                                                    color: Colors.black),
                                                 SizedBox(width: 10),
                                                 Text(
                                                     'Status',
@@ -827,7 +853,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                             ),
                                           ),
                                           SizedBox(height: 10),
-
                                           Padding(
                                             padding: const EdgeInsets.only(bottom: 10),
                                             child: Row(
@@ -849,21 +874,19 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                         child: GestureDetector(
                                                           onTap: (){
                                                             print('-----832---View Image---');
-                                                            var images =  leaveData.sExpBillPhoto;
-                                                            var dExpDate = leaveData.dExpDate;
-                                                            var billdate ='Bill Date : $dExpDate';
-                                                           // var images2 = _filteredData[index];
-                                                            print('$images');
-                                                            print('$dExpDate');
-                                                            openFullScreenDialog(
-                                                              context,
-                                                                images,
-                                                                billdate
-                                                             // 'https://your-image-url.com/image.jpg', // Replace with your image URL
-                                                             // 'Bill Date: 01-01-2024', // Replace with your bill date
-                                                            );
+                                                            print('-----832---View Image---');
 
-                                                          },
+                                                            List<String> images = [
+                                                              leaveData.sExpBillPhoto,
+                                                              leaveData.sExpBillPhoto2,
+                                                              leaveData.sExpBillPhoto3,
+                                                              leaveData.sExpBillPhoto4,
+                                                            ].where((image) => image != null && image.isNotEmpty).toList(); // Filter out null/empty images
+
+                                                            var dExpDate = leaveData.dExpDate;
+                                                            var billDate = 'Bill Date : $dExpDate';
+                                                            openFullScreenDialog(context, images, billDate);
+                                                            },
                                                           child: Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: [
@@ -877,37 +900,36 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                   ),
                                                 ),
                                                 SizedBox(width: 2),
+                                                if(leaveData.iStatus=="0")
+                                                  // remove
                                                 Expanded(
                                                   child: Column(
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       Container(
                                                         height: 40,
-                                                        decoration: BoxDecoration(
-                                                          color: Color(0xFF0098a6),
+                                                        decoration: BoxDecoration(color: Color(0xFFE4B9AB),
                                                           // Change this to your preferred color
                                                           borderRadius: BorderRadius.circular(10),
                                                         ),
                                                         child: GestureDetector(
                                                           onTap: (){
-
                                                             print('---take action-------');
                                                             /// todo call a take Action Dialog
                                                             //_takeActionDialog(context);
-                                                           sTranCode  = leaveData.sTranCode;
-                                                          print('-------882----$sTranCode');
+                                                              sTranCode  = leaveData.sTranCode;
+                                                              print('-------882----$sTranCode');
                                                             showDialog(
                                                             context: context,
-                                builder: (BuildContext context) {
-                                return _takeActionDialog(context);
-                                },
-                                );
-
-                                                          },
+                                                            builder: (BuildContext context) {
+                                                            return _takeActionDialog(context);
+                                                           },
+                                                           );
+                                                           },
                                                           child: Row(
                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                             children: [
-                                                              Text('Delete',style: AppTextStyle
+                                                              Text('Remove',style: AppTextStyle
                                                                   .font14OpenSansRegularWhiteTextStyle),
                                                               Icon(Icons.arrow_forward_ios,color: Colors.white,size: 16),
                                                             ],
@@ -918,6 +940,18 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                   ),
                                                 ),
                                                 SizedBox(width: 2),
+                                                // if 1 to 11 then show log
+                                                if(leaveData.iStatus=="1"
+                                                || leaveData.iStatus=="2"
+                                                || leaveData.iStatus=="3"
+                                                || leaveData.iStatus=="4"
+                                                || leaveData.iStatus=="5"
+                                                || leaveData.iStatus=="6"
+                                                || leaveData.iStatus=="7"
+                                                || leaveData.iStatus=="8"
+                                                || leaveData.iStatus=="9"
+                                                || leaveData.iStatus=="10"
+                                                || leaveData.iStatus=="11")
                                                 Expanded(
                                                   child: Column(
                                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -939,25 +973,13 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                         child: Container(
                                                           height: 40,
                                                           decoration: BoxDecoration(
-                                                            color: Color(0xFF0098a6),
+                                                            color: Color(0xFF6a94e3),
                                                             // Change this to your preferred color
                                                             borderRadius: BorderRadius.circular(10),
                                                           ),
                                                           child: GestureDetector(
                                                             onTap: () {
-
-                                                             // var projact =  item['sProjectName'] ??'';
-
-
-
-                                                              // Navigator.push(
-                                                              //   context,
-                                                              //   MaterialPageRoute(builder: (context) => ReimbursementLog(projact,sTranCode)),
-                                                              // );
-                                                              // Navigator.push(
-                                                              //   context,
-                                                              //   MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
-                                                              // );
+                                                              // var projact =  item['sProjectName'] ??'';
                                                             },
                                                             child: Row(
                                                               mainAxisAlignment: MainAxisAlignment.center,
@@ -973,7 +995,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                     ],
                                                   ),
                                                 ),
-
 
                                               ],
                                             ),
@@ -999,7 +1020,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     );
   }
   // Opend Full Screen DialogbOX
-  void openFullScreenDialog(BuildContext context, String imageUrl, String billDate) {
+  void openFullScreenDialog(BuildContext context, List<String> imageUrls, String billDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -1008,11 +1029,16 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
           insetPadding: EdgeInsets.all(0),
           child: Stack(
             children: [
-              // Fullscreen Image
+              // Fullscreen PageView for multiple images
               Positioned.fill(
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover, // Adjust the image to fill the dialog
+                child: PageView.builder(
+                  itemCount: imageUrls.length,
+                  itemBuilder: (context, index) {
+                    return Image.network(
+                      imageUrls[index],
+                      fit: BoxFit.cover, // Adjust the image to fill the dialog
+                    );
+                  },
                 ),
               ),
 
@@ -1029,8 +1055,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     children: [
                       Text(
                         billDate,
-                          style: AppTextStyle
-                              .font16OpenSansRegularBlackTextStyle
+                        style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
                       ),
                     ],
                   ),
@@ -1064,8 +1089,10 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
       },
     );
   }
-  // take a action Dialog
+
+  // // take a action Dialog
   Widget _takeActionDialog(BuildContext context) {
+
     TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
 
     return Dialog(
@@ -1094,9 +1121,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                 ),
                 SizedBox(height: 10),
                 // TextFormField for entering data
-
-          Padding(
-                      padding: const EdgeInsets.only(left: 0),
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
                       child: TextFormField(
                         controller: _takeAction,
                         textInputAction: TextInputAction.next,
@@ -1121,7 +1147,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       ),
                     ),
                 SizedBox(height: 15),
-
                 // Submit button
                 InkWell(
                   onTap: ()async{
@@ -1135,7 +1160,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
                       // Make API call here
                       var loginMap = await Reimbursementstatustakeaction().reimbursementTakeAction(context, sTranCode);
-
                       print('---418----$loginMap');
 
                       setState(() {

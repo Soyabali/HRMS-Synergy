@@ -149,20 +149,6 @@ class _NotificationPageState extends State<NotificationPage> {
               ],
             ),
           ),
-          // Positioned(
-          //   top: -30, // Position the image at the top center
-          //   child: CircleAvatar(
-          //     radius: 30,
-          //     backgroundColor: Colors.blueAccent,
-          //     child: ClipOval(
-          //       child: Image.asset('assets/images/delete.jpeg', // Replace with your asset image path
-          //         fit: BoxFit.cover,
-          //         width: 60,
-          //         height: 60,
-          //       ),
-          //     ),
-          //   ),
-          // ),
           Positioned(
             top: -30, // Position the image at the top center
             child: CircleAvatar(

@@ -47,7 +47,6 @@ class ShopSurvey extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
   const MyHomePage({super.key});
 
   @override
@@ -131,7 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
   List? listCon;
   var _dropDownValueDistric;
   var _dropDownValueShopeType;
-  var _dropDownValueBindReimType;
+
   var _dropDownSector;
   var sectorresponse;
   String? sec;
@@ -148,6 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
   File? image, image2, image3, image4;
   var uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4;
   double? lat, long;
+  var _dropDownValueBindReimType;
 
   //var dExpDate;
   String? dExpDate;
@@ -264,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image!);
+        uploadImage(sToken!, image2!);
       } else {
         print('no image selected');
       }
@@ -284,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image!);
+        uploadImage(sToken!, image3!);
       } else {
         print('no image selected');
       }
@@ -304,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image!);
+        uploadImage(sToken!, image4!);
       } else {
         print('no image selected');
       }
@@ -332,33 +332,26 @@ class _MyHomePageState extends State<MyHomePage> {
       print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
-      var request = http.MultipartRequest(
-        'POST',
+      var request = http.MultipartRequest('POST',
         Uri.parse('$uplodeImageApi'),
       );
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'sImagePath',
         imageFile.path,
       ));
-
       // Send the request
       var streamedResponse = await request.send();
 
       // Get the response
       var response = await http.Response.fromStream(streamedResponse);
-
       // Parse the response JSON
       List<dynamic> responseData = json.decode(response.body);
-
       // Extracting the image path
       uplodedImage = responseData[0]['Data'][0]['sImagePath'];
       print('Uploaded Image Path----245--: $uplodedImage');
-
       hideLoader();
     } catch (error) {
       hideLoader();
@@ -442,7 +435,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // Extracting the image path
       uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
       print('Uploaded Image Path----245--: $uplodedImage');
-
       hideLoader();
     } catch (error) {
       hideLoader();
@@ -492,27 +484,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // multipartProdecudre() async {
-  //   print('----139--$image');
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? sToken = prefs.getString('sToken');
-  //   print('---Token---$sToken');
-  //
-  //   var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
-  //   var request = http.Request('POST',
-  //       Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
-  //   request.body = json.encode({"sImagePath": "$image"});
-  //   request.headers.addAll(headers);
-  //   http.StreamedResponse response = await request.send();
-  //   var responsed = await http.Response.fromStream(response);
-  //   final responseData = json.decode(responsed.body);
-  //   print('---155----$responseData');
-  // }
   // build dialog sucess
   Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),
       ),
       elevation: 0,
       backgroundColor: Colors.transparent,
@@ -531,8 +506,7 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text('Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                Text('Success', style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 Text(
                   msg,
@@ -591,15 +565,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
-  // datepicker
-  // InitState
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused) {
-  //     FocusScope.of(context).unfocus();  // Unfocus when app is paused
-  //   }
-  // }
 
   // function summit logic
   List<Map<String, dynamic>> _itemsList = [];
@@ -675,7 +640,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _addressfocus = FocusNode();
     // FocusScope.of(context).unfocus();
   }
-
   // location
   void getLocation() async {
     bool serviceEnabled;
@@ -1365,7 +1329,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ],
                                 ),
-                              ListView.builder(
+                                ListView.builder(
                                 shrinkWrap: true, // Makes ListView take up only the needed height
                                 physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling if the outer widget scrolls
                                 itemCount: _itemsList.length,
@@ -1584,6 +1548,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 ),
+
                               Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 5, top: 5),
@@ -2283,8 +2248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     // Call Api
                                     print('---call Api---');
 
-                                    var hrmsPopWarning =
-                                        await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
+                                    var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
                                     print('--------1097----xxx--$hrmsPopWarning');
                                     result = "${hrmsPopWarning[0]['Result']}";
                                     msg = "${hrmsPopWarning[0]['Msg']}";
@@ -2332,12 +2296,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           uplodedImage3,
                                           uplodedImage4,
                                           consumableList
-
-
-                                  );
+                                        );
                                     print('---1050--$hrmsPostReimbursement');
-                                    result =
-                                        "${hrmsPostReimbursement[0]['Result']}";
+                                    result = "${hrmsPostReimbursement[0]['Result']}";
                                     msg = "${hrmsPostReimbursement[0]['Msg']}";
 
                                     // displayToast(msg);
@@ -2345,8 +2306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return _buildDialogSucces2(
-                                            context, msg);
+                                        return _buildDialogSucces2(context, msg);
                                       },
                                     );
                                   } else {
@@ -2406,8 +2366,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Icon(Icons.warning, color: Colors.red),
                   SizedBox(width: 8),
-                  Text('Duplicate Entry',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Duplicate Entry',style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(height: 16),
@@ -2456,7 +2415,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             uplodedImage4,
                             consumableList
                         );
-                    print('---1050--$hrmsPostReimbursement');
+                    print('---2421--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";
                     // displayToast(msg);

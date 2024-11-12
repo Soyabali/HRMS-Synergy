@@ -9,6 +9,7 @@ class HrmsPostReimbursementRevertRepo {
   // this is a loginApi call functin
 
   Future hrmsPostReimbursementRevert(
+
       BuildContext context,
       int sTranCode,
       String? sEmpCode,
@@ -20,7 +21,7 @@ class HrmsPostReimbursementRevertRepo {
       uplodedImage,
       String? sContactNo,
       result,
-      String remarks) async {
+      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
@@ -36,6 +37,10 @@ class HrmsPostReimbursementRevertRepo {
       print('----sContactNo--15---$sContactNo');
       print('----sRemarks--15---${remarks}');
       print('----result--15---$result');
+      print('----uplodedImage2--15---$uplodedImage2');
+      print('----uplodedImage3--41---$uplodedImage3');
+      print('----uplodedImage4--41---$uplodedImage4');
+      print('----consumableList--43---$consumableList');
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsPostReimbursement/hrmsPostReimbursement";
@@ -60,6 +65,10 @@ class HrmsPostReimbursementRevertRepo {
         "sEntryBy": sContactNo,
         "sRemarks": remarks,
         "sResult": result,
+        "uplodedImage2": uplodedImage2,
+        "uplodedImage3": uplodedImage3,
+        "uplodedImage4": uplodedImage4,
+        "sItemArray":consumableList
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
