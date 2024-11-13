@@ -30,9 +30,7 @@ class MyLeaveStatusPage extends StatefulWidget {
   State<MyLeaveStatusPage> createState() => _MyLeaveStatusPageState();
 }
 
-class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
-
-   with TickerProviderStateMixin {
+class _MyLeaveStatusPageState extends State<MyLeaveStatusPage> with TickerProviderStateMixin {
 // with SingleTickerProviderStateMixin {
   //
   late Future<List<HrmsLeaveStatusModel>> hrmsLeaveStatus;
@@ -90,6 +88,7 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
     });
   }
   // to Date SelectedLogic
+
   void toDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
@@ -402,7 +401,6 @@ class _MyLeaveStatusPageState extends State<MyLeaveStatusPage>
                                       color: Colors.blue,
                                       width: 0,
                                     )),
-
                                 tabs: <Widget>[
                                   _buildTab('Pending', context),
                                   _buildTab('Sanctioned', context),
