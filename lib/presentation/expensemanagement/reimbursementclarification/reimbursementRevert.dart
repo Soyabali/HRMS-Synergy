@@ -82,19 +82,16 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   // Distic List
   updatedSector() async {
     distList = await ProjectRepo().projectList();
-    print(" -----xxxxx-  projectList--76---> $distList");
     setState(() {});
   }
 
   expenseCategory() async {
     expenseList = await ExpenseRepo().expenseList();
-    print(" -----xxxxx-  expenseList--84---> $expenseList");
     setState(() {});
   }
 
   shopType() async {
     shopTypeList = await ShopTypeRepo().getShopType();
-    print(" -----xxxxx-  shopTypeList--- Data--65---> $shopTypeList");
     setState(() {});
   }
 
@@ -107,10 +104,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
   // postImage
   postimage() async {
-    print('----ImageFile----$_imageFile');
     var postimageResponse =
         await PostImageRepo().postImage(context, _imageFile);
-    print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
 
@@ -179,13 +174,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
   late Future<List<GetConsumableSreimbitemModel>> consumableItem;
 
-  // consumableItemlist(String stranCode) async {
-  //   consumableItem = ConsumableItemRepo().consumableList(context, stranCode);
-  //  // print(" -----xx--xx--xx----xx--conssumable ITem--148-----> $consumableItem");
-  //   // setState(() {});
-  // }
-  //
-
   Future<void> monthAttendance(String stranCode) async {
     // Clear the list and update UI immediately
     setState(() {
@@ -204,13 +192,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       print("Error fetching consumable items: $e");
     }
   }
-
-  // Uplode Id Proof with gallary
-  // pick image from a Camera
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -252,7 +236,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImage3() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -260,7 +243,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       if (pickFileid != null) {
         image3 = File(pickFileid.path);
         setState(() {});
-        print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
         uploadImage3(sToken!, image3!);
       } else {
@@ -273,7 +255,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImage4() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
+
 
     try {
       final pickFileid = await ImagePicker()
@@ -294,7 +276,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImageGallery() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -315,7 +296,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImageGallery2() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -336,7 +316,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImageGallery3() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -357,7 +336,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImageGallery4() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -427,16 +405,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
     // Display success message and print data for verification
     displayToast("Item added successfully.");
-    print('Item Description: $itemDescription');
-    print('Quantity: $quantity');
-    print('Amount: $amount');
-    print('Reimbursement Type: $selectedReimType');
-    print('Consumable List JSON: $consumableList');
 
-    // Optionally call the API here if needed
-    print('Calling API...');
   }
-
   // delete the data on a list
 
   Widget _deleteItemDialog(BuildContext context) {
@@ -489,16 +459,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                       Expanded(
                         child: TextButton(
                           onPressed: () async {
-                            // generalFunction.logout(context);
-                            /// todo heere you shold call a delete item api
-
-                            // var  hrmsPopWarning = await NotificatindeleteRepo().notification(context,iTranId);
-                            // print('---80--$hrmsPopWarning');
-                            // var  result = "${hrmsPopWarning[0]['Result']}";
-                            // var  msg = "${hrmsPopWarning[0]['Msg']}";
-                            // generalFunction.displayToast(msg);
-                            // Navigator.of(context).pop();
-                            //
                             setState(() {
                               // _notificationList = NotificationRepo().notificationList(context);
                             });
@@ -588,8 +548,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     );
   }
 
-  // multifilepath
-  // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(
         msg: msg,
@@ -742,7 +700,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     var endPoint = "UploadTrackingImage/UploadTrackingImage";
     var uplodeImageApi = "$baseURL$endPoint";
     try {
-      print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
       var request = http.MultipartRequest(
@@ -781,19 +738,14 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     }
   }
 
-  // ---
-
   bindreimUom() async {
     bindreimouList = await BindreimuomRepo().bindReimouList();
-    print(" -----xx----xx--609--xxx---> $bindreimouList");
     setState(() {});
   }
 
   multipartProdecudre() async {
-    print('----139--$image');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token---$sToken');
 
     var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
     var request = http.Request('POST',
@@ -801,10 +753,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     request.body = json.encode({"sImagePath": "$image"});
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
-
     var responsed = await http.Response.fromStream(response);
     final responseData = json.decode(responsed.body);
-    print('---155----$responseData');
+
   }
 
   // dropdown
@@ -827,10 +778,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                 text: TextSpan(
                   text: "UOM",
                   style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
-                  // style: TextStyle(
-                  //     color: Colors.black,
-                  //     fontSize: 16,
-                  //     fontWeight: FontWeight.normal),
                   children: <TextSpan>[
                     TextSpan(
                         text: '',
@@ -847,25 +794,16 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               onChanged: (newValue) {
                 setState(() {
                   _dropDownValueBindReimType = newValue;
-                  print('---837-------$_dropDownValueBindReimType');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
                   bindreimouList.forEach((element) {
                     if (element["sUoM"] == _dropDownValueShopeType) {
                       setState(() {
-                        // _selectedShopId = element['sUoM'];
-                        //print('----349--sExpHeadCode id ------$_selectedShopId');
-                      });
-                      //print('-----Point id----241---$_selectedShopId');
+                       });
                       if (_selectedShopId != null) {
                         // updatedBlock();
                       } else {
                         print('-------');
                       }
-                      // print("Distic Id value xxxxx.... $_selectedDisticId");
-                      // print("Distic Name xxxxxxx.... $_dropDownValueDistric");
-                      //print("Block list Ali xxxxxxxxx.... $blockList");
-                    }
+                       }
                   });
                 });
               },
@@ -882,7 +820,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       ),
     );
   }
-
   // build dialog sucess
   Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
@@ -975,25 +912,12 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     // TODO: implement initState
     updatedSector();
     shopType();
-    getLocation();
     expenseCategory();
     super.initState();
     bindreimUom();
-    print('xxxx---977--${widget.sProjectName}');
-    print('xxxx---978--${widget.sExpHeadName}');
-    print('xxxx---979--${widget.dEntryAt}');
-    print('xxxx---980--${widget.fAmount}');
-    print('xxxx---981--${widget.sExpDetails}');
-    print('xxxx---982--${widget.sExpBillPhoto}');
-    print('xxxx---983--${widget.sProjectCode}');
-    print('xxxx---984--${widget.sExpHeadCode}');
-    print('xxxx---985--${widget.sExpBillPhoto2}');
-    print('xxxx---986--${widget.sExpBillPhoto3}');
-    print('xxxx---987--${widget.sExpBillPhoto4}');
-    print('xxxx---988--${widget.sTranCode}');
-    print('xxxx---988--Remarks--${widget.sRemarks}');
-    print('xxxx---9977 xx--dExpDate--${widget.dExpDate}');
     dExpDate = '${widget.dExpDate}';
+    _selectedSectorId = '${widget.sProjectCode}';
+    _selectedShopId = '${widget.sExpHeadCode}';
 //  sTranCode
     var sTranCode = '${widget.sTranCode}';
     monthAttendance(sTranCode);
@@ -1014,44 +938,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     uplodedImage3 = "${widget.sExpBillPhoto3}";
     uplodedImage4 = "${widget.sExpBillPhoto4}";
     print('---360--$billPhoto');
-  }
-
-  // location
-  void getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    debugPrint("-------------Position-----------------");
-    debugPrint(position.latitude.toString());
-
-    setState(() {
-      lat = position.latitude;
-      long = position.longitude;
-    });
-
-    print('-----------105----$lat');
-    print('-----------106----$long');
-    // setState(() {
-    // });
-    debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-    debugPrint(position.toString());
   }
 
   @override
@@ -1095,10 +981,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                 text: TextSpan(
                     text: "${widget.sProjectName}",
                     style: AppTextStyle.font16OpenSansRegularBlack45TextStyle
-                    // style: TextStyle(
-                    //     color: Colors.black,
-                    //     fontSize: 16,
-                    //     fontWeight: FontWeight.normal),
                     ),
               ),
               // value: _dropDownSector,
@@ -1106,19 +988,12 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               key: sectorFocus,
               onChanged: (newValue) {
                 setState(() {
-                  //_dropDownSector = newValue;
-                  //   _dropDownSector = newValue ?? widget.sProjectName;
-                  //   distList.forEach((element) {
-                  //     if (element["sProjectName"] == _dropDownSector) {
-                  //       _selectedSectorId = element['sProjectCode'];
-                  //       setState(() {});
-                  //     }
-                  //   });
                   _dropDownSector = newValue ?? widget.sProjectName;
                   _selectedSectorId = distList.firstWhere(
                     (element) => element["sProjectName"] == _dropDownSector,
                     orElse: () => {"sProjectCode": widget.sProjectCode},
                   )["sProjectCode"];
+                  print("-------xxx----$_selectedSectorId");
                 });
               },
               items: distList.map((dynamic item) {
@@ -1131,10 +1006,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                           overflow: TextOverflow.ellipsis, // Handles long text
                           style:
                               AppTextStyle.font16OpenSansRegularBlackTextStyle,
-                          // style: TextStyle(
-                          //   fontSize: 16,
-                          //   fontWeight: FontWeight.normal,
-                          // ),
                         ),
                       ),
                     ],
@@ -1169,10 +1040,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                 text: TextSpan(
                   text: "${widget.sExpHeadName}",
                   style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
-                  // style: TextStyle(
-                  //     color: Colors.black,
-                  //     fontSize: 16,
-                  //     fontWeight: FontWeight.normal),
                   children: <TextSpan>[
                     TextSpan(
                         text: '',
@@ -1189,25 +1056,17 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
               onChanged: (newValue) {
                 setState(() {
                   _dropDownValueShopeType = newValue;
-                  print('---333-------$_dropDownValueShopeType');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
                   expenseList.forEach((element) {
                     if (element["sExpHeadName"] == _dropDownValueShopeType) {
                       setState(() {
                         _selectedShopId = element['sExpHeadCode'];
-                        print(
-                            '----349--sExpHeadCode id ------$_selectedShopId');
-                      });
+                       });
                       //print('-----Point id----241---$_selectedShopId');
                       if (_selectedShopId != null) {
                         // updatedBlock();
                       } else {
                         print('-------');
                       }
-                      // print("Distic Id value xxxxx.... $_selectedDisticId");
-                      print("Distic Name xxxxxxx.... $_dropDownValueDistric");
-                      print("Block list Ali xxxxxxxxx.... $blockList");
                     }
                   });
                 });
@@ -1645,7 +1504,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                               ),
                             ),
                             SizedBox(height: 10),
-
                             /// todo here we add a custom list according to cosumabnleItem
                             if (consuambleItemList!.isNotEmpty)
                               Column(
@@ -1682,7 +1540,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                           setState(() {
                                             // iTranId = notificationData.iTranId;
                                           });
-
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
@@ -1707,8 +1564,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                             ],
                                           ),
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Row(
                                                 children: [
@@ -1730,12 +1586,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                   ),
                                                   SizedBox(width: 10),
                                                   Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(item['sItemName'],
-                                                          style: AppTextStyle
+                                                      Text(item['sItemName'], style: AppTextStyle
                                                               .font14OpenSansRegularBlack45TextStyle),
                                                       Text('Item Description',
                                                           style: AppTextStyle
@@ -1756,12 +1609,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                   children: [
                                                     Padding(
                                                       padding:
-                                                          const EdgeInsets.only(
-                                                              left: 25),
+                                                          const EdgeInsets.only(left: 25),
                                                       child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
                                                           Row(
                                                             children: [
@@ -1770,12 +1620,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                                 width: 14,
                                                                 decoration:
                                                                     BoxDecoration(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              7),
+                                                                  color: Colors.black,
+                                                                  borderRadius: BorderRadius.circular(7),
                                                                 ),
                                                               ),
                                                               SizedBox(
@@ -1787,12 +1633,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                           ),
                                                           Padding(
                                                             padding:
-                                                                const EdgeInsets
-                                                                    .only(
-                                                                    left: 15),
+                                                                const EdgeInsets.only(left: 15),
                                                             child: Text('UOM',
-                                                                style: AppTextStyle
-                                                                    .font14OpenSansRegularBlack45TextStyle),
+                                                                style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                                           ),
                                                         ],
                                                       ),
@@ -1823,7 +1666,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   ),
                                 ],
                               ),
-
                             SizedBox(height: 10),
                             if (_dropDownValueShopeType ==
                                 "Consumable/Material Purchase")
@@ -2631,23 +2473,26 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
                             InkWell(
                               onTap: () async {
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
                                 String? sEmpCode = prefs.getString('sEmpCode');
-                                String? sContactNo =
-                                    prefs.getString('sContactNo');
-
-                                print('----sEmpCode--15---$sEmpCode');
-
+                                String? sContactNo = prefs.getString('sContactNo');
                                 /// TODO GET A RANDOM NUMBER
                                 Random random = Random();
-                                int sTranCode =
-                                    10000000 + random.nextInt(90000000);
+                                int sTranCode = 10000000 + random.nextInt(90000000);
 
                                 var amount = '${_amountController.text}';
-                                var expenseDetails =
-                                    '${_expenseController.text}';
+                                var expenseDetails = '${_expenseController.text}';
                                 remarks = '${_remarkController.text}';
+
+                                print('-----sTranCode-----XX--$sTranCode');
+                                print('-----sEmpCode-----XX--$sEmpCode');
+                                print('-----_selectedSectorId---XX---$_selectedSectorId');
+                                print('-----_selectedShopId-----XXX-$_selectedShopId');
+                                print('-----amount------XXX----$amount');
+                                print('-----expenseDetails-----XX----$expenseDetails');
+                                print('-----uplodedImage-----XX----$uplodedImage');
+                                print('-----sContactNo-----XX-----$sContactNo');
+
 
                                 if (_formKey.currentState!.validate() &&
                                     sTranCode != null &&
@@ -2673,6 +2518,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   print('--------1097----xxx--$hrmsPopWarning');
                                   result = "${hrmsPopWarning[0]['Result']}";
                                   msg = "${hrmsPopWarning[0]['Msg']}";
+
                                 } else {
                                   if (sTranCode == null) {
                                     displayToast('Genrate Random Number');

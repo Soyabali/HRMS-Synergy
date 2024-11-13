@@ -1173,7 +1173,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             inputFormatters: [
                                               FilteringTextInputFormatter.allow(
                                                 RegExp(
-                                                    r'^\d{0,6}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
+                                                    r'^\d{0,7}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
                                               ),
                                               //FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')), // Allow up to 2 decimal places
                                             ],
@@ -1193,7 +1193,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             validator: (value) {
                                               if (value == null ||
                                                   value.isEmpty) {
-                                                return 'Please enter a value';
+                                                return 'Please enter amount';
                                               }
                                               final doubleValue =
                                                   double.tryParse(value);

@@ -20,11 +20,6 @@ class Hrmsreimbursementstatusv3Repo {
       print('--16 --lastDayOfCurrentMonth--$lastDayOfCurrentMonth');
       print('--17 --contactNo--$contactNo');
       showLoader();
-    //  String defaultFromDate = "01/Sep/2024";
-      //String defaultToDate = "30/Sep/2024";
-     // String fromDate = firstOfMonthDay ?? defaultFromDate;
-      //String toDate = lastDayOfCurrentMonth ?? defaultToDate;
-
           var baseURL = BaseRepo().baseurl;
           var endPoint = "hrmsreimbursementstatusV3/hrmsreimbursementstatusV3";
            var hrmsreimbursementstatusV3 = "$baseURL$endPoint";
