@@ -52,12 +52,12 @@ class _ConsumableItemPageState extends State<ConsumableItemPage> {
         backgroundColor: Color(0xFF0098a6),
         leading: InkWell(
           onTap: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const Reimbursementstatus()),
-            );
+             Navigator.pop(context);
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) => const Reimbursementstatus()),
+            // );
           },
           child: const Padding(
             padding: EdgeInsets.only(left: 5.0),

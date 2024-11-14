@@ -50,6 +50,7 @@ class ReimbursementClarificationPage extends StatefulWidget {
 class _MyHomePageState extends State<ReimbursementClarificationPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
+
   TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
@@ -590,30 +591,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       softWrap: true,
                                                     ),
                                                     SizedBox(height: 2),
-                                                    // Row(
-                                                    //   mainAxisAlignment: MainAxisAlignment.start,
-                                                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                                                    //   children: [
-                                                    //     Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
-                                                    //     Text(
-                                                    //       'Project Name :',
-                                                    //       style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                    //       maxLines: 1,
-                                                    //       overflow: TextOverflow.ellipsis,
-                                                    //     ),
-                                                    //     SizedBox(width: 2),
-                                                    //     // Wrap the long text in an Expanded widget to prevent overflow
-                                                    //     Expanded(
-                                                    //       child: Text(
-                                                    //         leaveData.sProjectName,
-                                                    //         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                    //         maxLines: 1,  // Limit to one line
-                                                    //         overflow: TextOverflow.ellipsis, // Adds ellipsis if text is too long
-                                                    //         softWrap: false,
-                                                    //       ),
-                                                    //     ),
-                                                    //   ],
-                                                    // ),
 
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -832,9 +809,10 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                   print('--sExpBillPhoto2-------$sExpBillPhoto2');
                                                   print('--sExpBillPhoto3-------$sExpBillPhoto3');
                                                   print('--sExpBillPhoto4-------$sExpBillPhoto4');
-                                                  print('--sTranCode-------$sTranCode');
+                                                  print('--sTranCode-----xx--$sTranCode');
                                                   print('--dExpDate-------$dExpDate');
-
+                                                  print('--sExpHeadName-------$sExpHeadName');
+                                                //
                                                   Navigator.push(
                                                   context,
                                                   MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode,sExpBillPhoto2,sExpBillPhoto3,sExpBillPhoto4,sTranCode,dExpDate,sRemarks)),

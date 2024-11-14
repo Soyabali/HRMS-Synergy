@@ -28,6 +28,7 @@ import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 import 'dart:math';
+import 'dart:convert';
 
 class ReimbursementrevertPage extends StatefulWidget {
 
@@ -161,8 +162,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   var uplodedImage4;
   double? lat, long;
   String? consumableList;
+  String? consumableItemString;
+
   List<dynamic>? consuambleItemList;
   var sTranCode;
+  var sTranCode2;
 
   //var dExpDate;
   String? dExpDate;
@@ -178,17 +182,19 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future<void> monthAttendance(String stranCode) async {
     // Clear the list and update UI immediately
     setState(() {
-      consuambleItemList = [];
+     // consuambleItemList = [];
     });
 
     try {
       // Fetch the new data and assign it to the list
-      final newItems =
-          await ConsuamableItemRepo_2().consuambleItem(context, stranCode);
+      final newItems = await ConsuamableItemRepo_2().consuambleItem(context, stranCode);
       setState(() {
         consuambleItemList = newItems;
       });
-      print("Fetched consumable items: $consuambleItemList");
+      consumableItemString = jsonEncode(consuambleItemList);
+      // convert list dynamic to String
+      // consItemList_2 = consuambleItemList?.map((item) => item.toString()).toList();
+      print("=========-------191----list: $consuambleItemList");
     } catch (e) {
       print("Error fetching consumable items: $e");
     }
@@ -357,13 +363,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
   void _onFormSubmit() {
     count++;
-
     // Retrieve values from controllers and dropdown
     var itemDescription = _itemDescriptionController.text.trim();
     var quantity = _quantityController.text.trim();
     var amount = _amountController2.text.trim();
     var selectedReimType = _dropDownValueBindReimType;
-
     // Check each field and display an error if any are empty
     if (itemDescription.isEmpty) {
       displayToast("Please enter Item Description");
@@ -910,17 +914,22 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   @override
   void initState() {
     // TODO: implement initState
+    sTranCode2 = '${widget.sTranCode}';
+    monthAttendance(sTranCode2);
     updatedSector();
     shopType();
     expenseCategory();
     super.initState();
     bindreimUom();
+    _dropDownValueShopeType="${widget.sExpHeadName}";
     dExpDate = '${widget.dExpDate}';
     _selectedSectorId = '${widget.sProjectCode}';
     _selectedShopId = '${widget.sExpHeadCode}';
      sTranCode = '${widget.sTranCode}';
 
-    monthAttendance(sTranCode);
+     print("------922----$sTranCode");
+
+
     // widget.dEntryAt}
     _shopfocus = FocusNode();
     _owenerfocus = FocusNode();
@@ -1138,7 +1147,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
-
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
@@ -1746,6 +1754,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                           Expanded(
                                             child: TextFormField(
                                               controller: _amountController2,
+
                                               decoration: InputDecoration(
                                                 labelText: "Amount",
                                                 border: OutlineInputBorder(
@@ -1754,8 +1763,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                           8.0),
                                                 ),
                                               ),
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              keyboardType: TextInputType.number,
                                             ),
                                           ),
                                         ],
@@ -2476,23 +2484,20 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 SharedPreferences prefs = await SharedPreferences.getInstance();
                                 String? sEmpCode = prefs.getString('sEmpCode');
                                 String? sContactNo = prefs.getString('sContactNo');
-                                /// TODO GET A RANDOM NUMBER
-                              //  Random random = Random();
-                                //int sTranCode = 10000000 + random.nextInt(90000000);
 
                                 var amount = '${_amountController.text}';
                                 var expenseDetails = '${_expenseController.text}';
                                 remarks = '${_remarkController.text}';
 
-                                print('-----sTranCode-----XX--$sTranCode');
-                                print('-----sEmpCode-----XX--$sEmpCode');
-                                print('-----_selectedSectorId---XX---$_selectedSectorId');
-                                print('-----_selectedShopId-----XXX-$_selectedShopId');
-                                print('-----amount------XXX----$amount');
-                                print('-----expenseDetails-----XX----$expenseDetails');
-                                print('-----uplodedImage-----XX----$uplodedImage');
-                                print('-----sContactNo-----XX-----$sContactNo');
-                                print("-------R----$remarks");
+                                // print('-----sTranCode-----XX--$sTranCode2');
+                                // print('-----sEmpCode-----XX--$sEmpCode');
+                                // print('-----_selectedSectorId---XX---$_selectedSectorId');
+                                // print('-----_selectedShopId-----XXX-$_selectedShopId');
+                                // print('-----amount------XXX----$amount');
+                                // print('-----expenseDetails-----XX----$expenseDetails');
+                                // print('-----uplodedImage-----XX----$uplodedImage');
+                                // print('-----sContactNo-----XX-----$sContactNo');
+                                // print("-------R----$remarks");
 
                                 if (_formKey.currentState!.validate() &&
                                     sEmpCode != null &&
@@ -2505,17 +2510,62 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                     sContactNo != null) {
                                   // Call Api
                                   print('---call Api---');
+                                  print('-----2507---list----$consumableList');// consuambleItemList
+                                  print('-----2508---list----$consuambleItemList');
+                                  // consumableItemString
+                                  print('------2516----$consumableItemString');
+                                  var hrmsPostReimbursement =
+                                  await HrmsPostReimbursementRepo()
+                                      .hrmsPostReimbursement(
+                                      context,
+                                      sTranCode2,
+                                      sEmpCode,
+                                      _selectedSectorId,
+                                      _selectedShopId,
+                                      dExpDate,
+                                      amount,
+                                      expenseDetails,
+                                      uplodedImage,
+                                      sContactNo,
+                                      result,
+                                      remarks,
+                                      uplodedImage2,
+                                      uplodedImage3,
+                                      uplodedImage4,
+                                      consumableList,
+                                      consumableItemString
+                                  );
 
-                                  var dExpDate = '${widget.dExpDate}';
-                                  print("---Date---$dExpDate");
-                                  print("---Emp Code---$sEmpCode");
-                                  print("---Amount---$amount");
+                                  print('---1050--$hrmsPostReimbursement');
 
-                                  var hrmsPopWarning =
-                                      await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate, amount);
-                                  print('--------1097----xxx--$hrmsPopWarning');
-                                  result = "${hrmsPopWarning[0]['Result']}";
-                                  msg = "${hrmsPopWarning[0]['Msg']}";
+                                  result = "${hrmsPostReimbursement[0]['Result']}";
+                                  msg = "${hrmsPostReimbursement[0]['Msg']}";
+
+                                  print("----2532----msg---$msg");
+                                  print("----2532----result---$result");
+
+                                  if(result=="1"){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return _buildDialogSucces2(context, msg);
+                                        },
+                                      );
+                                  }
+
+                                  // var dExpDate = '${widget.dExpDate}';
+                                  //
+                                  //
+                                  // print('-----sEmpCode-----XX--$sEmpCode');
+                                  // print('-----dExpDate-----XX--$dExpDate');
+                                  // print('-----amount-----XX--$amount');
+                                  //
+                                  // var hrmsPopWarning =
+                                  //     await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate, amount);
+                                  // print('--------1097----xxx--$hrmsPopWarning');
+                                  // result = "${hrmsPopWarning[0]['Result']}";
+                                  // msg = "${hrmsPopWarning[0]['Msg']}";
+
 
                                 } else {
                                   if (sTranCode == null) {
@@ -2543,163 +2593,64 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                     displayToast('Please get a contact number');
                                   }
                                 } // condition to fetch a response form a api
-                                if (result == "0") {
-                                  // CALL API HRMS Reimbursement
-
-                                  print('----sTranCode--2616---$sTranCode');
-                                  print('----sEmpCode--2617---$sEmpCode');
-                                  print(
-                                      '----selectedSectorId--15---$_selectedSectorId');
-                                  print(
-                                      '----selectedShopId--15---$_selectedShopId');
-                                  print('----dExpDate--15---$dExpDate');
-                                  print('----amount--15---$amount');
-                                  print(
-                                      '----expenseDetails--15---$expenseDetails');
-                                  print('----uplodedImage--15---$uplodedImage');
-                                  print('----sContactNo--15---$sContactNo');
-                                  print('----sRemarks--15---${remarks}');
-                                  print('----result--15---$result');
-                                  print(
-                                      '----uplode image 2--44---$uplodedImage2');
-                                  print(
-                                      '----uplode image 3--45---$uplodedImage3');
-                                  print(
-                                      '----uplode image 4--46---$uplodedImage4');
-                                  print(
-                                      '----ConsumaleList --2630---$consumableList');
-
-                                  var hrmsPostReimbursement =
-                                      await HrmsPostReimbursementRepo()
-                                          .hrmsPostReimbursement(
-                                              context,
-                                              sTranCode,
-                                              sEmpCode,
-                                              _selectedSectorId,
-                                              _selectedShopId,
-                                              dExpDate,
-                                              amount,
-                                              expenseDetails,
-                                              uplodedImage,
-                                              sContactNo,
-                                              result,
-                                              remarks,
-                                              uplodedImage2,
-                                              uplodedImage3,
-                                              uplodedImage4,
-                                              consumableList);
-                                  print('---1050--$hrmsPostReimbursement');
-
-                                  result =
-                                      "${hrmsPostReimbursement[0]['Result']}";
-                                  msg = "${hrmsPostReimbursement[0]['Msg']}";
-
-                                  // displayToast(msg);
-                                  /// todo here to show the dialog sucess
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return _buildDialogSucces2(context, msg);
-                                    },
-                                  );
-                                } else {
-                                  showCustomDialog(context, msg);
-                                  //displayToast(msg);
-                                  print('---diaplay dialog --');
-                                }
+                                // if (result == "0") {
+                                //
+                                //   // CALL API HRMS Reimbursement
+                                //   print("---sTranCode2-----$sTranCode2");
+                                //   print("---sEmpCode-----$sEmpCode");
+                                //   print("---_selectedSectorId-----$_selectedSectorId");
+                                //   print("---_selectedShopId-----$_selectedShopId");
+                                //   print("---dExpDate-----$dExpDate");
+                                //   print("---amount-----$amount");
+                                //   print("---expenseDetails-----$expenseDetails");
+                                //   print("---uplodedImage-----$uplodedImage");
+                                //   print("---sContactNo-----$sContactNo");
+                                //   print("---result-----$result");
+                                //   print("---remarks-----$remarks");
+                                //   print("---uplodedImage2-----$uplodedImage2");
+                                //   print("---uplodedImage3-----$uplodedImage3");
+                                //   print("---uplodedImage4-----$uplodedImage4");
+                                //   print("---consumableList-----$consumableList");
+                                //
+                                //   var hrmsPostReimbursement =
+                                //       await HrmsPostReimbursementRepo()
+                                //           .hrmsPostReimbursement(
+                                //               context,
+                                //                sTranCode2,
+                                //               sEmpCode,
+                                //               _selectedSectorId,
+                                //               _selectedShopId,
+                                //               dExpDate,
+                                //               amount,
+                                //               expenseDetails,
+                                //               uplodedImage,
+                                //               sContactNo,
+                                //               result,
+                                //               remarks,
+                                //               uplodedImage2,
+                                //               uplodedImage3,
+                                //               uplodedImage4,
+                                //               consumableList);
+                                //
+                                //  print('---1050--$hrmsPostReimbursement');
+                                //
+                                //  result = "${hrmsPostReimbursement[0]['Result']}";
+                                //  msg = "${hrmsPostReimbursement[0]['Msg']}";
+                                //
+                                //   // displayToast(msg);
+                                //   /// todo here to show the dialog sucess
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (BuildContext context) {
+                                //       return _buildDialogSucces2(context, msg);
+                                //     },
+                                //   );
+                                // } else {
+                                //   showCustomDialog(context, msg);
+                                //   //displayToast(msg);
+                                //   print('---diaplay dialog --');
+                                // }
                               },
-                              // onTap: () async {
-                              //   SharedPreferences prefs =
-                              //       await SharedPreferences.getInstance();
-                              //   String? sEmpCode = prefs.getString('sEmpCode');
-                              //   String? sContactNo = prefs.getString('sContactNo');
-                              //
-                              //   // Generate random transaction code
-                              //   Random random = Random();
-                              //   int sTranCode =
-                              //       10000000 + random.nextInt(90000000);
-                              //
-                              //   var amount = _amountController.text.trim();
-                              //   var expenseDetails = _expenseController.text.trim();
-                              //   var remarks = _remarkController.text.trim();
-                              //
-                              //   // Project code and expense category from widget
-                              //   _selectedSectorId = widget.sProjectCode;
-                              //   _selectedShopId = widget.sExpHeadCode;
-                              //   dExpDate = widget.dEntryAt;
-                              //
-                              //   // Validate all fields
-                              //   if (amount.isEmpty) {
-                              //     displayToast('Please enter amount');
-                              //   } else if (expenseDetails.isEmpty) {
-                              //     displayToast('Please enter expense details');
-                              //   } else if (_selectedSectorId == null) {
-                              //     displayToast('Please select project');
-                              //   } else if (_selectedShopId == null) {
-                              //     displayToast(
-                              //         'Please select expense category');
-                              //   } else if (dExpDate == null) {
-                              //     displayToast('Please select expense date');
-                              //   } else if (uplodedImage == null) {
-                              //     displayToast('Please pick a photo');
-                              //   } else if (remarks.isEmpty) {
-                              //     displayToast('Please enter remarks');
-                              //   } else if (sEmpCode == null) {
-                              //     displayToast('Employee code missing');
-                              //   } else if (sContactNo == null) {
-                              //     displayToast('Contact number missing');
-                              //   } else {
-                              //     // All validations passed, call the first API
-                              //     var hrmsPopWarning =
-                              //         await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!,
-                              //                 dExpDate!, amount);
-                              //     print('---API Response: $hrmsPopWarning');
-                              //
-                              //     result = "${hrmsPopWarning[0]['Result']}";
-                              //     msg = "${hrmsPopWarning[0]['Msg']}";
-                              //
-                              //     // If result is "0", call the second API
-                              //     if (result == "0") {
-                              //
-                              //       var hrmsPostReimbursement =
-                              //           await HrmsPostReimbursementRevertRepo()
-                              //               .hrmsPostReimbursementRevert(
-                              //                   context,
-                              //                   sTranCode,
-                              //                   sEmpCode,
-                              //                   _selectedSectorId!,
-                              //                   _selectedShopId!,
-                              //                   dExpDate!,
-                              //                   amount,
-                              //                   expenseDetails,
-                              //                   uplodedImage,
-                              //                   sContactNo!,
-                              //                   result,
-                              //                   remarks,
-                              //               uplodedImage2,
-                              //               uplodedImage3,
-                              //               uplodedImage4,
-                              //               consumableList
-                              //           );
-                              //
-                              //
-                              //       result =
-                              //           "${hrmsPostReimbursement[0]['Result']}";
-                              //       msg = "${hrmsPostReimbursement[0]['Msg']}";
-                              //
-                              //       // Show success dialog
-                              //       showDialog(
-                              //         context: context,
-                              //         builder: (BuildContext context) {
-                              //           return _buildDialogSucces2(
-                              //               context, msg);
-                              //         },
-                              //       );
-                              //     } else {
-                              //       showCustomDialog(context, msg);
-                              //     }
-                              //   }
-                              // },
 
                               child: Container(
                                 width: double.infinity,
@@ -2777,15 +2728,15 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     String? sContactNo = prefs.getString('sContactNo');
 
                     /// TODO GET A RANDOM NUMBER
-                    Random random = Random();
-                    int sTranCode = 10000000 + random.nextInt(90000000);
+                   // Random random = Random();
+                    //int sTranCode = 10000000 + random.nextInt(90000000);
                     var amount = '${_amountController.text}';
                     var expenseDetails = '${_expenseController.text}';
                     remarks = '${_remarkController.text}';
 
                     //---------
 
-                    print('----sTranCode--15---$sTranCode');
+                    print('----sTranCode--15---$sTranCode2');
                     print('----sEmpCode--15---$sEmpCode');
                     print('----selectedSectorId--15---$_selectedSectorId');
                     print('----selectedShopId--15---$_selectedShopId');
@@ -2801,27 +2752,27 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                     print('----uplode image 4--46---$uplodedImage4');
                     print('----ConsumaleList --46---$consumableList');
 
-                    var hrmsPostReimbursement =
-                        await HrmsPostReimbursementRepo().hrmsPostReimbursement(
-                            context,
-                            sTranCode,
-                            sEmpCode,
-                            _selectedSectorId!,
-                            _selectedShopId!,
-                            dExpDate!,
-                            amount,
-                            expenseDetails,
-                            uplodedImage,
-                            sContactNo!,
-                            result,
-                            remarks,
-                            uplodedImage2,
-                            uplodedImage3,
-                            uplodedImage4,
-                            consumableList);
-                    print('---1050--$hrmsPostReimbursement');
-                    result = "${hrmsPostReimbursement[0]['Result']}";
-                    msg = "${hrmsPostReimbursement[0]['Msg']}";
+                   //  var hrmsPostReimbursement =
+                   //      await HrmsPostReimbursementRepo().hrmsPostReimbursement(
+                   //          context,
+                   //          sTranCode2,
+                   //          sEmpCode,
+                   //          _selectedSectorId!,
+                   //          _selectedShopId!,
+                   //          dExpDate!,
+                   //          amount,
+                   //          expenseDetails,
+                   //          uplodedImage,
+                   //          sContactNo!,
+                   //          result,
+                   //          remarks,
+                   //          uplodedImage2,
+                   //          uplodedImage3,
+                   //          uplodedImage4,
+                   //          consumableList);
+                   // print('---1050--$hrmsPostReimbursement');
+                   //  result = "${hrmsPostReimbursement[0]['Result']}";
+                   //  msg = "${hrmsPostReimbursement[0]['Msg']}";
                     // displayToast(msg);
                     // Dialog
                     showDialog(

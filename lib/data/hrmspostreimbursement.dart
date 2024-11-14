@@ -20,7 +20,7 @@ class HrmsPostReimbursementRepo {
       uplodedImage,
       String? sContactNo,
       result,
-      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList,
+      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList, consumableItemString,
       ) async {
     try {
       //uplodedImage2, uplodedImage3, uplodedImage4
@@ -43,6 +43,7 @@ class HrmsPostReimbursementRepo {
       print('----uplode image 3--43---$uplodedImage3');
       print('----uplode image 4--44---$uplodedImage4');
       print('----ConsumaleList --45---$consumableList');
+      print('----consumableItemString --45---$consumableItemString');
 
 
       var baseURL = BaseRepo().baseurl;
@@ -68,9 +69,14 @@ class HrmsPostReimbursementRepo {
         "sExpBillPhoto": uplodedImage ?? "",
         "sExpHeadCode": selectedShopId ?? "",
         "sProjectCode": selectedSectorId ?? "",
-        "sItemArray":consumableList ?? "",
-       // "sItemArray":'[{"SrNo":"1","sItemName":"Pencil Box","sUoM":"Box","fQty":"4","fAmount":"400"},{"SrNo":"2","sItemName":"Laptop Bag","sUoM":"Bags","fQty":"2","fAmount":"4400"}]',
         "sEmpCode": sEmpCode ?? "",
+        "sItemArray": consumableList ?? consumableItemString,
+        //"sItemArray": consumableList ?? '[{"":""}]',
+        //"sItemArray": (consumableList == null || consumableList.isEmpty) ? [] : consumableList,
+
+        // "sItemArray":consumableList ?? "",
+       // "sItemArray":'[{"SrNo":"1","sItemName":"Pencil Box","sUoM":"Box","fQty":"4","fAmount":"400"},{"SrNo":"2","sItemName":"Laptop Bag","sUoM":"Bags","fQty":"2","fAmount":"4400"}]',
+
 
       });
       request.headers.addAll(headers);

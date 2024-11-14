@@ -33,11 +33,10 @@ class PendingTeamReimbPage extends StatefulWidget {
   State<PendingTeamReimbPage> createState() => _MyHomePageState();
 
 }
-
 class _MyHomePageState extends State<PendingTeamReimbPage> {
 
-
   List<Map<String, dynamic>>? pendingSchedulepointList;
+
   TextEditingController _searchController = TextEditingController();
   //  _takeAction
   TextEditingController _takeAction = TextEditingController();
@@ -105,8 +104,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                        displayToast(_selectedDecision!);
-                        print('Selected Decision: $_selectedDecision');
+                       // displayToast(_selectedDecision!);
+                       // print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     RadioListTile<String>(
@@ -117,8 +116,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                        displayToast(_selectedDecision!);
-                        print('Selected Decision: $_selectedDecision');
+                       // displayToast(_selectedDecision!);
+                        //print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     RadioListTile<String>(
@@ -129,8 +128,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                        displayToast(_selectedDecision!);
-                        print('Selected Decision: $_selectedDecision');
+                        //displayToast(_selectedDecision!);
+                        //print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     Padding(
@@ -300,8 +299,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   var duplicate;
   String? _selectedDecision;
 
-
-
   // Uplode Id Proof with gallary
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -325,6 +322,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
   // multifilepath
   // toast
+
   void displayToast(String msg) {
     Fluttertoast.showToast(
         msg: msg,
@@ -478,7 +476,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
       }
     });
   }
-
   // currentDate
 
   @override
@@ -765,6 +762,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                           );
                                         } else {
                                           final leaveData = _filteredData[index];
+                                          var sExpHeadCode = leaveData.sExpHeadCode;
+
 
                                           duplicate = leaveData.sDuplicate;
                                           var textColor;
@@ -798,16 +797,12 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                       top: 8),
                                                   child: SingleChildScrollView(
                                                     child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment
-                                                          .start,
-                                                      crossAxisAlignment: CrossAxisAlignment
-                                                          .start,
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          crossAxisAlignment: CrossAxisAlignment
-                                                              .start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: <Widget>[
                                                             Container(
                                                               width: 30.0,
@@ -827,8 +822,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                               ),
                                                               child: Center(
                                                                 child: Text(
-                                                                  "${1 +
-                                                                      index}",
+                                                                  "${1+index}",
                                                                   style: AppTextStyle
                                                                       .font14OpenSansRegularBlackTextStyle,
                                                                 ),
@@ -879,6 +873,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
                                                             /// todo here you should add a icon on a right hand side
                                                             Spacer(),
+                                                            sExpHeadCode =="3521182900" ?
                                                             Padding(
                                                               padding: const EdgeInsets
                                                                   .only(
@@ -887,16 +882,16 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                 onTap: () {
                                                                   print(
                                                                       '----print----');
-                                                                  // var sTranCode =  leaveData.sTranCode;
-                                                                  //print("----670----$sTranCode");
+                                                                   var sTranCode =  leaveData.sTranCode;
+                                                                  print("----670----$sTranCode");
+
                                                                   Navigator
                                                                       .push(
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (
                                                                             context) =>
-                                                                            ConsumableItemPage(
-                                                                                sTranCode: sTranCode)),
+                                                                            ConsumableItemPage(sTranCode: sTranCode)),
                                                                   );
                                                                 },
                                                                 child: Row(
@@ -917,13 +912,9 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                            ),
+                                                            )
+                                                            : Container(),
 
-                                                            // Image.asset("assets/images/uplodeConsum.jpeg",
-                                                            // width: 20,
-                                                            // height: 20,
-                                                            // fit: BoxFit.fill,
-                                                            // ),
                                                           ],
                                                         ),
                                                         const SizedBox(
@@ -1057,8 +1048,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                               MaterialPageRoute(
                                                                   builder: (
                                                                       context) =>
-                                                                      DuplicatExpensEntry(
-                                                                          sTranCode)),
+                                                                      DuplicatExpensEntry(sTranCode)),
                                                             );
                                                           },
 
@@ -1131,8 +1121,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                         SizedBox(height: 10),
                                                         //
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: <Widget>[
                                                             Container(
                                                               height: 10.0,
@@ -1547,215 +1536,6 @@ void openFullScreenDialog(
     },
   );
 }
-
-// take action Dialog
-// Widget _takeActionDialog(BuildContext context) {
-//   String? _selectedDecision;
-//   TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
-//
-//   return Dialog(
-//     shape: RoundedRectangleBorder(
-//       borderRadius: BorderRadius.circular(20),
-//     ),
-//     elevation: 0,
-//     backgroundColor: Colors.transparent,
-//     child: Stack(
-//       clipBehavior: Clip.none,
-//       alignment: Alignment.center,
-//       children: [
-//         Container(
-//          // height: 220,
-//           // Adjusted height to accommodate the TextFormField and Submit button
-//           padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-//           decoration: BoxDecoration(
-//             color: Colors.white,
-//             borderRadius: BorderRadius.circular(20),
-//           ),
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               Text(
-//                 'Update Status',
-//                 style: AppTextStyle.font16OpenSansRegularRedTextStyle,
-//               ),
-//               SizedBox(height: 10),
-//               // TextFormField for entering data
-//               /// todo here y0u should apply radio putton
-//               RadioListTile<String>(
-//                 title: Text('Approved'),
-//                 value: 'Approved',
-//                 groupValue: _selectedDecision,
-//                 onChanged: (String? value) {
-//                   _selectedDecision = value;
-//                   print('----$_selectedDecision');
-//                   setState(() {
-//                     _selectedDecision = value;
-//                   });
-//                 },
-//               ),
-//               RadioListTile<String>(
-//                           title: Text('Rejected'),
-//                           value: 'Rejected',
-//                           groupValue: _selectedDecision,
-//                           onChanged: (String? value) {
-//                             _selectedDecision = value;
-//                             print('----$_selectedDecision');
-//                             setState(() {
-//                               _selectedDecision = value;
-//                             });
-//                           },
-//                         ),
-//               RadioListTile<String>(
-//                 title: Text('Clarification Required'),
-//                 value: 'Clarification Required',
-//                 groupValue: _selectedDecision,
-//                 onChanged: (String? value) {
-//                   _selectedDecision = value;
-//                   print('----$_selectedDecision');
-//                   setState(() {
-//                     _selectedDecision = value;
-//                   });
-//                 },
-//               ),
-//
-//
-//               Padding(
-//                 padding: const EdgeInsets.only(left: 0),
-//                 child: TextFormField(
-//                   controller: _takeAction,
-//                   textInputAction: TextInputAction.next,
-//                   onEditingComplete: () => FocusScope.of(context).nextFocus(),
-//                   decoration: const InputDecoration(
-//                     border: OutlineInputBorder(),
-//                     contentPadding:
-//                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-//                     filled: true, // Enable background color
-//                     fillColor: Color(
-//                         0xFFf2f3f5), // Set your desired background color here
-//                   ),
-//                   autovalidateMode: AutovalidateMode.onUserInteraction,
-//                 ),
-//               ),
-//               SizedBox(height: 15),
-//               // Submit button
-//               InkWell(
-//                 onTap: () async {
-//
-//                   var takeAction = _takeAction.text.trim();
-//                   print('-----1102--$takeAction');
-//                   // print(sTranCode);
-//                   // Check if the input is not empty
-//                   if (takeAction != null && takeAction != '') {
-//                     print('---Call Api-----');
-//
-//                     // Make API call here
-//                     // var loginMap = await Reimbursementstatustakeaction()
-//                     //     .reimbursementTakeAction(context, sTranCode);
-//                     // print('---418----$loginMap');
-//
-//                     // setState(() {
-//                     //   result = "${loginMap[0]['Result']}";
-//                     //   msg = "${loginMap[0]['Msg']}";
-//                     // });
-//
-//                     // print('---1114----$result');
-//                     // print('---1115----$msg');
-//
-//                     // Check the result of the API call
-//                     //   if (result == "1") {
-//                     //     // Close the current dialog and show a success dialog
-//                     //     Navigator.of(context).pop();
-//                     //
-//                     //     // Show the success dialog
-//                     //     showDialog(
-//                     //       context: context,
-//                     //       builder: (BuildContext context) {
-//                     //         return _buildDialogSucces2(context, msg); // A new dialog for showing success
-//                     //       },
-//                     //     );
-//                     //     print('-----1123---');
-//                     //   } else if (result == "0") {
-//                     //     // Keep the dialog open and show an error message (if needed)
-//                     //     // You can display an error message in the same dialog without dismissing it
-//                     //     displayToast(msg);  // Optionally, show a toast message to indicate failure
-//                     //
-//                     //     // Optionally clear the input field if needed
-//                     //     // _takeAction.clear();  // Do not clear to allow retrying
-//                     //   }
-//                     // } else {
-//                     //   // Handle the case where no input is provided
-//                     //   displayToast("Enter remarks");
-//                     // }
-//                   }
-//                 },
-//                 child: Container(
-//                   //width: double.infinity,
-//                   // Make container fill the width of its parent
-//                   height: AppSize.s45,
-//                   padding: EdgeInsets.all(AppPadding.p5),
-//                   decoration: BoxDecoration(
-//                     color: AppColors.loginbutton,
-//                     // Background color using HEX value
-//                     borderRadius:
-//                         BorderRadius.circular(AppMargin.m10), // Rounded corners
-//                   ),
-//                   //  #00b3c7
-//                   child: Center(
-//                     child: Text(
-//                       "Submit",
-//                       style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//               // ElevatedButton(
-//               //   onPressed: () {
-//               //     String enteredText = _textController.text;
-//               //     if (enteredText.isNotEmpty) {
-//               //       print('Submitted: $enteredText');
-//               //     }
-//               //     // Perform any action you need on submit
-//               //    // Navigator.of(context).pop(); // Close the dialog
-//               //   },
-//               //   style: ElevatedButton.styleFrom(
-//               //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
-//               //     shape: RoundedRectangleBorder(
-//               //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
-//               //     ),
-//               //     backgroundColor: Colors.blue, // Button background color
-//               //   ),
-//               //   child: Text(
-//               //     'Submit',
-//               //     style: TextStyle(
-//               //       color: Colors.white,
-//               //       fontSize: 14,
-//               //       fontWeight: FontWeight.bold,
-//               //     ),
-//               //   ),
-//               // ),
-//             ],
-//           ),
-//         ),
-//         Positioned(
-//           top: -30, // Position the image at the top center
-//           child: CircleAvatar(
-//             radius: 30,
-//             backgroundColor: Colors.blueAccent,
-//             child: ClipOval(
-//               child: Image.asset(
-//                 'assets/images/addreimbursement.jpeg',
-//                 // Replace with your asset image path
-//                 fit: BoxFit.cover,
-//                 width: 60,
-//                 height: 60,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
 
 // sucessDialog
 Widget _buildDialogSucces2(BuildContext context, String msg) {

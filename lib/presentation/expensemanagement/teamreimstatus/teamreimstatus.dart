@@ -49,7 +49,6 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
   String selectedButton = 'Approved';
   var iStatus;
 
-
   getACurrentDate() {
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -121,7 +120,6 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
     hrmsLeaveStatus = ApprovedTeamReimbursementRepo().approvedTeamReimbursementList(
         context, formDate!,toDate!,iStatus,empCode);
   }
-
 
   // dropDown
   Widget empListDropDown() {
@@ -252,180 +250,193 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                       height: MediaQuery.of(context).size.height - 115,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(0),
-                          color: Color(0xFF0098a6)),
+                          color: Color(0xFFFFFFFF)),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Divider(
-                            height: 2,
-                            //color: Color(0xFF0098a6),
-                            color: Colors.grey,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const SizedBox(width: 4),
-                                Icon(Icons.calendar_month,
-                                    size: 15, color: Colors.white),
-                                const SizedBox(width: 4),
-                                const Text(
-                                  'From',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                SizedBox(width: 4),
+                         Container(
+                           height: 160,
+                           //color: Colors.grey,
+                           decoration: BoxDecoration(
+                               borderRadius: BorderRadius.circular(0),
+                               color: Color(0xFF0098a6)),
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             crossAxisAlignment: CrossAxisAlignment.center,
+                             children: [
+                               Divider(
+                                 height: 2,
+                                 //color: Color(0xFF0098a6),
+                                 color: Colors.grey,
+                               ),
+                               Padding(
+                                 padding: const EdgeInsets.only(top: 10),
+                                 child: Row(
+                                   mainAxisAlignment: MainAxisAlignment.start,
+                                   children: [
+                                     const SizedBox(width: 4),
+                                     Icon(Icons.calendar_month,
+                                         size: 15, color: Colors.white),
+                                     const SizedBox(width: 4),
+                                     const Text(
+                                       'From',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 12,
+                                           fontWeight: FontWeight.normal),
+                                     ),
+                                     SizedBox(width: 4),
 
-                                GestureDetector(
-                                  onTap: () async {
-                                    /// TODO Open Date picke and get a date
-                                    DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2100),
-                                    );
-                                    if (pickedDate != null) {
-                                      String formattedDate =
-                                          DateFormat('dd/MMM/yyyy')
-                                              .format(pickedDate);
-                                      setState(() {
-                                        tempDate =
-                                            formDate; // Save the current formDate before updating
-                                        formDate = formattedDate;
-                                      });
-                                      print("-----237---$formDate");
+                                     GestureDetector(
+                                       onTap: () async {
+                                         /// TODO Open Date picke and get a date
+                                         DateTime? pickedDate = await showDatePicker(
+                                           context: context,
+                                           initialDate: DateTime.now(),
+                                           firstDate: DateTime(2000),
+                                           lastDate: DateTime(2100),
+                                         );
+                                         if (pickedDate != null) {
+                                           String formattedDate =
+                                           DateFormat('dd/MMM/yyyy')
+                                               .format(pickedDate);
+                                           setState(() {
+                                             tempDate =
+                                                 formDate; // Save the current formDate before updating
+                                             formDate = formattedDate;
+                                           });
+                                           print("-----237---$formDate");
 
-                                      //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
-                                      fromDateSelectLogic();
-                                    }
-                                  },
-                                  child: Container(
-                                    height: 35,
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 14.0),
-                                    // Optional: Adjust padding for horizontal space
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      // Change this to your preferred color
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '$formDate',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          // Change this to your preferred text color
-                                          fontSize:
-                                              12.0, // Adjust font size as needed
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 6),
-                                Container(
-                                  height: 32,
-                                  width: 32,
-                                  child: Image.asset(
-                                    "assets/images/reimicon_2.png",
-                                    fit: BoxFit
-                                        .contain, // or BoxFit.cover depending on the desired effect
-                                  ),
-                                ),
-                                //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                                SizedBox(width: 8),
-                                const Icon(Icons.calendar_month,
-                                    size: 16, color: Colors.white),
-                                SizedBox(width: 5),
-                                const Text(
-                                  'To',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.normal),
-                                ),
-                                SizedBox(width: 5),
-                                GestureDetector(
-                                  onTap: () async {
-                                    DateTime? pickedDate = await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2100),
-                                    );
-                                    if (pickedDate != null) {
-                                      String formattedDate =
-                                          DateFormat('dd/MMM/yyyy')
-                                              .format(pickedDate);
-                                      setState(() {
-                                        tempDate =
-                                            toDate; // Save the current toDate before updating
-                                        toDate = formattedDate;
-                                        // calculateTotalDays();
-                                      });
-                                      //
-                                      print("-------300----$toDate");
-                                      // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
-                                      toDateSelectLogic();
-                                    }
-                                  },
-                                  child: Container(
-                                    height: 35,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 14.0),
-                                    // Optional: Adjust padding for horizontal space
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      // Change this to your preferred color
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        '$toDate',
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          // Change this to your preferred text color
-                                          fontSize:
-                                              12.0, // Adjust font size as needed
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          Container(
-                            height: 40,
-                            width: MediaQuery.of(context).size.width - 10,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.horizontal(
-                                left: Radius.circular(0),
-                                right: Radius.circular(0),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildTextButton('Approved'),
-                                  _buildTextButton('Rejected'),
-                                  _buildTextButton('Clarification'),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          empListDropDown(),
-                          SizedBox(height: 10),
+                                           //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                                           fromDateSelectLogic();
+                                         }
+                                       },
+                                       child: Container(
+                                         height: 35,
+                                         padding:
+                                         EdgeInsets.symmetric(horizontal: 14.0),
+                                         // Optional: Adjust padding for horizontal space
+                                         decoration: BoxDecoration(
+                                           color: Colors.white,
+                                           // Change this to your preferred color
+                                           borderRadius: BorderRadius.circular(15),
+                                         ),
+                                         child: Center(
+                                           child: Text(
+                                             '$formDate',
+                                             style: const TextStyle(
+                                               color: Colors.grey,
+                                               // Change this to your preferred text color
+                                               fontSize:
+                                               12.0, // Adjust font size as needed
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+                                     SizedBox(width: 6),
+                                     Container(
+                                       height: 32,
+                                       width: 32,
+                                       child: Image.asset(
+                                         "assets/images/reimicon_2.png",
+                                         fit: BoxFit
+                                             .contain, // or BoxFit.cover depending on the desired effect
+                                       ),
+                                     ),
+                                     //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                                     SizedBox(width: 8),
+                                     const Icon(Icons.calendar_month,
+                                         size: 16, color: Colors.white),
+                                     SizedBox(width: 5),
+                                     const Text(
+                                       'To',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 12,
+                                           fontWeight: FontWeight.normal),
+                                     ),
+                                     SizedBox(width: 5),
+                                     GestureDetector(
+                                       onTap: () async {
+                                         DateTime? pickedDate = await showDatePicker(
+                                           context: context,
+                                           initialDate: DateTime.now(),
+                                           firstDate: DateTime(2000),
+                                           lastDate: DateTime(2100),
+                                         );
+                                         if (pickedDate != null) {
+                                           String formattedDate =
+                                           DateFormat('dd/MMM/yyyy')
+                                               .format(pickedDate);
+                                           setState(() {
+                                             tempDate =
+                                                 toDate; // Save the current toDate before updating
+                                             toDate = formattedDate;
+                                             // calculateTotalDays();
+                                           });
+                                           //
+                                           print("-------300----$toDate");
+                                           // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                                           toDateSelectLogic();
+                                         }
+                                       },
+                                       child: Container(
+                                         height: 35,
+                                         padding: const EdgeInsets.symmetric(
+                                             horizontal: 14.0),
+                                         // Optional: Adjust padding for horizontal space
+                                         decoration: BoxDecoration(
+                                           color: Colors.white,
+                                           // Change this to your preferred color
+                                           borderRadius: BorderRadius.circular(15),
+                                         ),
+                                         child: Center(
+                                           child: Text(
+                                             '$toDate',
+                                             style: const TextStyle(
+                                               color: Colors.grey,
+                                               // Change this to your preferred text color
+                                               fontSize:
+                                               12.0, // Adjust font size as needed
+                                             ),
+                                           ),
+                                         ),
+                                       ),
+                                     ),
+                                   ],
+                                 ),
+                               ),
+                               SizedBox(height: 10),
+                               Container(
+                                 height: 40,
+                                 width: MediaQuery.of(context).size.width - 10,
+                                 decoration: const BoxDecoration(
+                                   color: Colors.white,
+                                   borderRadius: BorderRadius.horizontal(
+                                     left: Radius.circular(0),
+                                     right: Radius.circular(0),
+                                   ),
+                                 ),
+                                 child: Padding(
+                                   padding: const EdgeInsets.all(2.0),
+                                   child: Row(
+                                     mainAxisAlignment:
+                                     MainAxisAlignment.spaceEvenly,
+                                     children: [
+                                       _buildTextButton('Approved'),
+                                       _buildTextButton('Rejected'),
+                                       _buildTextButton('Clarification'),
+                                     ],
+                                   ),
+                                 ),
+                               ),
+                               SizedBox(height: 10),
+                               empListDropDown(),
+                               SizedBox(height: 10),
+                             ],
+                           ),
+                         ),
                           /// todo here you should bind the list
                           Expanded(
                             child: Container(
@@ -439,7 +450,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                         return Center(child: CircularProgressIndicator());
                                       } else if (snapshot.hasError) {
                                         // Handle error scenario
-                                        return Center(child: Text('Error: ${snapshot.error}'));
+                                        return Center(child: Text('No Data'));
                                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                         // Handle the case where the data is empty or null
                                         return Center(child: Text('No Data'));
@@ -508,7 +519,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                                 CrossAxisAlignment.start,
                                                                 children: <Widget>[
                                                                   Text(
-                                                                    'Conveyance',
+                                                                    '${empinfo.sExpHeadName}',
                                                                     style: AppTextStyle
                                                                         .font12OpenSansRegularBlackTextStyle,
                                                                     maxLines: 2,
