@@ -587,6 +587,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 itemBuilder: (context, index)
                                 {
                                   final leaveData = _filteredData[index];
+                                  var sExpHeadCode = leaveData.sExpHeadCode;
                                  // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
                               return Padding(
                                 padding: const EdgeInsets.only(left: 10, right: 10,top: 10),
@@ -658,6 +659,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                               ),
                                               /// todo here you should add a icon on a right hand side
                                               Spacer(),
+                                             // if(sExpHeadCode=="3521182900")
+                                              sExpHeadCode=="3521182900" ?
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 10),
                                                 child: InkWell(
@@ -683,7 +686,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                     ],
                                                   ),
                                                 ),
-                                              ),
+                                              )
+                                                  :Container()
 
                                               // Image.asset("assets/images/uplodeConsum.jpeg",
                                               // width: 20,

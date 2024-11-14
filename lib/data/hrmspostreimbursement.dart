@@ -10,7 +10,7 @@ class HrmsPostReimbursementRepo {
 
   Future hrmsPostReimbursement(
       BuildContext context,
-      int sTranCode,
+      sTranCode,
       String? sEmpCode,
       selectedSectorId,
       selectedShopId,
@@ -28,21 +28,21 @@ class HrmsPostReimbursementRepo {
       String? sToken = prefs.getString('sToken');
 
       print('----sToken--18---$sToken');
-      print('----sTranCode--15---$sTranCode');
-      print('----sEmpCode--15---$sEmpCode');
-      print('----selectedSectorId--15---$selectedSectorId');
-      print('----selectedShopId--15---$selectedShopId');
-      print('----dExpDate--15---$dExpDate');
-      print('----amount--15---$amount');
-      print('----expenseDetails--15---$expenseDetails');
-      print('----uplodedImage--15---$uplodedImage');
-      print('----sContactNo--15---$sContactNo');
-      print('----sRemarks--15---${remarks}');
-      print('----result--15---$result');
-      print('----uplode image 2--44---$uplodedImage2');
-      print('----uplode image 3--45---$uplodedImage3');
-      print('----uplode image 4--46---$uplodedImage4');
-      print('----ConsumaleList --46---$consumableList');
+      print('----sTranCode--31---$sTranCode');
+      print('----sEmpCode--32---$sEmpCode');
+      print('----selectedSectorId--33---$selectedSectorId');
+      print('----selectedShopId--34---$selectedShopId');
+      print('----dExpDate--35---$dExpDate');
+      print('----amount--36---$amount');
+      print('----expenseDetails--37---$expenseDetails');
+      print('----uplodedImage--38---$uplodedImage');
+      print('----sContactNo--39---$sContactNo');
+      print('----sRemarks--40---${remarks}');
+      print('----result--41---$result');
+      print('----uplode image 2--42---$uplodedImage2');
+      print('----uplode image 3--43---$uplodedImage3');
+      print('----uplode image 4--44---$uplodedImage4');
+      print('----ConsumaleList --45---$consumableList');
 
 
       var baseURL = BaseRepo().baseurl;
@@ -55,22 +55,22 @@ class HrmsPostReimbursementRepo {
       var request = http.Request('POST', Uri.parse('$hrmsPostReimbursementApi'));
 
       request.body = json.encode({
-        "fAmount": amount,
-        "sExpDetails": expenseDetails,
+        "fAmount": amount ?? "",
+        "sExpDetails": expenseDetails ?? "",
         "sExpBillPhoto2":uplodedImage2 ?? "",
         "sExpBillPhoto3":uplodedImage3 ?? "",
         "sExpBillPhoto4":uplodedImage4 ?? "",
-        "sRemarks": remarks,
-        "sResult": result,
-        "sTranCode": sTranCode,
-        "dExpDate": dExpDate,
-        "sEntryBy": sContactNo,
-        "sExpBillPhoto": uplodedImage,
-        "sExpHeadCode": selectedShopId,
-        "sProjectCode": selectedSectorId,
+        "sRemarks": remarks ?? "",
+        "sResult": result ?? "",
+        "sTranCode": "$sTranCode" ?? "",
+        "dExpDate": dExpDate ?? "",
+        "sEntryBy": sContactNo ?? "",
+        "sExpBillPhoto": uplodedImage ?? "",
+        "sExpHeadCode": selectedShopId ?? "",
+        "sProjectCode": selectedSectorId ?? "",
         "sItemArray":consumableList ?? "",
        // "sItemArray":'[{"SrNo":"1","sItemName":"Pencil Box","sUoM":"Box","fQty":"4","fAmount":"400"},{"SrNo":"2","sItemName":"Laptop Bag","sUoM":"Bags","fQty":"2","fAmount":"4400"}]',
-        "sEmpCode": sEmpCode,
+        "sEmpCode": sEmpCode ?? "",
 
       });
       request.headers.addAll(headers);

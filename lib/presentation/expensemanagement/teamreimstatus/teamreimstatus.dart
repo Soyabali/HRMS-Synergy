@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app/generalFunction.dart';
 import '../../../data/approvedTeamReimbursementRepo.dart';
 import '../../../data/teamEmpListRepo.dart';
 import '../../../domain/ApprovedTeamReimbursementModel.dart';
-
 import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 import '../pendingteamreimb/duplicateExpenseEntry.dart';
@@ -27,6 +25,7 @@ class TeamReimStatus extends StatelessWidget {
 }
 
 class TeamReimStatusPage extends StatefulWidget {
+
   const TeamReimStatusPage({super.key});
 
   @override
@@ -82,7 +81,9 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
       /// here you change a tab and update date on a ispecific tab
     }
   }
+
   void fromDateSelectLogic() {
+
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
     DateTime? toDate2 = dateFormat.parse(toDate!);
@@ -186,11 +187,6 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
     );
   }
 
-  storeEmpCode(empCode) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // prefs.setString('sEmpCode',sEmpCode);
-    prefs.setString("EmpCodeReim", empCode);
-  }
 
   @override
   void dispose() {

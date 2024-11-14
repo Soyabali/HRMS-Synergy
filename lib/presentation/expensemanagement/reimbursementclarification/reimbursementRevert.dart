@@ -162,6 +162,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   double? lat, long;
   String? consumableList;
   List<dynamic>? consuambleItemList;
+  var sTranCode;
 
   //var dExpDate;
   String? dExpDate;
@@ -255,7 +256,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   Future pickImage4() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-
 
     try {
       final pickFileid = await ImagePicker()
@@ -918,8 +918,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     dExpDate = '${widget.dExpDate}';
     _selectedSectorId = '${widget.sProjectCode}';
     _selectedShopId = '${widget.sExpHeadCode}';
-//  sTranCode
-    var sTranCode = '${widget.sTranCode}';
+     sTranCode = '${widget.sTranCode}';
+
     monthAttendance(sTranCode);
     // widget.dEntryAt}
     _shopfocus = FocusNode();
@@ -929,7 +929,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     _addressfocus = FocusNode();
     _amountController = TextEditingController(text: widget.fAmount);
     _expenseController = TextEditingController(text: widget.sExpDetails);
-    _remarkController = TextEditingController(text: widget.sRemarks);
+    _remarkController = TextEditingController();
     _itemDescriptionController = TextEditingController();
     _quantityController = TextEditingController();
     _amountController2 = TextEditingController();
@@ -2477,8 +2477,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 String? sEmpCode = prefs.getString('sEmpCode');
                                 String? sContactNo = prefs.getString('sContactNo');
                                 /// TODO GET A RANDOM NUMBER
-                                Random random = Random();
-                                int sTranCode = 10000000 + random.nextInt(90000000);
+                              //  Random random = Random();
+                                //int sTranCode = 10000000 + random.nextInt(90000000);
 
                                 var amount = '${_amountController.text}';
                                 var expenseDetails = '${_expenseController.text}';
@@ -2492,16 +2492,16 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 print('-----expenseDetails-----XX----$expenseDetails');
                                 print('-----uplodedImage-----XX----$uplodedImage');
                                 print('-----sContactNo-----XX-----$sContactNo');
-
+                                print("-------R----$remarks");
 
                                 if (_formKey.currentState!.validate() &&
-                                    sTranCode != null &&
                                     sEmpCode != null &&
                                     _selectedSectorId != null &&
                                     _selectedShopId != null &&
                                     amount != null &&
                                     expenseDetails != null &&
-                                    uplodedImage != null &&
+                                    remarks !=null && remarks!="" &&
+                                    uplodedImage!=null || uplodedImage2!=null || uplodedImage3!=null || uplodedImage4!=null &&
                                     sContactNo != null) {
                                   // Call Api
                                   print('---call Api---');
@@ -2512,9 +2512,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   print("---Amount---$amount");
 
                                   var hrmsPopWarning =
-                                      await HrmsPopUpWarningRepo()
-                                          .hrmsPopUpWarnging(context, sEmpCode,
-                                              dExpDate, amount);
+                                      await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate, amount);
                                   print('--------1097----xxx--$hrmsPopWarning');
                                   result = "${hrmsPopWarning[0]['Result']}";
                                   msg = "${hrmsPopWarning[0]['Msg']}";
@@ -2535,9 +2533,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                     displayToast('Please Enter Amount');
                                   } else if (expenseDetails == null ||
                                       expenseDetails == '') {
-                                    displayToast(
-                                        'Please Enter Expense Details');
-                                  } else if (uplodedImage == null) {
+                                    displayToast('Please Enter Expense Details');
+                                  }else if(remarks==null && remarks==""){
+                                    displayToast('Please Enter Remarks');
+                                  }
+                                  else if (uplodedImage == null || uplodedImage2==null || uplodedImage3==null || uplodedImage4==null) {
                                     displayToast('Please pick a photo');
                                   } else if (sContactNo == null) {
                                     displayToast('Please get a contact number');
@@ -2589,6 +2589,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                               uplodedImage4,
                                               consumableList);
                                   print('---1050--$hrmsPostReimbursement');
+
                                   result =
                                       "${hrmsPostReimbursement[0]['Result']}";
                                   msg = "${hrmsPostReimbursement[0]['Msg']}";
