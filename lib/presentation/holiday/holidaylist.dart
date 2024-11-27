@@ -249,7 +249,7 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 15, right: 15),
+                    left: 0, right: 0),
                 child: Container(
                   height: 0.5,
                   color: Color(0xff3f617d),

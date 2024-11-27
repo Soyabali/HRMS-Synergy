@@ -234,78 +234,78 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                                                            style: AppTextStyle
                                                                .font10OpenSansRegularBlackTextStyle,
                                                          ),
-                                                         SizedBox(height: 5),
-                                                         Row(
-                                                           mainAxisAlignment: MainAxisAlignment.end,
-                                                           // Aligns Row to the right
-                                                           children: [
-                                                             // Accept text with iOS forward icon
-                                                             GestureDetector(
-                                                               onTap: () async {
-                                                                 print('---ACCEPT---');
-                                                                 // call api
-                                                                 var sPolicyCode = policyDocData.sPolicyCode;
-                                                                 print('---sPolicyCode---$sPolicyCode');
-                                                                 var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
-                                                                 print('---232---$projectDocAccept');
-                                                                 setState(() {
-                                                                   msg = "${projectDocAccept[0]['Msg']}";
-                                                                 });
-                                                                 if(msg!=null && msg!=''){
-                                                                   showDialog(
-                                                                     context: context,
-                                                                     builder: (BuildContext context) {
-                                                                       return _buildDialogSucces2(context, msg); // A new dialog for showing success
-                                                                     },
-                                                                   );
-                                                                 }else{
-                                                                   generalFunction.displayToast("Not Response");
-                                                                 }
-                 
-                 
-                                                               },
-                                                               child: Row(
-                                                                 children: [
-                                                                   Text('ACCEPT', style: AppTextStyle
-                                                                       .font12OpenSansRegularGreenTextStyle,
-                                                                   ),
-                                                                   SizedBox(width: 8),
-                                                                   // Space between text and icon
-                                                                   Icon(Icons.arrow_forward_ios, size: 12),
-                                                                 ],
-                                                               ),
-                                                             ),
-                                                             SizedBox(width: 20),
-                                                             // Space between "Accept" and "Reject"
-                 
-                                                             // Reject text with iOS forward icon
-                                                             GestureDetector(
-                                                               onTap: (){
-                                                                 print('---REJECT---');
-                                                                 //_takeActionDialog(context);
-                                                                 var sPolicyCode = policyDocData.sPolicyCode;
-                                                                 print('---PoliceCode---$sPolicyCode');
-                 
-                                                                 showDialog(
-                                                                   context: context,
-                                                                   builder: (BuildContext context) {
-                                                                     return _takeActionDialog(context,sPolicyCode);
-                                                                   },
-                                                                 );
-                                                               },
-                                                               child: Row(
-                                                                 children: [
-                                                                   Text('REJECT', style: AppTextStyle
-                                                                       .font12OpenSansRegularRedTextStyle),
-                                                                   SizedBox(width: 8),
-                                                                   // Space between text and icon
-                                                                   Icon(Icons.arrow_forward_ios, size: 12),
-                                                                 ],
-                                                               ),
-                                                             ),
-                                                           ],
-                                                         ),
-                                                         SizedBox(height: 5),
+                                                          SizedBox(height: 5),
+                                                         // Row(
+                                                         //   mainAxisAlignment: MainAxisAlignment.end,
+                                                         //   // Aligns Row to the right
+                                                         //   children: [
+                                                         //     // Accept text with iOS forward icon
+                                                         //     GestureDetector(
+                                                         //       onTap: () async {
+                                                         //         print('---ACCEPT---');
+                                                         //         // call api
+                                                         //         var sPolicyCode = policyDocData.sPolicyCode;
+                                                         //         print('---sPolicyCode---$sPolicyCode');
+                                                         //         var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
+                                                         //         print('---232---$projectDocAccept');
+                                                         //         setState(() {
+                                                         //           msg = "${projectDocAccept[0]['Msg']}";
+                                                         //         });
+                                                         //         if(msg!=null && msg!=''){
+                                                         //           showDialog(
+                                                         //             context: context,
+                                                         //             builder: (BuildContext context) {
+                                                         //               return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                                                         //             },
+                                                         //           );
+                                                         //         }else{
+                                                         //           generalFunction.displayToast("Not Response");
+                                                         //         }
+                                                         //
+                                                         //
+                                                         //       },
+                                                         //       child: Row(
+                                                         //         children: [
+                                                         //           Text('ACCEPT', style: AppTextStyle
+                                                         //               .font12OpenSansRegularGreenTextStyle,
+                                                         //           ),
+                                                         //           SizedBox(width: 8),
+                                                         //           // Space between text and icon
+                                                         //           Icon(Icons.arrow_forward_ios, size: 12),
+                                                         //         ],
+                                                         //       ),
+                                                         //     ),
+                                                         //     SizedBox(width: 20),
+                                                         //     // Space between "Accept" and "Reject"
+                                                         //
+                                                         //     // Reject text with iOS forward icon
+                                                         //     GestureDetector(
+                                                         //       onTap: (){
+                                                         //         print('---REJECT---');
+                                                         //         //_takeActionDialog(context);
+                                                         //         var sPolicyCode = policyDocData.sPolicyCode;
+                                                         //         print('---PoliceCode---$sPolicyCode');
+                                                         //
+                                                         //         showDialog(
+                                                         //           context: context,
+                                                         //           builder: (BuildContext context) {
+                                                         //             return _takeActionDialog(context,sPolicyCode);
+                                                         //           },
+                                                         //         );
+                                                         //       },
+                                                         //       child: Row(
+                                                         //         children: [
+                                                         //           Text('REJECT', style: AppTextStyle
+                                                         //               .font12OpenSansRegularRedTextStyle),
+                                                         //           SizedBox(width: 8),
+                                                         //           // Space between text and icon
+                                                         //           Icon(Icons.arrow_forward_ios, size: 12),
+                                                         //         ],
+                                                         //       ),
+                                                         //     ),
+                                                         //   ],
+                                                         // ),
+                                                         // SizedBox(height: 5),
                                                        ],
                                                      ),
                                                    ),

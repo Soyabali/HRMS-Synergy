@@ -15,7 +15,7 @@ class CustomCalendarScreen extends StatefulWidget {
 
 class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
 
-  var attendaceResponse;
+ late var attendaceResponse;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDate = DateTime.now();
@@ -64,6 +64,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
   var firstDateOfMonth;
   Color? color;
   Color? txtColor;
+  bool isLoading = true;
 
   // Method to change month on month selection from horizontal list
 
@@ -114,6 +115,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     selectedMonth = getCurrentMonth();
     selectedMonth = capitalizeFirstLetter(selectedMonth);
     print('----82---$selectedMonth');
+
     // Scroll to the current month after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToCurrentMonth();
@@ -121,62 +123,64 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     responseStatus(formatDate);
     super.initState();
   }
+
   getAttendaceResponse() async {
+    setState(() {
+      isLoading = true; // Show loading
+    });
+
     DateTime now = DateTime.now();
     var currentYear = now.year;
     var selectedMonth = DateFormat('MMM').format(now);
-    attendaceResponse = await HrmsAttendanceRepo().attendance(context,selectedMonth);
-    print("Attendance response -----106---: $attendaceResponse");
-    // Extract the object from the array
-    Map<String, dynamic> attendanceData = attendaceResponse[0];
-    // Function to convert the string to a list of integers
+    try {
+      attendaceResponse = await HrmsAttendanceRepo().attendance(context, selectedMonth);
 
-    List<int> parseToList(String? value) {
-      if (value != null && value.isNotEmpty) {
-        return value.split(',').map(int.parse).toList();
-      } else {
-        return [];
+      Map<String, dynamic> attendanceData = attendaceResponse[0];
+
+      List<int> parseToList(String? value) {
+        if (value != null && value.isNotEmpty) {
+          return value.split(',').map(int.parse).toList();
+        } else {
+          return [];
+        }
       }
+
+      setState(() {
+        sPresents = parseToList(attendanceData['sPresents']);
+        sAbsent = parseToList(attendanceData['sAbsent']);
+        sLeave = parseToList(attendanceData['sLeave']);
+        sHalfDay = parseToList(attendanceData['sHalfDay']);
+        sHolidays = parseToList(attendanceData['sHolidays']);
+        sLateComing = parseToList(attendanceData['sLateComing']);
+        sEarlyGoing = parseToList(attendanceData['sEarlyGoing']);
+        sLcEg = parseToList(attendanceData['sLcEg']);
+        sOnSite = parseToList(attendanceData['sOnSite']);
+        sWeeklyOff = parseToList(attendanceData['sWeeklyOff']);
+
+        sPresentsText = sPresents!.join(", ");
+        sAbsentText = sAbsent!.join(", ");
+        sLeaveText = sLeave!.join(", ");
+        sHalfDayText = sHalfDay!.join(", ");
+        sHolidaysText = sHolidays!.join(", ");
+        sLateComingText = sLateComing!.join(", ");
+        sEarlyGoingText = sEarlyGoing!.join(", ");
+        sLcEgText = sLcEg!.join(", ");
+        sOnSiteText = sOnSite!.join(", ");
+        sWeeklyOffText = sWeeklyOff!.join(", ");
+
+        // Hide loading
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false; // Hide loading on error
+      });
+      // Optionally, display an error message
+      print("Error fetching attendance data: $error");
     }
-
-    // Convert each key to a list of integers
-    setState(() {
-      sPresents = (parseToList(attendanceData['sPresents']));
-      sAbsent = (parseToList(attendanceData['sAbsent']));
-      sLeave = (parseToList(attendanceData['sLeave']));
-      sHalfDay = (parseToList(attendanceData['sHalfDay']));
-      sHolidays = (parseToList(attendanceData['sHolidays']));
-      sLateComing = (parseToList(attendanceData['sLateComing']));
-      sEarlyGoing = (parseToList(attendanceData['sEarlyGoing']));
-      sLcEg = (parseToList(attendanceData['sLcEg']));
-      sOnSite = (parseToList(attendanceData['sOnSite']));
-      sWeeklyOff = (parseToList(attendanceData['sWeeklyOff']));
-    });
-     sPresentsText = sPresents!.join(", ");
-    sAbsentText = sAbsent!.join(", ");
-    sLeaveText = sLeave!.join(", ");
-    sHalfDayText = sHalfDay!.join(", ");
-    sHolidaysText = sHolidays!.join(", ");
-    sLateComingText = sLateComing!.join(", ");
-    sEarlyGoingText = sEarlyGoing!.join(", ");
-    sLcEgText = sLcEg!.join(", ");
-    sOnSiteText = sOnSite!.join(", ");
-    sWeeklyOffText = sWeeklyOff!.join(", ");
-
-
-    // Print results
-    print("sPresents: $sPresents");
-    print("sAbsent: $sAbsent");
-    print("sLeave: $sLeave");
-    print("sHalfDay: $sHalfDay");
-    print("sHolidays: $sHolidays");
-    print("sLateComing: $sLateComing");
-    print("sEarlyGoing: $sEarlyGoing");
-    print("sLcEg: $sLcEg");
-    print("sOnSite: $sOnSite");
-    print("sWeeklyOff: $sWeeklyOff");
   }
-  // clear list
 
   void clearList() {
     setState(() {
@@ -314,7 +318,9 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
           ),
         ), // Removes shadow under the AppBar
       ),
-      body: SingleChildScrollView(
+      body:isLoading
+          ? Center(child: CircularProgressIndicator()) :
+      SingleChildScrollView(
         child: Column(
           children: [
             // Row with month name and year
@@ -335,7 +341,11 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
               ),
             ),
             // Calendar Widget
-      Container(
+            if(isLoading)
+              Center(
+                child: CircularProgressIndicator(), // Show loader when isLoading is true
+              )else
+            Container(
         height: 328,
         child: TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),

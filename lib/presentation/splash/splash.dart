@@ -110,7 +110,6 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    //checkUserConnection();
     print("-------93---------Splash");
    // _checkPermissions();
     Future.microtask(() => getUserValueFromLocalDataBase());
@@ -182,9 +181,6 @@ class _SplashViewState extends State<SplashView> {
          context,
          '/loginScreen',
        );
-     // Navigator.pushNamed(context, '/login');  // home
-     // Navigator.pushNamed(context, '/home');  //   /attendancelist
-     // Navigator.pushNamed(context, '/attendancelist');
 
      }else{
       showDialog(context: context,
@@ -215,18 +211,6 @@ class _SplashViewState extends State<SplashView> {
     _timer?.cancel();
     super.dispose();
   }
-  // get a localdatabase
-  // getUserValueFromaLocalDataBase() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   sContactNo = prefs.getString('sContactNo').toString();
-  //   if (sContactNo != null) {
-  //     Navigator.pushReplacement(context,
-  //         MaterialPageRoute(builder: (context) => const DashBoard()));
-  //   } else {
-  //     print('----check user Connection and go LoginScreen-');
-  //     //checkUserConnection();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

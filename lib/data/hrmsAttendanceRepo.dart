@@ -49,13 +49,13 @@ class HrmsAttendanceRepo {
       var map;
       var data = await response.stream.bytesToString();
       map = json.decode(data);
-      print('----------47---attendance RESPONSE----$map');
+     // print('----------47---attendance RESPONSE----$map');
       if (response.statusCode == 200) {
         hideLoader();
         print('----------50-----$map');
         return map;
       } else {
-        print('----------29---Attendace RESPONSE----$map');
+      //  print('----------29---Attendace RESPONSE----$map');
         hideLoader();
         print(response.reasonPhrase);
         return map;

@@ -12,7 +12,6 @@ import '../dashboard/dashboard.dart';
 import '../forgotpassword/forgotPassword.dart';
 import '../resources/app_text_style.dart';
 import '../resources/assets_manager.dart';
-import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 
@@ -75,22 +74,12 @@ class _LoginPageState extends State<LoginPage> {
     }
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
     }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    debugPrint("-------------Position-----------------");
-    debugPrint(position.latitude.toString());
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     lat = position.latitude;
     long = position.longitude;
-    print('-----------105----$lat');
-    print('-----------106----$long');
-    // setState(() {
-    // });
-    debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-    debugPrint(position.toString());
   }
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -120,15 +109,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // TODO: implement initState
-    print('---login---Screen---');
     super.initState();
-    // getLocation();
-    // Future.delayed(const Duration(milliseconds: 100), () {
-    //   requestLocationPermission();
-    //   setState(() {
-    //     // Here you can write your code for open new view
-    //   });
-    // });
   }
 
   @override
@@ -165,84 +146,6 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.clear();
   }
 
-  // bottomSheet
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 200,
-          color: Colors.white,
-          child: GestureDetector(
-            onTap: () {
-              print('---------');
-            },
-            child: Container(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: const Center(
-                            child: Padding(
-                          padding: EdgeInsets.all(0.0),
-                          child:
-                              Icon(Icons.close, size: 25, color: Colors.white),
-                        )),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Text("Can't Login?"),
-                  SizedBox(height: 10),
-                  Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        /// After implement attion this comment is remove and OtpVerfication is hide
-                        // Add your button onPressed logic here
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //     builder: (context) =>
-                        // const ForgotPassword()));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(20), // Adjust as needed
-                        ), // Text color
-                      ),
-                      child: const Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text('Forgot Password',
-                            style:
-                                TextStyle(fontSize: 16, color: Colors.white)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -251,7 +154,6 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               child: Padding(
-                //padding: const EdgeInsets.only(top: AppPadding.p25),
                 padding: const EdgeInsets.only(top: 0),
                 child: Column(
                   children: <Widget>[
@@ -336,9 +238,6 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                   prefixIcon: const Icon(Icons.phone,
                                       color: AppColors.loginbutton),
-                                  // errorBorder
-                                  // errorBorder: OutlineInputBorder(
-                                  //     borderSide: BorderSide(color: Colors.green, width: 0.5))
                                 ),
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
@@ -398,34 +297,16 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(height: AppPadding.p10),
                               /// LoginButton code and onclik Operation
                               InkWell(
-                                // onTap: () {
-                                //   print('---DashBoard Screen------');
-                                //   Navigator.pushAndRemoveUntil(
-                                //     context,
-                                //     MaterialPageRoute(builder: (context) => DashBoard()),
-                                //         (Route<dynamic> route) => false, // Remove all previous routes
-                                //   );
-                                //   // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
-                                //   //Navigator.pushReplacementNamed(context, Routes.mainRoute);
-                                // },
-
                                 onTap: () async {
-                                  // Navigator.pushReplacementNamed(
-                                  //     context, Routes.forgotPasswordRoute);
-                                 // Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
-                                 // getLocation();
                                    var phone = _phoneNumberController.text;
                                    var password = passwordController.text;
 
                                    if(_formKey.currentState!.validate() && phone != null && password != null){
                                      // Call Api
                                              loginMap = await LoginRepo().login(context, phone!, password!);
-
-                                             print('---418----$loginMap');
                                              result = "${loginMap[0]['Result']}";
                                              msg = "${loginMap[0]['Msg']}";
-                                             print('---421----$result');
-                                             print('---422----$msg');
+
                                    }else{
                                      if(_phoneNumberController.text.isEmpty){
                                        phoneNumberfocus.requestFocus();
@@ -434,7 +315,6 @@ class _LoginPageState extends State<LoginPage> {
                                      }
                                    } // condition to fetch a response form a api
                                   if(result=="1"){
-                                    print('---data store --Local data b---431----');
                                       var sEmpCode = "${loginMap[0]['sEmpCode']}";
                                       var sCompEmpCode = "${loginMap[0]['sCompEmpCode']}";
                                       var sFirstName = "${loginMap[0]['sFirstName']}";
@@ -507,35 +387,13 @@ class _LoginPageState extends State<LoginPage> {
                                     prefs.setString('sMngrContactNo',sMngrContactNo);
                                     prefs.setString('iIsEligibleShLv',iIsEligibleShLv);
 
-                                    // navigate to dashboard
-
-                                   // Navigator.pushNamed(context,'/dashBoard',);
-                                    // Navigator.pushNamed(
-                                    //   context,
-
-                                    //   '/loginScreen',
-                                    // );
-                                    //Navigator.pushNamed(context, '/main');
-                                  //  Navigator.pushReplacementNamed(context, Routes.dashboardRoute);
-                                    //Navigator.pushNamed(context, Routes.mainRoute);
-
-                                      Navigator.pushAndRemoveUntil(
+                                    Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(builder: (context) => DashBoard()),
                                             (Route<dynamic> route) => false, // Remove all previous routes
                                       );
-
-                                    // prefs.setDouble('lat',lat!);
-                                      //prefs.setDouble('long',long!);
-                                    //  String? sEmpCode1 = prefs.getString('sEmpCode');
-                                      //String? sCompEmpCode1 = prefs.getString('sCompEmpCode');
-                                      //String? sFirstName1 = prefs.getString('sFirstName');
-
-                                      // iAgencyCode = prefs.getString('iAgencyCode').toString();
-
                                   }else{
                                     displayToast(msg);
-                                    print('---Value is not store in a local data-----508--');
                                   }
                                   },
 
@@ -558,27 +416,27 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
+                              SizedBox(height: 5),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Checkbox(
-                                    value: _isChecked,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        _isChecked = value ?? false;
-                                      });
-                                    },
-                                  ),
-                                  Text(
-                                    AppStrings.txtStayConnected,
-                                    style: AppTextStyle
-                                        .font16OpenSansRegularBlack45TextStyle,
-                                  ),
+                                  // Checkbox(
+                                  //   value: _isChecked,
+                                  //   onChanged: (bool? value) {
+                                  //     setState(() {
+                                  //       _isChecked = value ?? false;
+                                  //     });
+                                  //   },
+                                  // ),
+                                  // Text(
+                                  //   AppStrings.txtStayConnected,
+                                  //   style: AppTextStyle
+                                  //       .font16OpenSansRegularBlack45TextStyle,
+                                  // ),
                                   Spacer(),
                                   GestureDetector(
                                     onTap: (){
-                                      print('----Forgot Password----');
                                       // Navigator.pop(context);
                                       Navigator.push(
                                         context,

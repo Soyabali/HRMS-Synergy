@@ -17,10 +17,10 @@ import '../../../data/postimagerepo.dart';
 import '../../../data/shopTypeRepo.dart';
 import '../../../domain/GetPendingForApprovalReimModel.dart';
 import '../../../domain/GetPendingForApprovalReimRepo.dart';
-import '../../dashboard/dashboard.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
+import '../expense_management.dart';
 import '../reimbursementStatus/consumableItem.dart';
 import '../reimbursementStatus/reimbursementlog.dart';
 import 'duplicateExpenseEntry.dart';
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   List shopTypeList = [];
   var result2, msg2;
 
-
+   // DialogBox Code
   Dialog showTakeActionDialog(BuildContext context, String sTranCode) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -104,8 +104,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                       // displayToast(_selectedDecision!);
-                       // print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     RadioListTile<String>(
@@ -116,8 +114,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                       // displayToast(_selectedDecision!);
-                        //print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     RadioListTile<String>(
@@ -128,8 +124,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                         setState(() {
                           _selectedDecision = value;
                         });
-                        //displayToast(_selectedDecision!);
-                        //print('Selected Decision: $_selectedDecision');
                       },
                     ),
                     Padding(
@@ -152,50 +146,42 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                     InkWell(
                       onTap: () async {
                         var iStatus;
-                        var sRemarks = _takeAction.text;
+                        var sRemarks = _takeAction.text.trim();
                         print('-----155--$sRemarks');
                         print('-----158--$sTranCode');
-                        // _selectedDecision
                         print('-----158----$_selectedDecision');
-                        if(_selectedDecision=="Approved"){
-                          iStatus="8";
-                        }else if(_selectedDecision=="Rejected"){
-                          iStatus="9";
-                        }else{
-                          iStatus="5";
+
+                        // Set iStatus based on selected decision
+                        if (_selectedDecision == "Approved") {
+                          iStatus = "8"; // Approved
+                        } else if (_selectedDecision == "Rejected") {
+                          iStatus = "9"; // Rejected
+                        } else {
+                          iStatus = "5"; // Clarification Required
                         }
                         print('-----167-----$iStatus');
 
-                        if((iStatus!=null && iStatus!='') && (sRemarks!=null && sRemarks!='')){
-
-                          print('------170----Call API-----');
-                          var apprejreim = await ApprejctreimbursementbyapproverrepoRepo().apprejectReim(context,sTranCode,iStatus,sRemarks);
-                          print('------174--xx--$apprejreim');
-                          result = "${apprejreim[0]['Result']}";
-                          msg = "${apprejreim[0]['Msg']}";
-
-                          if(result=="1"){
-                            // gice the sucess dialog
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return _buildDialogSucces2(context, msg);
-                              },
-                            );
-                          }else{
-                          }
-
-                        }else {
-                          if(iStatus==null && iStatus==''){
-                            displayToast('Select value');
-                          }else if(sRemarks!=null && sRemarks!=''){
-                            displayToast('Please Enter ther Remarks');
-                          }
-                          print('------172----Not Call API-----');
+                        // Validate iStatus and remarks before API call
+                        if (iStatus == null || iStatus == '') {
+                          displayToast('Select a value');
+                          return;
                         }
-                        },
 
-
+                        if (iStatus == "8") {
+                          // If Approved, proceed directly to API call
+                          print('------170----Call API for Approved-----');
+                          await _callApi(sTranCode, iStatus, sRemarks, context);
+                        } else {
+                          // If not Approved, check if remarks are entered
+                          if (sRemarks.isEmpty) {
+                            displayToast('Remarks are required');
+                            return;
+                          }
+                          // Call the API for Rejected or Clarification
+                          print('------170----Call API for Rejected or Clarification-----');
+                          await _callApi(sTranCode, iStatus, sRemarks, context);
+                        }
+                      },
                       child: Container(
                         height: AppSize.s45,
                         padding: EdgeInsets.all(AppPadding.p5),
@@ -236,7 +222,103 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     );
   }
 
+  Future<void> _callApi(String sTranCode, String iStatus, String sRemarks, BuildContext context) async {
+    var apprejreim = await ApprejctreimbursementbyapproverrepoRepo().apprejectReim(context, sTranCode, iStatus, sRemarks);
+    print('------174--xx--$apprejreim');
+    var result = "${apprejreim[0]['Result']}";
+    var msg = "${apprejreim[0]['Msg']}";
 
+    if (result == "1") {
+      // close the dialog
+      Navigator.pop(context);
+      // Success dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+         // return _buildDialogSucces2(context, msg);
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: 190,
+                  padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 0), // Space for the image
+                      Text('Success',
+                          style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      SizedBox(height: 10),
+                      Text(
+                        msg,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              setState(() {
+                                hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              });
+                              // Main Api call again
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              // Set the background color to white
+                              foregroundColor: Colors.black, // Set the text color to black
+                            ),
+                            child: Text('Ok', style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(
+                  top: -30, // Position the image at the top center
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.blueAccent,
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/images/sussess.jpeg',
+                        // Replace with your asset image path
+                        fit: BoxFit.cover,
+                        width: 60,
+                        height: 60,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    } else {
+      displayToast('API call failed');
+    }
+  }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -319,7 +401,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
       }
     } catch (e) {}
   }
-
   // multifilepath
   // toast
 
@@ -420,6 +501,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
     shopType();
+    print("---------424--------xxxx--");
    // _takeAction = TextEditingController();
     super.initState();
     _shopfocus = FocusNode();
@@ -448,8 +530,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   List<GetPendingForApprovalReimmodel> _filteredData = [];
 
   hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
-    getPendingApprovalReim = GetPendingforApprovalReimRepo()
-        .getPendingApprovalReim(context, firstOfMonthDay, lastDayOfCurrentMonth);
+    getPendingApprovalReim = GetPendingforApprovalReimRepo().getPendingApprovalReim(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
     getPendingApprovalReim.then((data) {
       setState(() {
@@ -499,7 +580,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
               // Navigator.pop(context);
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const DashBoard()),
+                MaterialPageRoute(builder: (context) => const ExpenseManagement()),
               );
             },
             child: const Padding(
@@ -525,7 +606,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
             ),
           ), // Removes shadow under the AppBar
         ),
-
         body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -763,7 +843,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                         } else {
                                           final leaveData = _filteredData[index];
                                           var sExpHeadCode = leaveData.sExpHeadCode;
-
 
                                           duplicate = leaveData.sDuplicate;
                                           var textColor;
@@ -1117,7 +1196,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                             ],
                                                           ),
                                                         ),
-
                                                         SizedBox(height: 10),
                                                         //
                                                         Row(
@@ -1338,8 +1416,162 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
                                                                           showDialog(
                                                                             context: context,
-                                                                            builder: (context) => showTakeActionDialog(context,sTranCode),
+                                                                           // builder: (context) => showTakeActionDialog(context,sTranCode),
+                                                                            builder: (context) =>Dialog(
+                                                                              shape: RoundedRectangleBorder(
+                                                                                borderRadius: BorderRadius.circular(20),
+                                                                              ),
+                                                                              elevation: 0,
+                                                                              backgroundColor: Colors.transparent,
+                                                                              child: StatefulBuilder(
+                                                                                builder: (BuildContext context, StateSetter setState) {
+                                                                                  return Stack(
+                                                                                    clipBehavior: Clip.none,
+                                                                                    alignment: Alignment.center,
+                                                                                    children: [
+                                                                                      Container(
+                                                                                        padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.white,
+                                                                                          borderRadius: BorderRadius.circular(20),
+                                                                                        ),
+                                                                                        child: Column(
+                                                                                          mainAxisSize: MainAxisSize.min,
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              'Update Status',
+                                                                                              style: AppTextStyle.font16OpenSansRegularRedTextStyle,
+                                                                                            ),
+                                                                                            SizedBox(height: 10),
+                                                                                            // Radio buttons for the decision options
+                                                                                            RadioListTile<String>(
+                                                                                              title: Text('Approved'),
+                                                                                              value: 'Approved',
+                                                                                              groupValue: _selectedDecision,
+                                                                                              onChanged: (String? value) {
+                                                                                                setState(() {
+                                                                                                  _selectedDecision = value;
+                                                                                                });
+                                                                                              },
+                                                                                            ),
+                                                                                            RadioListTile<String>(
+                                                                                              title: Text('Rejected'),
+                                                                                              value: 'Rejected',
+                                                                                              groupValue: _selectedDecision,
+                                                                                              onChanged: (String? value) {
+                                                                                                setState(() {
+                                                                                                  _selectedDecision = value;
+                                                                                                });
+                                                                                              },
+                                                                                            ),
+                                                                                            RadioListTile<String>(
+                                                                                              title: Text('Clarification Required'),
+                                                                                              value: 'Clarification Required',
+                                                                                              groupValue: _selectedDecision,
+                                                                                              onChanged: (String? value) {
+                                                                                                setState(() {
+                                                                                                  _selectedDecision = value;
+                                                                                                });
+                                                                                              },
+                                                                                            ),
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.only(left: 0),
+                                                                                              child: TextFormField(
+                                                                                                controller: _takeAction,
+                                                                                                textInputAction: TextInputAction.next,
+                                                                                                onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                                                                                decoration: const InputDecoration(
+                                                                                                  border: OutlineInputBorder(),
+                                                                                                  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                                                                                  filled: true,
+                                                                                                  fillColor: Color(0xFFf2f3f5),
+                                                                                                ),
+                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                              ),
+                                                                                            ),
+                                                                                            SizedBox(height: 15),
+                                                                                            // Submit button
+                                                                                            InkWell(
+                                                                                              onTap: () async {
+                                                                                                var iStatus;
+                                                                                                var sRemarks = _takeAction.text.trim();
+                                                                                                print('-----155--$sRemarks');
+                                                                                                print('-----158--$sTranCode');
+                                                                                                print('-----158----$_selectedDecision');
+
+                                                                                                // Set iStatus based on selected decision
+                                                                                                if (_selectedDecision == "Approved") {
+                                                                                                  iStatus = "8"; // Approved
+                                                                                                } else if (_selectedDecision == "Rejected") {
+                                                                                                  iStatus = "9"; // Rejected
+                                                                                                } else {
+                                                                                                  iStatus = "5"; // Clarification Required
+                                                                                                }
+                                                                                                print('-----167-----$iStatus');
+
+                                                                                                // Validate iStatus and remarks before API call
+                                                                                                if (iStatus == null || iStatus == '') {
+                                                                                                  displayToast('Select a value');
+                                                                                                  return;
+                                                                                                }
+
+                                                                                                if (iStatus == "8") {
+                                                                                                  // If Approved, proceed directly to API call
+                                                                                                  print('------170----Call API for Approved-----');
+                                                                                                  await _callApi(sTranCode, iStatus, sRemarks, context);
+                                                                                                } else {
+                                                                                                  // If not Approved, check if remarks are entered
+                                                                                                  if (sRemarks.isEmpty) {
+                                                                                                    displayToast('Remarks are required');
+                                                                                                    return;
+                                                                                                  }
+                                                                                                  // Call the API for Rejected or Clarification
+                                                                                                  print('------170----Call API for Rejected or Clarification-----');
+                                                                                                  await _callApi(sTranCode, iStatus, sRemarks, context);
+                                                                                                }
+                                                                                              },
+                                                                                              child: Container(
+                                                                                                height: AppSize.s45,
+                                                                                                padding: EdgeInsets.all(AppPadding.p5),
+                                                                                                decoration: BoxDecoration(
+                                                                                                  color: AppColors.loginbutton,
+                                                                                                  borderRadius: BorderRadius.circular(AppMargin.m10),
+                                                                                                ),
+                                                                                                child: Center(
+                                                                                                  child: Text(
+                                                                                                    "Submit",
+                                                                                                    style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      Positioned(
+                                                                                        top: -30,
+                                                                                        child: CircleAvatar(
+                                                                                          radius: 30,
+                                                                                          backgroundColor: Colors.blueAccent,
+                                                                                          child: ClipOval(
+                                                                                            child: Image.asset(
+                                                                                              'assets/images/addreimbursement.jpeg',
+                                                                                              fit: BoxFit.cover,
+                                                                                              width: 60,
+                                                                                              height: 60,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                },
+                                                                              ),
+                                                                            )
+
                                                                           );
+
+
 
                                                                         },
                                                                         child: Row(
@@ -1347,8 +1579,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                           MainAxisAlignment
                                                                               .center,
                                                                           children: [
-                                                                            Text(
-                                                                                'Action',
+                                                                            Text('Action',
                                                                                 style: AppTextStyle
                                                                                     .font14OpenSansRegularWhiteTextStyle),
                                                                             Icon(
@@ -1488,7 +1719,6 @@ void openFullScreenDialog(
                 },
               ),
             ),
-
             // White container with Bill Date at the bottom
             Positioned(
               bottom: 0,
@@ -1578,23 +1808,18 @@ Widget _buildDialogSucces2(BuildContext context, String msg) {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+
                       Navigator.of(context).pop();
-                      // call api again
-                      // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-                      // );
+                      // Main Api call again
+
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       // Set the background color to white
-                      foregroundColor:
-                          Colors.black, // Set the text color to black
+                      foregroundColor: Colors.black, // Set the text color to black
                     ),
-                    child: Text('Ok',
-                        style:
-                            AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    child: Text('Ok', style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                   ),
                 ],
               )

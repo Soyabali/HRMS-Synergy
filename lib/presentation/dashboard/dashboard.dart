@@ -441,30 +441,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     hideLoader();
     if (lat != null && long != null) {
       hideLoader();
-      print('----452---call api---');
+    //  print('----452---call api---');
       attendaceapi(lat, long); // Call your attendance API
 
     } else {
       hideLoader();
-      displayToast("Please pick location");
+     // displayToast("Please pick location");
     }
     hideLoader();
-    print('Latitude: $lat, Longitude: $long');
+   // print('Latitude: $lat, Longitude: $long');
   }
 
   attendaceapi(double? lat, double? long) async {
 
-    print('----lat--459--$lat');
-    print('----long----460--$long');
 
     var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
-    print('-----99---$attendance');
 
     if(attendance!=null){
-      var result = "${attendance[0]['Result']}";
       var msg = "${attendance[0]['Msg']}";
-     // displayToast(msg);
-     // _buildDialogSucces2(context,msg);
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -593,20 +587,20 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       ),
                     ),
                         const Positioned(
-                          bottom: 20, // Position from the bottom
+                          bottom: 10, // Position from the bottom
                           right: 20,  // Position from the right
                           child: Text(
-                            'Version 1.6.3',
+                            'Version 1.0',
                             style: TextStyle(
                               color: Colors.white, // Text color
-                              fontSize: 16,        // Text size
+                              fontSize: 12,        // Text size
                               fontWeight: FontWeight.bold, // Text style
                             ),
                           ),
                         ),
                   ],
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 5),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 12,right: 12),
@@ -622,7 +616,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: (){
-                             // print('---Profle----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const Profile()),
@@ -669,11 +662,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Profile",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -683,16 +671,12 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---Mark Attendance----');
-                              //  _showConfirmationDialog(context);
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                 return _buildDialogSucces(context);
                               },
                               );
-                              /// TODO TO OPEN DIALOG AND THEN GET A LOCATION
-                              //getLocation();
                             },
                             child: Container(
                               height: 85.0,
@@ -735,11 +719,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Mark Attendance",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -749,7 +728,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---AttendanceList----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const Attendancelist()),
@@ -796,11 +774,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Attendance List",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -811,7 +784,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           // Second Part
                           GestureDetector(
                             onTap: (){
-                              print('------Attendance----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => CustomCalendarScreen()),
@@ -858,11 +830,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Attandance",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -872,7 +839,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---AttendanceList----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>  Applyleave()),
@@ -919,11 +885,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Apply Leave",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -933,7 +894,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                             // print('---Pay Slip ------');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const Setpin()),
@@ -980,11 +940,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Pay Slip",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -995,8 +950,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           // third Part
                           GestureDetector(
                             onTap: (){
-                              print('-------');
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => PolicyDoc()
@@ -1044,11 +997,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Policy Doc",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -1058,8 +1006,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---Mark Attendance----');
-
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => HolidaylistScreen()),
@@ -1121,7 +1067,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---Profle----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const Userquery()),
@@ -1168,11 +1113,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "User Query",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -1183,7 +1123,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           // fourth part
                           GestureDetector(
                             onTap: (){
-                              print('-------');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => const ExpenseManagement()),
@@ -1229,11 +1168,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Expense Management",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
@@ -1288,11 +1222,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Work Detail",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
+
                                       ),
                                     ),
                                   ),
@@ -1302,7 +1232,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              print('---Notification----');
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) => NotificationPage()),
@@ -1349,11 +1278,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                         "Notification",
                                         textAlign: TextAlign.center, // Center align the text
                                         style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                        // style: TextStyle(
-                                        //   fontFamily: 'Quicksand',
-                                        //   fontSize: 12.0,
-                                        //   fontWeight: FontWeight.normal,
-                                        // ),
                                       ),
                                     ),
                                   ),
