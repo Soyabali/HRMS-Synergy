@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:untitled/app/generalFunction.dart';
 import 'package:untitled/data/loader_helper.dart';
 import 'package:untitled/domain/educationModel.dart';
 import 'package:untitled/domain/jobDetailModel.dart';
@@ -11,7 +12,7 @@ import 'baseurl.dart';
 
 
 class JobDetailRepo {
-
+   GeneralFunction generalFunction = GeneralFunction();
   Future<List<JobDetailmodel>>  jobDetailList(BuildContext context) async{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -52,7 +53,12 @@ class JobDetailRepo {
         // Return the list of LeaveData
         return jsonResponse.map((data) => JobDetailmodel.fromJson(data)).toList();
 
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+        throw Exception("Unauthorized access");
+      }
+      else {
         hideLoader();
         throw Exception('Failed to load leave data');
       }

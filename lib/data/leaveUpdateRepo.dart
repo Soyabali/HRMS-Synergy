@@ -27,7 +27,6 @@ class LeaveUpdateRepo {
       var endPoint = "hrmsupdateleavestatus/hrmsupdateleavestatus";
       var leaveUpdateApi = "$baseURL$endPoint";
       print('------------17---leaveUpdateApi Api ---$leaveUpdateApi');
-
       showLoader();
 
       var headers = {

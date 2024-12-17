@@ -74,35 +74,41 @@ class _SplashViewState extends State<SplashView> {
     setState(() {
     var  sFirstName = prefs.getString('sFirstName');
     var  sCompEmailId = prefs.getString('sCompEmailId');
-    if(sFirstName!=null){
+    if(sFirstName!=null && sFirstName!=''){
       // to Open DashBoard
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => DashBoard()),
             (Route<dynamic> route) => false, // Remove all previous routes
       );
+       //print("------84---$sFirstName");
     }else{
+     // print("------86---$sFirstName");
       // call the Api
-      checkUserConnection();
+     checkUserConnection();
     }
     });
   }
   //
   Future<void> getUserValueFromLocalDataBase() async {
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sEmpCode = prefs.getString('sEmpCode');
 
     if (sEmpCode != null && sEmpCode.isNotEmpty) {
+      print("-------97---xx--->>>>-$sEmpCode");
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const DashBoard()),
+      // );
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const DashBoard()),
-      );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
+      print("-------104--xx---->>>>>--$sEmpCode");
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+      // );
+
     }
   }
 
@@ -110,13 +116,10 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    print("-------93---------Splash");
-   // _checkPermissions();
-    Future.microtask(() => getUserValueFromLocalDataBase());
-    checkUserConnection();
     getLocalDataInfo();
-  }
+    //checkUserConnection();
 
+  }
   //
   Future<void> _checkPermissions() async {
     //var status = await Permission.location.status;
@@ -165,7 +168,6 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
-
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
@@ -181,7 +183,6 @@ class _SplashViewState extends State<SplashView> {
          context,
          '/loginScreen',
        );
-
      }else{
       showDialog(context: context,
         builder: (BuildContext context) {

@@ -11,7 +11,6 @@ import '../resources/app_text_style.dart';
 
 class NotificationPage extends StatefulWidget {
   NotificationPage({super.key});
-
   @override
   State<NotificationPage> createState() => _NotificationPageState();
 }

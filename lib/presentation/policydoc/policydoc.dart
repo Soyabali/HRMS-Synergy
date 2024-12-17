@@ -24,7 +24,6 @@ class PolicyDoc extends StatelessWidget {
   }
 }
 class PolicydocScreen extends StatefulWidget {
-
   const PolicydocScreen({super.key});
 
   @override

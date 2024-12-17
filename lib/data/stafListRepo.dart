@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:untitled/app/generalFunction.dart';
 import 'package:untitled/data/loader_helper.dart';
 import '../domain/allLeaveStatusModel.dart';
 import '../domain/employeeListModel.dart';
@@ -10,7 +11,7 @@ import 'baseurl.dart';
 
 
 class StaffListRepo {
-
+   GeneralFunction generalFunction = GeneralFunction();
   var hrmsleavebalacev2List = [];
 
   Future<List<EmployeeListModel>>  staffList(BuildContext context) async {
@@ -52,6 +53,10 @@ class StaffListRepo {
         // Return the list of LeaveData
         return jsonResponse.map((data) => EmployeeListModel.fromJson(data)).toList();
 
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+        throw Exception("Unauthorized access");
       } else {
         hideLoader();
         throw Exception('Failed to load leave data');

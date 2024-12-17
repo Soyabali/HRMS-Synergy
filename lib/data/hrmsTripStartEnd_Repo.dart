@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
 class HrmstripstartendRepo {
 
+   GeneralFunction generalFunction = GeneralFunction();
   Future tripStart(BuildContext context, String sContactNo, double? lat, double? long, String randomNumber, uplodedImage, String edtOdometer, dTripDateTime) async {
     try {
       print('---Scontact----$sContactNo');
@@ -62,7 +64,11 @@ class HrmstripstartendRepo {
         var map = json.decode(response.body);
         print('----------22-----$map');
         return map;
-      } else {
+      }
+      else if(response.statusCode==200){
+        generalFunction.logout(context);
+      }
+      else {
         print('----53--${response.statusCode}');
         hideLoader();
         print('----------29---API RESPONSE ERROR: ${response.reasonPhrase}');

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
@@ -9,6 +10,7 @@ import 'loader_helper.dart';
 class HrmsAttendanceRepo {
 
   // this is a loginApi call functin
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future hrmsattendance(BuildContext context, double? lat, double? long) async {
 
@@ -55,7 +57,12 @@ class HrmsAttendanceRepo {
         hideLoader();
         print('----------22-----$map');
         return map;
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+        throw Exception("Unauthorized access");
+      }
+      else {
         print('----------29---LOGINaPI RESPONSE----$map');
         print('------61---${response.statusCode}');
         hideLoader();

@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '../app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
 class LoginRepo {
 
   // this is a loginApi call functin
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future login(BuildContext context, String mobileNo,String password) async {
 
@@ -33,11 +35,15 @@ class LoginRepo {
       var data = await response.stream.bytesToString();
       map = json.decode(data);
       print('----------20---login RESPONSE----$map');
+
       if (response.statusCode == 200) {
         hideLoader();
         print('----------22-----$map');
         return map;
-      } else {
+      }else if(response.statusCode ==401){
+        generalFunction.logout(context);
+      }
+      else {
         print('----------29---LOGINaPI RESPONSE----$map');
         hideLoader();
         print(response.reasonPhrase);

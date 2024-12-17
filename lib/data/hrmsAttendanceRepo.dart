@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
 class HrmsAttendanceRepo {
 
   // this is a loginApi call functin
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future attendance(BuildContext context,String selectedMonth) async {
 
@@ -54,7 +56,11 @@ class HrmsAttendanceRepo {
         hideLoader();
         print('----------50-----$map');
         return map;
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+      }
+      else {
       //  print('----------29---Attendace RESPONSE----$map');
         hideLoader();
         print(response.reasonPhrase);

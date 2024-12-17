@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
@@ -9,6 +10,7 @@ import 'loader_helper.dart';
 class PersonaldetailRepo {
 
   // this is a loginApi call functin
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future personal_detail(BuildContext context) async {
 
@@ -55,7 +57,12 @@ class PersonaldetailRepo {
         hideLoader();
         print('----------22-----$map');
         return map;
-      } else {
+      }else if(response.statusCode==401){
+        hideLoader();
+        generalFunction.logout(context);
+      }
+
+      else {
         print('----------29---personalDetail RESPONSE----$map');
         print('------61---${response.statusCode}');
         hideLoader();

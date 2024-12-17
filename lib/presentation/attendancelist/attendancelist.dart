@@ -59,7 +59,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
 
 
   getCurrentMonthandPreviousMonth() async {
-    getCurrentAndPreviousMonth = await GetCurrentAndpreviousMonthRepo().getCurrentAndPreviousMonth();
+    getCurrentAndPreviousMonth = await GetCurrentAndpreviousMonthRepo().getCurrentAndPreviousMonth(context);
     print(" -----xxxxx-  distList--49---> $getCurrentAndPreviousMonth");
     reversedList = getCurrentAndPreviousMonth?.reversed.toList();
     var dDate =  '${reversedList?[0]['dDate']}';

@@ -421,19 +421,31 @@ class _LoginPageState extends State<LoginPage> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 // crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  // Checkbox(
-                                  //   value: _isChecked,
-                                  //   onChanged: (bool? value) {
-                                  //     setState(() {
-                                  //       _isChecked = value ?? false;
-                                  //     });
-                                  //   },
-                                  // ),
-                                  // Text(
-                                  //   AppStrings.txtStayConnected,
-                                  //   style: AppTextStyle
-                                  //       .font16OpenSansRegularBlack45TextStyle,
-                                  // ),
+                                  InkWell(
+                                    onTap: (){
+
+                                    },
+                                    child: Checkbox(
+                                      value: _isChecked,
+                                      onChanged: (bool? value) {
+                                        setState(() async {
+                                          _isChecked = value ?? false;
+                                         // print("-------426-----");
+                                          var MobileNo = _phoneNumberController.text;
+                                          var password = passwordController.text;
+                                          // To save store value in  a  SharedPreference
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                                          prefs.setString('MobileNo',MobileNo);
+                                          prefs.setString('password',password);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Text(
+                                    AppStrings.txtStayConnected,
+                                    style: AppTextStyle
+                                        .font16OpenSansRegularBlack45TextStyle,
+                                  ),
                                   Spacer(),
                                   GestureDetector(
                                     onTap: (){

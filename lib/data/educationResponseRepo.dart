@@ -4,12 +4,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:untitled/data/loader_helper.dart';
 import 'package:untitled/domain/educationModel.dart';
+import '../app/generalFunction.dart';
 import '../domain/holidaylist_model.dart';
 import '../domain/queryResponseModel.dart';
 import 'baseurl.dart';
 
 
 class EducationrRepo {
+
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future<List<EducationModel>>  educationList(BuildContext context) async{
 
@@ -51,7 +54,12 @@ class EducationrRepo {
         // Return the list of LeaveData
         return jsonResponse.map((data) => EducationModel.fromJson(data)).toList();
 
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+        throw Exception("Unauthorized access");
+      }
+      else {
         hideLoader();
         throw Exception('Failed to load leave data');
       }

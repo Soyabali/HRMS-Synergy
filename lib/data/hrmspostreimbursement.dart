@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
 class HrmsPostReimbursementRepo {
   // this is a loginApi call functin
 
+  GeneralFunction generalFunction = GeneralFunction();
   Future hrmsPostReimbursement(
       BuildContext context,
       sTranCode,
@@ -89,7 +91,11 @@ class HrmsPostReimbursementRepo {
         hideLoader();
         print('----------71-----$map');
         return map;
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+      }
+      else {
         print('----------74--hrmsPostReimbursement----$map');
         hideLoader();
         print(response.reasonPhrase);

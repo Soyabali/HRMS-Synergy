@@ -12,9 +12,7 @@ class HrmsWorkEntryNewRepo {
   // this is a loginApi call functin
   GeneralFunction generalFunction = GeneralFunction();
 
-  Future hrmsWorkEntryNew(
-      BuildContext context,
-        String combinedList) async {
+  Future hrmsWorkEntryNew(BuildContext context, String combinedList) async {
     // sharedP
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('sToken');

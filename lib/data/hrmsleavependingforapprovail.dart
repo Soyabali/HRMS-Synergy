@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:untitled/app/generalFunction.dart';
 import 'package:untitled/data/loader_helper.dart';
 import '../domain/actionOnLeaveModel.dart';
 import '../domain/leaveStatusModel.dart';
 import 'baseurl.dart';
 
 class HrmsLeavePendingForApprovailRepo {
-
+   GeneralFunction generalFunction = GeneralFunction();
   var hrmsLeavePendingForApprovailList = [];
 
   Future<List<HrmsLeavePendingForApprovalModel>>  hrmsLevePendingForApprovalList(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth, sStatusValue) async {
@@ -55,7 +56,12 @@ class HrmsLeavePendingForApprovailRepo {
         // Return the list of LeaveData
         return jsonResponse.map((data) => HrmsLeavePendingForApprovalModel.fromJson(data)).toList();
 
-      } else {
+      }
+      else if(response.statusCode==401){
+        generalFunction.logout(context);
+        throw Exception('Unauthorized access');
+      }
+      else {
         hideLoader();
         throw Exception('Failed to load leave data');
       }

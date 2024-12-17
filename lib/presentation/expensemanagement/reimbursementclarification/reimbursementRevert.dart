@@ -1674,6 +1674,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   ),
                                 ],
                               ),
+
                             SizedBox(height: 10),
                             if (_dropDownValueShopeType ==
                                 "Consumable/Material Purchase")
