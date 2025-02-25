@@ -16,6 +16,7 @@ class CustomCalendarScreen extends StatefulWidget {
 class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
 
  late var attendaceResponse;
+ late var attendaceResponse2;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _selectedDate = DateTime.now();

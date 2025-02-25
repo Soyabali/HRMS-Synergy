@@ -986,8 +986,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Image.asset(
                         'assets/images/addreimbursement.jpeg',
                         // Replace 'image_name.png' with your asset image path
-                        fit: BoxFit
-                            .cover, // Adjust the image fit to cover the container
+                        fit: BoxFit.cover, // Adjust the image fit to cover the container
                       ),
                     ),
                   ),

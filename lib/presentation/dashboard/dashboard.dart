@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -8,6 +9,7 @@ import 'package:untitled/presentation/applyleave/applyLeave.dart';
 import 'package:untitled/presentation/profile/profile.dart';
 import '../../app/generalFunction.dart';
 import '../../data/hrmsattendance.dart';
+import '../../data/hrmsupdategsmidios.dart';
 import '../../data/loader_helper.dart';
 import '../attandanceCalendar/customCalendarScreen.dart';
 import '../attendancelist/attendancelist.dart';
@@ -56,6 +58,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   double? lat, long;
   var sFirstName,sCompEmailId,sLastName,fullName;
+  var token;
 
   // DialogBo
 
@@ -492,13 +495,136 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
        sCompEmailId = prefs.getString('sCompEmailId');
      });
    }
+   // firebase get token code---
+  void setupPushNotifications() async {
+    final fcm = FirebaseMessaging.instance;
+    await fcm.requestPermission();
+    // here send notification all persoin which is on chat
+    //fcm.subscribeToTopic('chat');
+    // here you pick a token and send a notification befafe of token
+     token = await fcm.getToken();
+    print("=--504---token--- $token");// you could send this token (via Http or the Firebase SDK)TO A BACKED
+
+   if(token!=null && token!=''){
+     notificationResponse(token);
+   }else{
+     print("-----511--Empty Token--");
+   }
+  }
+
+  notificationResponse(token) async {
+   var   Notiresponse = await HrmsUpdateGsmidIosRepo().updateGsmidIos(context,token);
+   print("-----517---notification Response----$Notiresponse");
+
+  }
 
    @override
   void initState() {
     // TODO: implement initState
      getLocalDataInfo();
-    super.initState();
+     setupPushNotifications();
+     super.initState();
+     // firebase foreground msg
+     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+       // Handle the foreground notification here
+       print("Received message:---530-- ${message.notification?.title}");
+       // You can show a dialog or display the notification in the UI
+       // dialog
+       showDialog(
+         context: context,
+         builder: (_) => AlertDialog(
+           title: Text(message.notification?.title ?? 'New Notification',style:AppTextStyle.font12OpenSansRegularBlackTextStyle),
+           content: Text(message.notification?.body ?? 'You have a new message',style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
+         ),
+       );
+       //-------
+       // showDialog(
+       //   context: context,
+       //   builder: (_) => Dialog(
+       //     shape: RoundedRectangleBorder(
+       //       borderRadius: BorderRadius.circular(16.0),
+       //     ),
+       //     elevation: 10.0,
+       //     child: Card(
+       //       elevation: 5.0,
+       //       shape: RoundedRectangleBorder(
+       //         borderRadius: BorderRadius.circular(16.0),
+       //       ),
+       //       margin: EdgeInsets.zero,
+       //       child: Padding(
+       //         padding: const EdgeInsets.all(8.0),
+       //         child:  Container(
+       //           color: Colors.white,
+       //           child: Column(
+       //             crossAxisAlignment: CrossAxisAlignment.start,
+       //             children: [
+       //               Text(
+       //                 message.notification?.title ?? 'New Notification',
+       //                 style: TextStyle(
+       //                   fontWeight: FontWeight.bold,
+       //                   fontSize: 18.0,
+       //                 ),
+       //               ),
+       //               SizedBox(height: 5),
+       //               Text(
+       //                 message.notification?.body ?? 'You have a new message',
+       //                 style: TextStyle(
+       //                   fontSize: 14.0,
+       //                   color: Colors.grey[600],
+       //                 ),
+       //               ),
+       //             ],
+       //           ),
+       //         ),
+       //       ),
+       //     ),
+       //   ),
+       //);
+       //-------
+       // Row(
+       //   mainAxisSize: MainAxisSize.min,
+       //   children: [
+       //     ClipRRect(
+       //       borderRadius: BorderRadius.circular(10.0),
+       //       child: Image.asset(
+       //         'assets/icon/icon.png',
+       //         width: 50.0,
+       //         height: 50.0,
+       //         fit: BoxFit.cover,
+       //       ),
+       //     ),
+       //     SizedBox(width: 10),
+       //     Flexible(
+       //       child: Column(
+       //         crossAxisAlignment: CrossAxisAlignment.start,
+       //         children: [
+       //           Text(
+       //             message.notification?.title ?? 'New Notification',
+       //             style: TextStyle(
+       //               fontWeight: FontWeight.bold,
+       //               fontSize: 18.0,
+       //             ),
+       //           ),
+       //           SizedBox(height: 5),
+       //           Text(
+       //             message.notification?.body ?? 'You have a new message',
+       //             style: TextStyle(
+       //               fontSize: 14.0,
+       //               color: Colors.grey[600],
+       //             ),
+       //           ),
+       //         ],
+       //       ),
+       //     ),
+       //   ],
+       // );
+
+
+     });
   }
+
+
+
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -581,16 +707,17 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       height: 170.0, // Set the height of the container
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage(ImageAssets.deshboardtop), // Path to your asset image
+                          image: AssetImage("assets/images/leave.jpeg"),
+                         // image: AssetImage(ImageAssets.deshboardtop), // Path to your asset image
                           fit: BoxFit.cover, // Adjust the image to cover the container
                         ),
                       ),
                     ),
                         const Positioned(
                           bottom: 10, // Position from the bottom
-                          right: 20,  // Position from the right
+                          right: 28,  // Position from the right
                           child: Text(
-                            'Version 1.0',
+                            'Version 1.1',
                             style: TextStyle(
                               color: Colors.white, // Text color
                               fontSize: 12,        // Text size
