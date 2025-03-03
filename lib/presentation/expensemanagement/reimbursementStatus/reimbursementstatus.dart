@@ -1041,12 +1041,11 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                   itemBuilder: (context, index) {
                     return Image.network(
                       imageUrls[index],
-                      fit: BoxFit.cover, // Adjust the image to fill the dialog
+                      fit: BoxFit.contain, // Ensures the entire image is visible
                     );
                   },
                 ),
               ),
-
               // White container with Bill Date at the bottom
               Positioned(
                 bottom: 0,

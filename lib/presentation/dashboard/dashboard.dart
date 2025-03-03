@@ -22,6 +22,7 @@ import '../resources/assets_manager.dart';
 import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class DashBoard extends StatelessWidget {
 
@@ -57,7 +58,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   GeneralFunction generalFunction = GeneralFunction();
 
   double? lat, long;
-  var sFirstName,sCompEmailId,sLastName,fullName;
+  var sFirstName, sCompEmailId, sLastName, fullName;
   var token;
 
   // DialogBo
@@ -83,7 +84,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-               // Space for the image
+                // Space for the image
                 const Row(
                   children: [
                     Icon(
@@ -110,16 +111,22 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       fontSize: 12,
                       color: Colors.grey[600],
                     ),
-                    textAlign: TextAlign.left, // Align the text to the left
-                    softWrap: true, // Allow text to wrap
-                    maxLines: 2, // Set the maximum number of lines the text can take
-                    overflow: TextOverflow.ellipsis, // Add ellipsis if the text exceeds the available space
+                    textAlign: TextAlign.left,
+                    // Align the text to the left
+                    softWrap: true,
+                    // Allow text to wrap
+                    maxLines: 2,
+                    // Set the maximum number of lines the text can take
+                    overflow: TextOverflow
+                        .ellipsis, // Add ellipsis if the text exceeds the available space
                   ),
                 ),
                 SizedBox(height: 20),
                 Container(
-                  height: 35, // Reduced height to 35
-                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust padding as needed
+                  height: 35,
+                  // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  // Adjust padding as needed
                   decoration: BoxDecoration(
                     color: Colors.white, // Container background color
                     borderRadius: BorderRadius.circular(15), // Rounded corners
@@ -135,18 +142,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, // Remove default padding
-                            minimumSize: Size(0, 0), // Remove minimum size constraints
-                            backgroundColor: Colors.white, // Button background
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // Button border radius
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
                             ),
                           ),
                           child: Text(
                             'No',
                             style: GoogleFonts.openSans(
-                              color: Colors.red, // Text color for "Yes"
-                              fontSize: 12, // Adjust font size to fit the container
+                              color: Colors.red,
+                              // Text color for "Yes"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -164,18 +177,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, // Remove default padding
-                            minimumSize: Size(0, 0), // Remove minimum size constraints
-                            backgroundColor: Colors.white, // Button background
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // Button border radius
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
                             ),
                           ),
                           child: Text(
                             'Yes',
                             style: GoogleFonts.openSans(
-                              color: Colors.green, // Text color for "No"
-                              fontSize: 12, // Adjust font size to fit the container
+                              color: Colors.green,
+                              // Text color for "No"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -192,6 +211,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       ),
     );
   }
+
   // logoutdialog
   Widget _logoutDialog(BuildContext context) {
     return Dialog(
@@ -230,8 +250,10 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                 ),
                 SizedBox(height: 15),
                 Container(
-                  height: 35, // Reduced height to 35
-                  padding: EdgeInsets.symmetric(horizontal: 5), // Adjust padding as needed
+                  height: 35,
+                  // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  // Adjust padding as needed
                   decoration: BoxDecoration(
                     color: Colors.white, // Container background color
                     borderRadius: BorderRadius.circular(15), // Rounded corners
@@ -248,18 +270,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, // Remove default padding
-                            minimumSize: Size(0, 0), // Remove minimum size constraints
-                            backgroundColor: Colors.white, // Button background
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // Button border radius
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
                             ),
                           ),
                           child: Text(
                             'Yes',
                             style: GoogleFonts.openSans(
-                              color: Colors.green, // Text color for "Yes"
-                              fontSize: 12, // Adjust font size to fit the container
+                              color: Colors.green,
+                              // Text color for "Yes"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -276,18 +304,24 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, // Remove default padding
-                            minimumSize: Size(0, 0), // Remove minimum size constraints
-                            backgroundColor: Colors.white, // Button background
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15), // Button border radius
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
                             ),
                           ),
                           child: Text(
                             'No',
                             style: GoogleFonts.openSans(
-                              color: Colors.red, // Text color for "No"
-                              fontSize: 12, // Adjust font size to fit the container
+                              color: Colors.red,
+                              // Text color for "No"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -307,7 +341,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/logoutnew.jpeg', // Replace with your asset image path
+                  'assets/images/logoutnew.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -320,7 +355,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     );
   }
 
-  Widget _buildDialogSucces2(BuildContext context,String msg) {
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -365,10 +400,13 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor: Colors
+                            .black, // Set the text color to black
                       ),
-                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok', style: AppTextStyle
+                          .font16OpenSansRegularBlackTextStyle),
                     ),
                     // ElevatedButton(
                     //   onPressed: () {
@@ -393,7 +431,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/sussess.jpeg', // Replace with your asset image path
+                  'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
@@ -430,7 +469,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     }
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      return Future.error('Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
     // Get the current location
     Position position = await Geolocator.getCurrentPosition(
@@ -444,38 +484,40 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     hideLoader();
     if (lat != null && long != null) {
       hideLoader();
-    //  print('----452---call api---');
+      //  print('----452---call api---');
       attendaceapi(lat, long); // Call your attendance API
 
     } else {
       hideLoader();
-     // displayToast("Please pick location");
+      // displayToast("Please pick location");
     }
     hideLoader();
-   // print('Latitude: $lat, Longitude: $long');
+    // print('Latitude: $lat, Longitude: $long');
   }
 
   attendaceapi(double? lat, double? long) async {
+    var attendance = await HrmsAttendanceRepo().hrmsattendance(
+        context, lat, long);
 
-
-    var attendance = await HrmsAttendanceRepo().hrmsattendance(context,lat,long);
-
-    if(attendance!=null){
+    if (attendance != null) {
       var msg = "${attendance[0]['Msg']}";
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return _buildDialogSucces2(context,msg);
+          return _buildDialogSucces2(context, msg);
         },
       );
+
       /// todo mark Attendance Success Dialog
 
-    }else{
+    } else {
       displayToast("Attendance not confirmed.");
     }
   }
+
   // toast
   void displayToast(String msg) {
+
     Fluttertoast.showToast(
         msg: msg,
         toastLength: Toast.LENGTH_SHORT,
@@ -485,32 +527,212 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-   getLocalDataInfo()async{
-     SharedPreferences prefs = await SharedPreferences.getInstance();
-     // get a stored value
-     setState(() {
-       sFirstName = prefs.getString('sFirstName');
-       sLastName = prefs.getString('sLastName');
-       fullName = "$sFirstName $sLastName";
-       sCompEmailId = prefs.getString('sCompEmailId');
-     });
-   }
-   // firebase get token code---
+  getLocalDataInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // get a stored value
+    setState(() {
+      sFirstName = prefs.getString('sFirstName');
+      sLastName = prefs.getString('sLastName');
+      fullName = "$sFirstName $sLastName";
+      sCompEmailId = prefs.getString('sCompEmailId');
+    });
+  }
+  // firebase get token code---
+
   void setupPushNotifications() async {
     final fcm = FirebaseMessaging.instance;
     await fcm.requestPermission();
-    // here send notification all persoin which is on chat
-    //fcm.subscribeToTopic('chat');
-    // here you pick a token and send a notification befafe of token
-     token = await fcm.getToken();
-    print("=--504---token--- $token");// you could send this token (via Http or the Firebase SDK)TO A BACKED
+    token = await fcm.getToken();
+    print("🔥 Firebase Messaging Instance Info:");
+    print("📌 Token:----550----xxx $token");
 
-   if(token!=null && token!=''){
-     notificationResponse(token);
-   }else{
-     print("-----511--Empty Token--");
-   }
+    NotificationSettings settings = await fcm.getNotificationSettings();
+    print("🔔 Notification Permissions:");
+    print("  - Authorization Status: ${settings.authorizationStatus}");
+    print("  - Alert: ${settings.alert}");
+    print("  - Sound: ${settings.sound}");
+    print("  - Badge: ${settings.badge}");
+
+    // ✅ Ensure notifications play default sound
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("📩 New foreground notification received!");
+      print("📦 Data Payload----563---xx--: ${message.data}");
+      if (message.notification != null) {
+        _showNotification(message.notification!);
+      }
+    });
+
+    if (token != null && token!.isNotEmpty) {
+      notificationResponse(token);
+    } else {
+      print("🚨 No Token Received!");
+    }
   }
+
+// ✅ Show Notification with Default Sound
+  void _showNotification(RemoteNotification notification) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'default_channel',
+      'Default Notifications',
+      importance: Importance.high,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      priority: Priority.high,
+      playSound: true, // 🔊 Ensure sound is enabled
+    );
+
+    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+      presentSound: true, // 🔊 Enable sound for iOS
+    );
+
+    const NotificationDetails details = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0, // Notification ID
+      notification.title,
+      notification.body,
+      details,
+    );
+  }
+
+  // Future<void> setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //
+  //   // 1. Request Permissions (if not already granted)
+  //   NotificationSettings settings = await fcm.requestPermission(
+  //     alert: true,
+  //     announcement: false,
+  //     badge: true,
+  //     carPlay: false,
+  //     criticalAlert: false,
+  //     provisional: false,
+  //     sound: true,
+  //   );
+  //
+  //   print('User granted permission: ${settings.authorizationStatus}');
+  //
+  //   // 2. Get the FCM token
+  //   token = await fcm.getToken();
+  //   print("🔥 Firebase Messaging Instance Info:");
+  //   print("📌 Token: $token");
+  //
+  //   // 3. Print Notification Settings for Debugging
+  //   print("🔔 Notification Permissions:");
+  //   print("  - Authorization Status: ${settings.authorizationStatus}");
+  //   print("  - Alert: ${settings.alert}");
+  //   print("  - Sound: ${settings.sound}");
+  //   print("  - Badge: ${settings.badge}");
+  //   print("🛠 Firebase Messaging Instance: ${fcm.toString()}");
+  //
+  //   if (token != null && token!.isNotEmpty) {
+  //     notificationResponse(token);
+  //   } else {
+  //     print("🚨 No Token Received!");
+  //   }
+  //
+  //   // 4. Handle messages in the background (if your app is terminated or in the background)
+  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //
+  //   // 5. Handle messages when app is in the foreground
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print('Got a message whilst in the foreground!');
+  //     print('Message data: ${message.data}');
+  //
+  //     if (message.notification != null) {
+  //       print('Message also contained a notification: ${message.notification}');
+  //     }
+  //   });
+  // }
+  //
+  // // Handle background messages
+  // Future<void> _firebaseMessagingBackgroundHandler(
+  //     RemoteMessage message) async {
+  //   // If you're going to use other Firebase services in the background, such as Firestore,
+  //   // make sure you call `initializeApp` before using other Firebase services.
+  //   // await Firebase.initializeApp();
+  //
+  //   print("Handling a background message: ${message.messageId}");
+  //   if (message.notification != null) {
+  //     debugPrint('Message also contained a notification: ${message.notification}');
+  //   }
+  // }
+  //
+  // void notificationResponse(String? token) {
+  //   // Implement the logic to send the token to your server here.
+  //   // You will likely use an HTTP client (like http or dio) to send a POST request.
+  //
+  //   print("Token sent to server: $token");
+  // }
+
+
+  // void setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //   await fcm.requestPermission();
+  //   token = await fcm.getToken();
+  //   print("🔥 Firebase Messaging Instance Info:");
+  //   print("📌 Token: $token");
+  //
+  //   // Get FCM settings for better readability
+  //   NotificationSettings settings = await fcm.getNotificationSettings();
+  //   print("🔔 Notification Permissions:");
+  //   print("  - Authorization Status: ${settings.authorizationStatus}");
+  //   print("  - Alert: ${settings.alert}");
+  //   print("  - Sound: ${settings.sound}");
+  //   print("  - Badge: ${settings.badge}");
+  //
+  //   // Print the complete FirebaseMessaging instance as a string (if necessary)
+  //   print("🛠 Firebase Messaging Instance: ${fcm.toString()}");
+  //
+  //   if (token != null && token!.isNotEmpty) {
+  //     notificationResponse(token);
+  //   } else {
+  //     print("🚨 No Token Received!");
+  //   }
+  // }
+
+  // void setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //   await fcm.requestPermission();
+  //   token = await fcm.getToken();
+  //   print("=--504---token--- $token");// you could send this token (via Http or the Firebase SDK)TO A BACKED
+  //   print("----506----firebase--response: ${fcm.toString()}");
+  //  if(token!=null && token!=''){
+  //    notificationResponse(token);
+  //  }else{
+  //    print("-----511--Empty Token--");
+  //  }
+  // }
 
   notificationResponse(token) async {
    var   Notiresponse = await HrmsUpdateGsmidIosRepo().updateGsmidIos(context,token);
