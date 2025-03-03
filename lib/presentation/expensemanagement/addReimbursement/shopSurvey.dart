@@ -264,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image2!);
+        uploadImage2(sToken!, image2!);
       } else {
         print('no image selected');
       }
@@ -284,7 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image3!);
+        uploadImage3(sToken!, image3!);
       } else {
         print('no image selected');
       }
@@ -304,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {});
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
-        uploadImage(sToken!, image4!);
+        uploadImage4(sToken!, image4!);
       } else {
         print('no image selected');
       }
@@ -1060,15 +1060,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     initialDate: DateTime.now(),
                                     firstDate: DateTime(2000),
                                     // Adjust this to your desired start date
-                                    lastDate: DateTime
-                                        .now(), // Restrict selection to today or past dates
+                                    lastDate: DateTime.now(), // Restrict selection to today or past dates
                                   );
                                   // Check if a date was picked
                                   if (pickedDate != null) {
                                     // Format the picked date
                                     String formattedDate =
-                                        DateFormat('dd/MMM/yyyy')
-                                            .format(pickedDate);
+                                        DateFormat('dd/MMM/yyyy').format(pickedDate);
                                     // Update the state with the picked date
                                     setState(() {
                                       dExpDate = formattedDate;
@@ -1547,7 +1545,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 ),
-
                               Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 5, top: 5),

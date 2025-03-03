@@ -477,18 +477,20 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    print("-------480-----xxxxx--firstDayOfMonth----$firstDayOfMonth");
     // last day of the current month
     DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
     DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
     lastDayOfCurrentMonth = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    print("-------485-------xxxxx----lastDayOfmonth----$firstDayOfMonth");
     setState(() {});
     if (firstDayOfNextMonth != null && lastDayOfCurrentMonth != null) {
       print('You should call api');
-      //reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!)) as Future<List<Hrmsreimbursementstatusv3model>>;
+    //  reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!)) as Future<List<Hrmsreimbursementstatusv3model>>;
       //print('---255--$reimbursementStatusV3');
       /// reimbursementStatusList = await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay!,lastDayOfCurrentMonth!);
       // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-      // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+       hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
     } else {
       print('You should  not call api');
     }
@@ -501,7 +503,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
     shopType();
-    print("---------424--------xxxx--");
+
    // _takeAction = TextEditingController();
     super.initState();
     _shopfocus = FocusNode();
@@ -531,6 +533,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
   hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     getPendingApprovalReim = GetPendingforApprovalReimRepo().getPendingApprovalReim(context, firstOfMonthDay, lastDayOfCurrentMonth);
+    print("------xxx---536---xxx000---$getPendingApprovalReim");
 
     getPendingApprovalReim.then((data) {
       setState(() {
@@ -643,7 +646,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                           // Update the state with the picked date
                           setState(() {
                             firstOfMonthDay = formattedDate;
-                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
 
                           /// todo call api here to change date to that that is reflect
@@ -661,7 +664,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                           //displayToast(dExpDate.toString());
                         } else {
                           // Handle case where no date was selected
-                          //displayToast("No date selected");
+                          displayToast("No date selected");
                         }
                       },
                       child: Container(
@@ -723,7 +726,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                           // Update the state with the picked date
                           setState(() {
                             lastDayOfCurrentMonth = formattedDate;
-                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                           });
 
                           /// todo call api here such that live data reflected
@@ -851,7 +854,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                           } else if (duplicate == "Single") {
                                             textColor = Colors.green;
                                           }
-
                                           return Padding(
                                             padding: const EdgeInsets.only(
                                                 left: 10, right: 10, top: 10),
@@ -1385,26 +1387,20 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                              SizedBox(
-                                                                  width: 2),
+                                                              SizedBox(width: 2),
                                                               // if(leaveData.iStatus=="0")
                                                               // remove
                                                               Expanded(
                                                                 child: Column(
                                                                   mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
+                                                                  MainAxisAlignment.center,
                                                                   children: [
                                                                     Container(
                                                                       height: 40,
                                                                       decoration: BoxDecoration(
-                                                                        color: Color(
-                                                                            0xFFE4B9AB),
+                                                                        color: Color(0xFFE4B9AB),
                                                                         // Change this to your preferred color
-                                                                        borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                            10),
+                                                                        borderRadius: BorderRadius.circular(10),
                                                                       ),
                                                                       child: GestureDetector(
                                                                         onTap: () {
@@ -1413,7 +1409,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                           var sTranCode =  '${leaveData.sTranCode}';
                                                                           var isActionBT =
                                                                           print('-----1310---$sTranCode');
-
+                                                                          // Open Dialog
                                                                           showDialog(
                                                                             context: context,
                                                                            // builder: (context) => showTakeActionDialog(context,sTranCode),
@@ -1474,6 +1470,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                                                 });
                                                                                               },
                                                                                             ),
+                                                                                            // TextField
+
                                                                                             Padding(
                                                                                               padding: const EdgeInsets.only(left: 0),
                                                                                               child: TextFormField(
@@ -1498,7 +1496,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                                                 print('-----155--$sRemarks');
                                                                                                 print('-----158--$sTranCode');
                                                                                                 print('-----158----$_selectedDecision');
-
                                                                                                 // Set iStatus based on selected decision
                                                                                                 if (_selectedDecision == "Approved") {
                                                                                                   iStatus = "8"; // Approved
@@ -1570,10 +1567,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                             )
 
                                                                           );
-
-
-
-                                                                        },
+                                                                          },
                                                                         child: Row(
                                                                           mainAxisAlignment:
                                                                           MainAxisAlignment

@@ -578,33 +578,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       'default_channel',
       'Default Notifications',
       importance: Importance.high,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       priority: Priority.high,
       playSound: true, // 🔊 Ensure sound is enabled
     );

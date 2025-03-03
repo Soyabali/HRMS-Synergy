@@ -2506,9 +2506,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                     _selectedShopId != null &&
                                     amount != null &&
                                     expenseDetails != null &&
-                                    remarks !=null && remarks!="" &&
+                                    remarks!="" &&
                                     uplodedImage!=null || uplodedImage2!=null || uplodedImage3!=null || uplodedImage4!=null &&
-                                    sContactNo != null) {
+                                    sContactNo != null &&
+                                    _remarkController!=null
+                                ) {
                                   // Call Api
                                   print('---call Api---');
                                   print('-----2507---list----$consumableList');// consuambleItemList
@@ -2554,20 +2556,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                       );
                                   }
 
-                                  // var dExpDate = '${widget.dExpDate}';
-                                  //
-                                  //
-                                  // print('-----sEmpCode-----XX--$sEmpCode');
-                                  // print('-----dExpDate-----XX--$dExpDate');
-                                  // print('-----amount-----XX--$amount');
-                                  //
-                                  // var hrmsPopWarning =
-                                  //     await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode!, dExpDate, amount);
-                                  // print('--------1097----xxx--$hrmsPopWarning');
-                                  // result = "${hrmsPopWarning[0]['Result']}";
-                                  // msg = "${hrmsPopWarning[0]['Msg']}";
-
-
                                 } else {
                                   if (sTranCode == null) {
                                     displayToast('Genrate Random Number');
@@ -2585,7 +2573,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                   } else if (expenseDetails == null ||
                                       expenseDetails == '') {
                                     displayToast('Please Enter Expense Details');
-                                  }else if(remarks==null && remarks==""){
+                                  }else if(remarks==""){
                                     displayToast('Please Enter Remarks');
                                   }
                                   else if (uplodedImage == null || uplodedImage2==null || uplodedImage3==null || uplodedImage4==null) {

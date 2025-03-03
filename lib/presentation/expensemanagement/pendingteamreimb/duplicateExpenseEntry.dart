@@ -208,7 +208,6 @@ class _DuplicagteExpenseEntryState extends State<DuplicatExpensEntry> {
         body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-
               Expanded(
                   child: Container(
                       child: FutureBuilder<List<DuplicateEntriesForCrossCheck>>(
@@ -731,13 +730,30 @@ void openFullScreenDialog(
               child: PageView.builder(
                 itemCount: imageUrls.length,
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    imageUrls[index],
-                    fit: BoxFit.cover, // Adjust the image to fill the dialog
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0), // Add padding on all sides
+                    child: Center(
+                      child: Image.network(
+                        imageUrls[index],
+                        fit: BoxFit.contain, // Ensures the image fits within the available space
+                      ),
+                    ),
                   );
                 },
               ),
             ),
+
+            // Positioned.fill(
+            //   child: PageView.builder(
+            //     itemCount: imageUrls.length,
+            //     itemBuilder: (context, index) {
+            //       return Image.network(
+            //         imageUrls[index],
+            //         fit: BoxFit.contain, // Adjust the image to fill the dialog
+            //       );
+            //     },
+            //   ),
+            // ),
 
             // White container with Bill Date at the bottom
             Positioned(
