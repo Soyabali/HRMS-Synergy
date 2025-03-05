@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -568,6 +569,160 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // function summit logic
   List<Map<String, dynamic>> _itemsList = [];
+
+  Widget _deleteItemDialog(BuildContext context, int index) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 160,
+            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text('Delete',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                SizedBox(height: 10),
+                Text(
+                  "Do you want to Delete ?",
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 15),
+                Container(
+                  height: 35,
+                  // Reduced height to 35
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  // Adjust padding as needed
+                  decoration: BoxDecoration(
+                    color: Colors.white, // Container background color
+                    borderRadius: BorderRadius.circular(15), // Rounded corners
+                    border: Border.all(color: Colors.grey), // Border color
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () async {
+                            setState(() {
+                              /// TODO HERE TO GET A LIST INDEX AND AFTER THAT REMOVE VALUE FROM A INDEX
+                              setState(() {
+                                _itemsList!.removeAt(index); // Remove item at index
+                                //
+                                consumableList = jsonEncode(_itemsList);
+                                // Clear form fields after adding
+                                _itemDescriptionController.clear();
+                                _quantityController.clear();
+                                _amountController2.clear();
+                                _dropDownValueBindReimType = null;
+
+                              });
+                              Navigator.of(context).pop();
+                              //consuambleItemList[index];
+
+                              // _notificationList = NotificationRepo().notificationList(context);
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'Yes',
+                            style: GoogleFonts.openSans(
+                              color: Colors.green,
+                              // Text color for "Yes"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      VerticalDivider(
+                        color: Colors.grey, // Divider color
+                        width: 20, // Space between buttons
+                        thickness: 1, // Thickness of the divider
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            // Remove default padding
+                            minimumSize: Size(0, 0),
+                            // Remove minimum size constraints
+                            backgroundColor: Colors.white,
+                            // Button background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Button border radius
+                            ),
+                          ),
+                          child: Text(
+                            'No',
+                            style: GoogleFonts.openSans(
+                              color: Colors.red,
+                              // Text color for "No"
+                              fontSize: 12,
+                              // Adjust font size to fit the container
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.white,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/delete.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.fill,
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _onFormSubmit() {
     count++;
@@ -1322,107 +1477,217 @@ class _MyHomePageState extends State<MyHomePage> {
                                     Text('Consumable Item List',
                                         style: AppTextStyle
                                             .font14OpenSansRegularBlack45TextStyle
-
                                     ),
                                   ],
                                 ),
-                                ListView.builder(
-                                shrinkWrap: true, // Makes ListView take up only the needed height
-                                physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling if the outer widget scrolls
-                                itemCount: _itemsList.length,
+                                // item list
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: _itemsList?.length ?? 0,
                                 itemBuilder: (context, index) {
-                                  final item = _itemsList[index];
-                                  return Container(
-                                    margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-                                    padding: const EdgeInsets.all(16.0),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(5),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey,
-                                          spreadRadius: 1,
-                                          blurRadius: 3,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Container(
-                                              height: 25,
-                                              width: 25,
-                                              child: Image.asset(
-                                                'assets/images/aadhar.jpeg',
-                                                fit: BoxFit.fill,
-                                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                                                  return Icon(Icons.error, size: 25);
-                                                },
-                                              ),
-                                            ),
-                                            SizedBox(width: 10),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                                                Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                                              ],
-                                            ),
-                                            Spacer(),
-                                            Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                                          ],
-                                        ),
-                                        Divider(),
-                                        Container(
-                                          height: 45,
-                                          child: Row(
+                                  final item = _itemsList![index];
+                                  return GestureDetector(
+                                    onLongPress: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return _deleteItemDialog(context,index);
+                                        },
+                                      );
+                                      // setState(() {
+                                      //   consuambleItemList!.removeAt(index); // Remove item at index
+                                      // });
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                                      padding: const EdgeInsets.all(16.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(5),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey,
+                                            spreadRadius: 1,
+                                            blurRadius: 3,
+                                          ),
+                                        ],
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
                                             children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 25),
-                                                child: Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Container(
-                                                          height: 14,
-                                                          width: 14,
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.black,
-                                                            borderRadius: BorderRadius.circular(7),
-                                                          ),
-                                                        ),
-                                                        SizedBox(width: 5),
-                                                        Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
-                                                      ],
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(left: 15),
-                                                      child: Text('UOM', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                                                    ),
-                                                  ],
+                                              Container(
+                                                height: 25,
+                                                width: 25,
+                                                child: Image.asset(
+                                                  'assets/images/aadhar.jpeg',
+                                                  fit: BoxFit.fill,
+                                                  errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                                    return Icon(Icons.error, size: 25);
+                                                  },
                                                 ),
+                                              ),
+                                              SizedBox(width: 10),
+                                              Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                  Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                ],
                                               ),
                                               Spacer(),
-                                              Container(
-                                                color: Color(0xFF0098a6),
-                                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                                child: Text(
-                                                  '₹ ${item['fAmount']}',
-                                                  style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                              ),
+                                              Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                          Divider(),
+                                          Container(
+                                            height: 45,
+                                            child: Row(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 25),
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Container(
+                                                            height: 14,
+                                                            width: 14,
+                                                            decoration: BoxDecoration(
+                                                              color: Colors.black,
+                                                              borderRadius: BorderRadius.circular(7),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 15),
+                                                        child: Text('UOM', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Container(
+                                                  color: Color(0xFF0098a6),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                  child: Text(
+                                                    '₹ ${item['fAmount']}',
+                                                    style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
                               ),
+                              //   ListView.builder(
+                              //   shrinkWrap: true, // Makes ListView take up only the needed height
+                              //   physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling if the outer widget scrolls
+                              //   itemCount: _itemsList.length,
+                              //   itemBuilder: (context, index) {
+                              //     final item = _itemsList[index];
+                              //     return Container(
+                              //       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+                              //       padding: const EdgeInsets.all(16.0),
+                              //       decoration: BoxDecoration(
+                              //         color: Colors.white,
+                              //         borderRadius: BorderRadius.circular(5),
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             color: Colors.grey,
+                              //             spreadRadius: 1,
+                              //             blurRadius: 3,
+                              //           ),
+                              //         ],
+                              //       ),
+                              //       child: Column(
+                              //         crossAxisAlignment: CrossAxisAlignment.start,
+                              //         children: [
+                              //           Row(
+                              //             children: [
+                              //               Container(
+                              //                 height: 25,
+                              //                 width: 25,
+                              //                 child: Image.asset(
+                              //                   'assets/images/aadhar.jpeg',
+                              //                   fit: BoxFit.fill,
+                              //                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                              //                     return Icon(Icons.error, size: 25);
+                              //                   },
+                              //                 ),
+                              //               ),
+                              //               SizedBox(width: 10),
+                              //               Column(
+                              //                 crossAxisAlignment: CrossAxisAlignment.start,
+                              //                 children: [
+                              //                   Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                              //                   Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                              //                 ],
+                              //               ),
+                              //               Spacer(),
+                              //               Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                              //             ],
+                              //           ),
+                              //           Divider(),
+                              //           Container(
+                              //             height: 45,
+                              //             child: Row(
+                              //               children: [
+                              //                 Padding(
+                              //                   padding: const EdgeInsets.only(left: 25),
+                              //                   child: Column(
+                              //                     crossAxisAlignment: CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       Row(
+                              //                         children: [
+                              //                           Container(
+                              //                             height: 14,
+                              //                             width: 14,
+                              //                             decoration: BoxDecoration(
+                              //                               color: Colors.black,
+                              //                               borderRadius: BorderRadius.circular(7),
+                              //                             ),
+                              //                           ),
+                              //                           SizedBox(width: 5),
+                              //                           Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
+                              //                         ],
+                              //                       ),
+                              //                       Padding(
+                              //                         padding: const EdgeInsets.only(left: 15),
+                              //                         child: Text('UOM', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                              //                       ),
+                              //                     ],
+                              //                   ),
+                              //                 ),
+                              //                 Spacer(),
+                              //                 Container(
+                              //                   color: Color(0xFF0098a6),
+                              //                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                              //                   child: Text(
+                              //                     '₹ ${item['fAmount']}',
+                              //                     style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
+                              //                     textAlign: TextAlign.center,
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
                               // SizedBox(height: 10),
                               /// todo apply logic if then create a form
                               if (_dropDownValueShopeType == "Consumable/Material Purchase")

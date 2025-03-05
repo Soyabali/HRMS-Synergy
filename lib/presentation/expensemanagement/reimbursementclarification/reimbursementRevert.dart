@@ -413,7 +413,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   }
   // delete the data on a list
 
-  Widget _deleteItemDialog(BuildContext context) {
+  Widget _deleteItemDialog(BuildContext context, int index) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -464,6 +464,21 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                         child: TextButton(
                           onPressed: () async {
                             setState(() {
+                              /// TODO HERE TO GET A LIST INDEX AND AFTER THAT REMOVE VALUE FROM A INDEX
+                              setState(() {
+                                consuambleItemList!.removeAt(index); // Remove item at index
+                               //
+                                consumableList = jsonEncode(consuambleItemList);
+                                // Clear form fields after adding
+                                _itemDescriptionController.clear();
+                                _quantityController.clear();
+                                _amountController2.clear();
+                                _dropDownValueBindReimType = null;
+
+                              });
+                              Navigator.of(context).pop();
+                              //consuambleItemList[index];
+
                               // _notificationList = NotificationRepo().notificationList(context);
                             });
                           },
@@ -1532,37 +1547,33 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                       SizedBox(width: 10),
                                       Text('Consumable Item List',
                                           style: AppTextStyle
-                                              .font14OpenSansRegularBlack45TextStyle),
-                                    ],
+                                              .font14OpenSansRegularBlack45TextStyle),],
                                   ),
+
                                   ListView.builder(
                                     shrinkWrap: true,
-                                    // Makes ListView take up only the needed height
                                     physics: NeverScrollableScrollPhysics(),
-                                    // Disable ListView scrolling if the outer widget scrolls
                                     itemCount: consuambleItemList?.length ?? 0,
                                     itemBuilder: (context, index) {
                                       final item = consuambleItemList![index];
                                       return GestureDetector(
                                         onLongPress: () {
-                                          setState(() {
-                                            // iTranId = notificationData.iTranId;
-                                          });
-                                          showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return _deleteItemDialog(context);
-                                            },
-                                          );
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (BuildContext context) {
+                                                      return _deleteItemDialog(context,index);
+                                                    },
+                                                  );
+                                          // setState(() {
+                                          //   consuambleItemList!.removeAt(index); // Remove item at index
+                                          // });
                                         },
                                         child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8.0, horizontal: 10.0),
+                                          margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
                                           padding: const EdgeInsets.all(16.0),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                                            borderRadius: BorderRadius.circular(5),
                                             boxShadow: [
                                               BoxShadow(
                                                 color: Colors.grey,
@@ -1582,13 +1593,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                     child: Image.asset(
                                                       'assets/images/aadhar.jpeg',
                                                       fit: BoxFit.fill,
-                                                      errorBuilder:
-                                                          (BuildContext context,
-                                                              Object exception,
-                                                              StackTrace?
-                                                                  stackTrace) {
-                                                        return Icon(Icons.error,
-                                                            size: 25);
+                                                      errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                                        return Icon(Icons.error, size: 25);
                                                       },
                                                     ),
                                                   ),
@@ -1596,18 +1602,12 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                   Column(
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      Text(item['sItemName'], style: AppTextStyle
-                                                              .font14OpenSansRegularBlack45TextStyle),
-                                                      Text('Item Description',
-                                                          style: AppTextStyle
-                                                              .font14OpenSansRegularBlack45TextStyle),
+                                                      Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                      Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                                     ],
                                                   ),
                                                   Spacer(),
-                                                  Text(
-                                                      'Quantity: ${item['fQty']}',
-                                                      style: AppTextStyle
-                                                          .font14OpenSansRegularBlack45TextStyle),
+                                                  Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                                 ],
                                               ),
                                               Divider(),
@@ -1616,8 +1616,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                 child: Row(
                                                   children: [
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(left: 25),
+                                                      padding: const EdgeInsets.only(left: 25),
                                                       child: Column(
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
@@ -1626,24 +1625,18 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                               Container(
                                                                 height: 14,
                                                                 width: 14,
-                                                                decoration:
-                                                                    BoxDecoration(
+                                                                decoration: BoxDecoration(
                                                                   color: Colors.black,
                                                                   borderRadius: BorderRadius.circular(7),
                                                                 ),
                                                               ),
-                                                              SizedBox(
-                                                                  width: 5),
-                                                              Text(item['sUoM'],
-                                                                  style: AppTextStyle
-                                                                      .font14OpenSansRegularBlackTextStyle),
+                                                              SizedBox(width: 5),
+                                                              Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
                                                             ],
                                                           ),
                                                           Padding(
-                                                            padding:
-                                                                const EdgeInsets.only(left: 15),
-                                                            child: Text('UOM',
-                                                                style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                                            padding: const EdgeInsets.only(left: 15),
+                                                            child: Text('UOM', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
                                                           ),
                                                         ],
                                                       ),
@@ -1651,16 +1644,11 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                                     Spacer(),
                                                     Container(
                                                       color: Color(0xFF0098a6),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10,
-                                                          vertical: 10),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                                       child: Text(
                                                         '₹ ${item['fAmount']}',
-                                                        style: AppTextStyle
-                                                            .font14OpenSansRegularWhiteTextStyle,
-                                                        textAlign:
-                                                            TextAlign.center,
+                                                        style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
+                                                        textAlign: TextAlign.center,
                                                       ),
                                                     ),
                                                   ],
@@ -1671,7 +1659,148 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                         ),
                                       );
                                     },
-                                  ),
+                                  )
+
+                                  // ListView.builder(
+                                  //   shrinkWrap: true,
+                                  //   // Makes ListView take up only the needed height
+                                  //   physics: NeverScrollableScrollPhysics(),
+                                  //   // Disable ListView scrolling if the outer widget scrolls
+                                  //   itemCount: consuambleItemList?.length ?? 0,
+                                  //   itemBuilder: (context, index) {
+                                  //     final item = consuambleItemList![index];
+                                  //     return GestureDetector(
+                                  //       onLongPress: () {
+                                  //         setState(() {
+                                  //           // iTranId = notificationData.iTranId;
+                                  //         });
+                                  //         /// todo this is dialog code after debug open the code
+                                  //         // showDialog(
+                                  //         //   context: context,
+                                  //         //   builder: (BuildContext context) {
+                                  //         //     return _deleteItemDialog(context);
+                                  //         //   },
+                                  //         // );
+                                  //       },
+                                  //       child: Container(
+                                  //         margin: const EdgeInsets.symmetric(
+                                  //             vertical: 8.0, horizontal: 10.0),
+                                  //         padding: const EdgeInsets.all(16.0),
+                                  //         decoration: BoxDecoration(
+                                  //           color: Colors.white,
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(5),
+                                  //           boxShadow: [
+                                  //             BoxShadow(
+                                  //               color: Colors.grey,
+                                  //               spreadRadius: 1,
+                                  //               blurRadius: 3,
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //         child: Column(
+                                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                                  //           children: [
+                                  //             Row(
+                                  //               children: [
+                                  //                 Container(
+                                  //                   height: 25,
+                                  //                   width: 25,
+                                  //                   child: Image.asset(
+                                  //                     'assets/images/aadhar.jpeg',
+                                  //                     fit: BoxFit.fill,
+                                  //                     errorBuilder:
+                                  //                         (BuildContext context,
+                                  //                             Object exception,
+                                  //                             StackTrace?
+                                  //                                 stackTrace) {
+                                  //                       return Icon(Icons.error,
+                                  //                           size: 25);
+                                  //                     },
+                                  //                   ),
+                                  //                 ),
+                                  //                 SizedBox(width: 10),
+                                  //                 Column(
+                                  //                   crossAxisAlignment: CrossAxisAlignment.start,
+                                  //                   children: [
+                                  //                     Text(item['sItemName'], style: AppTextStyle
+                                  //                             .font14OpenSansRegularBlack45TextStyle),
+                                  //                     Text('Item Description',
+                                  //                         style: AppTextStyle
+                                  //                             .font14OpenSansRegularBlack45TextStyle),
+                                  //                   ],
+                                  //                 ),
+                                  //                 Spacer(),
+                                  //                 Text(
+                                  //                     'Quantity: ${item['fQty']}',
+                                  //                     style: AppTextStyle
+                                  //                         .font14OpenSansRegularBlack45TextStyle),
+                                  //               ],
+                                  //             ),
+                                  //             Divider(),
+                                  //             Container(
+                                  //               height: 45,
+                                  //               child: Row(
+                                  //                 children: [
+                                  //                   Padding(
+                                  //                     padding:
+                                  //                         const EdgeInsets.only(left: 25),
+                                  //                     child: Column(
+                                  //                       crossAxisAlignment: CrossAxisAlignment.start,
+                                  //                       children: [
+                                  //                         Row(
+                                  //                           children: [
+                                  //                             Container(
+                                  //                               height: 14,
+                                  //                               width: 14,
+                                  //                               decoration:
+                                  //                                   BoxDecoration(
+                                  //                                 color: Colors.black,
+                                  //                                 borderRadius: BorderRadius.circular(7),
+                                  //                               ),
+                                  //                             ),
+                                  //                             SizedBox(
+                                  //                                 width: 5),
+                                  //                             Text(item['sUoM'],
+                                  //                                 style: AppTextStyle
+                                  //                                     .font14OpenSansRegularBlackTextStyle),
+                                  //                           ],
+                                  //                         ),
+                                  //                         Padding(
+                                  //                           padding:
+                                  //                               const EdgeInsets.only(left: 15),
+                                  //                           child: Text('UOM',
+                                  //                               style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
+                                  //                         ),
+                                  //                       ],
+                                  //                     ),
+                                  //                   ),
+                                  //                   Spacer(),
+                                  //                   Container(
+                                  //                     color: Color(0xFF0098a6),
+                                  //                     padding: const EdgeInsets
+                                  //                         .symmetric(
+                                  //                         horizontal: 10,
+                                  //                         vertical: 10),
+                                  //                     child: Text(
+                                  //                       '₹ ${item['fAmount']}',
+                                  //                       style: AppTextStyle
+                                  //                           .font14OpenSansRegularWhiteTextStyle,
+                                  //                       textAlign:
+                                  //                           TextAlign.center,
+                                  //                     ),
+                                  //                   ),
+                                  //                 ],
+                                  //               ),
+                                  //             ),
+                                  //           ],
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // ),
+
+
                                 ],
                               ),
 
@@ -2486,39 +2615,29 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                 String? sEmpCode = prefs.getString('sEmpCode');
                                 String? sContactNo = prefs.getString('sContactNo');
 
-                                var amount = '${_amountController.text}';
-                                var expenseDetails = '${_expenseController.text}';
-                                remarks = '${_remarkController.text}';
+                                var amount = _amountController.text.trim();
+                                var expenseDetails = _expenseController.text.trim();
+                                var remarks = _remarkController.text.trim(); // Trimmed to remove extra spaces
 
-                                // print('-----sTranCode-----XX--$sTranCode2');
-                                // print('-----sEmpCode-----XX--$sEmpCode');
-                                // print('-----_selectedSectorId---XX---$_selectedSectorId');
-                                // print('-----_selectedShopId-----XXX-$_selectedShopId');
-                                // print('-----amount------XXX----$amount');
-                                // print('-----expenseDetails-----XX----$expenseDetails');
-                                // print('-----uplodedImage-----XX----$uplodedImage');
-                                // print('-----sContactNo-----XX-----$sContactNo');
-                                // print("-------R----$remarks");
+                                // Validation for remarks field
+                                if (remarks.isEmpty) {
+                                  displayToast('Please enter remarks');
+                                  return; // Stop execution if remarks are empty
+                                }
 
                                 if (_formKey.currentState!.validate() &&
                                     sEmpCode != null &&
                                     _selectedSectorId != null &&
                                     _selectedShopId != null &&
-                                    amount != null &&
-                                    expenseDetails != null &&
-                                    remarks!="" &&
-                                    uplodedImage!=null || uplodedImage2!=null || uplodedImage3!=null || uplodedImage4!=null &&
-                                    sContactNo != null &&
-                                    _remarkController!=null
-                                ) {
-                                  // Call Api
-                                  print('---call Api---');
-                                  print('-----2507---list----$consumableList');// consuambleItemList
-                                  print('-----2508---list----$consuambleItemList');
-                                  // consumableItemString
-                                  print('------2516----$consumableItemString');
-                                  var hrmsPostReimbursement =
-                                  await HrmsPostReimbursementRepo()
+                                    amount.isNotEmpty &&
+                                    expenseDetails.isNotEmpty &&
+                                    (uplodedImage != null || uplodedImage2 != null || uplodedImage3 != null || uplodedImage4 != null) &&
+                                    sContactNo != null) {
+
+                                  // Call API
+                                  print('---Calling API---');
+
+                                  var hrmsPostReimbursement = await HrmsPostReimbursementRepo()
                                       .hrmsPostReimbursement(
                                       context,
                                       sTranCode2,
@@ -2539,107 +2658,199 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                       consumableItemString
                                   );
 
-                                  print('---1050--$hrmsPostReimbursement');
-
                                   result = "${hrmsPostReimbursement[0]['Result']}";
                                   msg = "${hrmsPostReimbursement[0]['Msg']}";
 
-                                  print("----2532----msg---$msg");
-                                  print("----2532----result---$result");
-
-                                  if(result=="1"){
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return _buildDialogSucces2(context, msg);
-                                        },
-                                      );
+                                  if (result == "1") {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return _buildDialogSucces2(context, msg);
+                                      },
+                                    );
                                   }
-
                                 } else {
                                   if (sTranCode == null) {
-                                    displayToast('Genrate Random Number');
+                                    displayToast('Generate Random Number');
                                   } else if (sEmpCode == null) {
                                     displayToast('Enter sEmpCode');
                                   } else if (_selectedSectorId == null) {
                                     displayToast('Please Select Project');
                                   } else if (_selectedShopId == null) {
-                                    displayToast(
-                                        'Please Select Expense Category');
+                                    displayToast('Please Select Expense Category');
                                   } else if (dExpDate == null) {
                                     displayToast('Select Expense Date');
-                                  } else if (amount == null || amount == '') {
+                                  } else if (amount.isEmpty) {
                                     displayToast('Please Enter Amount');
-                                  } else if (expenseDetails == null ||
-                                      expenseDetails == '') {
-                                    displayToast('Please Enter Expense Details');
-                                  }else if(remarks==""){
+                                  } else if (expenseDetails.isEmpty) {
                                     displayToast('Please Enter Remarks');
-                                  }
-                                  else if (uplodedImage == null || uplodedImage2==null || uplodedImage3==null || uplodedImage4==null) {
+                                  } else if (uplodedImage == null && uplodedImage2 == null && uplodedImage3 == null && uplodedImage4 == null) {
                                     displayToast('Please pick a photo');
                                   } else if (sContactNo == null) {
                                     displayToast('Please get a contact number');
                                   }
-                                } // condition to fetch a response form a api
-                                // if (result == "0") {
-                                //
-                                //   // CALL API HRMS Reimbursement
-                                //   print("---sTranCode2-----$sTranCode2");
-                                //   print("---sEmpCode-----$sEmpCode");
-                                //   print("---_selectedSectorId-----$_selectedSectorId");
-                                //   print("---_selectedShopId-----$_selectedShopId");
-                                //   print("---dExpDate-----$dExpDate");
-                                //   print("---amount-----$amount");
-                                //   print("---expenseDetails-----$expenseDetails");
-                                //   print("---uplodedImage-----$uplodedImage");
-                                //   print("---sContactNo-----$sContactNo");
-                                //   print("---result-----$result");
-                                //   print("---remarks-----$remarks");
-                                //   print("---uplodedImage2-----$uplodedImage2");
-                                //   print("---uplodedImage3-----$uplodedImage3");
-                                //   print("---uplodedImage4-----$uplodedImage4");
-                                //   print("---consumableList-----$consumableList");
-                                //
-                                //   var hrmsPostReimbursement =
-                                //       await HrmsPostReimbursementRepo()
-                                //           .hrmsPostReimbursement(
-                                //               context,
-                                //                sTranCode2,
-                                //               sEmpCode,
-                                //               _selectedSectorId,
-                                //               _selectedShopId,
-                                //               dExpDate,
-                                //               amount,
-                                //               expenseDetails,
-                                //               uplodedImage,
-                                //               sContactNo,
-                                //               result,
-                                //               remarks,
-                                //               uplodedImage2,
-                                //               uplodedImage3,
-                                //               uplodedImage4,
-                                //               consumableList);
-                                //
-                                //  print('---1050--$hrmsPostReimbursement');
-                                //
-                                //  result = "${hrmsPostReimbursement[0]['Result']}";
-                                //  msg = "${hrmsPostReimbursement[0]['Msg']}";
-                                //
-                                //   // displayToast(msg);
-                                //   /// todo here to show the dialog sucess
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (BuildContext context) {
-                                //       return _buildDialogSucces2(context, msg);
-                                //     },
-                                //   );
-                                // } else {
-                                //   showCustomDialog(context, msg);
-                                //   //displayToast(msg);
-                                //   print('---diaplay dialog --');
-                                // }
+                                }
                               },
+
+                              // onTap: () async {
+                              //   SharedPreferences prefs = await SharedPreferences.getInstance();
+                              //   String? sEmpCode = prefs.getString('sEmpCode');
+                              //   String? sContactNo = prefs.getString('sContactNo');
+                              //
+                              //   var amount = '${_amountController.text}';
+                              //   var expenseDetails = '${_expenseController.text}';
+                              //   remarks = '${_remarkController.text}';
+                              //
+                              //   // print('-----sTranCode-----XX--$sTranCode2');
+                              //   // print('-----sEmpCode-----XX--$sEmpCode');
+                              //   // print('-----_selectedSectorId---XX---$_selectedSectorId');
+                              //   // print('-----_selectedShopId-----XXX-$_selectedShopId');
+                              //   // print('-----amount------XXX----$amount');
+                              //   // print('-----expenseDetails-----XX----$expenseDetails');
+                              //   // print('-----uplodedImage-----XX----$uplodedImage');
+                              //   // print('-----sContactNo-----XX-----$sContactNo');
+                              //   // print("-------R----$remarks");
+                              //
+                              //   if (_formKey.currentState!.validate() &&
+                              //       sEmpCode != null &&
+                              //       _selectedSectorId != null &&
+                              //       _selectedShopId != null &&
+                              //       amount != null &&
+                              //       expenseDetails != null &&
+                              //       remarks!="" &&
+                              //       uplodedImage!=null || uplodedImage2!=null || uplodedImage3!=null || uplodedImage4!=null &&
+                              //       sContactNo != null &&
+                              //       _remarkController!=null
+                              //   ) {
+                              //     // Call Api
+                              //     print('---call Api---');
+                              //     print('-----2507---list----$consumableList');// consuambleItemList
+                              //     print('-----2508---list----$consuambleItemList');
+                              //     // consumableItemString
+                              //     print('------2516----$consumableItemString');
+                              //     var hrmsPostReimbursement =
+                              //     await HrmsPostReimbursementRepo()
+                              //         .hrmsPostReimbursement(
+                              //         context,
+                              //         sTranCode2,
+                              //         sEmpCode,
+                              //         _selectedSectorId,
+                              //         _selectedShopId,
+                              //         dExpDate,
+                              //         amount,
+                              //         expenseDetails,
+                              //         uplodedImage,
+                              //         sContactNo,
+                              //         result,
+                              //         remarks,
+                              //         uplodedImage2,
+                              //         uplodedImage3,
+                              //         uplodedImage4,
+                              //         consumableList,
+                              //         consumableItemString
+                              //     );
+                              //
+                              //     print('---1050--$hrmsPostReimbursement');
+                              //
+                              //     result = "${hrmsPostReimbursement[0]['Result']}";
+                              //     msg = "${hrmsPostReimbursement[0]['Msg']}";
+                              //
+                              //     print("----2532----msg---$msg");
+                              //     print("----2532----result---$result");
+                              //
+                              //     if(result=="1"){
+                              //         showDialog(
+                              //           context: context,
+                              //           builder: (BuildContext context) {
+                              //             return _buildDialogSucces2(context, msg);
+                              //           },
+                              //         );
+                              //     }
+                              //
+                              //   } else {
+                              //     if (sTranCode == null) {
+                              //       displayToast('Genrate Random Number');
+                              //     } else if (sEmpCode == null) {
+                              //       displayToast('Enter sEmpCode');
+                              //     } else if (_selectedSectorId == null) {
+                              //       displayToast('Please Select Project');
+                              //     } else if (_selectedShopId == null) {
+                              //       displayToast(
+                              //           'Please Select Expense Category');
+                              //     } else if (dExpDate == null) {
+                              //       displayToast('Select Expense Date');
+                              //     } else if (amount == null || amount == '') {
+                              //       displayToast('Please Enter Amount');
+                              //     } else if (expenseDetails == null ||
+                              //         expenseDetails == '') {
+                              //       displayToast('Please Enter Expense Details');
+                              //     }else if(remarks==""){
+                              //       displayToast('Please Enter Remarks');
+                              //     }
+                              //     else if (uplodedImage == null || uplodedImage2==null || uplodedImage3==null || uplodedImage4==null) {
+                              //       displayToast('Please pick a photo');
+                              //     } else if (sContactNo == null) {
+                              //       displayToast('Please get a contact number');
+                              //     }
+                              //   } // condition to fetch a response form a api
+                              //   // if (result == "0") {
+                              //   //
+                              //   //   // CALL API HRMS Reimbursement
+                              //   //   print("---sTranCode2-----$sTranCode2");
+                              //   //   print("---sEmpCode-----$sEmpCode");
+                              //   //   print("---_selectedSectorId-----$_selectedSectorId");
+                              //   //   print("---_selectedShopId-----$_selectedShopId");
+                              //   //   print("---dExpDate-----$dExpDate");
+                              //   //   print("---amount-----$amount");
+                              //   //   print("---expenseDetails-----$expenseDetails");
+                              //   //   print("---uplodedImage-----$uplodedImage");
+                              //   //   print("---sContactNo-----$sContactNo");
+                              //   //   print("---result-----$result");
+                              //   //   print("---remarks-----$remarks");
+                              //   //   print("---uplodedImage2-----$uplodedImage2");
+                              //   //   print("---uplodedImage3-----$uplodedImage3");
+                              //   //   print("---uplodedImage4-----$uplodedImage4");
+                              //   //   print("---consumableList-----$consumableList");
+                              //   //
+                              //   //   var hrmsPostReimbursement =
+                              //   //       await HrmsPostReimbursementRepo()
+                              //   //           .hrmsPostReimbursement(
+                              //   //               context,
+                              //   //                sTranCode2,
+                              //   //               sEmpCode,
+                              //   //               _selectedSectorId,
+                              //   //               _selectedShopId,
+                              //   //               dExpDate,
+                              //   //               amount,
+                              //   //               expenseDetails,
+                              //   //               uplodedImage,
+                              //   //               sContactNo,
+                              //   //               result,
+                              //   //               remarks,
+                              //   //               uplodedImage2,
+                              //   //               uplodedImage3,
+                              //   //               uplodedImage4,
+                              //   //               consumableList);
+                              //   //
+                              //   //  print('---1050--$hrmsPostReimbursement');
+                              //   //
+                              //   //  result = "${hrmsPostReimbursement[0]['Result']}";
+                              //   //  msg = "${hrmsPostReimbursement[0]['Msg']}";
+                              //   //
+                              //   //   // displayToast(msg);
+                              //   //   /// todo here to show the dialog sucess
+                              //   //   showDialog(
+                              //   //     context: context,
+                              //   //     builder: (BuildContext context) {
+                              //   //       return _buildDialogSucces2(context, msg);
+                              //   //     },
+                              //   //   );
+                              //   // } else {
+                              //   //   showCustomDialog(context, msg);
+                              //   //   //displayToast(msg);
+                              //   //   print('---diaplay dialog --');
+                              //   // }
+                              // },
 
                               child: Container(
                                 width: double.infinity,
