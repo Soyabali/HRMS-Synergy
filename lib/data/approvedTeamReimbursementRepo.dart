@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:untitled/data/loader_helper.dart';
+import '../app/generalFunction.dart';
 import '../domain/ApprovedTeamReimbursementModel.dart';
 import '../domain/leaveStatusModel.dart';
 import 'baseurl.dart';
@@ -10,6 +11,8 @@ import 'baseurl.dart';
 class ApprovedTeamReimbursementRepo {
 
   var approvedteamReimList = [];
+
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future<List<ApprovedTeamReimbursementModel>>  approvedTeamReimbursementList(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth, sStatusValue, empCode) async {
 
@@ -54,6 +57,11 @@ class ApprovedTeamReimbursementRepo {
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+      if(response.statusCode==401){
+        hideLoader();
+        generalFunction.logout(context);
+        throw Exception('Unauthorized access');
+      }
       if (response.statusCode == 200) {
         hideLoader();
 

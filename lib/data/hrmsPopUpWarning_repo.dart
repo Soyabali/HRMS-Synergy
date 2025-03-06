@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
@@ -9,7 +10,7 @@ import 'loader_helper.dart';
 class HrmsPopUpWarningRepo {
 
   // this is a loginApi call functin
-
+  GeneralFunction? generalFunction;
   Future hrmsPopUpWarnging(BuildContext context, String sEmpCode, dExpDate, String amount) async {
 
     try {
@@ -42,6 +43,11 @@ class HrmsPopUpWarningRepo {
       var data = await response.stream.bytesToString();
       map = json.decode(data);
      // print('----------20---login RESPONSE----$map');
+      if(response.statusCode==401){
+        // todo apply logout code
+        generalFunction?.logout(context);
+      }
+
       if (response.statusCode == 200) {
         hideLoader();
         //print('----------22-----$map');

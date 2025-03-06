@@ -6,6 +6,7 @@ import '../../../data/consumableItemRepo.dart';
 import '../../resources/app_text_style.dart';
 
 class ConsumableItemPage extends StatefulWidget {
+
   String sTranCode;
 
   ConsumableItemPage({super.key, required this.sTranCode});
@@ -97,7 +98,6 @@ class _ConsumableItemPageState extends State<ConsumableItemPage> {
                 // Handle the case where the data is empty or null
                 return Center(child: Text('No Data'));
               }
-
               // Once data is available, build the ListView
               final consumableItem = snapshot.data!;
 
@@ -177,14 +177,12 @@ class _ConsumableItemPageState extends State<ConsumableItemPage> {
                                           width: 14,
                                           decoration: BoxDecoration(
                                             color: Colors.black,
-                                            borderRadius:
-                                                BorderRadius.circular(7),
+                                            borderRadius: BorderRadius.circular(7),
                                           ),
                                         ),
                                         SizedBox(width: 5),
                                         Text(item.sUoM,
-                                            style: AppTextStyle
-                                                .font14OpenSansRegularBlackTextStyle),
+                                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
                                       ],
                                     ),
                                     Padding(

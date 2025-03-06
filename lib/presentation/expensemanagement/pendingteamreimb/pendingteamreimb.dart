@@ -379,7 +379,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   String? lastDayOfCurrentMonth;
   var sTranCode;
   var duplicate;
-  String? _selectedDecision;
+  String? _selectedDecision='Approved';
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -531,6 +531,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   List<GetPendingForApprovalReimmodel> _allData = []; // Holds original data
   List<GetPendingForApprovalReimmodel> _filteredData = [];
 
+
   hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     getPendingApprovalReim = GetPendingforApprovalReimRepo().getPendingApprovalReim(context, firstOfMonthDay, lastDayOfCurrentMonth);
     print("------xxx---536---xxx000---$getPendingApprovalReim");
@@ -564,382 +565,367 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // statusBarColore
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color  // 2a697b
-            statusBarColor: Color(0xFF2a697b),
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark,
-            // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          ),
-          // backgroundColor: Colors.blu
-          backgroundColor: Color(0xFF0098a6),
-          leading: InkWell(
-            onTap: () {
-              // Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-                color: Colors.white,
-              ),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // statusBarColore
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              // Status bar color  // 2a697b
+              statusBarColor: Color(0xFF2a697b),
+              // Status bar brightness (optional)
+              statusBarIconBrightness: Brightness.dark,
+              // For Android (dark icons)
+              statusBarBrightness: Brightness.light, // For iOS (dark icons)
             ),
-          ),
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Pending Team Reimb',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Montserrat',
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ), // Removes shadow under the AppBar
-        ),
-        body: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Container(
-                height: 45,
-                color: Color(0xFF2a697b),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(width: 4),
-                    Icon(Icons.calendar_month, size: 15, color: Colors.white),
-                    const SizedBox(width: 4),
-                    const Text(
-                      'From',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: () async {
-                        /// TODO Open Date picke and get a date
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        // Check if a date was picked
-                        if (pickedDate != null) {
-                          // Format the picked date
-                          String formattedDate =
-                              DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          // Update the state with the picked date
-                          setState(() {
-                            firstOfMonthDay = formattedDate;
-                             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          });
-
-                          /// todo call api here to change date to that that is reflect
-                          ///
-                          // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          //print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                          // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          //print('---formPicker--$firstOfMonthDay');
-                          // Call API
-                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          // print('---formPicker--$firstOfMonthDay');
-
-                          // Display the selected date as a toast
-                          //displayToast(dExpDate.toString());
-                        } else {
-                          // Handle case where no date was selected
-                          displayToast("No date selected");
-                        }
-                      },
-                      child: Container(
-                        height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                        // Optional: Adjust padding for horizontal space
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          // Change this to your preferred color
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$firstOfMonthDay',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              // Change this to your preferred text color
-                              fontSize: 12.0, // Adjust font size as needed
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 6),
-                    Container(
-                      height: 32,
-                      width: 32,
-                      child: Image.asset(
-                        "assets/images/reimicon_2.png",
-                        fit: BoxFit
-                            .contain, // or BoxFit.cover depending on the desired effect
-                      ),
-                    ),
-                    //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                    SizedBox(width: 8),
-                    Icon(Icons.calendar_month, size: 16, color: Colors.white),
-                    SizedBox(width: 5),
-                    const Text(
-                      'To',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal),
-                    ),
-                    SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
-                        );
-                        // Check if a date was picked
-                        if (pickedDate != null) {
-                          // Format the picked date
-                          String formattedDate =
-                              DateFormat('dd/MMM/yyyy').format(pickedDate);
-                          // Update the state with the picked date
-                          setState(() {
-                            lastDayOfCurrentMonth = formattedDate;
-                             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          });
-
-                          /// todo call api here such that live data reflected
-                          //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                          //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                          // print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                        } else {}
-                      },
-                      child: Container(
-                        height: 35,
-                        padding: EdgeInsets.symmetric(horizontal: 14.0),
-                        // Optional: Adjust padding for horizontal space
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          // Change this to your preferred color
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '$lastDayOfCurrentMonth',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              // Change this to your preferred text color
-                              fontSize: 12.0, // Adjust font size as needed
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            // backgroundColor: Colors.blu
+            backgroundColor: Color(0xFF0098a6),
+            leading: InkWell(
+              onTap: () {
+                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ExpenseManagement()),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 24,
+                  color: Colors.white,
                 ),
               ),
-              SizedBox(height: 10),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
-                  // child: SearchBar(),
-                  child: Container(
-                    height: 45,
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(
-                        color: Colors.grey, // Outline border color
-                        width: 0.2, // Outline border width
+            ),
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Pending Team Reimb',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ), // Removes shadow under the AppBar
+          ),
+
+          body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Container(
+                  height: 45,
+                  color: Color(0xFF2a697b),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 4),
+                      Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                      const SizedBox(width: 4),
+                      const Text(
+                        'From',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
                       ),
-                      color: Colors.white,
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _searchController,
-                                autofocus: true,
-                                decoration: const InputDecoration(
-                                  hintText: 'Enter Keywords',
-                                  prefixIcon: Icon(Icons.search),
-                                  hintStyle: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      color: Color(0xFF707d83),
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold),
-                                  border: InputBorder.none,
-                                ),
-                                onChanged: (query) {
-                                  filterData(
-                                      query); // Call the filter function on text input change
-                                },
+                      SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () async {
+                          /// TODO Open Date picke and get a date
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          // Check if a date was picked
+                          if (pickedDate != null) {
+                            // Format the picked date
+                            String formattedDate =
+                                DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            // Update the state with the picked date
+                            setState(() {
+                              firstOfMonthDay = formattedDate;
+                               hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            });
+
+                            /// todo call api here to change date to that that is reflect
+                            ///
+                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            //print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                            // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            //print('---formPicker--$firstOfMonthDay');
+                            // Call API
+                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            // print('---formPicker--$firstOfMonthDay');
+
+                            // Display the selected date as a toast
+                            //displayToast(dExpDate.toString());
+                          } else {
+                            // Handle case where no date was selected
+                            displayToast("No date selected");
+                          }
+                        },
+                        child: Container(
+                          height: 35,
+                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                          // Optional: Adjust padding for horizontal space
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            // Change this to your preferred color
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$firstOfMonthDay',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                // Change this to your preferred text color
+                                fontSize: 12.0, // Adjust font size as needed
                               ),
                             ),
-                          ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 6),
+                      Container(
+                        height: 32,
+                        width: 32,
+                        child: Image.asset(
+                          "assets/images/reimicon_2.png",
+                          fit: BoxFit
+                              .contain, // or BoxFit.cover depending on the desired effect
+                        ),
+                      ),
+                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                      SizedBox(width: 8),
+                      Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                      SizedBox(width: 5),
+                      const Text(
+                        'To',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal),
+                      ),
+                      SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          // Check if a date was picked
+                          if (pickedDate != null) {
+                            // Format the picked date
+                            String formattedDate =
+                                DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            // Update the state with the picked date
+                            setState(() {
+                              lastDayOfCurrentMonth = formattedDate;
+                               hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            });
+
+                            /// todo call api here such that live data reflected
+                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                            // print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                          } else {}
+                        },
+                        child: Container(
+                          height: 35,
+                          padding: EdgeInsets.symmetric(horizontal: 14.0),
+                          // Optional: Adjust padding for horizontal space
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            // Change this to your preferred color
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              '$lastDayOfCurrentMonth',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                // Change this to your preferred text color
+                                fontSize: 12.0, // Adjust font size as needed
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 15, right: 15, top: 10),
+                    // child: SearchBar(),
+                    child: Container(
+                      height: 45,
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Colors.grey, // Outline border color
+                          width: 0.2, // Outline border width
+                        ),
+                        color: Colors.white,
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _searchController,
+                                  autofocus: true,
+                                  decoration: const InputDecoration(
+                                    hintText: 'Enter Keywords',
+                                    prefixIcon: Icon(Icons.search),
+                                    hintStyle: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF707d83),
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold),
+                                    border: InputBorder.none,
+                                  ),
+                                  onChanged: (query) {
+                                    filterData(query); // Call the filter function on text input change
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10),
-              Expanded(
-              child: Container(
-              child: FutureBuilder<List<GetPendingForApprovalReimmodel>>(
-                              future: getPendingApprovalReim,
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                } else if (snapshot.hasError) {
-                                  return Center(
-                                      child: Text('Error: ${snapshot.error}'));
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return Center(
-                                      child: Text('No data available'));
-                                } else {
-                                  return ListView.builder(
-                                      itemCount: snapshot.data!.length ?? 0,
-                                      itemBuilder: (context, index) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Center(
-                                            child: Text(
-                                                'Error: ${snapshot.error}'),
-                                          );
-                                        } else if (!snapshot.hasData ||
-                                            snapshot.data!.isEmpty) {
-                                          return Center(
-                                            child: Text('No data available'),
-                                          );
-                                        } else {
-                                          final leaveData = _filteredData[index];
-                                          var sExpHeadCode = leaveData.sExpHeadCode;
+                SizedBox(height: 10),
+                Expanded(
+                child: Container(
+                child: FutureBuilder<List<GetPendingForApprovalReimmodel>>(
+                                future: getPendingApprovalReim,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } else if (snapshot.hasError) {
+                                    return Center(
+                                        child: Text('Error: ${snapshot.error}'));
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return Center(
+                                        child: Text('No data available'));
+                                  } else {
+                                    return ListView.builder(
+                                        itemCount: snapshot.data!.length ?? 0,
+                                        itemBuilder: (context, index) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return Center(
+                                              child: CircularProgressIndicator(),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text(
+                                                  'Error: ${snapshot.error}'),
+                                            );
+                                          } else if (!snapshot.hasData ||
+                                              snapshot.data!.isEmpty) {
+                                            return Center(
+                                              child: Text('No data available'),
+                                            );
+                                          } else {
+                                            final leaveData = _filteredData[index];
+                                            var sExpHeadCode = leaveData.sExpHeadCode;
 
-                                          duplicate = leaveData.sDuplicate;
-                                          var textColor;
-                                          if (duplicate == "Cross Check") {
-                                            textColor = Colors.red;
-                                          } else if (duplicate == "Single") {
-                                            textColor = Colors.green;
-                                          }
-                                          return Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 10, right: 10, top: 10),
-                                            child: Card(
-                                              elevation: 1,
-                                              color: Colors.white,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius
-                                                      .circular(5.0),
-                                                  border: Border.all(
-                                                    color: Colors.grey,
-                                                    // Outline border color
-                                                    width: 0.2, // Outline border width
+                                            duplicate = leaveData.sDuplicate;
+                                            var textColor;
+                                            if (duplicate == "Cross Check") {
+                                              textColor = Colors.red;
+                                            } else if (duplicate == "Single") {
+                                              textColor = Colors.green;
+                                            }
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10, right: 10, top: 10),
+                                              child: Card(
+                                                elevation: 1,
+                                                color: Colors.white,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius
+                                                        .circular(5.0),
+                                                    border: Border.all(
+                                                      color: Colors.grey,
+                                                      // Outline border color
+                                                      width: 0.2, // Outline border width
+                                                    ),
                                                   ),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .only(
-                                                      left: 8,
-                                                      right: 8,
-                                                      top: 8),
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              width: 30.0,
-                                                              height: 30.0,
-                                                              decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .circular(
-                                                                    15.0),
-                                                                border: Border
-                                                                    .all(
-                                                                  color: Color(
-                                                                      0xFF255899),
-                                                                  width: 0.5, // Outline border width
-                                                                ),
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  "${1+index}",
-                                                                  style: AppTextStyle
-                                                                      .font14OpenSansRegularBlackTextStyle,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 10),
-                                                            // Wrap the column in Flexible to prevent overflow
-                                                            Flexible(
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment
-                                                                    .start,
-                                                                children: <
-                                                                    Widget>[
-                                                                  Text(
-                                                                    leaveData
-                                                                        .sExpHeadName,
-                                                                    //leaveData.sExpHeadName,
-                                                                    style: AppTextStyle
-                                                                        .font12OpenSansRegularBlackTextStyle,
-                                                                    maxLines: 2,
-                                                                    // Limits the text to 2 lines
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis, // Truncates with an ellipsis if too long
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .only(
+                                                        left: 8,
+                                                        right: 8,
+                                                        top: 8),
+                                                    child: SingleChildScrollView(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.start,
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: <Widget>[
+                                                              Container(
+                                                                width: 30.0,
+                                                                height: 30.0,
+                                                                decoration: BoxDecoration(
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(
+                                                                      15.0),
+                                                                  border: Border
+                                                                      .all(
+                                                                    color: Color(
+                                                                        0xFF255899),
+                                                                    width: 0.5, // Outline border width
                                                                   ),
-                                                                  SizedBox(
-                                                                      height: 4),
-                                                                  // Add spacing between texts if needed
-                                                                  Padding(
-                                                                    padding:
-                                                                    const EdgeInsets
-                                                                        .only(
-                                                                        right: 10),
-                                                                    child: Text(
-                                                                      // leaveData.sProjectName,
-                                                                      "Project Name : ${leaveData
-                                                                          .sProjectName}",
+                                                                  color: Colors
+                                                                      .white,
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "${1+index}",
+                                                                    style: AppTextStyle
+                                                                        .font14OpenSansRegularBlackTextStyle,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              SizedBox(width: 10),
+                                                              // Wrap the column in Flexible to prevent overflow
+                                                              Flexible(
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment
+                                                                      .start,
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Text(
+                                                                      leaveData
+                                                                          .sExpHeadName,
+                                                                      //leaveData.sExpHeadName,
                                                                       style: AppTextStyle
                                                                           .font12OpenSansRegularBlackTextStyle,
                                                                       maxLines: 2,
@@ -947,684 +933,416 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                       overflow: TextOverflow
                                                                           .ellipsis, // Truncates with an ellipsis if too long
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-
-                                                            /// todo here you should add a icon on a right hand side
-                                                            Spacer(),
-                                                            sExpHeadCode =="3521182900" ?
-                                                            Padding(
-                                                              padding: const EdgeInsets
-                                                                  .only(
-                                                                  top: 10),
-                                                              child: InkWell(
-                                                                onTap: () {
-                                                                  print(
-                                                                      '----print----');
-                                                                   var sTranCode =  leaveData.sTranCode;
-                                                                  print("----670----$sTranCode");
-
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (
-                                                                            context) =>
-                                                                            ConsumableItemPage(sTranCode: sTranCode)),
-                                                                  );
-                                                                },
-                                                                child: Row(
-                                                                  mainAxisAlignment: MainAxisAlignment
-                                                                      .end,
-                                                                  // Aligns the child to the right
-                                                                  crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .end,
-                                                                  children: [
-                                                                    Image.asset(
-                                                                      "assets/images/aadhar.jpeg",
-                                                                      width: 20,
-                                                                      height: 20,
-                                                                      fit: BoxFit
-                                                                          .fill,
+                                                                    SizedBox(
+                                                                        height: 4),
+                                                                    // Add spacing between texts if needed
+                                                                    Padding(
+                                                                      padding:
+                                                                      const EdgeInsets
+                                                                          .only(
+                                                                          right: 10),
+                                                                      child: Text(
+                                                                        // leaveData.sProjectName,
+                                                                        "Project Name : ${leaveData
+                                                                            .sProjectName}",
+                                                                        style: AppTextStyle
+                                                                            .font12OpenSansRegularBlackTextStyle,
+                                                                        maxLines: 2,
+                                                                        // Limits the text to 2 lines
+                                                                        overflow: TextOverflow
+                                                                            .ellipsis, // Truncates with an ellipsis if too long
+                                                                      ),
                                                                     ),
                                                                   ],
                                                                 ),
                                                               ),
-                                                            )
-                                                            : Container(),
+                                                              /// todo here you should add a icon on a right hand side
+                                                              Spacer(),
+                                                              sExpHeadCode =="3521182900" ?
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                    .only(
+                                                                    top: 10),
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    print(
+                                                                        '----print----');
+                                                                     var sTranCode =  leaveData.sTranCode;
+                                                                    print("----670----$sTranCode");
 
-                                                          ],
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 10),
-                                                        Padding(
-                                                          padding:
-                                                          const EdgeInsets.only(
-                                                              left: 15,
-                                                              right: 15),
-                                                          child: Container(
-                                                            height: 0.5,
-                                                            color: Color(
-                                                                0xff3f617d),
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (
+                                                                              context) =>
+                                                                              ConsumableItemPage(sTranCode: sTranCode)),
+                                                                    );
+                                                                  },
+                                                                  child: Row(
+                                                                    mainAxisAlignment: MainAxisAlignment
+                                                                        .end,
+                                                                    // Aligns the child to the right
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .end,
+                                                                    children: [
+                                                                      Image.asset(
+                                                                        "assets/images/aadhar.jpeg",
+                                                                        width: 20,
+                                                                        height: 20,
+                                                                        fit: BoxFit
+                                                                            .fill,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              )
+                                                              : Container(),
+
+                                                            ],
                                                           ),
-                                                        ),
-                                                        SizedBox(height: 5),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              height: 10.0,
-                                                              width: 10.0,
-                                                              decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                // Change this to your preferred color
-                                                                borderRadius: BorderRadius
-                                                                    .circular(
-                                                                    5.0),
-                                                              ),
+                                                          const SizedBox(
+                                                              height: 10),
+                                                          Padding(
+                                                            padding:
+                                                            const EdgeInsets.only(
+                                                                left: 15,
+                                                                right: 15),
+                                                            child: Container(
+                                                              height: 0.5,
+                                                              color: Color(
+                                                                  0xff3f617d),
                                                             ),
-                                                            SizedBox(width: 5),
-                                                            //  '‣ Sector',
-                                                            Text(
-                                                                'Employee Name',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle)
-                                                          ],
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets
-                                                              .only(
-                                                              left: 15),
-                                                          child: Text(
-                                                              leaveData
-                                                                  .sEmpName,
-                                                              //item['dExpDate'] ??'',
-                                                              style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
-                                                        ),
-                                                        SizedBox(height: 5),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              height: 10.0,
-                                                              width: 10.0,
-                                                              decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                // Change this to your preferred color
-                                                                borderRadius: BorderRadius
-                                                                    .circular(
-                                                                    5.0),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 5),
-                                                            Text('Bill Date',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle)
-                                                          ],
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets
-                                                              .only(left: 15),
-                                                          child: Text(leaveData
-                                                              .dExpDate,
-                                                              // item['dEntryAt'] ?? '',
-                                                              style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
-                                                        ),
-                                                        SizedBox(height: 5),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              height: 10.0,
-                                                              width: 10.0,
-                                                              decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                // Change this to your preferred color
-                                                                borderRadius: BorderRadius
-                                                                    .circular(
-                                                                    5.0),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 5),
-                                                            Text('Enter At',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle)
-                                                          ],
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets
-                                                              .only(
-                                                              left: 15),
-                                                          child: Text(
-                                                              leaveData
-                                                                  .dEntryAt,
-                                                              // item['sExpDetails'] ?? '',
-                                                              style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        // cross Check
-                                                        GestureDetector(
-                                                          onTap: () {
-                                                            print(
-                                                                '-----Press------');
-                                                            // DuplicatExpensEntry
-                                                            var sTranCode = leaveData
-                                                                .sTranCode;
-                                                            print(
-                                                                '---TRANCODE---$sTranCode');
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (
-                                                                      context) =>
-                                                                      DuplicatExpensEntry(sTranCode)),
-                                                            );
-                                                          },
-
-                                                          child: Row(
-                                                            children: [
-                                                              // Container with black background
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment
+                                                                .start,
+                                                            children: <Widget>[
                                                               Container(
-                                                                width: 10,
-                                                                height: 10,
+                                                                height: 10.0,
+                                                                width: 10.0,
                                                                 decoration: BoxDecoration(
                                                                   color: Colors
                                                                       .black,
+                                                                  // Change this to your preferred color
                                                                   borderRadius: BorderRadius
                                                                       .circular(
-                                                                      5),
+                                                                      5.0),
                                                                 ),
                                                               ),
-                                                              // Spacer between container and column
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              // Column with two text widgets
-                                                              Expanded(
-                                                                child: Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment
-                                                                      .start,
-                                                                  children: [
-                                                                    Text(
-                                                                        'Cross Check',
-                                                                        // First text widget
-                                                                        style: AppTextStyle
-                                                                            .font12OpenSansRegularBlackTextStyle),
-                                                                    Text(
-                                                                      leaveData
-                                                                          .sDuplicate,
-                                                                      // Second text widget
-                                                                      style: TextStyle(
-                                                                          color: textColor,
-                                                                          fontSize: 12,
-                                                                          fontWeight: FontWeight
-                                                                              .normal
-                                                                      ),
-                                                                      // style: AppTextStyle.font12OpenSansRegularBlackTextStyle)
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Align(
-                                                                alignment: Alignment
-                                                                    .centerRight,
-                                                                child: Icon(
-                                                                  Icons
-                                                                      .arrow_forward_ios,
-                                                                  size: 16,
-                                                                  color: duplicate ==
-                                                                      "Cross Check"
-                                                                      ? Colors
-                                                                      .red
-                                                                      : duplicate ==
-                                                                      "Single"
-                                                                      ? Colors
-                                                                      .green
-                                                                      : Colors
-                                                                      .grey, // Default to grey if no match
-                                                                ),
-                                                              ),
+                                                              SizedBox(width: 5),
+                                                              //  '‣ Sector',
+                                                              Text('Employee Name',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle)
                                                             ],
                                                           ),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        //
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.start,
-                                                          children: <Widget>[
-                                                            Container(
-                                                              height: 10.0,
-                                                              width: 10.0,
-                                                              decoration: BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                // Change this to your preferred color
-                                                                borderRadius: BorderRadius
-                                                                    .circular(
-                                                                    5.0),
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 5),
-                                                            Text(
-                                                                'Expense Details',
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .only(
+                                                                left: 15),
+                                                            child: Text(
+                                                                leaveData
+                                                                    .sEmpName,
+                                                                //item['dExpDate'] ??'',
                                                                 style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle)
-                                                          ],
-                                                        ),
-                                                        Padding(
-                                                          padding: EdgeInsets
-                                                              .only(
-                                                              left: 15),
-                                                          child: Text(
-                                                              leaveData
-                                                                  .sExpDetails,
-                                                              // item['sExpDetails'] ?? '',
-                                                              style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        // bottom
-                                                        Container(
-                                                          height: 1,
-                                                          width: MediaQuery
-                                                              .of(context)
-                                                              .size
-                                                              .width - 40,
-                                                          color: Colors.grey,
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        Padding(
-                                                          padding: const EdgeInsets
-                                                              .only(left: 5),
-                                                          child: Row(
+                                                                    .font12OpenSansRegularBlack45TextStyle),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Row(
                                                             mainAxisAlignment: MainAxisAlignment
                                                                 .start,
-                                                            children: [
-                                                              Icon(Icons
-                                                                  .speaker_notes,
-                                                                  size: 20,
-                                                                  color: Colors
-                                                                      .black),
-                                                              SizedBox(
-                                                                  width: 10),
-                                                              Text('Status',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle),
-                                                              SizedBox(
-                                                                  width: 5),
-                                                              const Text(
-                                                                ':',
-                                                                style: TextStyle(
-                                                                  color: Color(
-                                                                      0xFF0098a6),
-                                                                  fontSize: 14,
-                                                                  fontWeight: FontWeight
-                                                                      .normal,
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                  width: 5),
-                                                              Expanded(
-                                                                child: Text(
-                                                                  leaveData
-                                                                      .sStatus,
-                                                                  // item['sStatusName'] ?? '',
-                                                                  style: AppTextStyle
-                                                                      .font12OpenSansRegularBlackTextStyle,
-                                                                  maxLines: 2,
-                                                                  // Allows up to 2 lines for the text
-                                                                  overflow: TextOverflow
-                                                                      .ellipsis, // Adds an ellipsis if the text overflows
-                                                                ),
-                                                              ),
-                                                              // Spacer(),
+                                                            children: <Widget>[
                                                               Container(
-                                                                height: 30,
-                                                                padding:
-                                                                EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal: 16.0),
+                                                                height: 10.0,
+                                                                width: 10.0,
                                                                 decoration: BoxDecoration(
-                                                                  color: Color(
-                                                                      0xFF0098a6),
+                                                                  color: Colors
+                                                                      .black,
+                                                                  // Change this to your preferred color
                                                                   borderRadius: BorderRadius
                                                                       .circular(
-                                                                      15),
-                                                                ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    '₹ ${leaveData
-                                                                        .fAmount}',
-                                                                    // item['fAmount'] ?? '',
-                                                                    style: TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontSize: 14.0,
-                                                                    ),
-                                                                    maxLines: 1,
-                                                                    // Allows up to 2 lines for the text
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis,
-                                                                  ),
+                                                                      5.0),
                                                                 ),
                                                               ),
+                                                              SizedBox(width: 5),
+                                                              Text('Bill Date',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle)
                                                             ],
                                                           ),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        Padding(
-                                                          padding: const EdgeInsets
-                                                              .only(bottom: 10),
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                            // Space between the two columns
-                                                            children: [
-                                                              // First Column
-                                                              Expanded(
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                                  children: [
-                                                                    Container(
-                                                                      height: 40,
-                                                                      decoration: BoxDecoration(
-                                                                        color: Color(
-                                                                            0xFF0098a6),
-                                                                        // Change this to your preferred color
-                                                                        borderRadius:
-                                                                        BorderRadius
-                                                                            .circular(
-                                                                            10),
-                                                                      ),
-                                                                      child: GestureDetector(
-                                                                        onTap: (){
-                                                                          print('-----832---View Image---');
-                                                                          List<String> images = [
-                                                                            leaveData.sExpBillPhoto,
-                                                                            leaveData.sExpBillPhoto2,
-                                                                            leaveData.sExpBillPhoto3,
-                                                                            leaveData.sExpBillPhoto4,
-                                                                          ].where((image) => image != null && image.isNotEmpty).toList(); // Filter out null/empty images
-
-                                                                          var dExpDate = leaveData.dExpDate;
-                                                                          var billDate = 'Bill Date : $dExpDate';
-                                                                          openFullScreenDialog(context, images, billDate);
-                                                                        },
-                                                                        child: Row(
-                                                                          mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                          children: [
-                                                                            Text(
-                                                                                'View Image',
-                                                                                style: AppTextStyle
-                                                                                    .font14OpenSansRegularWhiteTextStyle),
-                                                                            Icon(
-                                                                              Icons
-                                                                                  .arrow_forward_ios,
-                                                                              color: Colors
-                                                                                  .white,
-                                                                              size: 16,
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .only(left: 15),
+                                                            child: Text(leaveData
+                                                                .dExpDate,
+                                                                // item['dEntryAt'] ?? '',
+                                                                style: AppTextStyle
+                                                                    .font12OpenSansRegularBlack45TextStyle),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment
+                                                                .start,
+                                                            children: <Widget>[
+                                                              Container(
+                                                                height: 10.0,
+                                                                width: 10.0,
+                                                                decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  // Change this to your preferred color
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(
+                                                                      5.0),
                                                                 ),
                                                               ),
-                                                              SizedBox(width: 2),
-                                                              // if(leaveData.iStatus=="0")
-                                                              // remove
-                                                              Expanded(
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment.center,
-                                                                  children: [
-                                                                    Container(
-                                                                      height: 40,
-                                                                      decoration: BoxDecoration(
-                                                                        color: Color(0xFFE4B9AB),
-                                                                        // Change this to your preferred color
-                                                                        borderRadius: BorderRadius.circular(10),
-                                                                      ),
-                                                                      child: GestureDetector(
-                                                                        onTap: () {
-                                                                          print("----Action Dialog---");
-                                                                          /// todo here open dialog
-                                                                          var sTranCode =  '${leaveData.sTranCode}';
-                                                                          var isActionBT =
-                                                                          print('-----1310---$sTranCode');
-                                                                          // Open Dialog
-                                                                          showDialog(
-                                                                            context: context,
-                                                                           // builder: (context) => showTakeActionDialog(context,sTranCode),
-                                                                            builder: (context) =>Dialog(
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(20),
-                                                                              ),
-                                                                              elevation: 0,
-                                                                              backgroundColor: Colors.transparent,
-                                                                              child: StatefulBuilder(
-                                                                                builder: (BuildContext context, StateSetter setState) {
-                                                                                  return Stack(
-                                                                                    clipBehavior: Clip.none,
-                                                                                    alignment: Alignment.center,
-                                                                                    children: [
-                                                                                      Container(
-                                                                                        padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.white,
-                                                                                          borderRadius: BorderRadius.circular(20),
-                                                                                        ),
-                                                                                        child: Column(
-                                                                                          mainAxisSize: MainAxisSize.min,
-                                                                                          children: [
-                                                                                            Text(
-                                                                                              'Update Status',
-                                                                                              style: AppTextStyle.font16OpenSansRegularRedTextStyle,
-                                                                                            ),
-                                                                                            SizedBox(height: 10),
-                                                                                            // Radio buttons for the decision options
-                                                                                            RadioListTile<String>(
-                                                                                              title: Text('Approved'),
-                                                                                              value: 'Approved',
-                                                                                              groupValue: _selectedDecision,
-                                                                                              onChanged: (String? value) {
-                                                                                                setState(() {
-                                                                                                  _selectedDecision = value;
-                                                                                                });
-                                                                                              },
-                                                                                            ),
-                                                                                            RadioListTile<String>(
-                                                                                              title: Text('Rejected'),
-                                                                                              value: 'Rejected',
-                                                                                              groupValue: _selectedDecision,
-                                                                                              onChanged: (String? value) {
-                                                                                                setState(() {
-                                                                                                  _selectedDecision = value;
-                                                                                                });
-                                                                                              },
-                                                                                            ),
-                                                                                            RadioListTile<String>(
-                                                                                              title: Text('Clarification Required'),
-                                                                                              value: 'Clarification Required',
-                                                                                              groupValue: _selectedDecision,
-                                                                                              onChanged: (String? value) {
-                                                                                                setState(() {
-                                                                                                  _selectedDecision = value;
-                                                                                                });
-                                                                                              },
-                                                                                            ),
-                                                                                            // TextField
+                                                              SizedBox(width: 5),
+                                                              Text('Enter At',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle)
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .only(
+                                                                left: 15),
+                                                            child: Text(
+                                                                leaveData
+                                                                    .dEntryAt,
+                                                                // item['sExpDetails'] ?? '',
+                                                                style: AppTextStyle
+                                                                    .font12OpenSansRegularBlack45TextStyle),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          // cross Check
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              print(
+                                                                  '-----Press------');
+                                                              // DuplicatExpensEntry
+                                                              var sTranCode = leaveData
+                                                                  .sTranCode;
+                                                              print(
+                                                                  '---TRANCODE---$sTranCode');
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (
+                                                                        context) =>
+                                                                        DuplicatExpensEntry(sTranCode)),
+                                                              );
+                                                            },
 
-                                                                                            Padding(
-                                                                                              padding: const EdgeInsets.only(left: 0),
-                                                                                              child: TextFormField(
-                                                                                                controller: _takeAction,
-                                                                                                textInputAction: TextInputAction.next,
-                                                                                                onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                                                                                decoration: const InputDecoration(
-                                                                                                  border: OutlineInputBorder(),
-                                                                                                  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                                                                                                  filled: true,
-                                                                                                  fillColor: Color(0xFFf2f3f5),
-                                                                                                ),
-                                                                                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                                              ),
-                                                                                            ),
-                                                                                            SizedBox(height: 15),
-                                                                                            // Submit button
-                                                                                            InkWell(
-                                                                                              onTap: () async {
-                                                                                                var iStatus;
-                                                                                                var sRemarks = _takeAction.text.trim();
-                                                                                                print('-----155--$sRemarks');
-                                                                                                print('-----158--$sTranCode');
-                                                                                                print('-----158----$_selectedDecision');
-                                                                                                // Set iStatus based on selected decision
-                                                                                                if (_selectedDecision == "Approved") {
-                                                                                                  iStatus = "8"; // Approved
-                                                                                                } else if (_selectedDecision == "Rejected") {
-                                                                                                  iStatus = "9"; // Rejected
-                                                                                                } else {
-                                                                                                  iStatus = "5"; // Clarification Required
-                                                                                                }
-                                                                                                print('-----167-----$iStatus');
-
-                                                                                                // Validate iStatus and remarks before API call
-                                                                                                if (iStatus == null || iStatus == '') {
-                                                                                                  displayToast('Select a value');
-                                                                                                  return;
-                                                                                                }
-
-                                                                                                if (iStatus == "8") {
-                                                                                                  // If Approved, proceed directly to API call
-                                                                                                  print('------170----Call API for Approved-----');
-                                                                                                  await _callApi(sTranCode, iStatus, sRemarks, context);
-                                                                                                } else {
-                                                                                                  // If not Approved, check if remarks are entered
-                                                                                                  if (sRemarks.isEmpty) {
-                                                                                                    displayToast('Remarks are required');
-                                                                                                    return;
-                                                                                                  }
-                                                                                                  // Call the API for Rejected or Clarification
-                                                                                                  print('------170----Call API for Rejected or Clarification-----');
-                                                                                                  await _callApi(sTranCode, iStatus, sRemarks, context);
-                                                                                                }
-                                                                                              },
-                                                                                              child: Container(
-                                                                                                height: AppSize.s45,
-                                                                                                padding: EdgeInsets.all(AppPadding.p5),
-                                                                                                decoration: BoxDecoration(
-                                                                                                  color: AppColors.loginbutton,
-                                                                                                  borderRadius: BorderRadius.circular(AppMargin.m10),
-                                                                                                ),
-                                                                                                child: Center(
-                                                                                                  child: Text(
-                                                                                                    "Submit",
-                                                                                                    style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
-                                                                                      Positioned(
-                                                                                        top: -30,
-                                                                                        child: CircleAvatar(
-                                                                                          radius: 30,
-                                                                                          backgroundColor: Colors.blueAccent,
-                                                                                          child: ClipOval(
-                                                                                            child: Image.asset(
-                                                                                              'assets/images/addreimbursement.jpeg',
-                                                                                              fit: BoxFit.cover,
-                                                                                              width: 60,
-                                                                                              height: 60,
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  );
-                                                                                },
-                                                                              ),
-                                                                            )
-
-                                                                          );
-                                                                          },
-                                                                        child: Row(
-                                                                          mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                          children: [
-                                                                            Text('Action',
-                                                                                style: AppTextStyle
-                                                                                    .font14OpenSansRegularWhiteTextStyle),
-                                                                            Icon(
-                                                                                Icons
-                                                                                    .arrow_forward_ios,
-                                                                                color: Colors
-                                                                                    .white,
-                                                                                size: 16),
-                                                                          ],
+                                                            child: Row(
+                                                              children: [
+                                                                // Container with black background
+                                                                Container(
+                                                                  width: 10,
+                                                                  height: 10,
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    borderRadius: BorderRadius
+                                                                        .circular(
+                                                                        5),
+                                                                  ),
+                                                                ),
+                                                                // Spacer between container and column
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                // Column with two text widgets
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment: CrossAxisAlignment
+                                                                        .start,
+                                                                    children: [
+                                                                      Text(
+                                                                          'Cross Check',
+                                                                          // First text widget
+                                                                          style: AppTextStyle
+                                                                              .font12OpenSansRegularBlackTextStyle),
+                                                                      Text(
+                                                                        leaveData
+                                                                            .sDuplicate,
+                                                                        // Second text widget
+                                                                        style: TextStyle(
+                                                                            color: textColor,
+                                                                            fontSize: 12,
+                                                                            fontWeight: FontWeight
+                                                                                .normal
                                                                         ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                        // style: AppTextStyle.font12OpenSansRegularBlackTextStyle)
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Align(
+                                                                  alignment: Alignment
+                                                                      .centerRight,
+                                                                  child: Icon(
+                                                                    Icons
+                                                                        .arrow_forward_ios,
+                                                                    size: 16,
+                                                                    color: duplicate ==
+                                                                        "Cross Check"
+                                                                        ? Colors
+                                                                        .red
+                                                                        : duplicate ==
+                                                                        "Single"
+                                                                        ? Colors
+                                                                        .green
+                                                                        : Colors
+                                                                        .grey, // Default to grey if no match
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          //
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: <Widget>[
+                                                              Container(
+                                                                height: 10.0,
+                                                                width: 10.0,
+                                                                decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  // Change this to your preferred color
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(
+                                                                      5.0),
                                                                 ),
                                                               ),
-                                                              SizedBox(
-                                                                  width: 2),
-                                                              // if 1 to 11 then show log
-                                                              // if(leaveData.iStatus=="1"
-                                                              //     || leaveData.iStatus=="2"
-                                                              //     || leaveData.iStatus=="3"
-                                                              //     || leaveData.iStatus=="4"
-                                                              //     || leaveData.iStatus=="5"
-                                                              //     || leaveData.iStatus=="6"
-                                                              //     || leaveData.iStatus=="7"
-                                                              //     || leaveData.iStatus=="8"
-                                                              //     || leaveData.iStatus=="9"
-                                                              //     || leaveData.iStatus=="10"
-                                                              //     || leaveData.iStatus=="11")
-                                                              Expanded(
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                                  children: [
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        var project = leaveData.sProjectName;
-                                                                        var sTranCode = leaveData.sTranCode;
-                                                                        print("----1236----$sTranCode");
-                                                                        // Navigator.push(
-                                                                        Navigator.push(
-                                                                          context,
-                                                                          MaterialPageRoute(builder: (context) => ReimbursementLogPage(project,sTranCode)),
-                                                                        );
-                                                                      },
-                                                                      child: Container(
+                                                              SizedBox(width: 5),
+                                                              Text(
+                                                                  'Expense Details',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle)
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .only(
+                                                                left: 15),
+                                                            child: Text(
+                                                                leaveData
+                                                                    .sExpDetails,
+                                                                // item['sExpDetails'] ?? '',
+                                                                style: AppTextStyle
+                                                                    .font12OpenSansRegularBlack45TextStyle),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          // bottom
+                                                          Container(
+                                                            height: 1,
+                                                            width: MediaQuery
+                                                                .of(context)
+                                                                .size
+                                                                .width - 40,
+                                                            color: Colors.grey,
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Padding(
+                                                            padding: const EdgeInsets
+                                                                .only(left: 5),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment
+                                                                  .start,
+                                                              children: [
+                                                                Icon(Icons
+                                                                    .speaker_notes,
+                                                                    size: 20,
+                                                                    color: Colors
+                                                                        .black),
+                                                                SizedBox(
+                                                                    width: 10),
+                                                                Text('Status',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                const Text(
+                                                                  ':',
+                                                                  style: TextStyle(
+                                                                    color: Color(
+                                                                        0xFF0098a6),
+                                                                    fontSize: 14,
+                                                                    fontWeight: FontWeight
+                                                                        .normal,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 5),
+                                                                Expanded(
+                                                                  child: Text(
+                                                                    leaveData
+                                                                        .sStatus,
+                                                                    // item['sStatusName'] ?? '',
+                                                                    style: AppTextStyle
+                                                                        .font12OpenSansRegularBlackTextStyle,
+                                                                    maxLines: 2,
+                                                                    // Allows up to 2 lines for the text
+                                                                    overflow: TextOverflow
+                                                                        .ellipsis, // Adds an ellipsis if the text overflows
+                                                                  ),
+                                                                ),
+                                                                // Spacer(),
+                                                                Container(
+                                                                  height: 30,
+                                                                  padding:
+                                                                  EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal: 16.0),
+                                                                  decoration: BoxDecoration(
+                                                                    color: Color(
+                                                                        0xFF0098a6),
+                                                                    borderRadius: BorderRadius
+                                                                        .circular(
+                                                                        15),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      '₹ ${leaveData
+                                                                          .fAmount}',
+                                                                      // item['fAmount'] ?? '',
+                                                                      style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize: 14.0,
+                                                                      ),
+                                                                      maxLines: 1,
+                                                                      // Allows up to 2 lines for the text
+                                                                      overflow: TextOverflow
+                                                                          .ellipsis,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Padding(
+                                                            padding: const EdgeInsets
+                                                                .only(bottom: 10),
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              // Space between the two columns
+                                                              children: [
+                                                                // First Column
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    children: [
+                                                                      Container(
                                                                         height: 40,
                                                                         decoration: BoxDecoration(
                                                                           color: Color(
-                                                                              0xFF6a94e3),
+                                                                              0xFF0098a6),
                                                                           // Change this to your preferred color
                                                                           borderRadius:
                                                                           BorderRadius
@@ -1632,16 +1350,18 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                               10),
                                                                         ),
                                                                         child: GestureDetector(
-                                                                          onTap: () {
-                                                                            // var projact =  item['sProjectName'] ??'';
-                                                                            var sTranCode = leaveData.sTranCode;
-                                                                            var project = leaveData.sProjectName;
-                                                                            print("----1257----$sTranCode");
-                                                                            Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(builder: (context) => ReimbursementLogPage(project,sTranCode)),
-                                                                            );
+                                                                          onTap: (){
+                                                                            print('-----832---View Image---');
+                                                                            List<String> images = [
+                                                                              leaveData.sExpBillPhoto,
+                                                                              leaveData.sExpBillPhoto2,
+                                                                              leaveData.sExpBillPhoto3,
+                                                                              leaveData.sExpBillPhoto4,
+                                                                            ].where((image) => image != null && image.isNotEmpty).toList(); // Filter out null/empty images
 
+                                                                            var dExpDate = leaveData.dExpDate;
+                                                                            var billDate = 'Bill Date : $dExpDate';
+                                                                            openFullScreenDialog(context, images, billDate);
                                                                           },
                                                                           child: Row(
                                                                             mainAxisAlignment:
@@ -1649,44 +1369,323 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                                 .center,
                                                                             children: [
                                                                               Text(
-                                                                                  'Log', style: AppTextStyle
+                                                                                  'View Image',
+                                                                                  style: AppTextStyle
                                                                                       .font14OpenSansRegularWhiteTextStyle),
-                                                                              SizedBox(
-                                                                                  width: 10),
                                                                               Icon(
                                                                                 Icons
                                                                                     .arrow_forward_ios,
                                                                                 color: Colors
                                                                                     .white,
-                                                                                size: 18,
+                                                                                size: 16,
                                                                               ),
                                                                             ],
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  ],
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                                SizedBox(width: 2),
+                                                                // if(leaveData.iStatus=="0")
+                                                                // remove
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment.center,
+                                                                    children: [
+                                                                      Container(
+                                                                        height: 40,
+                                                                        decoration: BoxDecoration(
+                                                                          color: Color(0xFFE4B9AB),
+                                                                          // Change this to your preferred color
+                                                                          borderRadius: BorderRadius.circular(10),
+                                                                        ),
+                                                                        child: GestureDetector(
+                                                                          onTap: () {
+                                                                            print("----Action Dialog---");
+                                                                            /// todo here open dialog
+                                                                            var sTranCode =  '${leaveData.sTranCode}';
+                                                                            var isActionBT =
+                                                                            print('-----1310---$sTranCode');
+                                                                            // Open Dialog
+                                                                            showDialog(
+                                                                              context: context,
+                                                                             // builder: (context) => showTakeActionDialog(context,sTranCode),
+                                                                              builder: (context) =>Dialog(
+                                                                                shape: RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(20),
+                                                                                ),
+                                                                                elevation: 0,
+                                                                                backgroundColor: Colors.transparent,
+                                                                                child: StatefulBuilder(
+                                                                                  builder: (BuildContext context, StateSetter setState) {
+                                                                                    return Stack(
+                                                                                      clipBehavior: Clip.none,
+                                                                                      alignment: Alignment.center,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
+                                                                                          decoration: BoxDecoration(
+                                                                                            color: Colors.white,
+                                                                                            borderRadius: BorderRadius.circular(20),
+                                                                                          ),
+                                                                                          child: Column(
+                                                                                            mainAxisSize: MainAxisSize.min,
+                                                                                            children: [
+                                                                                              Text(
+                                                                                                'Update Status',
+                                                                                                style: AppTextStyle.font16OpenSansRegularRedTextStyle,
+                                                                                              ),
+                                                                                              SizedBox(height: 10),
+                                                                                              // Radio buttons for the decision options
+                                                                                              RadioListTile<String>(
+                                                                                                title: Text('Approved'),
+                                                                                                value: 'Approved',
+                                                                                                groupValue: _selectedDecision,
+                                                                                                onChanged: (String? value) {
+                                                                                                  setState(() {
+                                                                                                    _selectedDecision = value;
+                                                                                                  });
+                                                                                                },
+                                                                                              ),
+                                                                                              RadioListTile<String>(
+                                                                                                title: Text('Rejected'),
+                                                                                                value: 'Rejected',
+                                                                                                groupValue: _selectedDecision,
+                                                                                                onChanged: (String? value) {
+                                                                                                  setState(() {
+                                                                                                    _selectedDecision = value;
+                                                                                                  });
+                                                                                                },
+
+                                                                                              ),
+                                                                                              RadioListTile<String>(
+                                                                                                title: Text('Clarification Required'),
+                                                                                                value: 'Clarification Required',
+                                                                                                groupValue: _selectedDecision,
+                                                                                                onChanged: (String? value) {
+                                                                                                  setState(() {
+                                                                                                    _selectedDecision = value;
+                                                                                                  });
+                                                                                                },
+                                                                                              ),
+                                                                                              // TextField
+
+                                                                                              Padding(
+                                                                                                padding: const EdgeInsets.only(left: 0),
+                                                                                                child: TextFormField(
+                                                                                                  controller: _takeAction,
+                                                                                                  textInputAction: TextInputAction.next,
+                                                                                                  onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                                                                                  decoration: const InputDecoration(
+                                                                                                    border: OutlineInputBorder(),
+                                                                                                    contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                                                                                                    filled: true,
+                                                                                                    fillColor: Color(0xFFf2f3f5),
+                                                                                                  ),
+                                                                                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                                                ),
+                                                                                              ),
+                                                                                              SizedBox(height: 15),
+                                                                                              // Submit button
+                                                                                              InkWell(
+                                                                                                onTap: () async {
+                                                                                                  var iStatus;
+                                                                                                  var sRemarks = _takeAction.text.trim();
+                                                                                                  print('-----155--$sRemarks');
+                                                                                                  print('-----158--$sTranCode');
+                                                                                                  print('-----158----$_selectedDecision');
+                                                                                                  // Set iStatus based on selected decision
+                                                                                                  if (_selectedDecision == "Approved") {
+                                                                                                    iStatus = "8"; // Approved
+                                                                                                  } else if (_selectedDecision == "Rejected") {
+                                                                                                    iStatus = "9"; // Rejected
+                                                                                                  } else {
+                                                                                                    iStatus = "5"; // Clarification Required
+                                                                                                  }
+                                                                                                  print('-----167-----$iStatus');
+
+                                                                                                  // Validate iStatus and remarks before API call
+                                                                                                  if (iStatus == null || iStatus == '') {
+                                                                                                    displayToast('Select a value');
+                                                                                                    return;
+                                                                                                  }
+
+                                                                                                  if (iStatus == "8") {
+                                                                                                    // If Approved, proceed directly to API call
+                                                                                                    print('------170----Call API for Approved-----');
+                                                                                                    await _callApi(sTranCode, iStatus, sRemarks, context);
+                                                                                                  } else {
+                                                                                                    // If not Approved, check if remarks are entered
+                                                                                                    if (sRemarks.isEmpty) {
+                                                                                                      displayToast('Remarks are required');
+                                                                                                      return;
+                                                                                                    }
+                                                                                                    // Call the API for Rejected or Clarification
+                                                                                                    print('------170----Call API for Rejected or Clarification-----');
+                                                                                                    await _callApi(sTranCode, iStatus, sRemarks, context);
+                                                                                                  }
+                                                                                                },
+                                                                                                child: Container(
+                                                                                                  height: AppSize.s45,
+                                                                                                  padding: EdgeInsets.all(AppPadding.p5),
+                                                                                                  decoration: BoxDecoration(
+                                                                                                    color: AppColors.loginbutton,
+                                                                                                    borderRadius: BorderRadius.circular(AppMargin.m10),
+                                                                                                  ),
+                                                                                                  child: Center(
+                                                                                                    child: Text(
+                                                                                                      "Submit",
+                                                                                                      style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                        Positioned(
+                                                                                          top: -30,
+                                                                                          child: CircleAvatar(
+                                                                                            radius: 30,
+                                                                                            backgroundColor: Colors.blueAccent,
+                                                                                            child: ClipOval(
+                                                                                              child: Image.asset(
+                                                                                                'assets/images/addreimbursement.jpeg',
+                                                                                                fit: BoxFit.cover,
+                                                                                                width: 60,
+                                                                                                height: 60,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    );
+                                                                                  },
+                                                                                ),
+                                                                              )
+
+                                                                            );
+                                                                            },
+                                                                          child: Row(
+                                                                            mainAxisAlignment:
+                                                                            MainAxisAlignment
+                                                                                .center,
+                                                                            children: [
+                                                                              Text('Action',
+                                                                                  style: AppTextStyle
+                                                                                      .font14OpenSansRegularWhiteTextStyle),
+                                                                              Icon(
+                                                                                  Icons.arrow_forward_ios,
+                                                                                  color: Colors.white,
+                                                                                  size: 16),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 2),
+                                                                // if 1 to 11 then show log
+                                                                // if(leaveData.iStatus=="1"
+                                                                //     || leaveData.iStatus=="2"
+                                                                //     || leaveData.iStatus=="3"
+                                                                //     || leaveData.iStatus=="4"
+                                                                //     || leaveData.iStatus=="5"
+                                                                //     || leaveData.iStatus=="6"
+                                                                //     || leaveData.iStatus=="7"
+                                                                //     || leaveData.iStatus=="8"
+                                                                //     || leaveData.iStatus=="9"
+                                                                //     || leaveData.iStatus=="10"
+                                                                //     || leaveData.iStatus=="11")
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                    children: [
+                                                                      GestureDetector(
+                                                                        onTap: () {
+                                                                          var project = leaveData.sProjectName;
+                                                                          var sTranCode = leaveData.sTranCode;
+                                                                          print("----1236----$sTranCode");
+                                                                          // Navigator.push(
+                                                                          Navigator.push(
+                                                                            context,
+                                                                            MaterialPageRoute(builder: (context) => ReimbursementLogPage(project,sTranCode)),
+                                                                          );
+                                                                        },
+                                                                        child: Container(
+                                                                          height: 40,
+                                                                          decoration: BoxDecoration(
+                                                                            color: Color(
+                                                                                0xFF6a94e3),
+                                                                            // Change this to your preferred color
+                                                                            borderRadius:
+                                                                            BorderRadius
+                                                                                .circular(
+                                                                                10),
+                                                                          ),
+                                                                          child: GestureDetector(
+                                                                            onTap: () {
+                                                                              // var projact =  item['sProjectName'] ??'';
+                                                                              var sTranCode = leaveData.sTranCode;
+                                                                              var project = leaveData.sProjectName;
+                                                                              print("----1257----$sTranCode");
+                                                                              Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(builder: (context) => ReimbursementLogPage(project,sTranCode)),
+                                                                              );
+
+                                                                            },
+                                                                            child: Row(
+                                                                              mainAxisAlignment:
+                                                                              MainAxisAlignment
+                                                                                  .center,
+                                                                              children: [
+                                                                                Text(
+                                                                                    'Log', style: AppTextStyle
+                                                                                        .font14OpenSansRegularWhiteTextStyle),
+                                                                                SizedBox(
+                                                                                    width: 10),
+                                                                                Icon(
+                                                                                  Icons
+                                                                                      .arrow_forward_ios,
+                                                                                  color: Colors
+                                                                                      .white,
+                                                                                  size: 18,
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          );
+                                            );
+                                          }
                                         }
-                                      }
-                                  );
-                                }
-                              }))
+                                    );
+                                  }
+                                }))
 
-              )
-            ]
-              ));
+                )
+              ]
+                )),
+    );
   }
 }
 

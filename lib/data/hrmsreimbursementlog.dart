@@ -5,11 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import '../app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
 class HrmsreimbursementLogRepo {
   List<dynamic>  hrmsleavebalacev2List = [];
+  GeneralFunction generalFunction = GeneralFunction();
   Future<List> hrmsReimbursementLog(BuildContext context, String sTranCode) async
   {
 
@@ -18,8 +20,6 @@ class HrmsreimbursementLogRepo {
     int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-
-
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsReimbursementLog/hrmsReimbursementLog";
@@ -40,6 +40,10 @@ class HrmsreimbursementLogRepo {
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+      if(response.statusCode==401){
+        // todo apply logout code
+        generalFunction.logout(context);
+      }
       if (response.statusCode == 200)
       {
         hideLoader();

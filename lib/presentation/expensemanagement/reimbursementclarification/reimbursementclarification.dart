@@ -85,6 +85,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
+
   late Future<List<HrmsReimbursementClarificationModel>> reimbursementStatusV3;
   List<HrmsReimbursementClarificationModel> _allData = [];  // Holds original data
   List<HrmsReimbursementClarificationModel> _filteredData = [];  // Holds filtered data
@@ -123,7 +124,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
   String? _chosenValue;
 
   var msg;
@@ -159,14 +159,14 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   var fromPicker;
   var toPicker;
   // Uplode Id Proof with gallary
+
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
 
     try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
         image = File(pickFileid.path);
         setState(() {});
@@ -190,24 +190,21 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-
   // image code
+
   Future<void> uploadImage(String token, File imageFile) async {
     try {
       showLoader();
       // Create a multipart request
       var request = http.MultipartRequest('POST',
           Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'file',
         imageFile.path,
       ));
-
       // Send the request
       var streamedResponse = await request.send();
 
@@ -216,7 +213,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
 
       // Parse the response JSON
       var responseData = json.decode(response.body);
-
       // Print the response data
       print(responseData);
       hideLoader();
@@ -246,7 +242,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     final responseData = json.decode(responsed.body);
     print('---155----$responseData');
   }
-  getCurrentdate() async{
+  getCurrentdate() async {
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
@@ -401,7 +397,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                           fontWeight: FontWeight.normal
                       ),),
                       SizedBox(width: 4),
-
                       GestureDetector(
                         onTap: () async {
                           /// TODO Open Date picke and get a date
@@ -454,7 +449,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                           ),
                         ),
                       ),
-
                       SizedBox(width: 6),
                       Container(
                         height: 32,
@@ -475,7 +469,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                       ),),
                       SizedBox(width: 5),
                       GestureDetector(
-                        onTap: ()async{
+                        onTap:()async {
                           DateTime? pickedDate = await showDatePicker(
                             context: context,
                             initialDate: DateTime.now(),
@@ -494,9 +488,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                             hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                             //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
                             print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-
                           } else {
-
                           }
                         },
                         child: Container(
@@ -591,7 +583,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       softWrap: true,
                                                     ),
                                                     SizedBox(height: 2),
-
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -613,7 +604,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                           ),
                                                       ],
                                                     )
-
                                                   ],
                                                 )
                                               ],
@@ -658,8 +648,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                             Padding(
                                               padding: const EdgeInsets.only(top: 5),
                                               child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.start,
                                                 children: <Widget>[
                                                   Container(
                                                       width: 20.0,
@@ -692,9 +681,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                         overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
                                                         softWrap: true,
                                                       ),
-
-
-
                                                     ],
                                                   ),
                                                   Spacer(),
@@ -739,13 +725,10 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                       )),
                                                   SizedBox(width: 10),
                                                   Column(
-                                                    mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: <Widget>[
-                                                      Text(
-                                                        'Remark',
+                                                      Text('Remark',
                                                         // item['sExpHeadName'] ?? '',
                                                         style: AppTextStyle
                                                             .font12OpenSansRegularBlackTextStyle,

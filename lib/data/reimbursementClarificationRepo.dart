@@ -26,7 +26,6 @@ class HrmsreimbursementClarificationRepo {
     print('--17 --contactNo--$contactNo');
 
     showLoader();
-
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsreimbursementstatusV3/hrmsreimbursementstatusV3";
     var hrmsreimbursementClarification = "$baseURL$endPoint";
@@ -46,7 +45,6 @@ class HrmsreimbursementClarificationRepo {
         "dToDate": lastDayOfCurrentMonth,
       });
       request.headers.addAll(headers);
-
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {

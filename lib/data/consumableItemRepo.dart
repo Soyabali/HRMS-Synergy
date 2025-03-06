@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:untitled/data/loader_helper.dart';
+import '../app/generalFunction.dart';
 import '../domain/GetConsumablesReimbItem_Model.dart';
 import '../domain/hrmsreimbursementstatusV3Model.dart';
 import 'baseurl.dart';
@@ -11,13 +12,13 @@ import 'baseurl.dart';
 class ConsumableItemRepo {
 
   var consumableItemList = [];
+  GeneralFunction generalFunction = GeneralFunction();
 
   Future<List<GetConsumableSreimbitemModel>>  consumableList(BuildContext context, String stranCode) async{
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? contactNo = prefs.getString('sContactNo');
-
     print('--17 --contactNo--$contactNo');
     print('------22----StranCode-----$stranCode');
     showLoader();
@@ -41,9 +42,14 @@ class ConsumableItemRepo {
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
+      if(response.statusCode==401){
+        // logout
+        hideLoader();
+        generalFunction.logout(context);
+        throw Exception('Unauthorized access');
+      }
       if (response.statusCode == 200) {
         hideLoader();
-
         // Convert the response stream to a string
         String responseBody = await response.stream.bytesToString();
         // Decode the response body

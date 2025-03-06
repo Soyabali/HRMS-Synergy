@@ -9,6 +9,7 @@ import 'package:untitled/presentation/shortLeave/shortLeave.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../presentation/actionOnLeave/actionOnLeave.dart';
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
+import '../presentation/changePassword/changepassword.dart';
 import '../presentation/employeeList/employeelist.dart';
 import '../presentation/leaveCancellationRequest/leaveCancellationRequest.dart';
 import '../presentation/login/loginScreen.dart';
@@ -420,6 +421,17 @@ class GeneralFunction {
                     );
                   },
                     child: drawerItem('assets/images/employlist.jpeg', "Employee List")),
+                  // ChangePassword
+                InkWell(
+                    onTap: (){
+                      // open Password screen
+                      print('---Password-----');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ChangePassword(name: null,)),
+                      );
+                    },
+                    child: drawerItem('assets/images/changePasswrod.PNG', "Change Password")),
                 // drawerItem('assets/images/post_complaint.png', "Family Details (Dependents)"),
                 // drawerItem('assets/images/post_complaint.png', "Employees Nomination Details"),
                 // drawerItem('assets/images/post_complaint.png', "Emergency Contact List"),

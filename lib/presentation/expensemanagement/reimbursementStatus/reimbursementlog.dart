@@ -49,9 +49,10 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
   //List<Map<String, dynamic>>? reimbursementStatusLog;
 
   // Distic List
+
   hrmsReimbursementLog() async {
     reimbursementStatusLog = await HrmsreimbursementLogRepo().hrmsReimbursementLog(context,'${widget.sTranCode}');
-    print(" -----xxxxx-  hrmsReimbursement--67---> $reimbursementStatusLog");
+    print(" -----xxxxx-  hrmsReimbursement-----> $reimbursementStatusLog");
     setState(() {});
   }
 
@@ -87,7 +88,6 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
         textColor: Colors.white,
         fontSize: 16.0);
   }
-  
   // InitState
   @override
   void initState() {
@@ -168,6 +168,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
         child: ListView.builder(
         itemCount: reimbursementStatusLog?.length ?? 0,
         itemBuilder: (context, index) {
+          var remarks = '${reimbursementStatusLog?[index]['sRemarks']}';
           return
             Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -191,8 +192,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                         CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.only(top: 5),
@@ -232,7 +232,6 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                
                                   ],
                                 ),
                               )
@@ -263,10 +262,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                               ),
                               SizedBox(width: 5),
                               //  '‣ Sector',
-                              Text(
-                                  'Amount',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle
+                              Text('Amount',style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                               )
                             ],
                           ),
@@ -304,8 +300,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                             padding: EdgeInsets.only(left: 15),
                             child: Text(
                                 '${reimbursementStatusLog?[index]['sExpDetails']}',
-                                style: AppTextStyle
-                                    .font12OpenSansRegularBlack45TextStyle
+                                style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
                             ),
                           ),
                           SizedBox(height: 5),
@@ -323,10 +318,7 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                 ),
                               ),
                               SizedBox(width: 5),
-                              Text(
-                                  'Status',
-                                  style: AppTextStyle
-                                      .font12OpenSansRegularBlackTextStyle
+                              Text('Status',style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                               )
                             ],
                           ),
@@ -338,7 +330,43 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                     .font12OpenSansRegularBlack45TextStyle
                             ),
                           ),
-                         SizedBox(height: 10),
+                         // remarks
+                          remarks!=null ?
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              SizedBox(height: 5),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                    height: 10.0,
+                                    width: 10.0,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      // Change this to your preferred color
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text('Remarks',style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 15),
+                                child: Text(
+                                    '${reimbursementStatusLog?[index]['sRemarks']}',
+                                    style: AppTextStyle
+                                        .font12OpenSansRegularBlack45TextStyle
+                                ),
+                              ),
+                            ],
+                          ):
+                          Container(),
+                          SizedBox(height: 10),
                           Padding(
                             padding: const EdgeInsets.only(
                                 left: 2, right: 2),
@@ -369,12 +397,12 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
                                       // Add some spacing between texts
                                       Text(
                                         '${reimbursementStatusLog?[index]['dActionAt']}',
-                                        style: AppTextStyle
-                                            .font12OpenSansRegularBlackTextStyle,
+                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                       ),
                                     ],
                                   ),
                                 ),
+                                // divider
                                 Container(
                                   height: 40,
                                   width: 1,

@@ -33,8 +33,7 @@ class Reimbursementstatus extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-          iconTheme: IconThemeData(
-            color: Colors.white, // Change the color of the drawer icon here
+          iconTheme: IconThemeData(color: Colors.white, // Change the color of the drawer icon here
           ),
         ),
       ),
@@ -45,7 +44,6 @@ class Reimbursementstatus extends StatelessWidget {
 }
 
 class ReimbursementstatusPage extends StatefulWidget {
-
   const ReimbursementstatusPage({super.key});
 
   @override
@@ -56,12 +54,12 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
  // List<Map<String, dynamic>> _filteredData = [];
-  ///List<dynamic>  hrmsReimbursementList;
+  ///List<dynamic>  hrmsReimbursementLis
+  ///
   TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
   DateTime? _date;
 
   @override
@@ -84,7 +82,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   // Distic List
 
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
-
     reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay, lastDayOfCurrentMonth);
 
     reimbursementStatusV3.then((data) {
@@ -95,7 +92,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     });
      // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
    // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-
     print(" -----xxxxx-  reimbursementStatusList--98-----> $reimbursementStatusList");
     // setState(() {});
   }
@@ -104,13 +100,11 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     setState(() {
       if (query.isEmpty) {
         _filteredData = _allData;  // Show all data if search query is empty
-
       } else {
         _filteredData = _allData.where((item) {
           return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
               item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
               item.sStatusName.toLowerCase().contains(query.toLowerCase());
-
           // Filter by employee name
         }).toList();
       }
@@ -124,9 +118,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
   String? _chosenValue;
-
   var msg;
   var result;
   var SectorData;
@@ -250,8 +242,9 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     final responseData = json.decode(responsed.body);
     print('---155----$responseData');
   }
-
+  // getCurrentDate().
   getCurrentdate() async {
+
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
@@ -272,7 +265,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
       print('You should  not call api');
     }
   }
-
   // InitState
   @override
   void initState() {
@@ -574,7 +566,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                     ),
                   ),
                   SizedBox(height: 0),
-
                   Expanded(
                     child: Container(
                       child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
@@ -687,7 +678,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                   ),
                                                 ),
                                               )
-                                                  :Container()
+                                              :Container()
 
                                               // Image.asset("assets/images/uplodeConsum.jpeg",
                                               // width: 20,
@@ -720,9 +711,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                               ),
                                               SizedBox(width: 5),
                                               //  '‣ Sector',
-                                              Text(
-                                                  'Bill Date', style: AppTextStyle
-                                                      .font12OpenSansRegularBlackTextStyle
+                                              Text('Bill Date', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                               )
                                             ],
                                           ),
@@ -749,9 +738,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                 ),
                                               ),
                                               SizedBox(width: 5),
-                                              Text(
-                                                  'Entry At',
-                                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                              Text('Entry At', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                               )
                                             ],
                                           ),
@@ -759,7 +746,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                             padding: EdgeInsets.only(left: 15),
                                             child: Text(
                                                 leaveData.dEntryAt,
-                                               // item['dEntryAt'] ?? '',
                                                 style: AppTextStyle
                                                     .font12OpenSansRegularBlack45TextStyle
                                             ),
@@ -962,14 +948,13 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       GestureDetector(
-
                                                         onTap :(){
-
                                                           var projact =  leaveData.sProjectName;
                                                           // var sTranCode =   item['sTranCode'] ?? '';
                                                           var sTranCode =   leaveData.sTranCode;
                                                           print('--project---$projact');
                                                           print('--sTranCode---$sTranCode');
+
                                                           Navigator.push(
                                                             context,
                                                             MaterialPageRoute(builder: (context) => ReimbursementLogPage(projact,sTranCode)),
@@ -1025,6 +1010,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     );
   }
   // Opend Full Screen DialogbOX
+
   void openFullScreenDialog(BuildContext context, List<String> imageUrls, String billDate) {
     showDialog(
       context: context,

@@ -80,7 +80,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print(" -----xxxxx-  expenseList--84---> $expenseList");
     setState(() {});
   }
-
   //
   bindreimUom() async {
     bindreimouList = await BindreimuomRepo().bindReimouList();
@@ -93,7 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
     print(" -----xxxxx-  shopTypeList--- Data--65---> $shopTypeList");
     setState(() {});
   }
-
   // postImage
   postimage() async {
     print('----ImageFile----$_imageFile');
@@ -153,8 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
   //var dExpDate;
   String? dExpDate;
   var remarks = "N/A";
-
   // pick image from a Camera
+
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -534,12 +532,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         // Set the background color to white
-                        foregroundColor:
-                            Colors.black, // Set the text color to black
+                        foregroundColor: Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok',
-                          style:
-                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok', style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -569,7 +564,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // function summit logic
   List<Map<String, dynamic>> _itemsList = [];
-
+  // Delete Item Dialog
   Widget _deleteItemDialog(BuildContext context, int index) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -731,14 +726,13 @@ class _MyHomePageState extends State<MyHomePage> {
     var quantity = _quantityController.text.trim();
     var amount = _amountController2.text.trim();
     var selectedReimType = _dropDownValueBindReimType;
-
     // Check each field one by one and display the first missing field's error message
     if (itemDescription.isEmpty) {
       displayToast("Please enter Item Description");
       return;
     }
     if (selectedReimType == null || selectedReimType.isEmpty) {
-      displayToast("Please choose a reimbursement type");
+      displayToast("Please select a UOM");
       return;
     }
     if (quantity.isEmpty) {
@@ -846,7 +840,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _expenseController.dispose();
     FocusScope.of(context).unfocus(); //
   }
-
   // Todo bind sector code
   Widget _bindSector() {
     return Material(
@@ -917,7 +910,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
   /// Todo same way you should bind point Type data.
   Widget _bindExpenseCategory() {
     return Material(
@@ -994,7 +986,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
   //
   Widget _bindReimout() {
     return Material(
@@ -1083,6 +1074,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: Scaffold(
           backgroundColor: Colors.white,
+          //appBar
           appBar: AppBar(
             // statusBarColore
             systemOverlayStyle: const SystemUiOverlayStyle(
@@ -1127,6 +1119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ), // Removes shadow under the AppBar
           ),
+          // body
           body: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -1276,8 +1269,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               SizedBox(height: 10),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 5, top: 5),
+                                padding: const EdgeInsets.only(bottom: 5, top: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
@@ -1314,18 +1306,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                           child: TextFormField(
                                             focusNode: _shopfocus,
                                             controller: _amountController,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            onEditingComplete: () =>
-                                                FocusScope.of(context)
-                                                    .nextFocus(),
-                                            keyboardType: const TextInputType
-                                                .numberWithOptions(
+                                            textInputAction: TextInputAction.next,
+                                            onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                            keyboardType: const TextInputType.numberWithOptions(
                                                 decimal: true),
                                             inputFormatters: [
+                                              // TextField validation
                                               FilteringTextInputFormatter.allow(
-                                                RegExp(
-                                                    r'^\d{0,7}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
+                                                RegExp(r'^\d{0,7}(\.\d{0,2})?$'), // Allow up to 5 digits before decimal and 2 digits after decimal
                                               ),
                                               //FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')), // Allow up to 2 decimal places
                                             ],
@@ -1337,11 +1325,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       horizontal: 10.0),
                                               filled: true,
                                               // Enable background color
-                                              fillColor: Color(
-                                                  0xFFf2f3f5), // Set your desired background color here
+                                              fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                             ),
-                                            autovalidateMode: AutovalidateMode
-                                                .onUserInteraction,
+                                            autovalidateMode: AutovalidateMode.onUserInteraction,
                                             validator: (value) {
                                               if (value == null ||
                                                   value.isEmpty) {
@@ -1410,8 +1396,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                        margin:
-                                            EdgeInsets.only(left: 0, right: 2),
+                                        margin: EdgeInsets.only(left: 0, right: 2),
                                         child: const Icon(
                                           Icons.forward_sharp,
                                           size: 12,
@@ -1427,8 +1412,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 0),
+                                padding: const EdgeInsets.only(left: 10, right: 0),
                                 child: Container(
                                   height: 42,
                                   color: Colors.white,
@@ -1445,11 +1429,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         contentPadding: EdgeInsets.symmetric(
                                             vertical: 10.0, horizontal: 10.0),
                                         filled: true, // Enable background color
-                                        fillColor: Color(
-                                            0xFFf2f3f5), // Set your desired background color here
+                                        fillColor: Color(0xFFf2f3f5), // Set your desired background color here
                                       ),
-                                      autovalidateMode:
-                                          AutovalidateMode.onUserInteraction,
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
                                       // validator: (value) {
                                       //   if (value !=null && value =="0") {
                                       //     return 'Enter an amount greater than 0';
@@ -1474,9 +1456,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       fit: BoxFit.fill,
                                     ),
                                     SizedBox(width: 10),
-                                    Text('Consumable Item List',
-                                        style: AppTextStyle
-                                            .font14OpenSansRegularBlack45TextStyle
+                                    Text('Consumable Item List', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle
                                     ),
                                   ],
                                 ),
@@ -1591,103 +1571,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   );
                                 },
                               ),
-                              //   ListView.builder(
-                              //   shrinkWrap: true, // Makes ListView take up only the needed height
-                              //   physics: NeverScrollableScrollPhysics(), // Disable ListView scrolling if the outer widget scrolls
-                              //   itemCount: _itemsList.length,
-                              //   itemBuilder: (context, index) {
-                              //     final item = _itemsList[index];
-                              //     return Container(
-                              //       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-                              //       padding: const EdgeInsets.all(16.0),
-                              //       decoration: BoxDecoration(
-                              //         color: Colors.white,
-                              //         borderRadius: BorderRadius.circular(5),
-                              //         boxShadow: [
-                              //           BoxShadow(
-                              //             color: Colors.grey,
-                              //             spreadRadius: 1,
-                              //             blurRadius: 3,
-                              //           ),
-                              //         ],
-                              //       ),
-                              //       child: Column(
-                              //         crossAxisAlignment: CrossAxisAlignment.start,
-                              //         children: [
-                              //           Row(
-                              //             children: [
-                              //               Container(
-                              //                 height: 25,
-                              //                 width: 25,
-                              //                 child: Image.asset(
-                              //                   'assets/images/aadhar.jpeg',
-                              //                   fit: BoxFit.fill,
-                              //                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              //                     return Icon(Icons.error, size: 25);
-                              //                   },
-                              //                 ),
-                              //               ),
-                              //               SizedBox(width: 10),
-                              //               Column(
-                              //                 crossAxisAlignment: CrossAxisAlignment.start,
-                              //                 children: [
-                              //                   Text(item['sItemName'], style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                              //                   Text('Item Description', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                              //                 ],
-                              //               ),
-                              //               Spacer(),
-                              //               Text('Quantity: ${item['fQty']}', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                              //             ],
-                              //           ),
-                              //           Divider(),
-                              //           Container(
-                              //             height: 45,
-                              //             child: Row(
-                              //               children: [
-                              //                 Padding(
-                              //                   padding: const EdgeInsets.only(left: 25),
-                              //                   child: Column(
-                              //                     crossAxisAlignment: CrossAxisAlignment.start,
-                              //                     children: [
-                              //                       Row(
-                              //                         children: [
-                              //                           Container(
-                              //                             height: 14,
-                              //                             width: 14,
-                              //                             decoration: BoxDecoration(
-                              //                               color: Colors.black,
-                              //                               borderRadius: BorderRadius.circular(7),
-                              //                             ),
-                              //                           ),
-                              //                           SizedBox(width: 5),
-                              //                           Text(item['sUoM'], style: AppTextStyle.font14OpenSansRegularBlackTextStyle),
-                              //                         ],
-                              //                       ),
-                              //                       Padding(
-                              //                         padding: const EdgeInsets.only(left: 15),
-                              //                         child: Text('UOM', style: AppTextStyle.font14OpenSansRegularBlack45TextStyle),
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                 ),
-                              //                 Spacer(),
-                              //                 Container(
-                              //                   color: Color(0xFF0098a6),
-                              //                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                              //                   child: Text(
-                              //                     '₹ ${item['fAmount']}',
-                              //                     style: AppTextStyle.font14OpenSansRegularWhiteTextStyle,
-                              //                     textAlign: TextAlign.center,
-                              //                   ),
-                              //                 ),
-                              //               ],
-                              //             ),
-                              //           ),
-                              //         ],
-                              //       ),
-                              //     );
-                              //   },
-                              // ),
                               // SizedBox(height: 10),
                               /// todo apply logic if then create a form
                               if (_dropDownValueShopeType == "Consumable/Material Purchase")
@@ -1711,18 +1594,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     children: [
                                       Row(
                                         children: [
-                                          // Image.asset("assets/images/uplodeConsum.jpeg",
-                                          // width: 20,
-                                          // height: 20,
-                                          // fit: BoxFit.fill,
-                                          // ),
                                           Icon(Icons.shopping_cart, color: Colors.blue),
                                           SizedBox(width: 8.0),
                                           Expanded(
                                               child: Text(
                                                   "Uploaded Consumable Item $count",
-                                                  style: AppTextStyle
-                                                      .font16OpenSansRegularBlack45TextStyle)),
+                                                  style: AppTextStyle.font16OpenSansRegularBlack45TextStyle)),
                                           Icon(Icons.arrow_forward_ios,
                                               color: Colors.grey),
                                         ],
@@ -1753,13 +1630,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 decoration: InputDecoration(
                                                   labelText: "Quantity",
                                                   border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                    borderRadius: BorderRadius.circular(8.0),
                                                   ),
                                                 ),
-                                                keyboardType:
-                                                    TextInputType.number,
+                                                keyboardType: TextInputType.number,
                                               ),
                                             ),
                                             SizedBox(width: 16.0),
@@ -1769,13 +1643,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 decoration: InputDecoration(
                                                   labelText: "Amount",
                                                   border: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
+                                                    borderRadius: BorderRadius.circular(8.0),
                                                   ),
                                                 ),
-                                                keyboardType:
-                                                    TextInputType.number,
+                                                keyboardType: TextInputType.number,
                                               ),
                                             ),
                                           ],
@@ -1788,21 +1659,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                           width: double.infinity,
                                           // Make container fill the width of its parent
                                           height: AppSize.s45,
-                                          padding:
-                                              EdgeInsets.all(AppPadding.p5),
+                                          padding: EdgeInsets.all(AppPadding.p5),
                                           decoration: BoxDecoration(
                                             color: AppColors.loginbutton,
                                             // Background color using HEX value
-                                            borderRadius: BorderRadius.circular(
-                                                AppMargin
-                                                    .m10), // Rounded corners
+                                            borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
                                           ),
                                           //  #00b3c7
                                           child: Center(
-                                            child: Text(
-                                              "Add Item",
-                                              style: AppTextStyle
-                                                  .font16OpenSansRegularWhiteTextStyle,
+                                            child: Text("Add Item",
+                                              style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
                                             ),
                                           ),
                                         ),
@@ -1845,13 +1711,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   borderType: BorderType.RRect,
                                   radius: Radius.circular(5.0),
                                   // Optional: rounded corners
-                                  child: Padding(
-                                    padding: EdgeInsets.all(2.0),
+                                  child: Padding(padding: EdgeInsets.all(2.0),
                                     // Equal padding on all sides
                                     child: Center(
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        MainAxisAlignment.center,
                                         // Center the row contents
                                         children: [
                                           Column(
@@ -1861,21 +1726,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                               InkWell(
                                                 onTap: () {
                                                   // Your onTap logic here
-                                                  print(
-                                                      '--pick a Camra pick---');
+                                                  print('--pick a Camra pick---');
                                                   pickImage();
                                                 },
                                                 child: const Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: <Widget>[
-                                                    Icon(
-                                                        Icons
-                                                            .camera_alt_outlined,
+                                                    Icon(Icons.camera_alt_outlined,
                                                         size: 25),
                                                     SizedBox(width: 5),
-                                                    Text(
-                                                      'Click Photo',
+                                                    Text('Click Photo',
                                                       style: TextStyle(
                                                           color: Colors.black45,
                                                           fontSize: 16),
@@ -1887,8 +1748,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                           SizedBox(width: 10),
                                           Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
                                               InkWell(
                                                 onTap: () {
@@ -1921,7 +1781,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               ),
-                              //----
+                              // see the select image on a imageView.
                               Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -1977,7 +1837,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               SizedBox(height: 10),
                               Padding(
                                 padding:
-                                    const EdgeInsets.only(bottom: 5, top: 5),
+                                const EdgeInsets.only(bottom: 5, top: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
@@ -2086,9 +1946,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               ),
+                              // see the images
                               Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     image2 != null
                                         ? Stack(
@@ -2138,6 +1998,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 color: Colors.red[700]),
                                           )
                                   ]),
+                              // third pick a photo
                               Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 5, top: 5),
@@ -2250,6 +2111,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               SizedBox(height: 10),
+                              // see the thirdImages
                               Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -2258,8 +2120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ? Stack(
                                             children: [
                                               GestureDetector(
-                                                behavior:
-                                                    HitTestBehavior.translucent,
+                                                behavior: HitTestBehavior.translucent,
                                                 onTap: () {
                                                   // Navigator.push(
                                                   //     context,
@@ -2302,6 +2163,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 color: Colors.red[700]),
                                           )
                                   ]),
+                              // four dottedBorder
                               Padding(
                                 padding:
                                     const EdgeInsets.only(bottom: 5, top: 5),
@@ -2326,6 +2188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               SizedBox(height: 10),
+                              // four image
                               Center(
                                 child: DottedBorder(
                                   color: Colors.grey,
@@ -2342,8 +2205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     // Equal padding on all sides
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         // Center the row contents
                                         children: [
                                           Column(
@@ -2353,8 +2215,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               InkWell(
                                                 onTap: () {
                                                   // Your onTap logic here
-                                                  print(
-                                                      '--pick a Camra pick---');
+                                                  print('--pick a Camra pick---');
                                                   pickImage4();
                                                 },
                                                 child: const Row(
@@ -2414,6 +2275,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               SizedBox(height: 10),
+                              // see the fouth image
                               Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -2467,6 +2329,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           )
                                   ]),
                               SizedBox(height: 10),
+                              // send Reimbursement Button
                               InkWell(
                                 onTap: () async {
                                   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -2477,24 +2340,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   /// TODO GET A RANDOM NUMBER
                                   Random random = Random();
                                   int sTranCode = 10000000 + random.nextInt(90000000);
-
-                                  // print('--1001--sTranCode---$sTranCode');
-                                  // print('--1002--sEmpCode---$sEmpCode');
-                                  // print('--1003--sProjectCode---$_selectedSectorId');
-                                  // print('--1004--sExpHeadCode---$_selectedShopId');
-                                  // print('--1005--dExpDate---$dExpDate');
-                                  // print('--1006--fAmount---${_amountController.text}');
-                                  // print('--1007--sExpDetails---${_expenseController.text}');
-                                  // print('--1008--sExpBillPhoto---$uplodedImage');// sEntryBy
-                                  // print('--1009--sEntryBy---$sContactNo');
-                                  // print('--1010--sRemarks---${'NA'}');
-                                  // print('--1011--sResult---$result');
-
                                   var amount = '${_amountController.text}';
                                   var expenseDetails = '${_expenseController.text}';
-
-                                  // print('----964--amount----$amount');
-                                  // print('----965--expenseDetails----$expenseDetails');
                                   var conList="abc";
 
                                   if (_formKey.currentState!.validate() &&
@@ -2512,6 +2359,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                     var hrmsPopWarning = await HrmsPopUpWarningRepo().hrmsPopUpWarnging(context, sEmpCode, dExpDate, amount);
                                     print('--------1097----xxx--$hrmsPopWarning');
+
                                     result = "${hrmsPopWarning[0]['Result']}";
                                     msg = "${hrmsPopWarning[0]['Msg']}";
                                   } else {

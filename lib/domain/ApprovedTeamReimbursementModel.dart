@@ -1,3 +1,4 @@
+
 class ApprovedTeamReimbursementModel {
   final String sTranCode;
   final String sEmpCode;
@@ -40,8 +41,8 @@ class ApprovedTeamReimbursementModel {
     required this.dActionEntryAt,
     required this.sRemarks,
   });
-
   // Factory method to create an instance from JSON
+
   factory ApprovedTeamReimbursementModel.fromJson(Map<String, dynamic> json) {
     return ApprovedTeamReimbursementModel(
       sTranCode: json['sTranCode'] ?? '',

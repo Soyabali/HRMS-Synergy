@@ -37,7 +37,6 @@ class HrmsPostReimbursementRepo {
       print('----dExpDate--35---$dExpDate');
       print('----amount--36---$amount');
       print('----expenseDetails--37---$expenseDetails');
-
       print('----sContactNo--39---$sContactNo');
       print('----sRemarks--40---${remarks}');
       print('----result--41---$result');
@@ -47,8 +46,7 @@ class HrmsPostReimbursementRepo {
       print('----uplode image 4--44---$uplodedImage4');
       print('----ConsumaleList --45---$consumableList');
       print('----consumableItemString --45---$consumableItemString');
-
-
+      //
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsPostReimbursementNew/hrmsPostReimbursementNew";
       var hrmsPostReimbursementApi = "$baseURL$endPoint";

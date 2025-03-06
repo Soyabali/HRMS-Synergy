@@ -42,7 +42,7 @@ class Hrmsreimbursementstatusv3model {
   });
 
   // Factory constructor to create an instance from JSON
-  factory Hrmsreimbursementstatusv3model.fromJson(Map<String, dynamic> json) {
+  factory Hrmsreimbursementstatusv3model.fromJson(Map<String,dynamic> json) {
     return Hrmsreimbursementstatusv3model(
       sTranCode: json['sTranCode'],
       sEmpCode: json['sEmpCode'],
