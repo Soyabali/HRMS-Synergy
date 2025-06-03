@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/login/loginScreen.dart';
@@ -56,17 +56,29 @@ class _SplashViewState extends State<SplashView> {
       throw 'Could not launch $url';
     }
   }
-  void displayToast(String msg){
+  void displayToast(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
     );
   }
+  // void displayToast(String msg){
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  // }
   // local database
   getLocalDataInfo()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();

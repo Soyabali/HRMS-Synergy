@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
 import 'package:untitled/presentation/shortLeave/shortLeave.dart';
@@ -141,15 +141,28 @@ class GeneralFunction {
     goNext(context);
   }
   // dialogBOX
+  // void displayToast(String msg) {
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.black45,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0);
+  // }
+
   void displayToast(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black45,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+    );
   }
   //  takeActionDialog
   Widget _logoutDialog(BuildContext context) {
@@ -509,17 +522,17 @@ class GeneralFunction {
     );
   }
 
-  void displayToastlogout(){
-    Fluttertoast.showToast(
-        msg: "Someone else has been login with your number.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-  }
+  // void displayToastlogout(){
+  //   Fluttertoast.showToast(
+  //       msg: "Someone else has been login with your number.",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  // }
 
    Future<void> launchGoogleMaps(double laititude,double longitude) async {
      double destinationLatitude= laititude;

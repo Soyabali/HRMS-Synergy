@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/presentation/setpin/payslip.dart';
@@ -229,14 +229,26 @@ class _PolicydocScreenState extends State<PaySlipPdf> {
   // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 2,
-        backgroundColor: Colors.black45,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+    );
   }
+  // void displayToast(String msg) {
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 2,
+  //       backgroundColor: Colors.black45,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0);
+  // }
   // show prograssbar logic
   void showProgressBar(double progress) {
     int progressBarLength = 50; // Total length of progress bar

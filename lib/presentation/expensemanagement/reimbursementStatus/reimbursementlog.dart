@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementstatus.dart';
 import '../../../app/generalFunction.dart';
@@ -80,14 +80,26 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
   // toast
   void displayToast(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+    );
   }
+  // void displayToast(String msg) {
+  //   Fluttertoast.showToast(
+  //       msg: msg,
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.CENTER,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.red,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0);
+  // }
   // InitState
   @override
   void initState() {

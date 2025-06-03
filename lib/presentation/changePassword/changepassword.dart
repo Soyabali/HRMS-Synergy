@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import '../../app/generalFunction.dart';
 import '../../data/changePassword_Repo2.dart';
 import '../dashboard/dashboard.dart';
 import '../login/loginScreen.dart';
 import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class ChangePassword extends StatelessWidget {
 
@@ -514,14 +514,16 @@ class _LoginPageState extends State<changePassWordPage> {
     );
   }
   // toast code
-  void displayToast(String msg){
+  void displayToast(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0);
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+    );
   }
 }

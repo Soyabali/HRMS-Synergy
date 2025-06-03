@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'app/app.dart';
@@ -14,7 +15,8 @@ void main() async
     options: DefaultFirebaseOptions.currentPlatform,
   );
   _requestPermissions();
-  runApp(MyApp());
+ // runApp(MyApp());
+  runApp(OKToast(child: MyApp()));
   configLoading();
 }
 
