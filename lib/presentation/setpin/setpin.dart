@@ -8,7 +8,6 @@ import 'payslip.dart';
 import '../resources/app_text_style.dart';
 
 class Setpin extends StatelessWidget {
-
   const Setpin({super.key});
 
   @override
@@ -30,7 +29,7 @@ class SetPinScren extends StatefulWidget {
 
 class _setPinScrenState extends State<SetPinScren> {
 
-  TextEditingController pinController = TextEditingController();
+ TextEditingController pinController = TextEditingController();
  var storedPin;
 
   // Example function to handle button press

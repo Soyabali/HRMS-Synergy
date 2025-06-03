@@ -134,7 +134,6 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                             itemCount: polocyDocList.length,
                             itemBuilder: (context, index) {
                               final query = polocyDocList[index];
-
                               return
                                 GestureDetector(
                                   onTap: (){
@@ -149,8 +148,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                         child: Card(
                                           elevation: 4, // Adds shadow to the card
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                5), // Rounded corners
+                                            borderRadius: BorderRadius.circular(5), // Rounded corners
                                           ),
                                           child: Container(
                                             width: MediaQuery
@@ -192,8 +190,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                                             width: 2,
                                                             decoration: BoxDecoration(
                                                               color: Colors.grey, // Black color
-                                                              borderRadius: BorderRadius.circular(
-                                                                  0), // Border radius of 5
+                                                              borderRadius: BorderRadius.circular(0), // Border radius of 5
                                                             ),
                                                           ),
                                                         ),
@@ -213,21 +210,16 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                                       mainAxisAlignment: MainAxisAlignment.start,
                                                       crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Text(
-                                                          'Query At',
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlack45TextStyle,
+                                                        Text('Query At',style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
                                                         ),
                                                         SizedBox(height: 2),
                                                         Text(query.dRequestTime,
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlackTextStyle),
+                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
                                                         SizedBox(height: 5),
                                                         Container(
                                                           height: 25,
                                                           child: DottedBorder(
-                                                            color: Colors
-                                                                .grey,
+                                                            color: Colors.grey,
                                                             // Color of the dotted line
                                                             strokeWidth:
                                                             1.0,
@@ -238,20 +230,15 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                                             ],
                                                             // Dash pattern for the dotted line
                                                             borderType: BorderType.RRect,
-                                                            radius: Radius.circular(
-                                                                5.0),
+                                                            radius: Radius.circular(5.0),
                                                             // Optional: rounded corners
                                                             child: Padding(
-                                                              padding: EdgeInsets.all(
-                                                                  2.0),
+                                                              padding: EdgeInsets.all(2.0),
                                                               // Equal padding on all sides
                                                               child: Row(
-                                                                mainAxisSize: MainAxisSize
-                                                                    .min, // Center the row contents
+                                                                mainAxisSize: MainAxisSize.min, // Center the row contents
                                                                 children: [
-                                                                  Text('Title',
-                                                                      style: AppTextStyle
-                                                                          .font12OpenSansRegularBlack45TextStyle),
+                                                                  Text('Title', style: AppTextStyle.font12OpenSansRegularBlack45TextStyle),
                                                                   SizedBox(
                                                                       width:
                                                                       5.0),
@@ -274,13 +261,11 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                                                         // Text('Data Query',style: AppTextStyle.font12OpenSansRegularBlackTextStyle,),
                                                         SizedBox(height: 5),
                                                         Row(
-                                                          mainAxisAlignment: MainAxisAlignment
-                                                              .start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: [
                                                             Text(
                                                               'Query :',
-                                                              style: AppTextStyle
-                                                                  .font12OpenSansRegularBlack45TextStyle,
+                                                              style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
                                                             ),
                                                             SizedBox(width: 5),
                                                             Text(
@@ -363,7 +348,6 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
   //
   //Open Dialog
   Widget _takeActionDialog(BuildContext context) {
-
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -454,9 +438,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                     // Check if the input is not empty
                     if (queryTitle != null && queryTitle != '' && enterYourQuery!=null && enterYourQuery!='') {
                       print('---Call Api-----');
-
                       // Make API call here
-
                       var postQuery = await PostqueryRepo().postquery(context,queryTitle,enterYourQuery);
                       print('--326--$postQuery');
 

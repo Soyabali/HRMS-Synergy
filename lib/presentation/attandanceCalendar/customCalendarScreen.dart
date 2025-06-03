@@ -89,7 +89,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
       curve: Curves.easeInOut,
     );
   }
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -102,6 +101,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
   //   DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
   //   return DateFormat("d/MMM/yyyy").format(firstDayOfMonth);
   // }
+
   String getCurrentMonthFirstDate() {
     DateTime now = DateTime.now();
     return DateFormat("d/MMM/yyyy").format(now);
@@ -116,7 +116,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     selectedMonth = getCurrentMonth();
     selectedMonth = capitalizeFirstLetter(selectedMonth);
     print('----82---$selectedMonth');
-
     // Scroll to the current month after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToCurrentMonth();
@@ -135,7 +134,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     var selectedMonth = DateFormat('MMM').format(now);
     try {
       attendaceResponse = await HrmsAttendanceRepo().attendance(context, selectedMonth);
-
       Map<String, dynamic> attendanceData = attendaceResponse[0];
 
       List<int> parseToList(String? value) {
@@ -219,8 +217,8 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
         return [];
       }
     }
-
     // Convert each key to a list of integers
+
     setState(() {
       sPresents = (parseToList(attendanceData['sPresents']));
       sAbsent = (parseToList(attendanceData['sAbsent']));
@@ -346,7 +344,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
               Center(
                 child: CircularProgressIndicator(), // Show loader when isLoading is true
               )else
-            Container(
+        Container(
         height: 328,
         child: TableCalendar(
           firstDay: DateTime.utc(2020, 1, 1),
@@ -494,7 +492,7 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                       cellContent("Weekly Off (${sWeeklyOff?.length})"),
                      // cellContent("Late Entry + Early Exit (${sLcEg?.length})"),
                       //
-      Center(
+                      Center(
         child: Padding(
           padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
           child: Column(

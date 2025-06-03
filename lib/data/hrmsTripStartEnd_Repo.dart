@@ -9,7 +9,7 @@ import 'loader_helper.dart';
 class HrmstripstartendRepo {
 
    GeneralFunction generalFunction = GeneralFunction();
-  Future tripStart(BuildContext context, String sContactNo, double? lat, double? long, String randomNumber, uplodedImage, String edtOdometer, dTripDateTime) async {
+  Future tripStart(BuildContext context, String sContactNo, double? lat, double? long, String randomNumber, uplodedImage, String edtOdometer, dTripDateTime, locationAddress) async {
     try {
       print('---Scontact----$sContactNo');
       print('---lat----$lat');
@@ -18,6 +18,7 @@ class HrmstripstartendRepo {
       print('---uplodedImage----$uplodedImage');
       print('---edtOdometer----$edtOdometer');
       print('---dTripDateTime----$dTripDateTime');
+      print('-----locationAddress----21----$locationAddress');
 
       // get a token
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -47,7 +48,7 @@ class HrmstripstartendRepo {
         "fLon": long,
         "sImage": uplodedImage,
         "fOdometers": edtOdometer,
-        "sLocation": "A6, Bishanpura Rd, Block A, Sector 57, Noida, Uttar Pradesh 201301, India"
+        "sLocation": locationAddress
       });
 
       // Sending POST request

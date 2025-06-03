@@ -6,7 +6,6 @@ import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'dart:async';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
 import '../../../app/generalFunction.dart';
-import '../../../data/postimagerepo.dart';
 import '../../data/stafListRepo.dart';
 import '../../domain/employeeListModel.dart';
 import '../resources/app_text_style.dart';
@@ -73,6 +72,7 @@ class _MyHomePageState extends State<EmployeelistPage> {
   }
   // filter data
   void filterData(String query) {
+
     setState(() {
       if (query.isEmpty) {
         _filteredData = _allData; // Show all data if search query is empty
@@ -279,8 +279,7 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                   containerColor;
                                   if (status == "Sanctioned") {
                                     containerColor = Color(0xFF689F38);
-                                  } else if (status ==
-                                      "Request For Cancellation") {
+                                  } else if (status == "Request For Cancellation") {
                                     containerColor = Colors.redAccent;
                                   } else {
                                     containerColor = Color(0xFFFFD700);
@@ -317,10 +316,8 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                                 children: <Widget>[
                                                   GestureDetector(
                                                     onTap: () {
-                                                      var images =
-                                                          leaveStatus.sEmpImage;
-                                                      var designation =
-                                                          leaveStatus.sDsgName;
+                                                      var images = leaveStatus.sEmpImage;
+                                                      var designation = leaveStatus.sDsgName;
 
                                                       openFullScreenDialog(
                                                           context,
@@ -353,7 +350,6 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                                         ),
                                                       ),
                                                     ),
-
                                                   SizedBox(width: 10),
                                                   // Wrap the column in Flexible to prevent overflow
                                                   Flexible(
@@ -377,12 +373,9 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                                           child: Text(
                                                             leaveStatus.sDsgName,
                                                             //leaveData.sProjectName,
-                                                            style: AppTextStyle
-                                                                .font12OpenSansRegularBlack45TextStyle,
-                                                            maxLines:
-                                                            2, // Limits the text to 2 lines
-                                                            overflow: TextOverflow
-                                                                .ellipsis, // Truncates with an ellipsis if too long
+                                                            style: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                                                            maxLines: 2, // Limits the text to 2 lines
+                                                            overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
                                                           ),
                                                         ),
                                                       ],
@@ -406,8 +399,7 @@ class _MyHomePageState extends State<EmployeelistPage> {
                                                    borderRadius: BorderRadius.circular(8), // Optional: Rounded corners
                                                  ),
                                                  child: Center(
-                                                   child: Text(
-                                                     'Mobile No: ${leaveStatus.sContactNo}',
+                                                   child: Text('Mobile No: ${leaveStatus.sContactNo}',
                                                      style: TextStyle(fontSize: 16),
                                                    ),
                                                  ),

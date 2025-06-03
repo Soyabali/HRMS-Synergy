@@ -12,7 +12,6 @@ import '../dashboard/dashboard.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
 
-
 class SplashView extends StatefulWidget {
 
   const SplashView({Key? key}) : super(key: key);

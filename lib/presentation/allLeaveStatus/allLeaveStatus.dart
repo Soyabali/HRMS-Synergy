@@ -102,7 +102,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       }
     });
   }
-
   // postImage
 
   postimage() async {
@@ -208,10 +207,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       // Create a multipart request
       var request = http.MultipartRequest('POST',
           Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'file',
@@ -220,13 +217,10 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
 
       // Send the request
       var streamedResponse = await request.send();
-
       // Get the response
       var response = await http.Response.fromStream(streamedResponse);
-
       // Parse the response JSON
       var responseData = json.decode(response.body);
-
       // Print the response data
       print(responseData);
       hideLoader();
@@ -332,7 +326,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       setState(() {
         formDate = tempDate;
       });
-
       // calculateTotalDays();
       displayToast("From date can not be greater than To Date");
     } else {
@@ -359,7 +352,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     _searchController.dispose();
     FocusScope.of(context).unfocus();
   }
-
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -447,11 +439,9 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                               lastDate: DateTime(2100),
                             );
                             if (pickedDate != null) {
-                              String formattedDate =
-                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
-                                tempDate =
-                                    formDate; // Save the current formDate before updating
+                                tempDate = formDate; // Save the current formDate before updating
                                 formDate = formattedDate;
                                 // calculateTotalDays();
                               });
@@ -463,8 +453,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                             padding: EdgeInsets.symmetric(horizontal: 14.0),
                             // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Change this to your preferred color
+                              color: Colors.white, // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
@@ -485,14 +474,12 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                           width: 32,
                           child: Image.asset(
                             "assets/images/reimicon_2.png",
-                            fit: BoxFit
-                                .contain, // or BoxFit.cover depending on the desired effect
+                            fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
                           ),
                         ),
                         //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                         SizedBox(width: 8),
-                        Icon(Icons.calendar_month,
-                            size: 16, color: Colors.white),
+                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
                         SizedBox(width: 5),
                         const Text(
                           'To',
@@ -511,11 +498,10 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                               lastDate: DateTime(2100),
                             );
                             if (pickedDate != null) {
-                              String formattedDate =
-                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+
                               setState(() {
-                                tempDate =
-                                    toDate; // Save the current toDate before updating
+                                tempDate = toDate; // Save the current toDate before updating
                                 toDate = formattedDate;
                                 // calculateTotalDays();
                               });
@@ -527,8 +513,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                             padding: EdgeInsets.symmetric(horizontal: 14.0),
                             // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Change this to your preferred color
+                              color: Colors.white, // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
@@ -607,19 +592,16 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                 itemCount: _filteredData.length ?? 0,
                                 itemBuilder: (context, index) {
                                   final leaveStatus = _filteredData[index];
-                                  final randomColor =
-                                      colorList[index % colorList.length];
+                                  final randomColor = colorList[index % colorList.length];
                                   status = leaveStatus.sLeaveStatus;
                                   containerColor;
                                   if (status == "Sanctioned") {
                                     containerColor = Color(0xFF689F38);
-                                  } else if (status ==
-                                      "Request For Cancellation") {
+                                  } else if (status == "Request For Cancellation") {
                                     containerColor = Colors.redAccent;
                                   } else {
                                     containerColor = Color(0xFFFFD700);
                                   }
-
                                   return Card(
                                     elevation: 1,
                                     color: Colors.white,
@@ -632,17 +614,13 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                         ),
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0, right: 0, top: 5),
+                                        padding: const EdgeInsets.only(left: 0, right: 0, top: 5),
                                         child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8),
+                                              padding: const EdgeInsets.only(left: 8),
                                                 child: Row(
                                                   children: [
                                                     Expanded(
@@ -650,10 +628,8 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                       child: Container(
                                                        // color: Colors.blue, // Example styling for visualization
                                                         child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment.start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment.start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: <Widget>[
                                                             GestureDetector(
                                                               onTap: () {
@@ -841,8 +817,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                             ),
                                             const SizedBox(height: 5),
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: [
                                                 Icon(
                                                   Icons.notes_outlined,

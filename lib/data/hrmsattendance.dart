@@ -12,7 +12,7 @@ class HrmsAttendanceRepo {
   // this is a loginApi call functin
   GeneralFunction generalFunction = GeneralFunction();
 
-  Future hrmsattendance(BuildContext context, double? lat, double? long) async {
+  Future hrmsattendance(BuildContext context, double? lat, double? long, locationAddress) async {
 
     try {
       // get a local database value
@@ -24,6 +24,7 @@ class HrmsAttendanceRepo {
       print('----lat--20---$lat');
       print('----long--21---$long');
       print('----sCompEmpCode--24---xxx---$sCompEmpCode');
+      print('---------27-------locationAddress----$locationAddress');
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsOnSiteAttendance/hrmsOnSiteAttendance";
@@ -42,7 +43,7 @@ class HrmsAttendanceRepo {
         "sEmpCode": sCompEmpCode,
         "fLatitude": lat ?? 0,
         "fLongitude": long ?? 0,
-        "sLocation": sLocation,
+        "sLocation": locationAddress,
       });
       request.headers.addAll(headers);
 

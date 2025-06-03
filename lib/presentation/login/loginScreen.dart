@@ -106,6 +106,7 @@ class _LoginPageState extends State<LoginPage> {
         )) ??
         false;
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -194,8 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                                  SizedBox(height: AppPadding.p10),
                                  Text(
                                    AppStrings.txtHrms,
-                                   style: AppTextStyle
-                                       .font16OpenSansRegularWhiteTextStyle,
+                                   style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
                                  ),
                                  SizedBox(height: AppPadding.p10),
                                  Text(AppStrings.txtHrmsTitle,
@@ -216,6 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: AppPadding.p20),
+
                               TextFormField(
                                 focusNode: phoneNumberfocus,
                                 controller: _phoneNumberController,
@@ -257,8 +258,7 @@ class _LoginPageState extends State<LoginPage> {
                                 controller: passwordController,
                                 decoration: InputDecoration(
                                   labelText: AppStrings.txtPassword,
-                                  labelStyle: AppTextStyle
-                                      .font16OpenSansRegularBlack45TextStyle,
+                                  labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                                   border: const OutlineInputBorder(),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: AppPadding.p10,

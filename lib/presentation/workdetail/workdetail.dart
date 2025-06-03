@@ -30,7 +30,6 @@ class WorkDetail extends StatelessWidget {
 }
 
 class WorkDetailPage extends StatefulWidget {
-
   const WorkDetailPage({super.key});
 
   @override
@@ -38,8 +37,6 @@ class WorkDetailPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<WorkDetailPage> {
-
-  // ----
 
   List<Map<String, String>> hrmsTimeScheduleList = [
 
@@ -55,16 +52,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
   ];
 
   final List<TextEditingController> _controllers = [];
-
   List<String> projectNames = [];
   List<String> workDetails = [];
 
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _controller = TextEditingController();
-
   List<dynamic>?  baseProjectList;
-
   //List<dynamic>?  hrmsTimeScheduleList;
 
   // toast
@@ -107,9 +101,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
       for (int i = 0; i < baseProjectList!.length; i++) {
         _controllers.add(TextEditingController());
       }
-      // Initialize the controllers with an arbitrary number of items (replace 2 with your dynamic item count)
-    }
+      }
   }
+
   sendCurrentWorkNew(String combinedList) async {
     var workEntryNew = await HrmsWorkEntryNewRepo().hrmsWorkEntryNew(context, combinedList);
     print('-----111---$workEntryNew');
@@ -160,10 +154,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
     workDetails.clear();
     projectNames.clear();
     List<Map<String, dynamic>> combinedList = [];
-
     bool isAtLeastOneFieldFilled = false; // Track if at least one field is filled
-
     // Check if baseProjectList exists and has elements
+
     if (baseProjectList != null && baseProjectList!.isNotEmpty) {
       // Ensure that _controllers has the same length as baseProjectList
       if (_controllers.length != baseProjectList!.length) {
@@ -172,21 +165,18 @@ class _MyHomePageState extends State<WorkDetailPage> {
           _controllers.add(TextEditingController());
         }
       }
-
       // Iterate over the baseProjectList and corresponding controllers
       for (int i = 0; i < baseProjectList!.length; i++) {
         String workDetail = _controllers[i].text.trim();
-
         // Check if the field is not empty
         if (workDetail.isNotEmpty) {
           isAtLeastOneFieldFilled = true; // At least one field is filled
-
           // Collect project code and work detail for filled fields only
           String projectCode = baseProjectList![i]['sProjectCode'] ?? '';
           workDetails.add(workDetail);
           projectNames.add(projectCode);
-
           // Also add to the combined list here if hrmsTimeScheduleList has corresponding entries
+
           if (hrmsTimeScheduleList != null && i < hrmsTimeScheduleList.length) {
             combinedList.add({
               'sProjectName': projectCode,
@@ -196,8 +186,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
           }
         }
       }
-
       // If at least one field is filled, proceed with the submission
+
       if (isAtLeastOneFieldFilled) {
         // Proceed with the form submission logic
         print("Filtered ProjectNames: $projectNames");
@@ -310,8 +300,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
   //     );
   //   }
   // }
-
-
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override

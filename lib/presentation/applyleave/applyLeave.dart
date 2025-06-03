@@ -35,7 +35,7 @@ class _LeaveScreenState extends State<Applyleave> {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+      FocusScope.of(context).unfocus(); // Unfocus when app is paused
     }
   }
 
@@ -219,8 +219,7 @@ class _LeaveScreenState extends State<Applyleave> {
                                           Material(
                                             elevation:
                                                 5, // Elevation of the container
-                                            borderRadius: BorderRadius.circular(
-                                                20), // Border radius
+                                            borderRadius: BorderRadius.circular(20), // Border radius
                                             child: Container(
                                               height:
                                                   40, // Height of the container
@@ -273,24 +272,18 @@ class _LeaveScreenState extends State<Applyleave> {
                                               width:
                                                   40, // Width of the container
                                               decoration: BoxDecoration(
-                                                color: Colors
-                                                    .white, // Background color of the container
+                                                color: Colors.white, // Background color of the container
                                                 border: Border.all(
                                                     color: Colors.grey,
-                                                    width:
-                                                        1), // Outer border color and width
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20), // Border radius
+                                                    width: 1), // Outer border color and width
+                                                borderRadius: BorderRadius.circular(20), // Border radius
                                               ),
-                                              alignment: Alignment
-                                                  .center, // Center the text within the container
+                                              alignment: Alignment.center, // Center the text within the container
                                               child: Text(
                                                 leaveData.fEntitlement,
                                                 //temple.fEntitlement, // The text to display
                                                 style: TextStyle(
-                                                  color:
-                                                      Colors.grey, // Text color
+                                                  color: Colors.grey, // Text color
                                                   fontSize: 16, // Text size
                                                 ),
                                               ),
@@ -319,18 +312,13 @@ class _LeaveScreenState extends State<Applyleave> {
                                               width:
                                                   40, // Width of the container
                                               decoration: BoxDecoration(
-                                                color: Colors
-                                                    .white, // Background color of the container
+                                                color: Colors.white, // Background color of the container
                                                 border: Border.all(
                                                     color: Colors.grey,
-                                                    width:
-                                                        1), // Outer border color and width
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        20), // Border radius
+                                                    width: 1), // Outer border color and width
+                                                borderRadius: BorderRadius.circular(20), // Border radius
                                               ),
-                                              alignment: Alignment
-                                                  .center, // Center the text within the container
+                                              alignment: Alignment.center, // Center the text within the container
                                               child: Text(
                                                 leaveData
                                                     .fAvailed, // The text to display
@@ -401,59 +389,82 @@ class _LeaveScreenState extends State<Applyleave> {
                                     ],
                                   ),
                                   SizedBox(height: 10.0),
-                                 Row(
-                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets.only(left: 10.0),
-                                                                child: Text('$sLvDescTitle',style: TextStyle(
-                                                                    color: Colors.redAccent,fontSize: 10,fontWeight: FontWeight.normal
-                                                                ),),
-                                                              ),
-                                                              Spacer(),
-                                                              Align(
-                                                                alignment: Alignment.centerRight,
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets.only(bottom: 10,right: 10),
-                                                                  child: GestureDetector(
-                                                                    onTap: () async{
-                                                                      var sLvTypeCode = leaveData.sLvTypeCode;
-                                                                      // var sLvTypeCode = '${hrmsLeaveBalaceV2List?[index].sLvTypeCode}';
-                                                                      //sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
-                                                                      sLvDesc = leaveData.sLvDesc;
-                                                                      // print('---511---${sLvDesc}');
-                                                                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                                      var sFirstName = prefs.getString('sFirstName');// sLvTypeCode
-                                                                      var sLastName = prefs.getString('sLastName');
-                                                                      // var sLvTypeCode = prefs.getString('sLvTypeCode');
-                                                                      print('----517--${sFirstName}');
-                                                                      print('----518--${sLvTypeCode}');
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text(
+                                          '$sLvDescTitle',
+                                          style: TextStyle(
+                                              color: Colors.redAccent,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.normal),
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 10, right: 10),
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              var sLvTypeCode =
+                                                  leaveData.sLvTypeCode;
+                                              // var sLvTypeCode = '${hrmsLeaveBalaceV2List?[index].sLvTypeCode}';
+                                              //sLvDesc = '${hrmsLeaveBalaceV2List?[index].sLvDesc}';
+                                              sLvDesc = leaveData.sLvDesc;
+                                              // print('---511---${sLvDesc}');
+                                              SharedPreferences prefs =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              var sFirstName = prefs.getString(
+                                                  'sFirstName'); // sLvTypeCode
+                                              var sLastName =
+                                                  prefs.getString('sLastName');
+                                              // var sLvTypeCode = prefs.getString('sLvTypeCode');
+                                              print('----517--${sFirstName}');
+                                              print('----518--${sLvTypeCode}');
 
-                                                                      Navigator.push(
-                                                                        context,
-                                                                        MaterialPageRoute(builder: (context) => ApplyLeaveSubmitFormHome(sLvDesc,sFirstName,sLvTypeCode,sLastName)),
-                                                                      );
-                                                                    },
-                                                                    child: Container(
-                                                                      height: 30, // Height of the second container
-                                                                      width: 80, // Width of the second container
-                                                                      decoration: BoxDecoration(
-                                                                        color: containerColor, // Background color of the second container
-                                                                        borderRadius: BorderRadius.circular(20), // Border radius
-                                                                      ),
-                                                                      alignment: Alignment.center, // Center the text within the container
-                                                                      child: Center(
-                                                                        child: Text(
-                                                                            'Apply', // The text to display
-                                                                            style: AppTextStyle.font12OpenSansRegularWhiteTextStyle
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ApplyLeaveSubmitFormHome(
+                                                            sLvDesc,
+                                                            sFirstName,
+                                                            sLvTypeCode,
+                                                            sLastName)),
+                                              );
+                                            },
+                                            child: Container(
+                                              height:
+                                                  30, // Height of the second container
+                                              width:
+                                                  80, // Width of the second container
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    containerColor, // Background color of the second container
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20), // Border radius
+                                              ),
+                                              alignment: Alignment
+                                                  .center, // Center the text within the container
+                                              child: Center(
+                                                child: Text(
+                                                    'Apply', // The text to display
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularWhiteTextStyle),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   SizedBox(height: 2),
                                   // ... rest of the code for your columns and buttons
                                 ],
@@ -466,9 +477,7 @@ class _LeaveScreenState extends State<Applyleave> {
                   },
                 ),
               ),
-            ))
-
-        );
+            )));
   }
 
   // Helper function to build each Column

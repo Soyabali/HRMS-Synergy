@@ -7,7 +7,6 @@ import '../../data/hrmsMonthlyAttendanceRepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
-
 class Attendancelist extends StatelessWidget {
 
   const Attendancelist({super.key});
@@ -203,7 +202,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                   ),
                 ),
                 SizedBox(height: 5),
-
                 Padding(
                    padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5,top: 5),
                    child: Container(
@@ -287,8 +285,7 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                    ),
                                                  ),
                                                  SizedBox(width: 15), // Spacing between the two containers
-                                                 Text(
-                                                     '${monthlyAttendance?[index]['dDate']}', // The text to display
+                                                 Text('${monthlyAttendance?[index]['dDate']}', // The text to display
                                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                                  ),
                                                  Spacer(),
@@ -318,7 +315,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                  ),
                                                ],
                                              ),
-
                                              SizedBox(height: 10),
                                              Center(
                                                child: Container(
@@ -355,7 +351,6 @@ class _AttendaceListHomeState extends State<AttendaceListHome> {
                                                ),
                                              ),
                                              SizedBox(height: 10),
-
                                              Visibility(
                                                visible: '${monthlyAttendance?[index]['sStatus']}' != 'Holiday' && '${monthlyAttendance?[index]['sStatus']}' != 'Weekly Off'
                                                    && '${monthlyAttendance?[index]['sStatus']}' != 'On Leave'  && '${monthlyAttendance?[index]['sStatus']}' != 'Work From Home',

@@ -7,7 +7,6 @@ import 'package:untitled/presentation/login/loginScreen.dart';
 import '../presentation/resources/theme_manager.dart';
 import '../presentation/splash/splash.dart';
 
-
 class MyApp extends StatefulWidget {
 
   MyApp._internal(); // private named constructor

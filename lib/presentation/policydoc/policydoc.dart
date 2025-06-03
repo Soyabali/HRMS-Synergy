@@ -12,7 +12,6 @@ import '../resources/app_text_style.dart';
 import '../resources/values_manager.dart';
 
 class PolicyDoc extends StatelessWidget {
-
   const PolicyDoc({super.key});
 
   @override
@@ -23,6 +22,7 @@ class PolicyDoc extends StatelessWidget {
     );
   }
 }
+
 class PolicydocScreen extends StatefulWidget {
   const PolicydocScreen({super.key});
 
@@ -31,9 +31,8 @@ class PolicydocScreen extends StatefulWidget {
 }
 
 class _PolicydocScreenState extends State<PolicydocScreen> {
-
   late Future<List<PolicyDocModel>> polocyDocList;
-  var result,msg;
+  var result, msg;
   GeneralFunction generalFunction = GeneralFunction();
 
   final List<Color> colorList = [
@@ -48,7 +47,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
-      FocusScope.of(context).unfocus();  // Unfocus when app is paused
+      FocusScope.of(context).unfocus(); // Unfocus when app is paused
     }
   }
 
@@ -63,7 +62,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       // appBar
       appBar: AppBar(
         // statusBarColore
@@ -108,227 +107,236 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
           ),
         ), // Removes shadow under the AppBar
       ),
-
-        body: ListView(
+      body: ListView(
         children: [
-               Container(
-                       height: MediaQuery.of(context).size.height-110,
-                       child: FutureBuilder<List<PolicyDocModel>>(
-                           future: polocyDocList,
-                           builder: (context, snapshot) {
-                             // Check if the snapshot has data and is not null
-                             if (snapshot.connectionState == ConnectionState.waiting) {
-                               // Show a loading indicator while waiting for data
-                               return Center(child: CircularProgressIndicator());
-                             } else if (snapshot.hasError) {
-                               // Handle error scenario
-                               return Center(child: Text('Error: ${snapshot.error}'));
-                             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                               // Handle the case where the data is empty or null
-                               return Center(child: Text('No notifications found'));
-                             }
-                             // Once data is available, build the ListView
-                             final polocyDocList = snapshot.data!; // Access the resolved data
-                 
-                             return ListView.builder(
-                                 itemCount: polocyDocList.length,
-                                 itemBuilder: (context, index) {
-                                   final policyDocData = polocyDocList[index];
-                                   final randomColor = colorList[index % colorList.length];
-                                   return
-                                     Column(
-                                       children: [
-                                         Padding(
-                                             padding: const EdgeInsets.only(left: 5, right: 5),
-                                             child: Card(
-                                               elevation: 5, // Elevation for shadow effect
-                                               shape: RoundedRectangleBorder(
-                                                   borderRadius: BorderRadius.circular(5),
-                                                   // Rounded corners
-                                                   side: BorderSide(color: Colors.grey)),
-                                               child: Padding(
-                                                 padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
-                                                 child: Container(
-                                                   color: Colors.white,
-                                                   child: Padding(
-                                                     padding: const EdgeInsets.only(left: 5),
-                                                     child: Column(
-                                                       mainAxisAlignment: MainAxisAlignment.start,
-                                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                                       children: [
-                                                         Row(
-                                                           children: [
-                                                             // First Column: Takes 80% of the width
-                                                             Expanded(
-                                                               flex: 8, // 80% of width
-                                                               child: Column(
-                                                                 crossAxisAlignment: CrossAxisAlignment
-                                                                     .start,
-                                                                 children: [
-                                                                   Row(
-                                                                     mainAxisAlignment: MainAxisAlignment
-                                                                         .start,
-                                                                     children: <Widget>[
-                                                                       Container(
-                                                                         height: 10,
-                                                                         width: 10,
-                                                                         decoration: BoxDecoration(
-                                                                           color: randomColor, // Red color
-                                                                           borderRadius: BorderRadius
-                                                                               .circular(5), // Radius of 5
-                                                                         ),
-                                                                       ),
-                                                                       SizedBox(width: 5),
-                                                                       Text(
-                                                                         policyDocData.dUploadDate,
-                                                                         style: AppTextStyle
-                                                                             .font12OpenSansRegularBlackTextStyle,
-                                                                       ),
-                 
-                                                                     ],
-                                                                   ),
-                                                                   const SizedBox(height: 4),
-                                                                   // Spacing between the two texts
-                                                                   Text(
-                                                                     policyDocData.sPolictyTitle,
-                                                                     style: AppTextStyle
-                                                                         .font12OpenSansRegularBlackTextStyle,
-                 
-                                                                   ),
-                                                                 ],
-                                                               ),
-                                                             ),
-                 
-                                                             Expanded(
-                                                               flex: 2, // 20% of width
-                                                               child: Align(
-                                                                 alignment: Alignment.centerRight,
-                                                                 child: Transform.rotate(
-                                                                   angle: 45 * (3.1415927 / 180),
-                                                                   // Rotate by 90 degrees (convert degrees to radians)
-                                                                   child: GestureDetector(
-                                                                     child: IconButton(
-                                                                       icon: Icon(Icons.attach_file),
-                                                                       onPressed: () {
-                 
-                                                                         var pdfFile =  policyDocData.sPolicyFile;
-                                                                         print('---Downlode pdf ---195------$pdfFile');
-                                                                         Navigator.push(
-                                                                           context,
-                                                                           MaterialPageRoute(builder: (context) =>  PolicydocPdfScreen(pdfFile:pdfFile)),
-                                                                         );
-                                                      // Handle onPressed for icon here
-                                                                       },
-                                                                     ),
-                                                                   ),
-                                                                 ),
-                                                               ),
-                                                             )
-                 
-                                                           ],
-                                                         ),
-                                                         SizedBox(height: 5),
-                                                         Text(
-                                                           policyDocData.sPolictyDescription,
-                                                           style: AppTextStyle
-                                                               .font10OpenSansRegularBlackTextStyle,
-                                                         ),
-                                                          SizedBox(height: 5),
-                                                         // Row(
-                                                         //   mainAxisAlignment: MainAxisAlignment.end,
-                                                         //   // Aligns Row to the right
-                                                         //   children: [
-                                                         //     // Accept text with iOS forward icon
-                                                         //     GestureDetector(
-                                                         //       onTap: () async {
-                                                         //         print('---ACCEPT---');
-                                                         //         // call api
-                                                         //         var sPolicyCode = policyDocData.sPolicyCode;
-                                                         //         print('---sPolicyCode---$sPolicyCode');
-                                                         //         var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
-                                                         //         print('---232---$projectDocAccept');
-                                                         //         setState(() {
-                                                         //           msg = "${projectDocAccept[0]['Msg']}";
-                                                         //         });
-                                                         //         if(msg!=null && msg!=''){
-                                                         //           showDialog(
-                                                         //             context: context,
-                                                         //             builder: (BuildContext context) {
-                                                         //               return _buildDialogSucces2(context, msg); // A new dialog for showing success
-                                                         //             },
-                                                         //           );
-                                                         //         }else{
-                                                         //           generalFunction.displayToast("Not Response");
-                                                         //         }
-                                                         //
-                                                         //
-                                                         //       },
-                                                         //       child: Row(
-                                                         //         children: [
-                                                         //           Text('ACCEPT', style: AppTextStyle
-                                                         //               .font12OpenSansRegularGreenTextStyle,
-                                                         //           ),
-                                                         //           SizedBox(width: 8),
-                                                         //           // Space between text and icon
-                                                         //           Icon(Icons.arrow_forward_ios, size: 12),
-                                                         //         ],
-                                                         //       ),
-                                                         //     ),
-                                                         //     SizedBox(width: 20),
-                                                         //     // Space between "Accept" and "Reject"
-                                                         //
-                                                         //     // Reject text with iOS forward icon
-                                                         //     GestureDetector(
-                                                         //       onTap: (){
-                                                         //         print('---REJECT---');
-                                                         //         //_takeActionDialog(context);
-                                                         //         var sPolicyCode = policyDocData.sPolicyCode;
-                                                         //         print('---PoliceCode---$sPolicyCode');
-                                                         //
-                                                         //         showDialog(
-                                                         //           context: context,
-                                                         //           builder: (BuildContext context) {
-                                                         //             return _takeActionDialog(context,sPolicyCode);
-                                                         //           },
-                                                         //         );
-                                                         //       },
-                                                         //       child: Row(
-                                                         //         children: [
-                                                         //           Text('REJECT', style: AppTextStyle
-                                                         //               .font12OpenSansRegularRedTextStyle),
-                                                         //           SizedBox(width: 8),
-                                                         //           // Space between text and icon
-                                                         //           Icon(Icons.arrow_forward_ios, size: 12),
-                                                         //         ],
-                                                         //       ),
-                                                         //     ),
-                                                         //   ],
-                                                         // ),
-                                                         // SizedBox(height: 5),
-                                                       ],
-                                                     ),
-                                                   ),
-                                                 ),
-                                               ),
-                                             )
-                                         ),
-                                       ],
-                                     );
-                                 }
-                             );
-                           }
-                       ),
-                     ),
+          Container(
+            height: MediaQuery.of(context).size.height - 110,
+            child: FutureBuilder<List<PolicyDocModel>>(
+                future: polocyDocList,
+                builder: (context, snapshot) {
+                  // Check if the snapshot has data and is not null
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // Show a loading indicator while waiting for data
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    // Handle error scenario
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    // Handle the case where the data is empty or null
+                    return Center(child: Text('No notifications found'));
+                  }
+                  // Once data is available, build the ListView
+                  final polocyDocList = snapshot.data!; // Access the resolved data
 
+                  return ListView.builder(
+                      itemCount: polocyDocList.length,
+                      itemBuilder: (context, index) {
+                        final policyDocData = polocyDocList[index];
+                        final randomColor = colorList[index % colorList.length];
+
+                        return Column(
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(left: 5, right: 5),
+                                child: Card(
+                                  elevation: 5, // Elevation for shadow effect
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      // Rounded corners
+                                      side: BorderSide(color: Colors.grey)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5, top: 5),
+                                    child: Container(
+                                      color: Colors.white,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                // First Column: Takes 80% of the width
+                                                Expanded(
+                                                  flex: 8, // 80% of width
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            height: 10,
+                                                            width: 10,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: randomColor,
+                                                              // Red color
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5), // Radius of 5
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text(
+                                                            policyDocData
+                                                                .dUploadDate,
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 4),
+                                                      // Spacing between the two texts
+                                                      Text(
+                                                        policyDocData
+                                                            .sPolictyTitle,
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+
+                                                Expanded(
+                                                  flex: 2, // 20% of width
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Transform.rotate(
+                                                      angle: 45 * (3.1415927 / 180),
+                                                      // Rotate by 90 degrees (convert degrees to radians)
+                                                      child: GestureDetector(
+                                                        child: IconButton(
+                                                          icon: Icon(Icons.attach_file),
+                                                          onPressed: () {
+                                                            var pdfFile = policyDocData.sPolicyFile;
+                                                            print(
+                                                                '---Downlode pdf ---195------$pdfFile');
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      PolicydocPdfScreen(
+                                                                          pdfFile:
+                                                                              pdfFile)),
+                                                            );
+                                                            // Handle onPressed for icon here
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              policyDocData.sPolictyDescription,
+                                              style: AppTextStyle
+                                                  .font10OpenSansRegularBlackTextStyle,
+                                            ),
+                                            SizedBox(height: 5),
+                                            // Row(
+                                            //   mainAxisAlignment: MainAxisAlignment.end,
+                                            //   // Aligns Row to the right
+                                            //   children: [
+                                            //     // Accept text with iOS forward icon
+                                            //     GestureDetector(
+                                            //       onTap: () async {
+                                            //         print('---ACCEPT---');
+                                            //         // call api
+                                            //         var sPolicyCode = policyDocData.sPolicyCode;
+                                            //         print('---sPolicyCode---$sPolicyCode');
+                                            //         var projectDocAccept = await PolicydocAcceptRepo().policydocAccept(context,sPolicyCode);
+                                            //         print('---232---$projectDocAccept');
+                                            //         setState(() {
+                                            //           msg = "${projectDocAccept[0]['Msg']}";
+                                            //         });
+                                            //         if(msg!=null && msg!=''){
+                                            //           showDialog(
+                                            //             context: context,
+                                            //             builder: (BuildContext context) {
+                                            //               return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                                            //             },
+                                            //           );
+                                            //         }else{
+                                            //           generalFunction.displayToast("Not Response");
+                                            //         }
+                                            //
+                                            //
+                                            //       },
+                                            //       child: Row(
+                                            //         children: [
+                                            //           Text('ACCEPT', style: AppTextStyle
+                                            //               .font12OpenSansRegularGreenTextStyle,
+                                            //           ),
+                                            //           SizedBox(width: 8),
+                                            //           // Space between text and icon
+                                            //           Icon(Icons.arrow_forward_ios, size: 12),
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            //     SizedBox(width: 20),
+                                            //     // Space between "Accept" and "Reject"
+                                            //
+                                            //     // Reject text with iOS forward icon
+                                            //     GestureDetector(
+                                            //       onTap: (){
+                                            //         print('---REJECT---');
+                                            //         //_takeActionDialog(context);
+                                            //         var sPolicyCode = policyDocData.sPolicyCode;
+                                            //         print('---PoliceCode---$sPolicyCode');
+                                            //
+                                            //         showDialog(
+                                            //           context: context,
+                                            //           builder: (BuildContext context) {
+                                            //             return _takeActionDialog(context,sPolicyCode);
+                                            //           },
+                                            //         );
+                                            //       },
+                                            //       child: Row(
+                                            //         children: [
+                                            //           Text('REJECT', style: AppTextStyle
+                                            //               .font12OpenSansRegularRedTextStyle),
+                                            //           SizedBox(width: 8),
+                                            //           // Space between text and icon
+                                            //           Icon(Icons.arrow_forward_ios, size: 12),
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            // SizedBox(height: 5),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        );
+                      });
+                }),
+          ),
         ],
-           ),
-
+      ),
     );
   }
+
   // Open DIALOG
   // take a action Dialog
   Widget _takeActionDialog(BuildContext context, String sPolicyCode) {
-    TextEditingController _takeAction = TextEditingController(); // Text controller for the TextFormField
+    TextEditingController _takeAction =
+        TextEditingController(); // Text controller for the TextFormField
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -341,7 +349,8 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 220, // Adjusted height to accommodate the TextFormField and Submit button
+            height: 220,
+            // Adjusted height to accommodate the TextFormField and Submit button
             padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -365,11 +374,16 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                     onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                      filled: true, // Enable background color
-                      fillColor: Color(0xFFf2f3f5), // Set your desired background color here
-                      hintText: 'Enter Reason', // Add hint text here
-                      hintStyle: AppTextStyle.font12OpenSansRegularBlack45TextStyle,
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 10.0),
+                      filled: true,
+                      // Enable background color
+                      fillColor: Color(0xFFf2f3f5),
+                      // Set your desired background color here
+                      hintText: 'Enter Reason',
+                      // Add hint text here
+                      hintStyle:
+                          AppTextStyle.font12OpenSansRegularBlack45TextStyle,
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
@@ -378,23 +392,24 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
 
                 // Submit button
                 InkWell(
-                  onTap: ()async{
+                  onTap: () async {
                     var remark = _takeAction.text.trim();
                     print('-----1102--$remark');
                     //  sPolicyCode
                     print('-----350----$sPolicyCode');
-                   // print(sTranCode);
+                    // print(sTranCode);
                     // Check if the input is not empty
                     if (remark != null && remark != '') {
                       print('---Call Api-----');
 
                       // Make API call here
-                      var projectdocReject = await PolicydocrejectRepo().policydocReject(context,remark,sPolicyCode);
+                      var projectdocReject = await PolicydocrejectRepo()
+                          .policydocReject(context, remark, sPolicyCode);
 
-                       print('---360----$projectdocReject');
+                      print('---360----$projectdocReject');
                       //
                       setState(() {
-                       // result = "${projectdocReject[0]['Result']}";
+                        // result = "${projectdocReject[0]['Result']}";
                         msg = "${projectdocReject[0]['Msg']}";
                       });
 
@@ -402,7 +417,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                       print('---1115----$msg');
 
                       // Check the result of the API call
-                      if (msg!=null && msg !='') {
+                      if (msg != null && msg != '') {
                         // Close the current dialog and show a success dialog
                         Navigator.of(context).pop();
 
@@ -410,7 +425,8 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return _buildDialogSucces2(context, msg); // A new dialog for showing success
+                            return _buildDialogSucces2(context,
+                                msg); // A new dialog for showing success
                           },
                         );
                         print('-----1123---');
@@ -427,7 +443,6 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                       // Handle the case where no input is provided
                       generalFunction.displayToast("Enter remarks");
                     }
-
                   },
                   child: Container(
                     //width: double.infinity,
@@ -437,7 +452,8 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                     decoration: BoxDecoration(
                       color: AppColors.loginbutton,
                       // Background color using HEX value
-                      borderRadius: BorderRadius.circular(AppMargin.m10), // Rounded corners
+                      borderRadius: BorderRadius.circular(
+                          AppMargin.m10), // Rounded corners
                     ),
                     //  #00b3c7
                     child: Center(
@@ -483,7 +499,8 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
               backgroundColor: Colors.white,
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/policydocrecect.jpeg', // Replace with your asset image path
+                  'assets/images/policydocrecect.jpeg',
+                  // Replace with your asset image path
                   fit: BoxFit.fill,
                   width: 40,
                   height: 40,
@@ -510,8 +527,9 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
       ),
     );
   }
+
   // sucessDialog
-  Widget _buildDialogSucces2(BuildContext context,String msg) {
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -533,10 +551,8 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Information',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 Text(
                   msg,
@@ -557,19 +573,22 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
                         // call api again
                         /// todo here you uncomment of the api link
                         ///
-                      //  hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //  hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
 
                         // Navigator.push(
                         //   context,
                         //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
                         // );
-
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Set the background color to white
-                        foregroundColor: Colors.black, // Set the text color to black
+                        backgroundColor:
+                            Colors.white, // Set the background color to white
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -582,17 +601,18 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
               radius: 30,
               backgroundColor: Colors.blueAccent,
               child: ClipOval(
-                child: Image.asset('assets/images/dialogimg.jpeg',
+                  child: Image.asset(
+                'assets/images/dialogimg.jpeg',
                 fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
-                )
-                // child: Image.asset('assets/images/sussess.jpeg', // Replace with your asset image path
-                //   fit: BoxFit.cover,
-                //   width: 60,
-                //   height: 60,
-                // ),
-              ),
+                width: 60,
+                height: 60,
+              )
+                  // child: Image.asset('assets/images/sussess.jpeg', // Replace with your asset image path
+                  //   fit: BoxFit.cover,
+                  //   width: 60,
+                  //   height: 60,
+                  // ),
+                  ),
             ),
           ),
         ],
@@ -600,4 +620,3 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
     );
   }
 }
-

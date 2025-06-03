@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
@@ -20,6 +21,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TripDetail extends StatelessWidget {
+
   const TripDetail({super.key});
 
   @override
@@ -46,8 +48,10 @@ class WorkDetailPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<WorkDetailPage> {
+
   late String randomNumber;
   double? lat, long;
+  var locationAddress;
   var dTripDateTime;
   File? image;
   var uplodedImage;
@@ -91,42 +95,88 @@ class _MyHomePageState extends State<WorkDetailPage> {
     return formattedDateTime;
   }
   // trip dialog success
-
-
   // get a currecr location latitude and longitude
   void getLocation() async {
+    showLoader();
     bool serviceEnabled;
     LocationPermission permission;
+
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
+      hideLoader();
       return Future.error('Location services are disabled.');
     }
+
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        hideLoader();
+        return Future.error('Location permissions are denied.');
       }
     }
+
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      hideLoader();
+      return Future.error('Location permissions are permanently denied.');
     }
+
+    // Get the current location
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    debugPrint("-------------Position-----------------");
-    debugPrint(position.latitude.toString());
 
-    lat = position.latitude;
-    long = position.longitude;
-    print('-----------105----$lat');
-    print('-----------106----$long');
-    // setState(() {
-    // });
-    debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-    debugPrint(position.toString());
+    // Convert latitude and longitude to an address
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+
+    Placemark place = placemarks[0]; // Extract relevant details
+    String address =
+        "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+
+    // Update state with location and address
+    setState(() {
+      lat = position.latitude;
+      long = position.longitude;
+      locationAddress = address; // Store the converted address
+    });
+    print('-------142----Address--$locationAddress');
+    print('-------143--lat----$lat');
+    print('-------144--long----$long');
+    hideLoader();
   }
+  // void getLocation() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     // Permissions are denied forever, handle appropriately.
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //   debugPrint("-------------Position-----------------");
+  //   debugPrint(position.latitude.toString());
+  //
+  //   lat = position.latitude;
+  //   long = position.longitude;
+  //   print('-----------105----$lat');
+  //   print('-----------106----$long');
+  //   // setState(() {
+  //   // });
+  //   debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
+  //   debugPrint(position.toString());
+  // }
 
   // function to generate random no
   String generateRandomNumber() {
@@ -307,8 +357,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey
-                                .withOpacity(0.5), // Color of the shadow
+                            color: Colors.grey.withOpacity(0.5), // Color of the shadow
                             spreadRadius: 5, // Spread radius
                             blurRadius: 7, // Blur radius
                             offset: Offset(0, 3), // Offset of the shadow
@@ -345,8 +394,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                       style: AppTextStyle
                                           .font12OpenSansRegularBlackTextStyle,
                                       maxLines: 2, // Limits the text to 2 lines
-                                      overflow: TextOverflow
-                                          .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                      overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
                                       softWrap: true,
                                     )
                                   ],
@@ -364,12 +412,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
-                                        vertical: 10.0, horizontal: 10.0),
+                                     vertical: 10.0, horizontal: 10.0),
                                     filled: true, // Enable background color
-                                    fillColor: Color(
-                                        0xFFf2f3f5), // Set your desired background color here
-                                    hintText:
-                                        'Enter Odometer', // Add your hint text here
+                                    fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                    hintText: 'Enter Odometer', // Add your hint text here
                                     hintStyle: TextStyle(color: Colors.grey),
                                   ),
                                   autovalidateMode:
@@ -379,8 +425,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(RegExp(
                                         r'^\d*\.?\d{0,2}')), // Allow only numbers with optional decimal point
-                                    LengthLimitingTextInputFormatter(
-                                        10), // Limit input to 10 characters
+                                    LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
                                   ],
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -477,7 +522,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                       randomNumber,
                                                       uplodedImage,
                                                       edtOdometer,
-                                                      dTripDateTime);
+                                                      dTripDateTime,
+                                                     locationAddress
+                                               );
 
 
                                           print('---472---$tripStart');

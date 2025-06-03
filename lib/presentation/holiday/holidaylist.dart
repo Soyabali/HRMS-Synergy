@@ -90,7 +90,6 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     _scrollController.jumpTo(offset); // No animation, instant scroll
   }
 
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -108,7 +107,7 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    holidayList = HolidayListRepo().holidayList(context);
+     holidayList = HolidayListRepo().holidayList(context);
      selectedMonth = getCurrentMonth();
 
     capitalizeFirstLetter(selectedMonth);
@@ -117,8 +116,6 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     holidayList.then((holidays) {
       filterByMonth(holidays, selectedMonth);
     });
-
-
     // Initialize the scroll controller
     _scrollController = ScrollController();
 
@@ -211,14 +208,12 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
 
                       return InkWell(
                         onTap: () {
-
                           setState(() {
                             selectedMonth = month;
                             print('----177--$selectedMonth');
                           });
                           // Scroll to the newly selected month
                           _scrollToCurrentMonth();
-
                           // Fetch filtered holiday list for the selected month
                           holidayList.then((holidays) {
                             filterByMonth(holidays, month);
@@ -237,8 +232,7 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
                             ),
                             child: Text(
                               month,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black45),
+                              style: TextStyle(fontSize: 16, color: Colors.black45),
                             ),
                           ),
                         ),
@@ -255,7 +249,6 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
                   color: Color(0xff3f617d),
                 ),
               ),
-
               // Vertical Holiday ListView
               Expanded(
                 child: FutureBuilder<List<HolidayListModel>>(
@@ -269,13 +262,11 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
                       return Center(
                           child: Text('No holidays lies in this month!'));
                     }
-
                     return ListView.builder(
                       itemCount: filteredHolidayList.length,
                       itemBuilder: (context, index) {
                         final holiday = filteredHolidayList[index];
                         final randomColor = colorList[index % colorList.length];
-
 
                         return Container(
                          // margin: EdgeInsets.all(10),

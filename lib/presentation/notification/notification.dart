@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../app/generalFunction.dart';
 import '../../data/notificatinDeleteRepo.dart';
 import '../../data/notificationRepo.dart';
@@ -10,7 +9,9 @@ import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
 class NotificationPage extends StatefulWidget {
+
   NotificationPage({super.key});
+
   @override
   State<NotificationPage> createState() => _NotificationPageState();
 }
@@ -28,8 +29,8 @@ class _NotificationPageState extends State<NotificationPage> {
       FocusScope.of(context).unfocus();  // Unfocus when app is paused
     }
   }
-
   // deleteDialogBox
+
   Widget _deleteItemDialog(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -52,9 +53,7 @@ class _NotificationPageState extends State<NotificationPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Delete',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                Text('Delete', style: AppTextStyle.font16OpenSansRegularBlackTextStyle
                 ),
                 SizedBox(height: 10),
                 Text(

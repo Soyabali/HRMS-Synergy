@@ -23,6 +23,7 @@ import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geocoding/geocoding.dart';
 
 class DashBoard extends StatelessWidget {
 
@@ -60,6 +61,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   double? lat, long;
   var sFirstName, sCompEmailId, sLastName, fullName;
   var token;
+  var locationAddress;
 
   // DialogBo
 
@@ -117,8 +119,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                     // Allow text to wrap
                     maxLines: 2,
                     // Set the maximum number of lines the text can take
-                    overflow: TextOverflow
-                        .ellipsis, // Add ellipsis if the text exceeds the available space
+                    overflow: TextOverflow.ellipsis, // Add ellipsis if the text exceeds the available space
                   ),
                 ),
                 SizedBox(height: 20),
@@ -266,7 +267,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         child: TextButton(
                           onPressed: () {
                             generalFunction.logout(context);
-
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
@@ -277,8 +277,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             backgroundColor: Colors.white,
                             // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  15), // Button border radius
+                              borderRadius: BorderRadius.circular(15), // Button border radius
                             ),
                           ),
                           child: Text(
@@ -311,8 +310,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                             backgroundColor: Colors.white,
                             // Button background
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  15), // Button border radius
+                              borderRadius: BorderRadius.circular(15), // Button border radius
                             ),
                           ),
                           child: Text(
@@ -446,19 +444,17 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   }
 
   // get a location :
-
   void getLocation() async {
     showLoader();
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       hideLoader();
       return Future.error('Location services are disabled.');
     }
-    // Check and request location permissions
+
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -467,40 +463,99 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         return Future.error('Location permissions are denied.');
       }
     }
+
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('Location permissions are permanently denied.');
     }
+
     // Get the current location
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
-    // Update state with the new location
+    // Convert latitude and longitude to an address
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude, position.longitude);
+
+    Placemark place = placemarks[0]; // Extract relevant details
+    String address =
+        "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+
+    // Update state with location and address
     setState(() {
       lat = position.latitude;
       long = position.longitude;
+      locationAddress = address; // Store the converted address
     });
+     print('-------490------$locationAddress');
+    print('-------491--lat----$lat');
+    print('-------492--long----$long');
     hideLoader();
-    if (lat != null && long != null) {
-      hideLoader();
-      //  print('----452---call api---');
-      attendaceapi(lat, long); // Call your attendance API
 
+    if (lat != null && long != null) {
+      // Call API with latitude, longitude, and address
+      attendaceapi(lat, long, locationAddress);
     } else {
       hideLoader();
       // displayToast("Please pick location");
     }
-    hideLoader();
-    // print('Latitude: $lat, Longitude: $long');
   }
 
-  attendaceapi(double? lat, double? long) async {
+  // void getLocation() async {
+  //   showLoader();
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //
+  //   // Check if location services are enabled
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     hideLoader();
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //   // Check and request location permissions
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       hideLoader();
+  //       return Future.error('Location permissions are denied.');
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     hideLoader();
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+  //   // Get the current location
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //
+  //   // Update state with the new location
+  //   setState(() {
+  //     lat = position.latitude;
+  //     long = position.longitude;
+  //   });
+  //   hideLoader();
+  //   if (lat != null && long != null) {
+  //     hideLoader();
+  //     //  print('----452---call api---');
+  //     attendaceapi(lat, long); // Call your attendance API
+  //
+  //   } else {
+  //     hideLoader();
+  //     // displayToast("Please pick location");
+  //   }
+  //   hideLoader();
+  //   // print('Latitude: $lat, Longitude: $long');
+  // }
+
+  attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
-        context, lat, long);
+        context, lat, long,locationAddress);
 
     if (attendance != null) {
       var msg = "${attendance[0]['Msg']}";
+      // dialog
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -528,6 +583,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       ),
     );
   }
+
   getLocalDataInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // get a stored value
@@ -538,6 +594,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       sCompEmailId = prefs.getString('sCompEmailId');
     });
   }
+
   // firebase get token code---
 
   void setupPushNotifications() async {
@@ -819,9 +876,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
      });
   }
 
-
-
-
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused) {
@@ -845,7 +899,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               // statusBarColore
               systemOverlayStyle: const SystemUiOverlayStyle(
                 statusBarColor: Color(0xFF2a697b),
-
                 statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
                 statusBarBrightness: Brightness.light, // For iOS (dark icons)
               ),
@@ -937,6 +990,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         mainAxisSpacing: 5.0,
                         shrinkWrap: true,
                         children: <Widget>[
+                          // profile
                           GestureDetector(
                             onTap: (){
                               Navigator.push(
@@ -992,6 +1046,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               ),
                             ),
                           ),
+                          // markAttendance
                           GestureDetector(
                             onTap: (){
                               showDialog(
@@ -1049,6 +1104,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                               ),
                             ),
                           ),
+                          // AttendanceList
                           GestureDetector(
                             onTap: (){
                               Navigator.push(

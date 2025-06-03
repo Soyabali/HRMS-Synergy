@@ -9,7 +9,6 @@ import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
 class Profile extends StatelessWidget {
-
   const Profile({super.key});
 
   @override
@@ -51,6 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
   toGetLocalDataBaseValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     setState(() {
       sCompEmpCode = prefs.getString('sCompEmpCode');
       sFirstName = prefs.getString('sFirstName');
@@ -143,7 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
                          mainAxisAlignment: MainAxisAlignment.start,
                          children: [
                            Image.asset('assets/images/ic_user_profile.PNG',
-                           height: 16,
+                             height: 16,
                              width: 16,
                              fit: BoxFit.fill,
                            ),
@@ -506,7 +506,7 @@ class _ProfilePageState extends State<ProfilePage> {
                            color: Colors.white,
                            child: Padding(
                                padding: const EdgeInsets.only(
-                                   left: 5,right: 5,top: 5),
+                                left: 5,right: 5,top: 5),
                                child: Column(
                                  mainAxisAlignment: MainAxisAlignment.start,
                                  crossAxisAlignment: CrossAxisAlignment.start,
@@ -666,8 +666,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                          child: Row(
                                            mainAxisSize: MainAxisSize.min, // Center the row contents
                                            children: [
-                                             Text(
-                                                 'Account Number',
+                                             Text('Account Number',
                                                  style: AppTextStyle.font12OpenSansRegularBlackTextStyle
                                              ),
                                              SizedBox(width: 5.0), // Space between 'Day' and ':'
