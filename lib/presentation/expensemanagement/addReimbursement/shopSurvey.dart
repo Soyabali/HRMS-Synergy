@@ -168,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImage2() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -187,7 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImage3() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -206,7 +204,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImage4() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -246,7 +243,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImageGallery2() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -266,7 +262,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImageGallery3() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -286,7 +281,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImageGallery4() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -321,16 +315,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  // void displayToast(String msg) {
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  // }
 
   Future<void> uploadImage(String token, File imageFile) async {
     var baseURL = BaseRepo().baseurl;

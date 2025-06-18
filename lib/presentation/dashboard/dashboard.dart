@@ -379,15 +379,25 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                     style: AppTextStyle.font16OpenSansRegularBlackTextStyle
                 ),
                 SizedBox(height: 10),
-                Text(
-                  msg,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
+                SingleChildScrollView(
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.justify, // Justify the text
                   ),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
                 ),
+                // Text(
+                //   msg,
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     color: Colors.grey[600],
+                //   ),
+                //   maxLines: 2,
+                //   textAlign: TextAlign.center,
+                // ),
                 SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -418,6 +428,95 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
               child: ClipOval(
                 child: Image.asset(
                   'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  // dialoginfo
+  Widget _buildDialogInfo(BuildContext context, String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                SingleChildScrollView(
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.justify, // Justify the text
+                  ),
+                ),
+                // Text(
+                //   msg,
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     color: Colors.grey[600],
+                //   ),
+                //   maxLines: 2,
+                //   textAlign: TextAlign.center,
+                // ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor: Colors
+                            .black, // Set the text color to black
+                      ),
+                      child: Text('Ok', style: AppTextStyle
+                          .font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/information.jpeg',
                   // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
@@ -491,16 +590,33 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
         context, lat, long,locationAddress);
+    print("---Attendace response-----494-----$attendance");
 
     if (attendance != null) {
       var msg = "${attendance[0]['Msg']}";
+      var result = "${attendance[0]['Result']}";
+      setState(() {
+
+      });
+      // here you should apply logic if result 0 then show info Dialog otherwise show
+      // sucess Dialog
+      if(result==0){
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return _buildDialogSucces2(context, msg);
+          },
+        );
+      }else{
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return _buildDialogInfo(context, msg);
+          },
+        );
+      }
       // dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return _buildDialogSucces2(context, msg);
-        },
-      );
+
 
       /// todo mark Attendance Success Dialog
 
