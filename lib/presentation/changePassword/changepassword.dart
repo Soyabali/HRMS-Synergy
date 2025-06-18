@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -141,40 +140,6 @@ class _LoginPageState extends State<changePassWordPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
-          // appBar: AppBar(
-          //   // statusBarColore
-          //   systemOverlayStyle: const SystemUiOverlayStyle(
-          //     statusBarColor: Color(0xFF12375e),
-          //     statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          //     statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          //   ),
-          //   // backgroundColor: Colors.blu
-          //   backgroundColor: Color(0xFF255898),
-          //   centerTitle: true,
-          //   leading: GestureDetector(
-          //     onTap: (){
-          //       print("------back---");
-          //       //Navigator.pop(context);
-          //     // Navigator.pop(context);
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => const DashBoard()),
-          //       );
-          //     },
-          //     child: Icon(Icons.arrow_back_ios,
-          //       color: Colors.white,),
-          //   ),
-          //   title: Padding(
-          //     padding: EdgeInsets.symmetric(horizontal: 5),
-          //     child: Text(
-          //       'Change Password',
-          //       style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
-          //       textAlign: TextAlign.center,
-          //     ),
-          //   ),
-          //   //centerTitle: true,
-          //   elevation: 0, // Removes shadow under the AppBar
-          // ),
           body: GestureDetector(
             onTap: (){
               FocusScope.of(context).unfocus();
@@ -442,42 +407,6 @@ class _LoginPageState extends State<changePassWordPage> {
                                           }
                                         },
                                         /// todo remoe this comments
-                                        // onTap: () async {
-                                        //   var oldPassword = _oldPasswordController.text.trim();
-                                        //   var newPassword = _newPasswordController.text.trim();
-                                        //   var confirmPassword = _confirmPasswordController.text.trim();
-                                        //
-                                        //   print("Old Password -----$oldPassword");
-                                        //   print("newPassword -----$newPassword");
-                                        //   print("confirmPassword -----$confirmPassword");
-                                        //
-                                        //   if(newPassword==confirmPassword){
-                                        //     print("--Call Api---");
-                                        //
-                                        //       loginMap = await ChangePasswordRepo().changePasswrod(context, oldPassword!,newPassword);
-                                        //       print('---358----$loginMap');
-                                        //       result = "${loginMap['Result']}";
-                                        //       msg = "${loginMap['Msg']}";
-                                        //       print('---361----$result');
-                                        //       print('---362----$msg');
-                                        //
-                                        //   }else{
-                                        //     print("--ConfirmPassword does not match---");
-                                        //     displayToast("Confirm Password does not match");
-                                        //   }
-                                        //   if(result=="1"){
-                                        //     // to login PAGE
-                                        //       Navigator.pushReplacement(
-                                        //         context,
-                                        //         MaterialPageRoute(builder: (context) => LoginScreen_2()),
-                                        //       );
-                                        //   }else{
-                                        //     // SAME PAGE WITH NOTIFICATION
-                                        //     displayToast(msg);
-                                        //   }
-                                        //
-                                        //   },
-
                                         child: Container(
                                           width: double.infinity, // Make container fill the width of its parent
                                           height: AppSize.s45,

@@ -1,11 +1,8 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled/data/educationResponseRepo.dart';
 import 'package:untitled/domain/educationModel.dart';
 import 'package:untitled/presentation/profile/profile.dart';
-
-import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
 class ProfileEducation extends StatelessWidget {

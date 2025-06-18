@@ -54,15 +54,9 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
 
-  // List<Map<String, dynamic>> _filteredData = [];
-  ///List<dynamic>  hrmsReimbursementList;
-  TextEditingController _searchController = TextEditingController();
-
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
-  DateTime? _date;
 
   List stateList = [];
   List hrmsReimbursementList = [];
@@ -72,8 +66,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
   late Future<List<LeaveCancellationListModel>> reimbursementStatusV3;
   List<LeaveCancellationListModel> _allData = []; // Holds original data
   List<LeaveCancellationListModel> _filteredData = []; // Holds filtered data
-  TextEditingController _takeActionController = TextEditingController();
-  // Distic List
 
   hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     reimbursementStatusV3 = LeaveCancellationListRepo()
@@ -106,9 +98,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
-  String? _chosenValue;
-
   var msg;
   var result;
   var SectorData;
@@ -181,17 +170,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
       ),
     );
   }
-  // void displayToast(String msg) {
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.black,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  // }
-
   // image code
   Future<void> uploadImage(String token, File imageFile) async {
     try {
@@ -576,57 +554,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                       ],
                     ),
                   ),
-
-                  // SizedBox(height: 10),
-                  //
-                  // Center(
-                  //   child: Padding(
-                  //     padding:
-                  //     const EdgeInsets.only(left: 15, right: 15, top: 10),
-                  //     // child: SearchBar(),
-                  //     child: Container(
-                  //       height: 45,
-                  //       padding: EdgeInsets.symmetric(horizontal: 10.0),
-                  //       decoration: BoxDecoration(
-                  //         borderRadius: BorderRadius.circular(5.0),
-                  //         border: Border.all(
-                  //           color: Colors.grey, // Outline border color
-                  //           width: 0.2, // Outline border width
-                  //         ),
-                  //         color: Colors.white,
-                  //       ),
-                  //       child: Center(
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.only(top: 0),
-                  //           child: Row(
-                  //             children: [
-                  //               Expanded(
-                  //                 child: TextFormField(
-                  //                   controller: _searchController,
-                  //                   autofocus: true,
-                  //                   decoration: const InputDecoration(
-                  //                     hintText: 'Enter Keywords',
-                  //                     prefixIcon: Icon(Icons.search),
-                  //                     hintStyle: TextStyle(
-                  //                         fontFamily: 'Montserrat',
-                  //                         color: Color(0xFF707d83),
-                  //                         fontSize: 14.0,
-                  //                         fontWeight: FontWeight.bold),
-                  //                     border: InputBorder.none,
-                  //                   ),
-                  //                   onChanged: (query) {
-                  //                     filterData(
-                  //                         query); // Call the filter function on text input change
-                  //                   },
-                  //                 ),
-                  //               ),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
 
                   SizedBox(height: 10),
                   Expanded(
@@ -1154,16 +1081,7 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                           0xFFf2f3f5), // Set your desired background color here
                     ),
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return 'Please enter a value';
-                    //   }
-                    //   final intValue = int.tryParse(value);
-                    //   if (intValue == null || intValue <= 0) {
-                    //     return 'Enter an amount greater than 0';
-                    //   }
-                    //   return null;
-                    // },
+
                   ),
                 ),
                 SizedBox(height: 15),
@@ -1241,31 +1159,6 @@ class _MyHomePageState extends State<LeaveCancellationRequestPage> {
                     ),
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     String enteredText = _textController.text;
-                //     if (enteredText.isNotEmpty) {
-                //       print('Submitted: $enteredText');
-                //     }
-                //     // Perform any action you need on submit
-                //    // Navigator.of(context).pop(); // Close the dialog
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
-                //     ),
-                //     backgroundColor: Colors.blue, // Button background color
-                //   ),
-                //   child: Text(
-                //     'Submit',
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 14,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),

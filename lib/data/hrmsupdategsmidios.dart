@@ -19,10 +19,6 @@ class HrmsUpdateGsmidIosRepo {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
       String? sContactNo = prefs.getString('sContactNo');
-      String? sLocation = prefs.getString('sLocation');
-      print('----sToken--19---$sToken');
-      print('----token--24---$token');
-      print('----sContactNo--25---xxx---$sContactNo');
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsupdategsmidios/hrmsupdategsmidios";

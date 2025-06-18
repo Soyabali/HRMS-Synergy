@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import '../../data/requestOtpRepo.dart';
-import '../dashboard/dashboard.dart';
 import '../login/loginScreen.dart';
 import '../resources/values_manager.dart';
 import 'otpPage.dart';
@@ -41,8 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final TextEditingController _phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -210,18 +207,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       SizedBox(height: 10),
                                       InkWell(
-                                        // onTap: (){
-                                        //         Navigator.push(
-                                        //           context,
-                                        //           MaterialPageRoute(builder: (context) => OtpPage(phone:"9871950881")),
-                                        //         );
-                                        // },
-
-                                        //       Navigator.push(
-                                        //         context,
-                                        //         MaterialPageRoute(builder: (context) => OtpPage(phone:phone)),
-                                        //       );
-
                                         onTap: () async {
                                           var phone = _phoneNumberController.text;
                                           if(_formKey.currentState!.validate() && phone!=null){
@@ -229,7 +214,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                             var requestotpresponse = await RequestOtpRepo().requestOtp(context, phone!);
                                             print("----230---reqestOtp---$requestotpresponse");
-
 
                                             var result =  "${requestotpresponse[0]['Result'].toString()}";
                                             var msg =  "${requestotpresponse[0]['Msg'].toString()}";
@@ -315,96 +299,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-  // void displayToast(String msg){
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0
-  //   );
-  // }
 }
-
-// class ForgotPassword extends StatelessWidget {
-//   const ForgotPassword({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: ForgotPassWordScreen());
-//
-//
-//   }
-// }
-// class ForgotPassWordScreen extends StatefulWidget {
-//   const ForgotPassWordScreen({super.key});
-//
-//   @override
-//   State<ForgotPassWordScreen> createState() => _forgotPassWordScreenState();
-// }
-//
-// class _forgotPassWordScreenState extends State<ForgotPassWordScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         // statusBarColore
-//         systemOverlayStyle: const SystemUiOverlayStyle(
-//           // Status bar color  // 2a697b
-//           statusBarColor: Color(0xFF2a697b),
-//           // Status bar brightness (optional)
-//           statusBarIconBrightness: Brightness.dark,
-//           // For Android (dark icons)
-//           statusBarBrightness: Brightness.light, // For iOS (dark icons)
-//         ),
-//         // backgroundColor: Colors.blu
-//         backgroundColor: Color(0xFF0098a6),
-//         leading: InkWell(
-//           onTap: () {
-//             // Navigator.pop(context);
-//             // Navigator.push(
-//             //   context,
-//             //   MaterialPageRoute(builder: (context) => const PolicyDoc()),
-//             // );
-//           },
-//           child: const Padding(
-//             padding: EdgeInsets.only(left: 5.0),
-//             child: Icon(
-//               Icons.arrow_back_ios,
-//               size: 24,
-//               color: Colors.white,
-//             ),
-//           ),
-//         ),
-//         title: const Padding(
-//           padding: EdgeInsets.symmetric(horizontal: 16.0),
-//           child: Text(
-//             'ForgotPassWord',
-//             style: TextStyle(
-//               color: Colors.white,
-//               fontSize: 18,
-//               fontWeight: FontWeight.normal,
-//               fontFamily: 'Montserrat',
-//             ),
-//             textAlign: TextAlign.center,
-//           ),
-//         ), // Removes shadow under the AppBar
-//       ),
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: [
-//           Center(
-//             child: Text("ForgotPassword",style: TextStyle(
-//               fontSize: 16,
-//               color: Colors.black45
-//             ),),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-

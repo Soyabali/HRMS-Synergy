@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/presentation/login/loginScreen.dart';
 import 'package:untitled/presentation/resources/values_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/appversionrepo.dart';
@@ -67,24 +65,11 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
-  // void displayToast(String msg){
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0
-  //   );
-  // }
-  // local database
   getLocalDataInfo()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // get a stored value
     setState(() {
     var  sFirstName = prefs.getString('sFirstName');
-    var  sCompEmailId = prefs.getString('sCompEmailId');
     if(sFirstName!=null && sFirstName!=''){
       // to Open DashBoard
       Navigator.pushAndRemoveUntil(
@@ -92,9 +77,7 @@ class _SplashViewState extends State<SplashView> {
         MaterialPageRoute(builder: (context) => DashBoard()),
             (Route<dynamic> route) => false, // Remove all previous routes
       );
-       //print("------84---$sFirstName");
     }else{
-     // print("------86---$sFirstName");
       // call the Api
      checkUserConnection();
     }
@@ -102,82 +85,16 @@ class _SplashViewState extends State<SplashView> {
   }
   //
   Future<void> getUserValueFromLocalDataBase() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? sEmpCode = prefs.getString('sEmpCode');
 
-    if (sEmpCode != null && sEmpCode.isNotEmpty) {
-      print("-------97---xx--->>>>-$sEmpCode");
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const DashBoard()),
-      // );
-
-    } else {
-      print("-------104--xx---->>>>>--$sEmpCode");
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-      // );
-
-    }
   }
-
 
   @override
   void initState() {
     super.initState();
     getLocalDataInfo();
-    //checkUserConnection();
 
-  }
-  //
-  Future<void> _checkPermissions() async {
-    //var status = await Permission.location.status;
-    var status = await Permission.location.status;
 
-    if (status.isGranted) {
-      // Permission is granted, continue with your logic.
-      print("Location permission granted.");
-    } else if (status.isDenied) {
-      // Request permission.
-      var newStatus = await Permission.location.request();
-      if (newStatus.isGranted) {
-        // Permission granted, continue.
-        print("Location permission granted.");
-      } else if (newStatus.isPermanentlyDenied) {
-        // Show a message directing users to settings.
-        _showPermissionDeniedDialog();
-      }
-    } else if (status.isPermanentlyDenied) {
-      // Show a message directing users to settings.
-      _showPermissionDeniedDialog();
-    }
-  }
-  // show permissinDialog
-  void _showPermissionDeniedDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Permission Denied"),
-        content: Text("Please enable location permissions in settings."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              openAppSettings(); // Redirects to app settings.
-            },
-            child: Text("Settings"),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("Cancel"),
-          ),
-        ],
-      ),
-    );
   }
   // version api call
   versionAliCall() async {

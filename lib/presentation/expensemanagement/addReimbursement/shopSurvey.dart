@@ -56,9 +56,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  DateTime? _date;
-  DateTime? _selectedDate;
-
   List stateList = [];
   List<dynamic> distList = [];
   List<dynamic> expenseList = [];

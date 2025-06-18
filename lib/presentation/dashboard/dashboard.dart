@@ -18,7 +18,6 @@ import '../holiday/holidaylist.dart';
 import '../notification/notification.dart';
 import '../policydoc/policydoc.dart';
 import '../resources/app_text_style.dart';
-import '../resources/assets_manager.dart';
 import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
@@ -406,17 +405,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       child: Text('Ok', style: AppTextStyle
                           .font16OpenSansRegularBlackTextStyle),
                     ),
-                    // ElevatedButton(
-                    //   onPressed: () {
-                    //     getLocation();
-                    //     Navigator.of(context).pop();
-                    //   },
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: Colors.white, // Set the background color to white
-                    //     foregroundColor: Colors.black, // Set the text color to black
-                    //   ),
-                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                    // )
                   ],
                 )
               ],
@@ -500,55 +488,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       // displayToast("Please pick location");
     }
   }
-
-  // void getLocation() async {
-  //   showLoader();
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //
-  //   // Check if location services are enabled
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     hideLoader();
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //   // Check and request location permissions
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       hideLoader();
-  //       return Future.error('Location permissions are denied.');
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     hideLoader();
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //   // Get the current location
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //
-  //   // Update state with the new location
-  //   setState(() {
-  //     lat = position.latitude;
-  //     long = position.longitude;
-  //   });
-  //   hideLoader();
-  //   if (lat != null && long != null) {
-  //     hideLoader();
-  //     //  print('----452---call api---');
-  //     attendaceapi(lat, long); // Call your attendance API
-  //
-  //   } else {
-  //     hideLoader();
-  //     // displayToast("Please pick location");
-  //   }
-  //   hideLoader();
-  //   // print('Latitude: $lat, Longitude: $long');
-  // }
-
   attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
         context, lat, long,locationAddress);
@@ -657,114 +596,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     );
   }
 
-  // Future<void> setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //
-  //   // 1. Request Permissions (if not already granted)
-  //   NotificationSettings settings = await fcm.requestPermission(
-  //     alert: true,
-  //     announcement: false,
-  //     badge: true,
-  //     carPlay: false,
-  //     criticalAlert: false,
-  //     provisional: false,
-  //     sound: true,
-  //   );
-  //
-  //   print('User granted permission: ${settings.authorizationStatus}');
-  //
-  //   // 2. Get the FCM token
-  //   token = await fcm.getToken();
-  //   print("🔥 Firebase Messaging Instance Info:");
-  //   print("📌 Token: $token");
-  //
-  //   // 3. Print Notification Settings for Debugging
-  //   print("🔔 Notification Permissions:");
-  //   print("  - Authorization Status: ${settings.authorizationStatus}");
-  //   print("  - Alert: ${settings.alert}");
-  //   print("  - Sound: ${settings.sound}");
-  //   print("  - Badge: ${settings.badge}");
-  //   print("🛠 Firebase Messaging Instance: ${fcm.toString()}");
-  //
-  //   if (token != null && token!.isNotEmpty) {
-  //     notificationResponse(token);
-  //   } else {
-  //     print("🚨 No Token Received!");
-  //   }
-  //
-  //   // 4. Handle messages in the background (if your app is terminated or in the background)
-  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  //
-  //   // 5. Handle messages when app is in the foreground
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     print('Got a message whilst in the foreground!');
-  //     print('Message data: ${message.data}');
-  //
-  //     if (message.notification != null) {
-  //       print('Message also contained a notification: ${message.notification}');
-  //     }
-  //   });
-  // }
-  //
-  // // Handle background messages
-  // Future<void> _firebaseMessagingBackgroundHandler(
-  //     RemoteMessage message) async {
-  //   // If you're going to use other Firebase services in the background, such as Firestore,
-  //   // make sure you call `initializeApp` before using other Firebase services.
-  //   // await Firebase.initializeApp();
-  //
-  //   print("Handling a background message: ${message.messageId}");
-  //   if (message.notification != null) {
-  //     debugPrint('Message also contained a notification: ${message.notification}');
-  //   }
-  // }
-  //
-  // void notificationResponse(String? token) {
-  //   // Implement the logic to send the token to your server here.
-  //   // You will likely use an HTTP client (like http or dio) to send a POST request.
-  //
-  //   print("Token sent to server: $token");
-  // }
-
-
-  // void setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //   await fcm.requestPermission();
-  //   token = await fcm.getToken();
-  //   print("🔥 Firebase Messaging Instance Info:");
-  //   print("📌 Token: $token");
-  //
-  //   // Get FCM settings for better readability
-  //   NotificationSettings settings = await fcm.getNotificationSettings();
-  //   print("🔔 Notification Permissions:");
-  //   print("  - Authorization Status: ${settings.authorizationStatus}");
-  //   print("  - Alert: ${settings.alert}");
-  //   print("  - Sound: ${settings.sound}");
-  //   print("  - Badge: ${settings.badge}");
-  //
-  //   // Print the complete FirebaseMessaging instance as a string (if necessary)
-  //   print("🛠 Firebase Messaging Instance: ${fcm.toString()}");
-  //
-  //   if (token != null && token!.isNotEmpty) {
-  //     notificationResponse(token);
-  //   } else {
-  //     print("🚨 No Token Received!");
-  //   }
-  // }
-
-  // void setupPushNotifications() async {
-  //   final fcm = FirebaseMessaging.instance;
-  //   await fcm.requestPermission();
-  //   token = await fcm.getToken();
-  //   print("=--504---token--- $token");// you could send this token (via Http or the Firebase SDK)TO A BACKED
-  //   print("----506----firebase--response: ${fcm.toString()}");
-  //  if(token!=null && token!=''){
-  //    notificationResponse(token);
-  //  }else{
-  //    print("-----511--Empty Token--");
-  //  }
-  // }
-
   notificationResponse(token) async {
    var   Notiresponse = await HrmsUpdateGsmidIosRepo().updateGsmidIos(context,token);
    print("-----517---notification Response----$Notiresponse");
@@ -790,89 +621,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
            content: Text(message.notification?.body ?? 'You have a new message',style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
          ),
        );
-       //-------
-       // showDialog(
-       //   context: context,
-       //   builder: (_) => Dialog(
-       //     shape: RoundedRectangleBorder(
-       //       borderRadius: BorderRadius.circular(16.0),
-       //     ),
-       //     elevation: 10.0,
-       //     child: Card(
-       //       elevation: 5.0,
-       //       shape: RoundedRectangleBorder(
-       //         borderRadius: BorderRadius.circular(16.0),
-       //       ),
-       //       margin: EdgeInsets.zero,
-       //       child: Padding(
-       //         padding: const EdgeInsets.all(8.0),
-       //         child:  Container(
-       //           color: Colors.white,
-       //           child: Column(
-       //             crossAxisAlignment: CrossAxisAlignment.start,
-       //             children: [
-       //               Text(
-       //                 message.notification?.title ?? 'New Notification',
-       //                 style: TextStyle(
-       //                   fontWeight: FontWeight.bold,
-       //                   fontSize: 18.0,
-       //                 ),
-       //               ),
-       //               SizedBox(height: 5),
-       //               Text(
-       //                 message.notification?.body ?? 'You have a new message',
-       //                 style: TextStyle(
-       //                   fontSize: 14.0,
-       //                   color: Colors.grey[600],
-       //                 ),
-       //               ),
-       //             ],
-       //           ),
-       //         ),
-       //       ),
-       //     ),
-       //   ),
-       //);
-       //-------
-       // Row(
-       //   mainAxisSize: MainAxisSize.min,
-       //   children: [
-       //     ClipRRect(
-       //       borderRadius: BorderRadius.circular(10.0),
-       //       child: Image.asset(
-       //         'assets/icon/icon.png',
-       //         width: 50.0,
-       //         height: 50.0,
-       //         fit: BoxFit.cover,
-       //       ),
-       //     ),
-       //     SizedBox(width: 10),
-       //     Flexible(
-       //       child: Column(
-       //         crossAxisAlignment: CrossAxisAlignment.start,
-       //         children: [
-       //           Text(
-       //             message.notification?.title ?? 'New Notification',
-       //             style: TextStyle(
-       //               fontWeight: FontWeight.bold,
-       //               fontSize: 18.0,
-       //             ),
-       //           ),
-       //           SizedBox(height: 5),
-       //           Text(
-       //             message.notification?.body ?? 'You have a new message',
-       //             style: TextStyle(
-       //               fontSize: 14.0,
-       //               color: Colors.grey[600],
-       //             ),
-       //           ),
-       //         ],
-       //       ),
-       //     ),
-       //   ],
-       // );
-
-
      });
   }
 

@@ -15,12 +15,9 @@ import 'package:untitled/presentation/dashboard/dashboard.dart';
 import '../../../app/generalFunction.dart';
 import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
-import '../../../data/reimbursementStatusTakeAction.dart';
 import '../../data/allLeaveStatusRepo.dart';
 import '../../domain/allLeaveStatusModel.dart';
-import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
-import '../resources/values_manager.dart';
 
 class AllLeaveStatus extends StatelessWidget {
   const AllLeaveStatus({super.key});
@@ -58,7 +55,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-  DateTime? _date;
   List stateList = [];
   List hrmsReimbursementList = [];
   List blockList = [];
@@ -111,8 +107,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
-  String? _chosenValue;
 
   var msg;
   var result;
@@ -290,7 +284,6 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       //formDate = DateFormat('dd/MMM/yyyy').format(now);
     });
     //
-    DateTime now2 = DateTime.now();
     DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
     DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
     toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
@@ -589,7 +582,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                             return ListView.builder(
                                 // itemCount: snapshot.data!.length ?? 0,
                                 // itemBuilder: (context, index)
-                                itemCount: _filteredData.length ?? 0,
+                                itemCount: _filteredData.length,
                                 itemBuilder: (context, index) {
                                   final leaveStatus = _filteredData[index];
                                   final randomColor = colorList[index % colorList.length];
@@ -1088,249 +1081,5 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
       },
     );
   }
-
-  // take a action Dialog
-  Widget _takeActionDialog(BuildContext context) {
-    TextEditingController _takeAction =
-        TextEditingController(); // Text controller for the TextFormField
-
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 220,
-            // Adjusted height to accommodate the TextFormField and Submit button
-            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Remove Reimbursement',
-                  style: AppTextStyle.font16OpenSansRegularRedTextStyle,
-                ),
-                SizedBox(height: 10),
-                // TextFormField for entering data
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 0),
-                  child: TextFormField(
-                    controller: _takeAction,
-                    textInputAction: TextInputAction.next,
-                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 10.0),
-                      filled: true, // Enable background color
-                      fillColor: Color(
-                          0xFFf2f3f5), // Set your desired background color here
-                    ),
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return 'Please enter a value';
-                    //   }
-                    //   final intValue = int.tryParse(value);
-                    //   if (intValue == null || intValue <= 0) {
-                    //     return 'Enter an amount greater than 0';
-                    //   }
-                    //   return null;
-                    // },
-                  ),
-                ),
-                SizedBox(height: 15),
-
-                // Submit button
-                InkWell(
-                  onTap: () async {
-                    var takeAction = _takeAction.text.trim();
-                    print('-----1102--$takeAction');
-                    print(sTranCode);
-
-                    // Check if the input is not empty
-                    if (takeAction != null && takeAction != '') {
-                      print('---Call Api-----');
-
-                      // Make API call here
-                      var loginMap = await Reimbursementstatustakeaction()
-                          .reimbursementTakeAction(context, sTranCode);
-
-                      print('---418----$loginMap');
-
-                      setState(() {
-                        result = "${loginMap[0]['Result']}";
-                        msg = "${loginMap[0]['Msg']}";
-                      });
-
-                      print('---1114----$result');
-                      print('---1115----$msg');
-
-                      // Check the result of the API call
-                      if (result == "1") {
-                        // Close the current dialog and show a success dialog
-                        Navigator.of(context).pop();
-
-                        // Show the success dialog
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return _buildDialogSucces2(context,
-                                msg); // A new dialog for showing success
-                          },
-                        );
-                        print('-----1123---');
-                      } else if (result == "0") {
-                        // Keep the dialog open and show an error message (if needed)
-                        // You can display an error message in the same dialog without dismissing it
-                        displayToast(
-                            msg); // Optionally, show a toast message to indicate failure
-
-                        // Optionally clear the input field if needed
-                        // _takeAction.clear();  // Do not clear to allow retrying
-                      }
-                    } else {
-                      // Handle the case where no input is provided
-                      displayToast("Enter remarks");
-                    }
-                  },
-                  child: Container(
-                    //width: double.infinity,
-                    // Make container fill the width of its parent
-                    height: AppSize.s45,
-                    padding: EdgeInsets.all(AppPadding.p5),
-                    decoration: BoxDecoration(
-                      color: AppColors.loginbutton,
-                      // Background color using HEX value
-                      borderRadius: BorderRadius.circular(
-                          AppMargin.m10), // Rounded corners
-                    ),
-                    //  #00b3c7
-                    child: Center(
-                      child: Text(
-                        "Submit",
-                        style: AppTextStyle.font16OpenSansRegularWhiteTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: -30, // Position the image at the top center
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.blueAccent,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/addreimbursement.jpeg',
-                  // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   // sucessDialog
-  Widget _buildDialogSucces2(BuildContext context, String msg) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 190,
-            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 0), // Space for the image
-                Text('Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                SizedBox(height: 10),
-                Text(
-                  msg,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        // call api again
-                        hrmsReimbursementStatus(
-                            firstOfMonthDay!, lastDayOfCurrentMonth!);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-                        // );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            Colors.white, // Set the background color to white
-                        foregroundColor:
-                            Colors.black, // Set the text color to black
-                      ),
-                      child: Text('Ok',
-                          style:
-                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Positioned(
-            top: -30, // Position the image at the top center
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.blueAccent,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/sussess.jpeg',
-                  // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
-}

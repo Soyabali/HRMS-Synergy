@@ -130,7 +130,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
     });
 
     DateTime now = DateTime.now();
-    var currentYear = now.year;
     var selectedMonth = DateFormat('MMM').format(now);
     try {
       attendaceResponse = await HrmsAttendanceRepo().attendance(context, selectedMonth);
@@ -580,19 +579,6 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
                           softWrap: true, // Allows text to wrap to the next line
                         ),
                       ),
-                      // Flexible(
-                      //   child: Text(
-                      //     sPresentsText!,
-                      //     style: TextStyle(
-                      //       color: Color(0xFF689F38),
-                      //       fontSize: 14,
-                      //       fontWeight: FontWeight.normal
-                      //     ),
-                      //     maxLines: 2, // Limits to 2 lines
-                      //     overflow: TextOverflow.ellipsis, // Adds "..." if text overflows
-                      //     softWrap: true, // Allows text to wrap to the next line
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

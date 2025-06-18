@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../domain/hrmsMonthlyAttendanceModel.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
@@ -15,10 +14,6 @@ class ConsuamableItemRepo_2
     showLoader();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    String? sEmpCode = prefs.getString('sEmpCode');
-
-    print('-----19---$sToken');
-
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "GetConsumablesReimbItem/GetConsumablesReimbItem";

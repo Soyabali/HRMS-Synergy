@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:async';
@@ -18,17 +17,14 @@ import '../../../data/bindReimUoMRepo.dart';
 import '../../../data/consuamableItemRepo2.dart';
 import '../../../data/district_repo.dart';
 import '../../../data/expensecategory_repo.dart';
-import '../../../data/hrmsPopUpWarning_repo.dart';
 import '../../../data/hrmspostreimbursement.dart';
 import '../../../data/loader_helper.dart';
-import '../../../data/postimagerepo.dart';
 import '../../../data/shopTypeRepo.dart';
 import '../../../domain/GetConsumablesReimbItem_Model.dart';
 import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
-import 'dart:math';
-import 'dart:convert';
+
 
 class ReimbursementrevertPage extends StatefulWidget {
 
@@ -70,9 +66,6 @@ class ReimbursementrevertPage extends StatefulWidget {
 
 class _MyHomePageState extends State<ReimbursementrevertPage> {
 
-  DateTime? _date;
-  DateTime? _selectedDate;
-
   List stateList = [];
   List<dynamic> distList = [];
   List<dynamic> expenseList = [];
@@ -106,7 +99,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
   // postImage
   postimage() async {
-    var postimageResponse = await PostImageRepo().postImage(context, _imageFile);
     setState(() {});
   }
 
@@ -136,19 +128,13 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
   List? data;
-  var _dropDownValueDistric;
   var _dropDownValueShopeType;
   var _dropDownSector;
-  var _dropDownSector2gi;
-
-  var _dropDownValue;
   var sectorresponse;
   String? sec;
   final distDropdownFocus = GlobalKey();
   final sectorFocus = GlobalKey();
-  File? _imageFile;
   var _selectedShopId;
-  var _selectedBlockId;
   var _selectedSectorId;
   final _formKey = GlobalKey<FormState>();
   var iUserTypeCode;
@@ -359,9 +345,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       }
     } catch (e) {}
   }
-
-  // submit Form  Reusable ITem
-  List<Map<String, dynamic>> _itemsList = [];
 
   void _onFormSubmit() {
     count++;
@@ -785,10 +768,6 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
         Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
     request.body = json.encode({"sImagePath": "$image"});
     request.headers.addAll(headers);
-    http.StreamedResponse response = await request.send();
-    var responsed = await http.Response.fromStream(response);
-    final responseData = json.decode(responsed.body);
-
   }
 
   // dropdown

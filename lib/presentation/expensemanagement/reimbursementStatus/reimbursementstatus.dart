@@ -60,7 +60,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-  DateTime? _date;
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -78,7 +77,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   late Future<List<Hrmsreimbursementstatusv3model>> reimbursementStatusV3;
   List<Hrmsreimbursementstatusv3model> _allData = [];  // Holds original data
   List<Hrmsreimbursementstatusv3model> _filteredData = [];  // Holds filtered data
-  TextEditingController _takeActionController = TextEditingController();
   // Distic List
 
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
@@ -118,7 +116,6 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-  String? _chosenValue;
   var msg;
   var result;
   var SectorData;

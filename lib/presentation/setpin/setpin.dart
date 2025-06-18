@@ -82,23 +82,6 @@ class _setPinScrenState extends State<SetPinScren> {
             pinController.clear();
           }
         }
-
-        // if (pinController.text == storedPin) {
-        //   // Navigate to the next screen
-        //   //   PaySlip
-        //  // storePinInaLocalDatabase(pin);
-        //   print('PIN matched! Navigate to next screen');
-        //   // Here you can use Navigator.push to navigate to the next screen
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (context) => const PaySlip()),
-        //   );
-        //   pinController.clear();
-        // } else {
-        //   pinController.clear();
-        //   print('Wrong PIN number');
-        //   _showValidationError();
-        // }
       }
     });
 
@@ -270,10 +253,6 @@ class _setPinScrenState extends State<SetPinScren> {
               style: TextStyle(fontSize: 24,color: Color(0xFF0098a6)),
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-              // hintText: storedPin == null ? 'Set Pin Code' : 'Enter Pin Again',
-                //hintText: 'Set Pin Code',
-               // hintStyle: TextStyle(color: Colors.green,fontSize: 16,fontWeight: FontWeight.normal),
-               // hintStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                 contentPadding: EdgeInsets.symmetric(vertical: 12), // Adjust vertical padding to control height
               ),
               // Set the height of the TextField

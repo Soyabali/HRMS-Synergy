@@ -4,10 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:untitled/app/generalFunction.dart';
 import 'package:untitled/data/loader_helper.dart';
-import 'package:untitled/domain/educationModel.dart';
 import 'package:untitled/domain/jobDetailModel.dart';
-import '../domain/holidaylist_model.dart';
-import '../domain/queryResponseModel.dart';
 import 'baseurl.dart';
 
 

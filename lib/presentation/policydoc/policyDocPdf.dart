@@ -16,9 +16,7 @@ class PolicydocPdfScreen extends StatefulWidget {
 }
 
 class _PolicydocScreenState extends State<PolicydocPdfScreen> {
-
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  double _currentZoomLevel = 1.0;
 
   @override
   void initState() {

@@ -46,9 +46,6 @@ class _MyHomePageState extends State<EmployeelistPage> {
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
-  DateTime? _date;
-
   List stateList = [];
   List hrmsReimbursementList = [];
   List blockList = [];
@@ -102,7 +99,6 @@ class _MyHomePageState extends State<EmployeelistPage> {
   String? sec;
   final distDropdownFocus = GlobalKey();
   final sectorFocus = GlobalKey();
-  File? _imageFile;
   var iUserTypeCode;
   var userId;
   var slat;
@@ -270,11 +266,9 @@ class _MyHomePageState extends State<EmployeelistPage> {
                           future: reimbursementStatusV3,
                           builder: (context, snapshot) {
                             return ListView.builder(
-                                itemCount: _filteredData.length ?? 0,
+                                itemCount: _filteredData.length,
                                 itemBuilder: (context, index) {
                                   final leaveStatus = _filteredData[index];
-                                  final randomColor =
-                                 // colorList[index % colorList.length];
                                   status = leaveStatus.sEmpName;
                                   containerColor;
                                   if (status == "Sanctioned") {

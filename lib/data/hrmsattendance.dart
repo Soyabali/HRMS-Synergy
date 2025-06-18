@@ -19,12 +19,6 @@ class HrmsAttendanceRepo {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
       String? sCompEmpCode = prefs.getString('sCompEmpCode');
-      String? sLocation = prefs.getString('sLocation');
-      print('----sToken--19---$sToken');
-      print('----lat--20---$lat');
-      print('----long--21---$long');
-      print('----sCompEmpCode--24---xxx---$sCompEmpCode');
-      print('---------27-------locationAddress----$locationAddress');
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsOnSiteAttendance/hrmsOnSiteAttendance";

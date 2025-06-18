@@ -1,18 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import '../../app/generalFunction.dart';
-import '../../data/hrmsLeaveStatusRepo.dart';
 import '../../data/hrmsleavependingforapprovail.dart';
-import '../../data/leaveCancellationRepo.dart';
 import '../../data/leaveUpdateRepo.dart';
 import '../../domain/actionOnLeaveModel.dart';
-import '../../domain/leaveStatusModel.dart';
-import '../dashboard/dashboard.dart';
-import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
-import '../resources/values_manager.dart';
 
 class RejectedActionOnLeave extends StatefulWidget {
 
@@ -807,91 +799,6 @@ class _RejectedPageState extends State<RejectedActionOnLeave> {
               child: ClipOval(
                 child: Image.asset(
                   'assets/images/addreimbursement.jpeg',
-                  // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 60,
-                  height: 60,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // build diaog success
-  Widget _buildDialogSucces2(BuildContext context, String msg) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 190,
-            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 0), // Space for the image
-                Text('Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                SizedBox(height: 10),
-                Text(
-                  msg,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                  maxLines: 2,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        // call api again
-                        // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-                        // );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        // Set the background color to white
-                        foregroundColor:
-                            Colors.black, // Set the text color to black
-                      ),
-                      child: Text('Ok',
-                          style:
-                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          Positioned(
-            top: -30, // Position the image at the top center
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.blueAccent,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/sussess.jpeg',
                   // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,

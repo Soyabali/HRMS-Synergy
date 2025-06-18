@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,8 +23,6 @@ String? iIsEligibleShLv;
 String? sEmpImage;
 
 class GeneralFunction {
-  TextEditingController _takeActionController = TextEditingController();
-
 
   getLocalValueFromALocalDataBase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

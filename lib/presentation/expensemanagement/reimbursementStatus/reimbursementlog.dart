@@ -2,21 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:image_picker/image_picker.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:untitled/presentation/expensemanagement/reimbursementStatus/reimbursementstatus.dart';
 import '../../../app/generalFunction.dart';
-import '../../../data/district_repo.dart';
 import '../../../data/hrmsreimbursementlog.dart';
-import '../../../data/loader_helper.dart';
-import '../../../data/postimagerepo.dart';
-import '../../../data/shopTypeRepo.dart';
-import '../../dashboard/dashboard.dart';
 import '../../resources/app_text_style.dart';
 
 class ReimbursementLogPage extends StatefulWidget {
@@ -37,8 +25,6 @@ class _MyHomePageState extends State<ReimbursementLogPage> {
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
-  DateTime? _date;
 
   List reimbursementStatusLog = [];
   List distList = [];

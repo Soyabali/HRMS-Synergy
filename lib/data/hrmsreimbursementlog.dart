@@ -14,10 +14,6 @@ class HrmsreimbursementLogRepo {
   GeneralFunction generalFunction = GeneralFunction();
   Future<List> hrmsReimbursementLog(BuildContext context, String sTranCode) async
   {
-
-   // print('---date----13---$dDate');
-    //showLoader();
-    int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
 

@@ -473,33 +473,6 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                     }else{
                       generalfunction.displayToast(msg);
                     }
-
-                      // Check the result of the API call
-                    //   if (result == "1") {
-                    //     // Close the current dialog and show a success dialog
-                    //     Navigator.of(context).pop();
-                    //
-                    //     // Show the success dialog
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (BuildContext context) {
-                    //         return _buildDialogSucces2(context, msg); // A new dialog for showing success
-                    //       },
-                    //     );
-                    //     print('-----1123---');
-                    //   } else if (result == "0") {
-                    //     // Keep the dialog open and show an error message (if needed)
-                    //     // You can display an error message in the same dialog without dismissing it
-                    //     generalfunction.displayToast(msg);  // Optionally, show a toast message to indicate failure
-                    //
-                    //     // Optionally clear the input field if needed
-                    //     // _takeAction.clear();  // Do not clear to allow retrying
-                    //   }
-                    // } else {
-                    //   // Handle the case where no input is provided
-                    //   generalfunction.displayToast("Enter remarks");
-                    // }
-
                   },
 
                   child: Container(
@@ -521,31 +494,7 @@ class _PolicydocScreenState extends State<UserqueryScreen> {
                     ),
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: () {
-                //     String enteredText = _textController.text;
-                //     if (enteredText.isNotEmpty) {
-                //       print('Submitted: $enteredText');
-                //     }
-                //     // Perform any action you need on submit
-                //    // Navigator.of(context).pop(); // Close the dialog
-                //   },
-                //   style: ElevatedButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 12), // Adjust button size
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(15), // Rounded corners for button
-                //     ),
-                //     backgroundColor: Colors.blue, // Button background color
-                //   ),
-                //   child: Text(
-                //     'Submit',
-                //     style: TextStyle(
-                //       color: Colors.white,
-                //       fontSize: 14,
-                //       fontWeight: FontWeight.bold,
-                //     ),
-                //   ),
-                // ),
+
               ],
             ),
           ),

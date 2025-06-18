@@ -17,11 +17,6 @@ class LeaveUpdateRepo {
       // get a local database value
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? sToken = prefs.getString('sToken');
-      String? sContactNo = prefs.getString('sContactNo');
-      print('----sToken--19---$sToken');
-      print('----queryTitle--19---$queryTitle');
-      print('-----23------$iTranId');
-
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsupdateleavestatus/hrmsupdateleavestatus";

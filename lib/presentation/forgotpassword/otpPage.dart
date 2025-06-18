@@ -43,8 +43,6 @@ class _MyHomePageState extends State<OtpPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print('------43----${widget.phone}');
-    print('------44----${widget.otp}');
     _newPasswordfocus = FocusNode();
     _confirmpasswordfoucs = FocusNode();
     controllers = List.generate(4, (_) => TextEditingController());
@@ -80,19 +78,6 @@ class _MyHomePageState extends State<OtpPage> {
       ),
     );
   }
-  // void displayToast(String msg) {
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0
-  //   );
-  // }
-
-  final TextEditingController _phoneNumberController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -176,15 +161,6 @@ class _MyHomePageState extends State<OtpPage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        // Text(
-                        //   "Otp : ${widget.otp}",
-                        //   style: TextStyle(
-                        //     fontFamily: 'Montserrat',
-                        //     color: Color(0xff3f617d),
-                        //     fontSize: 12.0,
-                        //     fontWeight: FontWeight.bold,
-                        //   ),
-                        // ),
                         SizedBox(height: 120.0),
                         Container(
                           //color: Colors.white,

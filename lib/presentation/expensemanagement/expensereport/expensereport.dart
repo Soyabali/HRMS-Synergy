@@ -15,7 +15,7 @@ import '../../../data/loader_helper.dart';
 import '../../../data/postimagerepo.dart';
 import '../../../data/shopTypeRepo.dart';
 import '../../dashboard/dashboard.dart';
-import '../../resources/app_text_style.dart';
+
 
 class ExpenseReport extends StatelessWidget {
   const ExpenseReport({super.key});
@@ -46,29 +46,9 @@ class ExpenseReportPage extends StatefulWidget {
 class _MyHomePageState extends State<ExpenseReportPage> {
 
   List<Map<String, dynamic>>? pendingSchedulepointList;
-  List<Map<String, dynamic>> _filteredData = [];
-  TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-
-  DateTime? _date;
-
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _date = selectedDate;
-      });
-    }
-    print('------67---${_date?.toLocal().toString()}'.split(' ')[0]);
-  }
 
   List stateList = [];
   List distList = [];
@@ -106,15 +86,11 @@ class _MyHomePageState extends State<ExpenseReportPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-
-  String? _chosenValue;
   var msg;
   var result;
   var SectorData;
   var stateblank;
   final stateDropdownFocus = GlobalKey();
-  // focus
-  // FocusNode locationfocus = FocusNode();
   FocusNode _shopfocus = FocusNode();
   FocusNode _owenerfocus = FocusNode();
   FocusNode _contactfocus = FocusNode();
@@ -125,21 +101,11 @@ class _MyHomePageState extends State<ExpenseReportPage> {
   String? todayDate;
 
   List? data;
-  var _dropDownValueDistric;
-  var _dropDownValueShopeType;
-  var _dropDownSector;
-  var _dropDownSector2gi;
-
-  var _dropDownValue;
   var sectorresponse;
   String? sec;
   final distDropdownFocus = GlobalKey();
   final sectorFocus = GlobalKey();
   File? _imageFile;
-  var _selectedShopId;
-  var _selectedBlockId;
-  var _selectedSectorId;
-  final _formKey = GlobalKey<FormState>();
   var iUserTypeCode;
   var userId;
   var slat;
@@ -151,7 +117,6 @@ class _MyHomePageState extends State<ExpenseReportPage> {
   Future pickImage() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    print('---Token----113--$sToken');
 
     try {
       final pickFileid = await ImagePicker()
@@ -182,16 +147,6 @@ class _MyHomePageState extends State<ExpenseReportPage> {
       ),
     );
   }
-  // void displayToast(String msg) {
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  // }
 
   // image code
   Future<void> uploadImage(String token, File imageFile) async {
@@ -313,146 +268,6 @@ class _MyHomePageState extends State<ExpenseReportPage> {
     _landMarkfocus.dispose();
     _addressfocus.dispose();
   }
-
-  // Todo bind sector code
-  Widget _bindSector() {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 50,
-        height: 42,
-        color: Color(0xFFf2f3f5),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButton(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              hint: RichText(
-                text: const TextSpan(
-                  text: "Select Project",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              // Not necessary for Option 1
-              value: _dropDownSector,
-              key: sectorFocus,
-              onChanged: (newValue) {
-                setState(() {
-                  _dropDownSector = newValue;
-                  print('---187---$_dropDownSector');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
-                  distList.forEach((element) {
-                    if (element["sSectorName"] == _dropDownSector) {
-                      _selectedSectorId = element['iSectorCode'];
-                      setState(() {});
-                      print('-----286-----sector id---$_selectedSectorId');
-                    }
-                  });
-                });
-              },
-              items: distList.map((dynamic item) {
-                return DropdownMenuItem(
-                  child: Text(item['sSectorName'].toString()),
-                  value: item["sSectorName"].toString(),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Todo same way you should bind point Type data.
-  Widget _bindShopType() {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 50,
-        height: 42,
-        color: Color(0xFFf2f3f5),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButton(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              hint: RichText(
-                text: const TextSpan(
-                  text: "Select Expense Category",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: '',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              // Not necessary for Option 1
-              value: _dropDownValueShopeType,
-              // key: distDropdownFocus,
-              onChanged: (newValue) {
-                setState(() {
-                  _dropDownValueShopeType = newValue;
-                  print('---333-------$_dropDownValueShopeType');
-                  //  _isShowChosenDistError = false;
-                  // Iterate the List
-                  shopTypeList.forEach((element) {
-                    if (element["sShopType"] == _dropDownValueShopeType) {
-                      setState(() {
-                        _selectedShopId = element['iTranId'];
-                        print('----349--shoptype id ------$_selectedShopId');
-                      });
-                      print('-----Point id----241---$_selectedShopId');
-                      if (_selectedShopId != null) {
-                        // updatedBlock();
-                      } else {
-                        print('-------');
-                      }
-                      // print("Distic Id value xxxxx.... $_selectedDisticId");
-                      print("Distic Name xxxxxxx.... $_dropDownValueDistric");
-                      print("Block list Ali xxxxxxxxx.... $blockList");
-                    }
-                  });
-                });
-              },
-              items: shopTypeList.map((dynamic item) {
-                return DropdownMenuItem(
-                  child: Text(item['sShopType'].toString()),
-                  value: item["sShopType"].toString(),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
   Widget build(BuildContext context) {

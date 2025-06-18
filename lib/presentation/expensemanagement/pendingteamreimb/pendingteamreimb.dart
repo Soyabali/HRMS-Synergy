@@ -43,23 +43,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
-  DateTime? _date;
-
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _date = selectedDate;
-      });
-    }
-    print('------67---${_date?.toLocal().toString()}'.split(' ')[0]);
-  }
 
   List stateList = [];
   List distList = [];
@@ -1418,7 +1401,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                             print("----Action Dialog---");
                                                                             /// todo here open dialog
                                                                             var sTranCode =  '${leaveData.sTranCode}';
-                                                                            var isActionBT =
+
                                                                             print('-----1310---$sTranCode');
                                                                             // Open Dialog
                                                                             showDialog(

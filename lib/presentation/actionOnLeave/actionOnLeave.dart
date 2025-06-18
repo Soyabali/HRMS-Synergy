@@ -159,7 +159,6 @@ class _MyLeaveStatusPageState extends State<ActionOnLeavePage>
     // TODO: implement initState
     getACurrentDate();
     tabController?.addListener(_handleTabSelection);
-    print("-----------93-----${"Action on Leave"}----");
     _updateTabContent();
   }
 

@@ -90,15 +90,7 @@ class _MyAppState extends State<MyApp> {
         // dashboardScreen
         '/dashBoard': (context) => const DashBoard(),
       },
-
-     // localizationsDelegates: context.localizationDelegates,
-      //supportedLocales: context.supportedLocales,
-      //locale: context.locale,
       builder: EasyLoading.init(),
-     // debugShowCheckedModeBanner: false,
-      //onGenerateRoute: RouteGenerator.getRoute,
-       //initialRoute: Routes.splashRoute,
-       //onGenerateRoute: RouteGenerator.getRoute,
       theme: getApplicationTheme(),
     );
   }

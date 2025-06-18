@@ -6,12 +6,6 @@ import 'baseurl.dart';
 import 'loader_helper.dart';
 
 
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'baseurl.dart';
-import 'loader_helper.dart';
-
 class HrmsLeaveApplicationRepo
 {
   List<dynamic>  hrmsleaveapplication = [];
@@ -26,15 +20,6 @@ class HrmsLeaveApplicationRepo
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');
-       print('----29---sEmpCode----$sEmpCode');
-    print('-------30----sLvType---$sLvTypeCode');
-    print('-------31---dFromDate----$formDate');
-    print('-------32----dToDate---$toDate');
-    print('-------33----sLeaveReason---$reason');
-    print('-------34----sContactableAddress---$address');
-    print('-------35---sLeaveAppBy----$sFirstName');
-    print('-------35----sFullHalfDay---$selectedValue');
-    print('-------36----iLeaveYear---$currentYear');
 
     var baseURL = BaseRepo().baseurl;
     var endPoint = "hrmsLeaveApplication/hrmsLeaveApplication";
@@ -68,10 +53,6 @@ class HrmsLeaveApplicationRepo
         hideLoader();
         print('----${response.statusCode}');
         var data = await response.stream.bytesToString();
-        //print('--74---xxx---${jsonDecode(data)}');
-        // Map<String, dynamic> parsedJson = jsonDecode(data);
-        //distList = parsedJson['Data'];
-        // distList = jsonDecode(data);
         List<dynamic> hrmsleavebalacev2List = jsonDecode(data);
         print('----75---$hrmsleavebalacev2List');
         return hrmsleavebalacev2List;

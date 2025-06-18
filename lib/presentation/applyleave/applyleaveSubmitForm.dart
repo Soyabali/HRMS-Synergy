@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/hrmsleaveapplication.dart';
 import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
@@ -26,7 +23,6 @@ class ApplyLeaveSubmitFormHome extends StatefulWidget {
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
   String _selectedValue = "Full Day";
-  String _selectedValue2 = "Full";
 
   List stateList = [];
   List<dynamic> distList = [];
@@ -1033,76 +1029,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // dialogbox
-  Widget _buildDialog(BuildContext context, String msg) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            height: 205,
-            padding: EdgeInsets.fromLTRB(20, 40, 20, 20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 0), // Space for the image
-                Text(
-                  'Information',
-                  style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
-                ),
-                SizedBox(height: 10),
-                Text(
-                  msg,
-                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        Colors.white, // Set the background color to white
-                    foregroundColor:
-                        Colors.black, // Set the text color to black
-                  ),
-                  child: Text('OK',
-                      style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
-                )
-              ],
-            ),
-          ),
-          Positioned(
-            top: -40, // Position the image at the top center
-            child: CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.blueAccent,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/dialogimg.jpeg', // Replace with your asset image path
-                  fit: BoxFit.cover,
-                  width: 80,
-                  height: 80,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

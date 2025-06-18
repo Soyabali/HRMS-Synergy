@@ -8,7 +8,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/presentation/setpin/payslip.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
 import '../../app/generalFunction.dart';
 
 
@@ -23,10 +22,7 @@ class PaySlipPdf extends StatefulWidget {
 }
 
 class _PolicydocScreenState extends State<PaySlipPdf> {
-
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-  double _currentZoomLevel = 1.0;
-
   late GeneralFunction generalFunction;
 
   @override

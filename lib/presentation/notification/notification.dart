@@ -83,8 +83,6 @@ class _NotificationPageState extends State<NotificationPage> {
                             /// todo heere you shold call a delete item api
 
                             var  hrmsPopWarning = await NotificatindeleteRepo().notification(context,iTranId);
-                            print('---80--$hrmsPopWarning');
-                            var  result = "${hrmsPopWarning[0]['Result']}";
                             var  msg = "${hrmsPopWarning[0]['Msg']}";
                             generalFunction.displayToast(msg);
                             Navigator.of(context).pop();

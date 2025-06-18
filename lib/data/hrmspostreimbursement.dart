@@ -57,14 +57,14 @@ class HrmsPostReimbursementRepo {
       var request = http.Request('POST', Uri.parse('$hrmsPostReimbursementApi'));
 
       request.body = json.encode({
-        "fAmount": amount ?? "",
-        "sExpDetails": expenseDetails ?? "",
+        "fAmount": amount,
+        "sExpDetails": expenseDetails,
         "sExpBillPhoto2":uplodedImage2 ?? "",
         "sExpBillPhoto3":uplodedImage3 ?? "",
         "sExpBillPhoto4":uplodedImage4 ?? "",
-        "sRemarks": remarks ?? "",
+        "sRemarks": remarks,
         "sResult": result ?? "",
-        "sTranCode": "$sTranCode" ?? "",
+        "sTranCode": "$sTranCode",
         "dExpDate": dExpDate ?? "",
         "sEntryBy": sContactNo ?? "",
         "sExpBillPhoto": uplodedImage ?? "",

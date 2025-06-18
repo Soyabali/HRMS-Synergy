@@ -14,7 +14,6 @@ void main() async
     options: DefaultFirebaseOptions.currentPlatform,
   );
   _requestPermissions();
- // runApp(MyApp());
   runApp(OKToast(child: MyApp()));
   configLoading();
 }

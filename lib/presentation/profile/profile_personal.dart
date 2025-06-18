@@ -20,7 +20,6 @@ class ProfilePersonal extends StatelessWidget {
 }
 
 class ProfilePersonalPage extends StatefulWidget {
-
   const ProfilePersonalPage({super.key});
 
   @override
@@ -181,19 +180,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                         '$sEmpImage',
                         fit: BoxFit.cover,
                       ),
-                      // CircleAvatar(
-                      //   radius: 20, // Adjust the size as needed
-                      //   backgroundImage: NetworkImage(
-                      //     (sEmpImage != null && sEmpImage.isNotEmpty)
-                      //         ? sEmpImage
-                      //         : 'https://via.placeholder.com/150', // Dummy image URL
-                      //   ),
-                      // ),
-                      // CircleAvatar(
-                      //   radius: 20, // Adjust the size as needed
-                      //   backgroundImage: NetworkImage(sEmpImage ?? 'https://via.placeholder.com/150'), // Replace with your image URL or use AssetImage
-                      // ),
-
                       SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -578,12 +564,6 @@ class _ProfilePageState extends State<ProfilePersonalPage> {
                                               (sVoterId?.isEmpty ?? true) ? 'Not Specified' : sVoterId,
                                               style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
                                             ),
-                                            // child: Text(
-                                            //   '8787',
-                                            //   //'$sVoterId',
-                                            //   style: AppTextStyle
-                                            //       .font12OpenSansRegularBlackTextStyle,
-                                            // ),
                                           ),
                                         ],
                                       ),

@@ -363,35 +363,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                      ],
                                    ),
 
-                                   // Row(
-                                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   //   children: [
-                                   //     Column(
-                                   //      crossAxisAlignment: CrossAxisAlignment.start,
-                                   //      // mainAxisAlignment: MainAxisAlignment.start,
-                                   //       children: [
-                                   //         Text('Department',style: AppTextStyle
-                                   //             .font12OpenSansRegularBlack45TextStyle),
-                                   //         SizedBox(height: 5),
-                                   //         Text('$sDeptName',style: AppTextStyle
-                                   //             .font12OpenSansRegularBlackTextStyle)
-                                   //       ],
-                                   //
-                                   //     ),
-                                   //     Column(
-                                   //       crossAxisAlignment: CrossAxisAlignment.start,
-                                   //       children: [
-                                   //         Text('Designation',style: AppTextStyle
-                                   //             .font14OpenSansRegularBlack45TextStyle),
-                                   //         SizedBox(height: 5),
-                                   //         Text('$sDsgName',style: AppTextStyle
-                                   //             .font12OpenSansRegularBlackTextStyle)
-                                   //       ],
-                                   //
-                                   //     ),
-                                   //   ],
-                                   // ),
-
                                    SizedBox(height: 5),
                                    Divider(
                                      color: Colors.grey[400],   // Set the color of the divider to gray
@@ -445,40 +416,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                      ],
                                    ),
                                    SizedBox(height: 5),
-                                   // Divider(
-                                   //   color: Colors.grey[400],   // Set the color of the divider to gray
-                                   //   thickness: 0.5,         // Set the thickness of the line
-                                   //   indent: 10,           // Optional: Indent from the left
-                                   //   endIndent: 10,        // Optional: Indent from the right
-                                   // ),
 
-                                   // Row(
-                                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                   //   children: [
-                                   //     Column(
-                                   //       crossAxisAlignment: CrossAxisAlignment.start,
-                                   //       children: [
-                                   //         Text('Blood Group',style: AppTextStyle
-                                   //             .font14OpenSansRegularBlack45TextStyle),
-                                   //         SizedBox(height: 5),
-                                   //         Text('$sBloodGroup',style: AppTextStyle
-                                   //             .font12OpenSansRegularBlackTextStyle)
-                                   //       ],
-                                   //
-                                   //     ),
-                                   //     Column(
-                                   //       crossAxisAlignment: CrossAxisAlignment.start,
-                                   //       children: [
-                                   //         Text('Category',style: AppTextStyle
-                                   //             .font14OpenSansRegularBlack45TextStyle),
-                                   //         SizedBox(height: 5),
-                                   //         Text('$sCategory',style: AppTextStyle
-                                   //             .font12OpenSansRegularBlackTextStyle)
-                                   //       ],
-                                   //
-                                   //     ),
-                                   //   ],
-                                   // ),
                                    Divider(
                                      color: Colors.grey[400],   // Set the color of the divider to gray
                                      thickness: 0.5,         // Set the thickness of the line

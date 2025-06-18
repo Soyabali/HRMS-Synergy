@@ -50,8 +50,6 @@ class ReimbursementClarificationPage extends StatefulWidget {
 class _MyHomePageState extends State<ReimbursementClarificationPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
-
-  TextEditingController _searchController = TextEditingController();
   double? lat;
   double? long;
   GeneralFunction generalfunction = GeneralFunction();
@@ -61,23 +59,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     if (state == AppLifecycleState.paused) {
       FocusScope.of(context).unfocus();  // Unfocus when app is paused
     }
-  }
-
-  DateTime? _date;
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      setState(() {
-        _date = selectedDate;
-      });
-    }
-    print('------67---${_date?.toLocal().toString()}'.split(' ')[0]);
   }
 
   List stateList = [];
@@ -124,8 +105,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     print(" -----xxxxx-  --72---> $postimageResponse");
     setState(() {});
   }
-  String? _chosenValue;
-
   var msg;
   var result;
   var SectorData;

@@ -63,7 +63,6 @@ class Hrmsleavebalacev2Repo {
   // }
   Future<List<LeaveData>> getHrmsleavebalacev2(BuildContext context) async {
     showLoader();
-    int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     String? sEmpCode = prefs.getString('sEmpCode');

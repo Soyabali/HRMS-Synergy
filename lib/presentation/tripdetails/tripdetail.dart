@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +20,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TripDetail extends StatelessWidget {
-
   const TripDetail({super.key});
 
   @override
@@ -94,8 +92,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     String formattedDateTime = DateFormat('dd/MMM/yyyy HH:mm').format(now);
     return formattedDateTime;
   }
-  // trip dialog success
-  // get a currecr location latitude and longitude
   void getLocation() async {
     showLoader();
     bool serviceEnabled;
@@ -144,40 +140,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('-------144--long----$long');
     hideLoader();
   }
-  // void getLocation() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return Future.error('Location permissions are denied');
-  //     }
-  //   }
-  //   if (permission == LocationPermission.deniedForever) {
-  //     // Permissions are denied forever, handle appropriately.
-  //     return Future.error(
-  //         'Location permissions are permanently denied, we cannot request permissions.');
-  //   }
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //   debugPrint("-------------Position-----------------");
-  //   debugPrint(position.latitude.toString());
-  //
-  //   lat = position.latitude;
-  //   long = position.longitude;
-  //   print('-----------105----$lat');
-  //   print('-----------106----$long');
-  //   // setState(() {
-  //   // });
-  //   debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
-  //   debugPrint(position.toString());
-  // }
-
   // function to generate random no
   String generateRandomNumber() {
     Random random = Random();
@@ -249,13 +211,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
       print('Error uploading image: $error');
     }
   }
-
-  // void getlocalDataInSharedPreference() async{
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //    tripMsg = prefs.getString('tripMsg');//  tripMsg
-  //   print('----188---$tripMsg');
-  //   getButtonColor(tripMsg ?? "Not a value");
-  // }
   void getlocalDataInSharedPreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -503,7 +458,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                         // Your trip start API logic
                                         SharedPreferences prefs =
                                             await SharedPreferences.getInstance();
-                                        var sImage;
                                         var edtOdometer = _takeAction.text;
                                         String? sContactNo =
                                             prefs.getString('sContactNo');
@@ -531,7 +485,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
                                           String Msg = "${tripStart[0]['Msg']}";
                                           String sTranNo = "${tripStart[0]['sTranNo']}";
-                                          String Result = "${tripStart[0]['Result']}";
 
                                           prefs.setString('sTranNo', sTranNo);
                                           prefs.setString('tripMsg', Msg);
@@ -630,7 +583,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                             print('----572---$tripEnd');
 
                                           String Msg = "${tripEnd[0]['Msg']}";
-                                          String Result = "${tripEnd[0]['Result']}";
 
                                           prefs.setString('tripMsg', Msg);
                                           setState(() {
@@ -691,127 +643,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              // ElevatedButton(
-                              //    onPressed: () async {
-                              //      var sImage;
-                              //      var edtOdometer = _takeAction.text;
-                              //      SharedPreferences prefs = await SharedPreferences.getInstance();
-                              //      String? sContactNo = prefs.getString('sContactNo');//  tripMsg
-                              //
-                              //      if(_formKey.currentState!.validate() && edtOdometer != null && uplodedImage != null){
-                              //           print('---Api call---');
-                              //         var  tripStart = await HrmstripstartendRepo().tripStart(context, sContactNo!,lat,long,randomNumber,uplodedImage,edtOdometer,dTripDateTime);
-                              //         print('---380--$tripStart');
-                              //
-                              //           Msg = "${tripStart[0]['Msg']}";
-                              //           sTranNo = "${tripStart[0]['sTranNo']}";
-                              //           Result = "${tripStart[0]['Result']}";
-                              //           /// todo here you should short sTranNo
-                              //           SharedPreferences prefs = await SharedPreferences.getInstance();
-                              //           prefs.setString('sTranNo',sTranNo);
-                              //           prefs.setString('tripMsg',Msg);
-                              //           print('---423---msg--$Msg');
-                              //
-                              //      }else{
-                              //        if(edtOdometer==null || edtOdometer==''){
-                              //          print('----print---424---');
-                              //          displayToast('Enter Odometer details ');
-                              //        }else if(uplodedImage==null || uplodedImage==''){
-                              //          displayToast('Please click Odometer image');
-                              //          //print('----print---424---');
-                              //        }
-                              //        print('---Api not call---');
-                              //       // displayToast('Click Photo');
-                              //      }
-                              //      if(Result=="1"){
-                              //       // displayToast(Msg);
-                              //        showDialog(
-                              //          context: context,
-                              //          builder: (BuildContext context) {
-                              //            return _buildDialogSucces2(context,Msg);
-                              //          },
-                              //        );
-                              //        setState(() {
-                              //
-                              //        });
-                              //      }else{
-                              //        //displayToast(Msg);
-                              //      }
-                              //      /// todo here you get record value and hit the api
-                              //    },
-                              //
-                              //     style: ElevatedButton.styleFrom(
-                              //       backgroundColor: getButtonColor(tripMsg ?? "Not a value") // Hex color code (FF for alpha, followed by RGB)
-                              //     ),
-                              //     child: const Text(
-                              //       "START TRIP",
-                              //       style: TextStyle(
-                              //           fontFamily: 'Montserrat',
-                              //           color: Colors.white,
-                              //           fontSize: 16.0,
-                              //           fontWeight: FontWeight.bold),
-                              //     )),
-                              //
-                              // SizedBox(height: 15),
-                              // ElevatedButton(
-                              //     onPressed: () async {
-                              //       var sImage;
-                              //       var edtOdometer = _takeAction.text;
-                              //       SharedPreferences prefs = await SharedPreferences.getInstance();
-                              //       String? sContactNo = prefs.getString('sContactNo');
-                              //       String? sTranNo = prefs.getString('sTranNo');
-                              //
-                              //       if(_formKey.currentState!.validate() && edtOdometer != null && image != null){
-                              //         print('---Api call---');
-                              //         var  tripEnd = await HrmstripEndRepo().tripEnd(context, sContactNo!,lat,long,sTranNo!,uplodedImage,edtOdometer,dTripDateTime);
-                              //         print('---425--$tripEnd');
-                              //         Msg = "${tripEnd[0]['Msg']}";
-                              //         sTranNo = "${tripEnd[0]['sTranNo']}";
-                              //         Result = "${tripEnd[0]['Result']}";
-                              //         // todo
-                              //         SharedPreferences prefs = await SharedPreferences.getInstance();
-                              //         prefs.setString('sTranNo',sTranNo);
-                              //         prefs.setString('tripMsg',Msg);
-                              //         setState(() {
-                              //         });
-                              //         String? msgg = prefs.getString('tripMsg');
-                              //         print('---517---$Msg');
-                              //         print('---519---$msgg');
-                              //
-                              //
-                              //
-                              //       }else{
-                              //         print('---Api not call---');
-                              //       }
-                              //       if(Result=="1"){
-                              //        // displayToast(Msg);
-                              //        // _buildDialogSucces2(context,Msg);
-                              //         showDialog(
-                              //           context: context,
-                              //           builder: (BuildContext context) {
-                              //             return _buildDialogSucces2(context,Msg);
-                              //           },
-                              //         );
-                              //         setState(() {
-                              //
-                              //         });
-                              //       }else{
-                              //         displayToast(Msg);
-                              //       }
-                              //       /// todo here you get record value and hit the api
-                              //     },
-                              //     style: ElevatedButton.styleFrom(
-                              //      // backgroundColor: Color(0xFF0098a6), // Hex color code (FF for alpha, followed by RGB)
-                              //       backgroundColor : getButtonColorStoptrip(tripMsg ?? "Not a value"),
-                              //     ),
-                              //     child: const Text(
-                              //       "STOP TRIP",
-                              //       style: TextStyle(
-                              //           fontFamily: 'Montserrat',
-                              //           color: Colors.white,
-                              //           fontSize: 16.0,
-                              //           fontWeight: FontWeight.bold),
-                              //     )),
                             ],
                           ),
                         ),
