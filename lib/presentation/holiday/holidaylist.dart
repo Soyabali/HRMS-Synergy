@@ -30,6 +30,9 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
   // month name list
   late Future<List<HolidayListModel>> holidayList;
   List<HolidayListModel> filteredHolidayList = [];
+  var itemsName = ['aaa','bbb','ccc','ddd'];
+  var itemsName2 = ['aaa','bbb','ccc','ddd'];
+  var itemsName3 = ['aaa','bbb','ccc','ddd'];
 // Default month
   List<String> months = [
     'Jan',

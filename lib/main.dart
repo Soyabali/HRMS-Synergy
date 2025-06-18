@@ -35,6 +35,7 @@ configLoading() {
     ..dismissOnTap = false;
 }
 Future<void> _requestPermissions() async {
+
   // Check the status of location permission
   var locationStatus = await Permission.location.status;
   if (locationStatus.isDenied || locationStatus.isPermanentlyDenied) {

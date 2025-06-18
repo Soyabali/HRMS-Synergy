@@ -1,0 +1,2 @@
+/Users/synergy/Documents/application/HRMS-Synergy/android/app/.cxx/RelWithDebInfo/4p1d576b/x86_64/CMakeFiles/edit_cache.dir
+/Users/synergy/Documents/application/HRMS-Synergy/android/app/.cxx/RelWithDebInfo/4p1d576b/x86_64/CMakeFiles/rebuild_cache.dir
