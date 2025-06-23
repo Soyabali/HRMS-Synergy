@@ -23,6 +23,10 @@ import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:app_settings/app_settings.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+
 
 class DashBoard extends StatelessWidget {
 
@@ -61,6 +65,12 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   var sFirstName, sCompEmailId, sLastName, fullName;
   var token;
   var locationAddress;
+
+  // internet Connectivity
+  Future<bool> isInternetAvailable() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
+  }
 
   // DialogBo
 
@@ -173,7 +183,8 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                       Expanded(
                         child: TextButton(
                           onPressed: () {
-                            getLocation();
+                            //getLocation();
+                            checkInternetAndGetLocation();
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
@@ -364,7 +375,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 190,
+            height: 210,
             padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -453,7 +464,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
         alignment: Alignment.center,
         children: [
           Container(
-            height: 190,
+            height: 210,
             padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -529,6 +540,23 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       ),
     );
   }
+  // getInternetAndLocation
+  // void checkInternetAndGetLocation() async {
+  //   (await isInternetAvailable())
+  //       ? getLocation()
+  //       : displayToast("Please connect internet");
+  // }
+  void checkInternetAndGetLocation() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+     print("-------551----Internet Connectivity----$connectivityResult");
+    if (connectivityResult != ConnectivityResult.none) {
+      // Internet is available
+      getLocation(); // Call your existing function
+    } else {
+      // No internet
+      displayToast("Please connect internet");
+    }
+  }
 
   // get a location :
   void getLocation() async {
@@ -536,57 +564,129 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     bool serviceEnabled;
     LocationPermission permission;
 
+    // Check if location service is enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       hideLoader();
-      return Future.error('Location services are disabled.');
+      displayToast("Location services are disabled. Please enable them in settings.");
+     // AppSettings.openLocationSettings(); // Redirect to location settings
+      AppSettings.openAppSettings();// on ios to open a settongs
+      return;
     }
 
+    // Check permission status
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         hideLoader();
-        return Future.error('Location permissions are denied.');
+        displayToast("Location permission denied.");
+        return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      return Future.error('Location permissions are permanently denied.');
+      displayToast("Location permission permanently denied. Please enable it in app settings.");
+      AppSettings.openAppSettings(); // Redirect to app settings
+      return;
     }
 
-    // Get the current location
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
 
-    // Convert latitude and longitude to an address
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
 
-    Placemark place = placemarks[0]; // Extract relevant details
-    String address =
-        "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      Placemark place = placemarks[0];
+      String address =
+          "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
 
-    // Update state with location and address
-    setState(() {
-      lat = position.latitude;
-      long = position.longitude;
-      locationAddress = address; // Store the converted address
-    });
-     print('-------490------$locationAddress');
-    print('-------491--lat----$lat');
-    print('-------492--long----$long');
-    hideLoader();
+      setState(() {
+        lat = position.latitude;
+        long = position.longitude;
+        locationAddress = address;
+      });
 
-    if (lat != null && long != null) {
-      // Call API with latitude, longitude, and address
-      attendaceapi(lat, long, locationAddress);
-    } else {
+      print('Address: $locationAddress');
+      print('Latitude: $lat');
+      print('Longitude: $long');
+
+      if (lat != null && long != null) {
+        attendaceapi(lat, long, locationAddress);
+      } else {
+        displayToast("Please select your location to proceed.");
+      }
+    } catch (e) {
       hideLoader();
-      // displayToast("Please pick location");
+      displayToast("Failed to get location: $e");
+    } finally {
+      hideLoader();
     }
   }
+
+
+  // void getLocation() async {
+  //   showLoader();
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     hideLoader();
+  //     return Future.error('Location services are disabled.');
+  //   }
+  //
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       hideLoader();
+  //       return Future.error('Location permissions are denied.');
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     hideLoader();
+  //     return Future.error('Location permissions are permanently denied.');
+  //   }
+  //
+  //   // Get the current location
+  //   Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+  //
+  //   // Convert latitude and longitude to an address
+  //   List<Placemark> placemarks = await placemarkFromCoordinates(
+  //       position.latitude, position.longitude);
+  //
+  //   Placemark place = placemarks[0]; // Extract relevant details
+  //   String address =
+  //       "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+  //
+  //   // Update state with location and address
+  //   setState(() {
+  //     lat = position.latitude;
+  //     long = position.longitude;
+  //     locationAddress = address; // Store the converted address
+  //   });
+  //    print('-------490------$locationAddress');
+  //   print('-------491--lat----$lat');
+  //   print('-------492--long----$long');
+  //   hideLoader();
+  //   var lat22;
+  //   if (lat != null && long != null) {
+  //     // Call API with latitude, longitude, and address
+  //     attendaceapi(lat, long, locationAddress);
+  //   } else {
+  //     hideLoader();
+  //      displayToast("Please select your location to proceed.");
+  //   }
+  // }
+
   attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
         context, lat, long,locationAddress);
@@ -629,9 +729,9 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   void displayToast(String msg) {
     Fluttertoast.showToast(
       msg,
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       position: Fluttertoast.ToastPosition.center,
-      backgroundColor: Colors.black45,
+      backgroundColor: Colors.red,
       textStyle: TextStyle(
         color: Colors.white,
         fontSize: 16.0,
@@ -721,6 +821,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
    @override
   void initState() {
     // TODO: implement initState
+     isInternetAvailable();
      getLocalDataInfo();
      setupPushNotifications();
      super.initState();
