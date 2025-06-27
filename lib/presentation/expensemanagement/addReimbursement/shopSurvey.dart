@@ -28,7 +28,6 @@ import 'dart:math';
 import '../expense_management.dart';
 
 class ShopSurvey extends StatelessWidget {
-
   const ShopSurvey({super.key});
 
   @override
@@ -48,6 +47,7 @@ class ShopSurvey extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+
   const MyHomePage({super.key});
 
   @override
@@ -149,18 +149,28 @@ class _MyHomePageState extends State<MyHomePage> {
   String? dExpDate;
   var remarks = "N/A";
   // pick image from a Camera
+  void clearAllImages() {
+    setState(() {
+      image = null;
+      image2 = null;
+      image3 = null;
+      image4 = null;
+    });
+  }
 
   Future pickImage() async {
+    image=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
     try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
-        image = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
+         image = File(pickFileid.path);
+        setState(() {
+          image = File(pickFileid.path);
+        });
+      //  print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
         uploadImage(sToken!, image!);
       } else {
@@ -169,6 +179,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
   Future pickImage2() async {
+    clearAllImages();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -176,17 +187,25 @@ class _MyHomePageState extends State<MyHomePage> {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
-        image2 = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
+          image2 = File(pickFileid.path);
+        setState(() {
+          image2 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof--camra-----195----->$image2');
         // multipartProdecudre();
+
+        print('token----$sToken');
+        print('Images----$image2');
+
         uploadImage2(sToken!, image2!);
+
       } else {
         print('no image selected');
       }
     } catch (e) {}
   }
   Future pickImage3() async {
+    image3=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -194,8 +213,10 @@ class _MyHomePageState extends State<MyHomePage> {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
-        image3 = File(pickFileid.path);
-        setState(() {});
+
+        setState(() {
+          image3 = File(pickFileid.path);
+        });
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
         uploadImage3(sToken!, image3!);
@@ -205,6 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
   Future pickImage4() async {
+    image4=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -212,8 +234,10 @@ class _MyHomePageState extends State<MyHomePage> {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
-        image4 = File(pickFileid.path);
-        setState(() {});
+
+        setState(() {
+          image4 = File(pickFileid.path);
+        });
         print('Image File path Id Proof-------167----->$image');
         // multipartProdecudre();
         uploadImage4(sToken!, image4!);
@@ -225,6 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // pick image from a Gallery
   Future pickImageGallery() async {
+    image=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -243,7 +268,9 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
+
   Future pickImageGallery2() async {
+    clearAllImages();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -252,9 +279,11 @@ class _MyHomePageState extends State<MyHomePage> {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.gallery, imageQuality: 65);
       if (pickFileid != null) {
-        image2 = File(pickFileid.path);
-        setState(() {});
-        print('Image File path Id Proof-------167----->$image');
+       // image2 = File(pickFileid.path);
+        setState(() {
+          image2 = File(pickFileid.path);
+        });
+        print('Image File path Id Proof-------273----->$image2');
         // multipartProdecudre();
         uploadImage2(sToken!, image2!);
       } else {
@@ -263,6 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
   Future pickImageGallery3() async {
+    image3=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -282,6 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
   Future pickImageGallery4() async {
+    image4=null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -317,6 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> uploadImage(String token, File imageFile) async {
+    print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
     var endPoint = "UploadTrackingImage/UploadTrackingImage";
     var uplodeImageApi = "$baseURL$endPoint";
@@ -343,15 +375,15 @@ class _MyHomePageState extends State<MyHomePage> {
       List<dynamic> responseData = json.decode(response.body);
       // Extracting the image path
       uplodedImage = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----245--: $uplodedImage');
+      print('Uploaded Image Path----362--: $uplodedImage');
       hideLoader();
     } catch (error) {
       hideLoader();
       print('Error uploading image: $error');
     }
   }
-
   Future<void> uploadImage2(String token, File imageFile) async {
+    print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
     var endPoint = "UploadTrackingImage/UploadTrackingImage";
     var uplodeImageApi = "$baseURL$endPoint";
@@ -359,41 +391,81 @@ class _MyHomePageState extends State<MyHomePage> {
       print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
-      var request = http.MultipartRequest(
-        'POST',
+      var request = http.MultipartRequest('POST',
         Uri.parse('$uplodeImageApi'),
       );
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'sImagePath',
         imageFile.path,
       ));
-
       // Send the request
       var streamedResponse = await request.send();
 
       // Get the response
       var response = await http.Response.fromStream(streamedResponse);
-
       // Parse the response JSON
       List<dynamic> responseData = json.decode(response.body);
-
       // Extracting the image path
       uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----245--: $uplodedImage');
-
+      print('Uploaded Image 2 Path----423--: $uplodedImage2');
       hideLoader();
     } catch (error) {
       hideLoader();
       print('Error uploading image: $error');
     }
   }
+  // Future<void> uploadImage2(String token, File imageFile) async {
+  //   print('----image file path--374---$imageFile');
+  //   //uplodedImage2=null;
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //
+  //     // Extracting the image path
+  //     uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
+  //     setState(() {
+  //      // uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
+  //     });
+  //     print('Uploaded Image Path----405--: $uplodedImage');
+  //
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
 
   Future<void> uploadImage3(String token, File imageFile) async {
+    print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
     var endPoint = "UploadTrackingImage/UploadTrackingImage";
     var uplodeImageApi = "$baseURL$endPoint";
@@ -401,40 +473,74 @@ class _MyHomePageState extends State<MyHomePage> {
       print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
-      var request = http.MultipartRequest(
-        'POST',
+      var request = http.MultipartRequest('POST',
         Uri.parse('$uplodeImageApi'),
       );
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'sImagePath',
         imageFile.path,
       ));
-
       // Send the request
       var streamedResponse = await request.send();
 
       // Get the response
       var response = await http.Response.fromStream(streamedResponse);
-
       // Parse the response JSON
       List<dynamic> responseData = json.decode(response.body);
-
       // Extracting the image path
       uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----245--: $uplodedImage');
+      print('Uploaded Image Path----495--: $uplodedImage3');
       hideLoader();
     } catch (error) {
       hideLoader();
       print('Error uploading image: $error');
     }
   }
-
+  // Future<void> uploadImage3(String token, File imageFile) async {
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //
+  //     // Extracting the image path
+  //     uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----500--: $uplodedImage');
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
   Future<void> uploadImage4(String token, File imageFile) async {
+    print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
     var endPoint = "UploadTrackingImage/UploadTrackingImage";
     var uplodeImageApi = "$baseURL$endPoint";
@@ -442,39 +548,75 @@ class _MyHomePageState extends State<MyHomePage> {
       print('-----xx-x----214----');
       showLoader();
       // Create a multipart request
-      var request = http.MultipartRequest(
-        'POST',
+      var request = http.MultipartRequest('POST',
         Uri.parse('$uplodeImageApi'),
       );
-
       // Add headers
       request.headers['token'] = token;
-
       // Add the image file as a part of the request
       request.files.add(await http.MultipartFile.fromPath(
         'sImagePath',
         imageFile.path,
       ));
-
       // Send the request
       var streamedResponse = await request.send();
 
       // Get the response
       var response = await http.Response.fromStream(streamedResponse);
-
       // Parse the response JSON
       List<dynamic> responseData = json.decode(response.body);
-
       // Extracting the image path
       uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----245--: $uplodedImage');
-
+      print('Uploaded Image Path----362--: $uplodedImage4');
       hideLoader();
     } catch (error) {
       hideLoader();
       print('Error uploading image: $error');
     }
   }
+
+  // Future<void> uploadImage4(String token, File imageFile) async {
+  //   var baseURL = BaseRepo().baseurl;
+  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
+  //   var uplodeImageApi = "$baseURL$endPoint";
+  //   try {
+  //     print('-----xx-x----214----');
+  //     showLoader();
+  //     // Create a multipart request
+  //     var request = http.MultipartRequest(
+  //       'POST',
+  //       Uri.parse('$uplodeImageApi'),
+  //     );
+  //
+  //     // Add headers
+  //     request.headers['token'] = token;
+  //
+  //     // Add the image file as a part of the request
+  //     request.files.add(await http.MultipartFile.fromPath(
+  //       'sImagePath',
+  //       imageFile.path,
+  //     ));
+  //
+  //     // Send the request
+  //     var streamedResponse = await request.send();
+  //
+  //     // Get the response
+  //     var response = await http.Response.fromStream(streamedResponse);
+  //
+  //     // Parse the response JSON
+  //     List<dynamic> responseData = json.decode(response.body);
+  //
+  //     // Extracting the image path
+  //     uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
+  //     print('Uploaded Image Path----245--: $uplodedImage');
+  //
+  //     hideLoader();
+  //   } catch (error) {
+  //     hideLoader();
+  //     print('Error uploading image: $error');
+  //   }
+  // }
+
 
   // build dialog sucess
   Widget _buildDialogSucces2(BuildContext context, String msg) {
@@ -1713,8 +1855,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         // Center the row contents
                                         children: [
                                           Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
                                             children: <Widget>[
                                               InkWell(
                                                 onTap: () {
@@ -1879,10 +2020,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                               InkWell(
                                                 onTap: () {
                                                   // Your onTap logic here
-                                                  print(
-                                                      '--pick a Camra pick---');
                                                   pickImage2();
-                                                },
+
+                                                  },
                                                 child: const Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
