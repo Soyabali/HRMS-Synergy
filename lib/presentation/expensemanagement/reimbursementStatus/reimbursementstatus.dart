@@ -1019,75 +1019,279 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     );
   }
   // Opend Full Screen DialogbOX
-
   void openFullScreenDialog(BuildContext context, List<String> imageUrls, String billDate) {
+    int currentIndex = 0;
+    PageController pageController = PageController();
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Colors.transparent, // Makes the dialog full screen
+          backgroundColor: Colors.transparent,
           insetPadding: EdgeInsets.all(0),
-          child: Stack(
-            children: [
-              // Fullscreen PageView for multiple images
-              Positioned.fill(
-                child: PageView.builder(
-                  itemCount: imageUrls.length,
-                  itemBuilder: (context, index) {
-                    return Image.network(
-                      imageUrls[index],
-                      fit: BoxFit.contain, // Ensures the entire image is visible
-                    );
-                  },
-                ),
-              ),
-              // White container with Bill Date at the bottom
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  padding: EdgeInsets.all(16),
-                  color: Colors.white.withOpacity(0.8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        billDate,
-                        style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: PageView.builder(
+                      controller: pageController,
+                      itemCount: imageUrls.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        return Image.network(
+                          imageUrls[index],
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    ),
+                  ),
+                  Positioned(
+                    top: 50,
+                    left: 0,
+                    right: 0,
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        height: 80,
+                        width: 250,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/header_background.png'), // Make sure this asset exists
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Text(
+                          'Document : ${currentIndex + 1}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              // Close button in the bottom-right corner
-              Positioned(
-                right: 16,
-                bottom: 10,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pop(); // Close the dialog
-                  },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.redAccent,
-                    ),
-                    padding: EdgeInsets.all(8),
-                    child: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 24,
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(16),
+                      color: Colors.white.withOpacity(0.8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            billDate,
+                            style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 16,
+                    bottom: 10,
+                    child: GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.redAccent,
+                        ),
+                        padding: EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         );
       },
     );
   }
+
+  // void openFullScreenDialog(BuildContext context, List<String> imageUrls, String billDate) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.transparent,
+  //         insetPadding: EdgeInsets.all(0),
+  //         child: StatefulBuilder(
+  //           builder: (context, setState) {
+  //             int currentIndex = 0;
+  //             PageController pageController = PageController();
+  //
+  //             return Stack(
+  //               children: [
+  //                 Positioned.fill(
+  //                   child: PageView.builder(
+  //                     controller: pageController,
+  //                     itemCount: imageUrls.length,
+  //                     onPageChanged: (index) => setState(() => currentIndex = index),
+  //                     itemBuilder: (context, index) {
+  //                       return Image.network(
+  //                         imageUrls[index],
+  //                         fit: BoxFit.contain,
+  //                       );
+  //                     },
+  //                   ),
+  //                 ),
+  //                 Positioned(
+  //                   top: 50,
+  //                   left: 0,
+  //                   right: 0,
+  //                   child: Align(
+  //                     alignment: Alignment.topCenter,
+  //                     child: Container(
+  //                       height: 80,
+  //                       width: 250,
+  //                       alignment: Alignment.center,
+  //                       decoration: BoxDecoration(
+  //                         image: DecorationImage(
+  //                           image: AssetImage('assets/images/header_background.png'), // Replace with your image asset path
+  //                           fit: BoxFit.cover,
+  //                         ),
+  //                       ),
+  //                       child: Text(
+  //                         'Document : ${currentIndex + 1}',
+  //                         style: TextStyle(
+  //                           color: Colors.white,
+  //                           fontSize: 18,
+  //                           fontWeight: FontWeight.bold,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Positioned(
+  //                   bottom: 0,
+  //                   left: 0,
+  //                   right: 0,
+  //                   child: Container(
+  //                     padding: EdgeInsets.all(16),
+  //                     color: Colors.white.withOpacity(0.8),
+  //                     child: Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         Text(
+  //                           billDate,
+  //                           style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Positioned(
+  //                   right: 16,
+  //                   bottom: 10,
+  //                   child: GestureDetector(
+  //                     onTap: () => Navigator.of(context).pop(),
+  //                     child: Container(
+  //                       decoration: const BoxDecoration(
+  //                         shape: BoxShape.circle,
+  //                         color: Colors.redAccent,
+  //                       ),
+  //                       padding: EdgeInsets.all(8),
+  //                       child: const Icon(
+  //                         Icons.close,
+  //                         color: Colors.white,
+  //                         size: 24,
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
+
+
+  // void openFullScreenDialog(BuildContext context, List<String> imageUrls, String billDate) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.transparent, // Makes the dialog full screen
+  //         insetPadding: EdgeInsets.all(0),
+  //         child: Stack(
+  //           children: [
+  //             // Fullscreen PageView for multiple images
+  //             Positioned.fill(
+  //               child: PageView.builder(
+  //                 itemCount: imageUrls.length,
+  //                 itemBuilder: (context, index) {
+  //                   return Image.network(
+  //                     imageUrls[index],
+  //                     fit: BoxFit.contain, // Ensures the entire image is visible
+  //                   );
+  //                 },
+  //               ),
+  //             ),
+  //             // White container with Bill Date at the bottom
+  //             Positioned(
+  //               bottom: 0,
+  //               left: 0,
+  //               right: 0,
+  //               child: Container(
+  //                 padding: EdgeInsets.all(16),
+  //                 color: Colors.white.withOpacity(0.8),
+  //                 child: Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Text(
+  //                       billDate,
+  //                       style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //             ),
+  //             // Close button in the bottom-right corner
+  //             Positioned(
+  //               right: 16,
+  //               bottom: 10,
+  //               child: GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.of(context).pop(); // Close the dialog
+  //                 },
+  //                 child: Container(
+  //                   decoration: const BoxDecoration(
+  //                     shape: BoxShape.circle,
+  //                     color: Colors.redAccent,
+  //                   ),
+  //                   padding: EdgeInsets.all(8),
+  //                   child: const Icon(
+  //                     Icons.close,
+  //                     color: Colors.white,
+  //                     size: 24,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   // // take a action Dialog
   Widget _takeActionDialog(BuildContext context) {

@@ -15,6 +15,7 @@ import '../attandanceCalendar/customCalendarScreen.dart';
 import '../attendancelist/attendancelist.dart';
 import '../expensemanagement/expense_management.dart';
 import '../holiday/holidaylist.dart';
+import '../markAttendance/markAttendance.dart';
 import '../notification/notification.dart';
 import '../policydoc/policydoc.dart';
 import '../resources/app_text_style.dart';
@@ -573,7 +574,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       AppSettings.openAppSettings();// on ios to open a settongs
       return;
     }
-
     // Check permission status
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
@@ -1014,12 +1014,22 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           // markAttendance
                           GestureDetector(
                             onTap: (){
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                return _buildDialogSucces(context);
-                              },
+                              /// todo this is a dialog to take a attendance.
+                              //
+                              // showDialog(
+                              //     context: context,
+                              //     builder: (BuildContext context) {
+                              //   return _buildDialogSucces(context);
+                              // },
+                              // );
+                              ///   todo here i want to create a new widget to take a attendance.
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const MarkAttendanceScreen()),
                               );
+
+
                             },
                             child: Container(
                               height: 85.0,
