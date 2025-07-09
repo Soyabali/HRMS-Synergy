@@ -66,6 +66,7 @@ dependencies:
   geocoding: ^4.0.0
   app_settings: ^6.1.1
   connectivity_plus: ^6.1.4
+  cached_network_image: ^3.4.0
 
 
 dev_dependencies:

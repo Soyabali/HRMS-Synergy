@@ -591,7 +591,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       AppSettings.openAppSettings(); // Redirect to app settings
       return;
     }
-
     try {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,

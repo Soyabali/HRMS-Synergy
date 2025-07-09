@@ -40,7 +40,6 @@ class HrmsAttendanceRepo {
         "sLocation": locationAddress,
       });
       request.headers.addAll(headers);
-
       http.StreamedResponse response = await request.send();
 
       var map;
