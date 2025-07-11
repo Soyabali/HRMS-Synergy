@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/baseurl.dart';
+import '../../data/getPendingTripsRepo.dart';
 import '../../data/hrmsTripEndRepo.dart';
 import '../../data/hrmsTripStartEnd_Repo.dart';
 import '../../data/loader_helper.dart';
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
   File? image;
   var uplodedImage;
   final _formKey = GlobalKey<FormState>();
+  var ResultTrip;
 
   var Msg;
   var sTranNo;
@@ -65,15 +67,18 @@ class _MyHomePageState extends State<WorkDetailPage> {
   bool isStartTripEnabled = true;
   bool isEndTripEnabled = false;
   String? tripMsg;
-  bool isTripStarted = false;
+  // bool isTripStarted = false;
+  // bool isTripStop = true;
+  var isTripStarted;
   // Inactive color for stop button
-  Future<void> _loadTripStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      tripMsg = prefs.getString('tripMsg');
-      isTripStarted = tripMsg == 'Trip has been started';
-    });
-  }
+
+  // Future<void> _loadTripStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     tripMsg = prefs.getString('tripMsg');
+  //     isTripStarted = tripMsg == 'Trip has been started';
+  //   });
+  // }
 
   Color getButtonColor(String msg) {
     return msg == 'Trip has been started' ? Colors.grey : Color(0xFF0098a6);
@@ -228,9 +233,50 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('Current Date : $dTripDateTime');
     print(randomNumber); // Example output: 1234567890
     getLocation();
-    _loadTripStatus();
+    //_loadTripStatus();
+    //
+    getPendingStatusResponse();
     //getlocalDataInSharedPreference();
   }
+
+  getPendingStatusResponse() async {
+    // contact to fecth login time
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sContactNo = prefs.getString('sContactNo');
+    if(sContactNo!=null) {
+
+      var tripEnd = await GetPendingtipsRepo()
+          .pendingtrip(
+          context,
+          sContactNo!);
+      print('------$tripEnd');
+
+     setState(() {
+       ResultTrip = "${tripEnd[0]['Result']}";
+       print('---------256---------xxxx-------$ResultTrip');
+     });
+      //   ResultTrip
+     //   isTripStarted
+      if(ResultTrip=="0"){
+        setState(() {
+          isTripStarted=false;
+
+        });
+        print('------258----$isTripStarted');
+      }else{
+        setState(() {
+          isTripStarted=true;
+        });
+        print('------263----$isTripStarted');
+      }
+     // print("------251----$ResultTrip");
+
+      }else{
+          // print('-------247------');
+          }
+    }
+
+
 
   @override
   void dispose() {
@@ -451,16 +497,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
                               ),
                               SizedBox(height: 15),
                               // Start Trip Button
+                              ResultTrip=="1" ?
                               ElevatedButton(
-                                onPressed: isTripStarted
-                                    ? null
-                                    : () async {
+                                onPressed: () async {
                                         // Your trip start API logic
-                                        SharedPreferences prefs =
-                                            await SharedPreferences.getInstance();
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var edtOdometer = _takeAction.text;
-                                        String? sContactNo =
-                                            prefs.getString('sContactNo');
+                                        String? sContactNo = prefs.getString('sContactNo');
 
                                         if (_formKey.currentState!.validate() &&
                                             edtOdometer != null &&
@@ -481,10 +524,11 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                );
 
 
-                                          print('---472---$tripStart');
+                                          print('---527---$tripStart');
 
                                           String Msg = "${tripStart[0]['Msg']}";
                                           String sTranNo = "${tripStart[0]['sTranNo']}";
+
 
                                           prefs.setString('sTranNo', sTranNo);
                                           prefs.setString('tripMsg', Msg);
@@ -551,20 +595,16 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                              const SizedBox(height: 15),
-
+                              ):
                               ElevatedButton(
-                                onPressed: isTripStarted
-                                    ? () async {
+                                onPressed: () async {
                                         // Your trip stop API logic
-                                        SharedPreferences prefs =
-                                            await SharedPreferences.getInstance();
+                                        SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var edtOdometer = _takeAction.text;
-                                        String? sContactNo =
-                                            prefs.getString('sContactNo');
-                                        String? sTranNo =
-                                            prefs.getString('sTranNo');
+                                        String? sContactNo = prefs.getString('sContactNo');
+                                        String? sTranNo = prefs.getString('sTranNo');
+
+                                        print("-------607----$sTranNo");
 
                                         if (_formKey.currentState!.validate() &&
                                             edtOdometer != null &&
@@ -628,8 +668,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                         } else {
                                           //displayToast(Msg);
                                         }
-                                      }
-                                    : null,
+                                      },
+
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: getButtonColorStoptrip(
                                       tripMsg ?? "Not a value"),
