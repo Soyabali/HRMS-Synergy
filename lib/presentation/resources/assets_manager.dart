@@ -23,6 +23,7 @@ class ImageAssets {
   static const String passwordlogin = "$IMAGE_PATH/passwordlogin.png";
   //  companylogo
   static const String companylogo = "$IMAGE_PATH/companylogo.png";
+  static const String companylogoNew = "$IMAGE_PATH/companylogoNew.png";
   static const String deshboardtop = "$IMAGE_PATH/deshboardtop.jpeg";
 }
 class JsonAssets {

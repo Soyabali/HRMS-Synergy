@@ -62,7 +62,7 @@ class _MyHomePageState extends State<TripListPage> {
   hrmsTripList(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     tripDetailModel = HrmstripdetailRepo()
         .hrmsTripDetail(context, firstOfMonthDay, lastDayOfCurrentMonth);
-    print('-----70---$tripDetailModel');
+    print('-----65---$tripDetailModel');
 
     tripDetailModel.then((data) {
       setState(() {
@@ -70,6 +70,7 @@ class _MyHomePageState extends State<TripListPage> {
         _filteredData = _allData; // Initially, no filter applied
       });
     });
+    print("----------73-----$_filteredData");
   }
 
   void filterData(String query) {

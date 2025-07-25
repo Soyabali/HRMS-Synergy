@@ -499,7 +499,7 @@ class _LoginPageState extends State<LoginPage> {
                                 width: 150,
                                 height: AppPadding.p50,
                                 // Set height as needed
-                                child: Image.asset(ImageAssets.companylogo,
+                                child: Image.asset(ImageAssets.companylogoNew,
                                   fit: BoxFit.fill,
                                 ),
                               ),

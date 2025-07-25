@@ -40,6 +40,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   double staticLng = 78.00586;
   double threshold = 100.00;
   var locationCheck;
+  //var locationCode="6084110826"; // Agra
+  //  8482110634  // noida code
+  var sLocCode;
 
   double calculateDistanceInMeters(
       double startLat, double startLng, double endLat, double endLng) {
@@ -123,6 +126,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sFirstName = prefs.getString('sFirstName');
     String? sLastName = prefs.getString('sLastName');
+     sLocCode = prefs.getString('sLocCode');
+     print("------128----xx---$sLocCode");
+    // sLocCode
 
     setState(() {
       fullName = "${sFirstName} ${sLastName}";
@@ -130,6 +136,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       sContactNo = prefs.getString('sContactNo');
       sDsgName = prefs.getString('sDsgName');
       sLocName = prefs.getString('sLocName');
+      sLocCode = prefs.getString('sLocCode');
     });
 
     print('---fullName--$fullName');
@@ -137,6 +144,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     print('---sContactNo--$sContactNo');
     print('---sDsgName--$sDsgName');
     print('------location-----105---$sLocName');
+    print('------sLocCode -----146---$sLocCode');
   }
 
   //  location function process
@@ -207,8 +215,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       );
 
       Placemark place = placemarks[0];
-      String address =
-          "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      String address = "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
+
+      // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
 
       setState(() {
         lat = position.latitude;
@@ -917,7 +926,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               ),
             ),
             SizedBox(height: 5),
-            sLocName!="Noida" ?
+            // 6084110826  agra code
+            sLocCode=="6084110826" ?
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Card(
@@ -1029,7 +1039,6 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               ),
             )
             :Container(),
-
             SizedBox(height: 5),
             ElevatedButton(
         onPressed: () {

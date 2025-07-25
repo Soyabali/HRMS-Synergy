@@ -97,6 +97,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
     String formattedDateTime = DateFormat('dd/MMM/yyyy HH:mm').format(now);
     return formattedDateTime;
   }
+
   void getLocation() async {
     showLoader();
     bool serviceEnabled;
@@ -127,12 +128,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
         desiredAccuracy: LocationAccuracy.high);
 
     // Convert latitude and longitude to an address
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude, position.longitude);
+    List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+   // List<Placemark> placemarks = await placemarkFromCoordinates(27.2034949538412,78.0057668059695);
 
     Placemark place = placemarks[0]; // Extract relevant details
-    String address =
-        "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+   // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+    String address = "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
 
     // Update state with location and address
     setState(() {
@@ -143,6 +145,11 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('-------142----Address--$locationAddress');
     print('-------143--lat----$lat');
     print('-------144--long----$long');
+    print('-------street------${place.street}');
+    print('-------locality------${place.locality}');
+    print('-------administrationArea------${place.administrativeArea}');
+    print('-------country------${place.country}');
+
     hideLoader();
   }
   // function to generate random no
