@@ -3,6 +3,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
+import 'package:untitled/data/hrmsTimeScheduleRepo.dart';
 import '../../data/baseProjectRepo.dart';
 import '../../data/hrmsWorkEntryNewRepo.dart';
 import '../../data/workinghoursRepo.dart';
@@ -82,7 +83,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     {"fWorkingHrs": "20", "sWorkingHrsName": "20 Hour"}
   ];
 
-
   List<TextEditingController> _controllers = [];
   List<String> projectNames = [];
   List<String> workDetails = [];
@@ -95,6 +95,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
   List<String?> _selectedDropDownValues = [];
   //List<String> _selectedHourCodes = [];
   List<Map<String, dynamic>> _selectedHourCodes = [];
+
+
+  //
+  // List<Map<String, String>> hrmsTimeScheduleList = [
+
+  List<Map<String, dynamic>>? hrmsTimeScheduleList2;
+
 
   void displayToast(String msg) {
     Fluttertoast.showToast(
@@ -114,18 +121,14 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print(" -----Project List---84---> $baseProjectList");
     setState(() {});
   }
-
-  // working Hour
-  // updatedSector() async {
-  //   selectedHourCodes = await WorkingHourRepo().workingHourList();
-  //   print(" -----xxxxx-  working Hour--83---> $selectedHourCodes");
-  //   setState(() {});
-  // }
+  // hrmsTimeSchedule
+  hrmsTimeSchedule() async {
+    hrmsTimeScheduleList2 = await HrmsTimeScheduleRepo().timeScheduleList(context);
+    print(" -----Hrsms time Schedule---137---> $hrmsTimeScheduleList2");
+    setState(() {});
+  }
 
   Future<void> toCallApiInitState() async {
-    // Fetch your data here
-    // baseProjectList = await fetchProjects();
-    // call api
 
     baseProjectList = await HrmsBaseProjectRepo().baseProjectList(context);
 
@@ -143,10 +146,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
   @override
   void initState() {
-   // baseProject();
-   // baseProject();
     toCallApiInitState();
-    //hrmsTimeSchedule();
+    hrmsTimeSchedule();
     super.initState();
 
     if (baseProjectList != null) {
@@ -219,29 +220,63 @@ class _MyHomePageState extends State<WorkDetailPage> {
                 style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
               ),
               value: _selectedDropDownValues[index],
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedDropDownValues[index] = newValue;
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDropDownValues[index] = newValue;
 
-                  final selectedItem = staticWorkingHours.firstWhere(
-                        (element) => element['sWorkingHrsName'] == newValue,
-                    orElse: () => {
-                          },
-                  );
-                  _selectHoursTime = selectedItem['fWorkingHrs'].toString();
-                  if (_selectHoursTime!=null) {
-                   // _selectedHourCodes[index] = _selectHoursTime;
-                    //  to add time slot into the list
-                    setState(() {
-                      _selectedHourCodes.add({
+                    final selectedItem = staticWorkingHours.firstWhere(
+                          (element) => element['sWorkingHrsName'] == newValue,
+                      orElse: () => {},
+                    );
+
+                    _selectHoursTime =
+                        selectedItem['fWorkingHrs']?.toString() ?? '';
+
+                    if (_selectHoursTime.isNotEmpty) {
+
+                      if (_selectedHourCodes.length <= index) {
+                        _selectedHourCodes.addAll(
+                          List.generate(index - _selectedHourCodes.length + 1, (_) => {}),
+                        );
+                      }
+                      _selectedHourCodes[index] = {
                         'fWorkingHrs': _selectHoursTime,
-                      });
-                    });
-                  }
-                });
-                print("----242----$_selectedHourCodes"); // to send this value api first of all adda list after that send
-                print("----244---$newValue");// you add this value into the list
-              },
+                      };
+
+                      // if (_selectedHourCodes.length <= index) {
+                      //   _selectedHourCodes.length = baseProjectList!.length;
+                      // }
+                      // _selectedHourCodes[index] = {
+                      //   'fWorkingHrs': _selectHoursTime,
+                      // };
+
+                    }
+                  });
+                },
+
+                // onChanged: (newValue) {
+              //   setState(() {
+              //     _selectedDropDownValues[index] = newValue;
+              //
+              //     final selectedItem = staticWorkingHours.firstWhere(
+              //           (element) => element['sWorkingHrsName'] == newValue,
+              //       orElse: () => {
+              //             },
+              //     );
+              //     _selectHoursTime = selectedItem['fWorkingHrs'].toString();
+              //     if (_selectHoursTime!=null) {
+              //      // _selectedHourCodes[index] = _selectHoursTime;
+              //       //  to add time slot into the list
+              //       setState(() {
+              //         _selectedHourCodes.add({
+              //           'fWorkingHrs': _selectHoursTime,
+              //         });
+              //       });
+              //     }
+              //   });
+              //   print("----242----$_selectedHourCodes"); // to send this value api first of all adda list after that send
+              //   print("----244---$newValue");// you add this value into the list
+              // },
               items: staticWorkingHours.map<DropdownMenuItem<String>>((item) {
                 final name = item['sWorkingHrsName'].toString();
 
@@ -303,7 +338,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
             combinedList.add({
               'sProjectName': projectCode,
               'sEmpWorkStatus': workDetail,
-              'fWorkingHrs': _selectedHourCodes[i]['fWorkingHrs'],            //'sHourCode': staticWorkingHours[i]['fWorkingHrs'],
+              'sHourCode': hrmsTimeScheduleList2![i]['sHourCode'],
+              'fWorkingHrs': (_selectedHourCodes.length > i && _selectedHourCodes[i] != null)
+                  ? _selectedHourCodes[i]['fWorkingHrs']
+                  : '',           // 'fWorkingHrs': _selectedHourCodes[i]['fWorkingHrs'],            //'sHourCode': staticWorkingHours[i]['fWorkingHrs'],
             });
           }
         }
@@ -344,205 +382,210 @@ class _MyHomePageState extends State<WorkDetailPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        // statusBarColore
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color  // 2a697b
-          statusBarColor: Color(0xFF2a697b),
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
-        ),
-        // backgroundColor: Colors.blu
-        backgroundColor: Color(0xFF0098a6),
-        leading: InkWell(
-          onTap: () {
-            // Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const DashBoard()),
-            );
-          },
-          child: const Padding(
-            padding: EdgeInsets.only(left: 5.0),
-            child: Icon(
-              Icons.arrow_back_ios,
-              size: 24,
-              color: Colors.white,
+    return GestureDetector(
+      onTap: (){
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          // statusBarColore
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            // Status bar color  // 2a697b
+            statusBarColor: Color(0xFF2a697b),
+            // Status bar brightness (optional)
+            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
+          // backgroundColor: Colors.blu
+          backgroundColor: Color(0xFF0098a6),
+          leading: InkWell(
+            onTap: () {
+              // Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DashBoard()),
+              );
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 5.0),
+              child: Icon(
+                Icons.arrow_back_ios,
+                size: 24,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-        title: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Work Detail',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Montserrat',
+          title: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              'Work Detail',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'Montserrat',
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ), // Removes shadow under the AppBar
-      ),
-      //
-      body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 10),
-              child: SizedBox(
-                height: 150, // Height of the container
-                width: MediaQuery.of(context).size.width,
-                child: Opacity(
-                  opacity: 0.9,
-                  child: Image.asset('assets/images/deshboardtop.jpeg',
-                    fit: BoxFit.fill, // Adjust the image fit to cover the container
+          ), // Removes shadow under the AppBar
+        ),
+        //
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 0, bottom: 10),
+                child: SizedBox(
+                  height: 150, // Height of the container
+                  width: MediaQuery.of(context).size.width,
+                  child: Opacity(
+                    opacity: 0.9,
+                    child: Image.asset('assets/images/deshboardtop.jpeg',
+                      fit: BoxFit.fill, // Adjust the image fit to cover the container
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: baseProjectList?.length ?? 0,
-                  itemBuilder: (context,index){
-                    // Make sure the _controllers list is initialized properly
-                    if (_controllers.length < baseProjectList!.length)
-                    {
-                      _controllers.add(TextEditingController());
-                    }
-                    return Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
-                        child: Container(
-                            width: MediaQuery.of(context).size.width - 10,
-                            decoration: BoxDecoration(
-                                color: Colors.white, // Background color of the container
-                                borderRadius: BorderRadius.circular(5),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5), // Color of the shadow
-                                    spreadRadius: 5, // Spread radius
-                                    blurRadius: 7, // Blur radius
-                                    offset: Offset(0, 3), // Offset of the shadow
-                                  ),
-                                ]),
-                            child: Padding(
-                                padding: const EdgeInsets.only(left: 10, right: 10),
-                                child: Form(
-                                  // key: _formKey,
-                                    child: Padding(
-                                        padding: const EdgeInsets.only(bottom: 10),
-                                        child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Container(
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.start,
-                                                  children: [
-                                                    SizedBox(height: 10),
-                                                    Container(
-                                                      alignment: Alignment.centerLeft,
-                                                      child: DottedBorder(
-                                                        color: Colors.grey,
-                                                        strokeWidth: 1.0,
-                                                        dashPattern: [4, 2],
-                                                        borderType: BorderType.RRect,
-                                                        radius: const Radius.circular(5.0),
-                                                        child: Padding(
-                                                          padding: EdgeInsets.all(8.0),
-                                                          child: Row(
-                                                            mainAxisSize: MainAxisSize.min, // This ensures the Row only takes up as much space as needed
-                                                            children: [
-                                                              Image.asset('assets/images/workdetail.jpeg',
-                                                                height: 25,
-                                                                width: 25,
-                                                                fit: BoxFit.fill,
-                                                              ),
-                                                              // const Icon(Icons.camera_alt_outlined,
-                                                              //     size: 25),
-                                                              SizedBox(width: 5),
-                                                              Flexible(
-                                                                child: Text(
-                                                                  '${baseProjectList?[index]['sProjectName']}',
-                                                                  style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                                                  overflow: TextOverflow.ellipsis,
+              Expanded(
+                child: ListView.builder(
+                    itemCount: baseProjectList?.length ?? 0,
+                    itemBuilder: (context,index){
+                      // Make sure the _controllers list is initialized properly
+                      if (_controllers.length < baseProjectList!.length)
+                      {
+                        _controllers.add(TextEditingController());
+                      }
+                      return Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width - 10,
+                              decoration: BoxDecoration(
+                                  color: Colors.white, // Background color of the container
+                                  borderRadius: BorderRadius.circular(5),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5), // Color of the shadow
+                                      spreadRadius: 5, // Spread radius
+                                      blurRadius: 7, // Blur radius
+                                      offset: Offset(0, 3), // Offset of the shadow
+                                    ),
+                                  ]),
+                              child: Padding(
+                                  padding: const EdgeInsets.only(left: 10, right: 10),
+                                  child: Form(
+                                    // key: _formKey,
+                                      child: Padding(
+                                          padding: const EdgeInsets.only(bottom: 10),
+                                          child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                Container(
+                                                  child: Column(
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      SizedBox(height: 10),
+                                                      Container(
+                                                        alignment: Alignment.centerLeft,
+                                                        child: DottedBorder(
+                                                          color: Colors.grey,
+                                                          strokeWidth: 1.0,
+                                                          dashPattern: [4, 2],
+                                                          borderType: BorderType.RRect,
+                                                          radius: const Radius.circular(5.0),
+                                                          child: Padding(
+                                                            padding: EdgeInsets.all(8.0),
+                                                            child: Row(
+                                                              mainAxisSize: MainAxisSize.min, // This ensures the Row only takes up as much space as needed
+                                                              children: [
+                                                                Image.asset('assets/images/workdetail.jpeg',
+                                                                  height: 25,
+                                                                  width: 25,
+                                                                  fit: BoxFit.fill,
                                                                 ),
+                                                                // const Icon(Icons.camera_alt_outlined,
+                                                                //     size: 25),
+                                                                SizedBox(width: 5),
+                                                                Flexible(
+                                                                  child: Text(
+                                                                    '${baseProjectList?[index]['sProjectName']}',
+                                                                    style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                                                    overflow: TextOverflow.ellipsis,
+                                                                  ),
 
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    SizedBox(height: 15),
-                                                    _bindSector(index),
-                                                   // _bindSector(),
-                                                    SizedBox(height: 15),
-
-                                                    Container(
-                                                      //  height: 65,
-                                                      color: Color(0xFFf2f3f5),
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.only(left: 0),
-                                                        child: TextFormField(
-                                                          focusNode: FocusNode(),
-                                                          controller: _controllers[index],
-                                                          textInputAction: TextInputAction.next,
-                                                          onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                                          maxLines: null, // Allows for multiline input and auto-adjusts height
-                                                          keyboardType: TextInputType.multiline, // Enables multiline input from keyboard
-                                                          decoration: InputDecoration(
-                                                            labelText: "Enter work detail",
-                                                            labelStyle: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                                            border: const OutlineInputBorder(),
-                                                            contentPadding: const EdgeInsets.symmetric(
-                                                              vertical: 10, // Adjust vertical padding for better layout
-                                                              horizontal: 10,
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
-                                                          autovalidateMode: AutovalidateMode.onUserInteraction,
                                                         ),
-
                                                       ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
-                                            ]
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    );
+                                                      SizedBox(height: 15),
+                                                      _bindSector(index),
+                                                     // _bindSector(),
+                                                      SizedBox(height: 15),
 
-                  }),
-            ),
-            SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 10), // Adjust padding as necessary
-              child: ElevatedButton(
-                onPressed: _submitForm,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF0098a6), // Green color
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                                                      Container(
+                                                        //  height: 65,
+                                                        color: Color(0xFFf2f3f5),
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 0),
+                                                          child: TextFormField(
+                                                            focusNode: FocusNode(),
+                                                            controller: _controllers[index],
+                                                            textInputAction: TextInputAction.next,
+                                                            onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                                            maxLines: null, // Allows for multiline input and auto-adjusts height
+                                                            keyboardType: TextInputType.multiline, // Enables multiline input from keyboard
+                                                            decoration: InputDecoration(
+                                                              labelText: "Enter work detail",
+                                                              labelStyle: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                                              border: const OutlineInputBorder(),
+                                                              contentPadding: const EdgeInsets.symmetric(
+                                                                vertical: 10, // Adjust vertical padding for better layout
+                                                                horizontal: 10,
+                                                              ),
+                                                            ),
+                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                          ),
+
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              ]
+                                          )
+                                      )
+                                  )
+                              )
+                          )
+                      );
+
+                    }),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 10,
+                    bottom: 10), // Adjust padding as necessary
+                child: ElevatedButton(
+                  onPressed: _submitForm,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0098a6), // Green color
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text(
+                    'SUBMIT',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
-                child: const Text(
-                  'SUBMIT',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
               ),
-            ),
-          ]
+            ]
+        ),
       ),
     );
   }

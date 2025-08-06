@@ -26,6 +26,7 @@ class HrmsWorkEntryNewRepo {
       var hrmsWorkStatusApi = "$baseURL$endPoint";
       print('------------39---hrmsWorkStatusApi---$hrmsWorkStatusApi');
       // here pass parameter as  a array :
+
       String jsonResponse = '{"sEmpCode":"$sEmpCode","TEmployeeWorkStatusType_V2":$combinedList}';
 
 // Print the updated JSON response (optional)
