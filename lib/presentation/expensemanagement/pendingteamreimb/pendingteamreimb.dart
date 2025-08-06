@@ -36,7 +36,6 @@ class PendingTeamReimbPage extends StatefulWidget {
 class _MyHomePageState extends State<PendingTeamReimbPage> {
 
   List<Map<String, dynamic>>? pendingSchedulepointList;
-
   TextEditingController _searchController = TextEditingController();
   //  _takeAction
   TextEditingController _takeAction = TextEditingController();
@@ -609,7 +608,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
               ),
             ), // Removes shadow under the AppBar
           ),
-
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -642,8 +640,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                           // Check if a date was picked
                           if (pickedDate != null) {
                             // Format the picked date
-                            String formattedDate =
-                                DateFormat('dd/MMM/yyyy').format(pickedDate);
+                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                             // Update the state with the picked date
                             setState(() {
                               firstOfMonthDay = formattedDate;

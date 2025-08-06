@@ -814,7 +814,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                 elevation: 6, // ✅ Stronger elevation
                 shadowColor: Colors.black26, // ✅ Visible shadow
                 child: Container(
-                  height: 80,
+                  height: 110,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12), // ✅ Match Card radius
@@ -831,6 +831,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                       // 🟩 Left Half - Location Text
                       Expanded(
                         child: Container(
+
+                         // color: Colors.grey,
                           padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
                           decoration: const BoxDecoration(
                             color: Colors.white,
@@ -871,7 +873,6 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
                                 ],
                               ),
-
                               const SizedBox(height: 2),
                               Expanded(
                                 child: SingleChildScrollView(
@@ -883,7 +884,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                       fontSize: 12,
                                     ),
                                     softWrap: true,
-                                    overflow: TextOverflow.visible,
+                                    overflow: TextOverflow.fade,
                                   ),
                                 ),
                               ),

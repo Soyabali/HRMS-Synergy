@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import '../../data/baseProjectRepo.dart';
 import '../../data/hrmsWorkEntryNewRepo.dart';
+import '../../data/workinghoursRepo.dart';
 import '../dashboard/dashboard.dart';
 import 'dart:convert';
 import '../resources/app_text_style.dart';
@@ -38,23 +39,62 @@ class WorkDetailPage extends StatefulWidget {
 
 class _MyHomePageState extends State<WorkDetailPage> {
 
-  List<Map<String, String>> hrmsTimeScheduleList = [
-
-    {'sHourCode': 'H00001', 'sHourDescription': '09:30am-10:30am'},
-    {'sHourCode': 'H00002', 'sHourDescription': '10:30am-11:30am'},
-    {'sHourCode': 'H00003', 'sHourDescription': '11:30am-12:30pm'},
-    {'sHourCode': 'H00004', 'sHourDescription': '12:30pm-01:30pm'},
-    {'sHourCode': 'H00005', 'sHourDescription': '01:30pm-02:00pm'},
-    {'sHourCode': 'H00006', 'sHourDescription': '02:00pm-03:00pm'},
-    {'sHourCode': 'H00007', 'sHourDescription': '03:00pm-04:00pm'},
-    {'sHourCode': 'H00008', 'sHourDescription': '04:00pm-05:00pm'},
-    {'sHourCode': 'H00009', 'sHourDescription': '05:00pm-06:30pm'}
+  final List<Map<String, dynamic>> staticWorkingHours = [
+    {"fWorkingHrs": "0.5", "sWorkingHrsName": "Half Hour"},
+    {"fWorkingHrs": "1", "sWorkingHrsName": "1 Hour"},
+    {"fWorkingHrs": "1.5", "sWorkingHrsName": "1.5 Hour"},
+    {"fWorkingHrs": "2", "sWorkingHrsName": "2 Hour"},
+    {"fWorkingHrs": "2.5", "sWorkingHrsName": "2.5 Hour"},
+    {"fWorkingHrs": "3", "sWorkingHrsName": "3 Hour"},
+    {"fWorkingHrs": "3.5", "sWorkingHrsName": "3.5 Hour"},
+    {"fWorkingHrs": "4", "sWorkingHrsName": "4 Hour"},
+    {"fWorkingHrs": "4.5", "sWorkingHrsName": "4.5 Hour"},
+    {"fWorkingHrs": "5", "sWorkingHrsName": "5 Hour"},
+    {"fWorkingHrs": "5.5", "sWorkingHrsName": "5.5 Hour"},
+    {"fWorkingHrs": "6", "sWorkingHrsName": "6 Hour"},
+    {"fWorkingHrs": "6.5", "sWorkingHrsName": "6.5 Hour"},
+    {"fWorkingHrs": "7", "sWorkingHrsName": "7 Hour"},
+    {"fWorkingHrs": "7.5", "sWorkingHrsName": "7.5 Hour"},
+    {"fWorkingHrs": "8", "sWorkingHrsName": "8 Hour"},
+    {"fWorkingHrs": "8.5", "sWorkingHrsName": "8.5 Hour"},
+    {"fWorkingHrs": "9", "sWorkingHrsName": "9 Hour"},
+    {"fWorkingHrs": "9.5", "sWorkingHrsName": "9.5 Hour"},
+    {"fWorkingHrs": "10", "sWorkingHrsName": "10 Hour"},
+    {"fWorkingHrs": "10.5", "sWorkingHrsName": "10.5 Hour"},
+    {"fWorkingHrs": "11", "sWorkingHrsName": "11 Hour"},
+    {"fWorkingHrs": "11.5", "sWorkingHrsName": "11.5 Hour"},
+    {"fWorkingHrs": "12", "sWorkingHrsName": "12 Hour"},
+    {"fWorkingHrs": "12.5", "sWorkingHrsName": "12.5 Hour"},
+    {"fWorkingHrs": "13", "sWorkingHrsName": "13 Hour"},
+    {"fWorkingHrs": "13.5", "sWorkingHrsName": "13.5 Hour"},
+    {"fWorkingHrs": "14", "sWorkingHrsName": "14 Hour"},
+    {"fWorkingHrs": "14.5", "sWorkingHrsName": "14.5 Hour"},
+    {"fWorkingHrs": "15", "sWorkingHrsName": "15 Hour"},
+    {"fWorkingHrs": "15.5", "sWorkingHrsName": "15.5 Hour"},
+    {"fWorkingHrs": "16", "sWorkingHrsName": "16 Hour"},
+    {"fWorkingHrs": "16.5", "sWorkingHrsName": "16.5 Hour"},
+    {"fWorkingHrs": "17", "sWorkingHrsName": "17 Hour"},
+    {"fWorkingHrs": "17.5", "sWorkingHrsName": "17.5 Hour"},
+    {"fWorkingHrs": "18", "sWorkingHrsName": "18 Hour"},
+    {"fWorkingHrs": "18.5", "sWorkingHrsName": "18.5 Hour"},
+    {"fWorkingHrs": "19", "sWorkingHrsName": "19 Hour"},
+    {"fWorkingHrs": "19.5", "sWorkingHrsName": "19.5 Hour"},
+    {"fWorkingHrs": "20", "sWorkingHrsName": "20 Hour"}
   ];
 
-  final List<TextEditingController> _controllers = [];
+
+  List<TextEditingController> _controllers = [];
   List<String> projectNames = [];
   List<String> workDetails = [];
   List<dynamic>?  baseProjectList;
+ // List<dynamic> selectedHourCodes = [];
+  var _dropDownSector;
+  final sectorFocus = GlobalKey();
+  var _selectedSectorId;
+  var _selectHoursTime;
+  List<String?> _selectedDropDownValues = [];
+  //List<String> _selectedHourCodes = [];
+  List<Map<String, dynamic>> _selectedHourCodes = [];
 
   void displayToast(String msg) {
     Fluttertoast.showToast(
@@ -75,15 +115,51 @@ class _MyHomePageState extends State<WorkDetailPage> {
     setState(() {});
   }
 
+  // working Hour
+  // updatedSector() async {
+  //   selectedHourCodes = await WorkingHourRepo().workingHourList();
+  //   print(" -----xxxxx-  working Hour--83---> $selectedHourCodes");
+  //   setState(() {});
+  // }
+
+  Future<void> toCallApiInitState() async {
+    // Fetch your data here
+    // baseProjectList = await fetchProjects();
+    // call api
+
+    baseProjectList = await HrmsBaseProjectRepo().baseProjectList(context);
+
+    if (baseProjectList != null) {
+      _controllers = List.generate(
+          baseProjectList!.length, (_) => TextEditingController());
+
+      _selectedDropDownValues = List.generate(
+          baseProjectList!.length, (_) => null);
+
+      setState(() {});
+    }
+  }
+
+
   @override
   void initState() {
-    baseProject();
+   // baseProject();
+   // baseProject();
+    toCallApiInitState();
     //hrmsTimeSchedule();
     super.initState();
 
     if (baseProjectList != null) {
       for (int i = 0; i < baseProjectList!.length; i++) {
         _controllers.add(TextEditingController());
+        if (_selectedDropDownValues.length != baseProjectList?.length) {
+          _selectedDropDownValues = List.generate(baseProjectList!.length, (_) => null);
+        }
+       // staticWorkingHours.add(null);//Initilize dropdown value
+        void initializeDropDownValues() {
+          // Only if not already initialized
+
+        }
       }
       }
   }
@@ -123,6 +199,67 @@ class _MyHomePageState extends State<WorkDetailPage> {
       FocusScope.of(context).unfocus();  // Unfocus when app is paused
     }
   }
+  // DropDown
+  Widget _bindSector(int index) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10.0),
+      child: Container(
+        height: 42,
+        color: Color(0xFFf2f3f5),
+        child: DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButton<String>(
+              isDense: true,
+              isExpanded: true,
+              onTap: () => FocusScope.of(context).unfocus(),
+              hint: Text(
+                "Working Hours",
+                style: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+              ),
+              value: _selectedDropDownValues[index],
+              onChanged: (newValue) {
+                setState(() {
+                  _selectedDropDownValues[index] = newValue;
+
+                  final selectedItem = staticWorkingHours.firstWhere(
+                        (element) => element['sWorkingHrsName'] == newValue,
+                    orElse: () => {
+                          },
+                  );
+                  _selectHoursTime = selectedItem['fWorkingHrs'].toString();
+                  if (_selectHoursTime!=null) {
+                   // _selectedHourCodes[index] = _selectHoursTime;
+                    //  to add time slot into the list
+                    setState(() {
+                      _selectedHourCodes.add({
+                        'fWorkingHrs': _selectHoursTime,
+                      });
+                    });
+                  }
+                });
+                print("----242----$_selectedHourCodes"); // to send this value api first of all adda list after that send
+                print("----244---$newValue");// you add this value into the list
+              },
+              items: staticWorkingHours.map<DropdownMenuItem<String>>((item) {
+                final name = item['sWorkingHrsName'].toString();
+
+                return DropdownMenuItem<String>(
+                  value: name,
+                  child: Text(
+                    name,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle,
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -138,7 +275,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
     workDetails.clear();
     projectNames.clear();
     List<Map<String, dynamic>> combinedList = [];
-    bool isAtLeastOneFieldFilled = false; // Track if at least one field is filled
+    bool isAtLeastOneFieldFilled = false;   // Track if at least one field is filled
     // Check if baseProjectList exists and has elements
 
     if (baseProjectList != null && baseProjectList!.isNotEmpty) {
@@ -160,12 +297,13 @@ class _MyHomePageState extends State<WorkDetailPage> {
           workDetails.add(workDetail);
           projectNames.add(projectCode);
           // Also add to the combined list here if hrmsTimeScheduleList has corresponding entries
+          final hourCode = _selectedHourCodes.length > i ? _selectedHourCodes[i] : null;
 
-          if (hrmsTimeScheduleList != null && i < hrmsTimeScheduleList.length) {
+          if (staticWorkingHours != null && i < staticWorkingHours.length) {
             combinedList.add({
               'sProjectName': projectCode,
               'sEmpWorkStatus': workDetail,
-              'sHourCode': hrmsTimeScheduleList[i]['sHourCode'],
+              'fWorkingHrs': _selectedHourCodes[i]['fWorkingHrs'],            //'sHourCode': staticWorkingHours[i]['fWorkingHrs'],
             });
           }
         }
@@ -340,6 +478,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                       ),
                                                     ),
                                                     SizedBox(height: 15),
+                                                    _bindSector(index),
+                                                   // _bindSector(),
+                                                    SizedBox(height: 15),
+
                                                     Container(
                                                       //  height: 65,
                                                       color: Color(0xFFf2f3f5),

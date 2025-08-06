@@ -67,6 +67,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
   bool isStartTripEnabled = true;
   bool isEndTripEnabled = false;
   String? tripMsg;
+  int? sTranNoStop;
+  late int sTranNo2;
+  var sTranNo3;
   // bool isTripStarted = false;
   // bool isTripStop = true;
   var isTripStarted;
@@ -129,9 +132,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
     // Convert latitude and longitude to an address
     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
-
-   // List<Placemark> placemarks = await placemarkFromCoordinates(27.2034949538412,78.0057668059695);
-
+    // List<Placemark> placemarks = await placemarkFromCoordinates(27.2034949538412,78.0057668059695);
     Placemark place = placemarks[0]; // Extract relevant details
    // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
     String address = "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
@@ -149,7 +150,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('-------locality------${place.locality}');
     print('-------administrationArea------${place.administrativeArea}');
     print('-------country------${place.country}');
-
     hideLoader();
   }
   // function to generate random no
@@ -167,8 +167,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print('---Token----113--$sToken');
 
     try {
-      final pickFileid = await ImagePicker()
-          .pickImage(source: ImageSource.camera, imageQuality: 65);
+      final pickFileid = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
         image = File(pickFileid.path);
         setState(() {});
@@ -223,6 +222,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
       print('Error uploading image: $error');
     }
   }
+
   void getlocalDataInSharedPreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -230,6 +230,12 @@ class _MyHomePageState extends State<WorkDetailPage> {
       sTranNo = prefs.getString('sTranNo');
       print('---Trip Message---$tripMsg');
     });
+  }
+
+  // currectTime
+  String generateTimeStamp() {
+    final now = DateTime.now();
+    return '${now.day.toString().padLeft(2, '0')}${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}';
   }
 
   @override
@@ -241,7 +247,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
     print(randomNumber); // Example output: 1234567890
     getLocation();
     //_loadTripStatus();
-    //
     getPendingStatusResponse();
     //getlocalDataInSharedPreference();
   }
@@ -534,11 +539,12 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                           print('---527---$tripStart');
 
                                           String Msg = "${tripStart[0]['Msg']}";
-                                          String sTranNo = "${tripStart[0]['sTranNo']}";
+                                           sTranNo2 = int.parse("${tripStart[0]['sTranNo']}"); // ✅ Convert to int
 
-
-                                          prefs.setString('sTranNo', sTranNo);
-                                          prefs.setString('tripMsg', Msg);
+                                          int result = int.parse("${tripStart[0]['Result']}");
+                                          // to store the value into the sharedPreference
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                                          await prefs.setInt('sTranNo', sTranNo2);
 
                                           setState(() {
                                             tripMsg = Msg;
@@ -561,12 +567,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                           if (edtOdometer == null ||
                                               edtOdometer == '') {
                                             print('----print---424---');
-                                            displayToast(
-                                                'Enter Odometer details ');
-                                          } else if (uplodedImage == null ||
-                                              uplodedImage == '') {
-                                            displayToast(
-                                                'Please click Odometer image');
+                                            displayToast('Enter Odometer details');
+                                          } else if (uplodedImage == null || uplodedImage == '') {
+                                            displayToast('Please click Odometer image');
                                             //print('----print---424---');
                                           }
                                           print('---Api not call---');
@@ -605,14 +608,17 @@ class _MyHomePageState extends State<WorkDetailPage> {
                               ):
                               ElevatedButton(
                                 onPressed: () async {
-                                        // Your trip stop API logic
+                                     String timestamp = generateTimeStamp();
+                                     print("------624--");
+
+                                       // Your trip stop API logic
                                         SharedPreferences prefs = await SharedPreferences.getInstance();
                                         var edtOdometer = _takeAction.text;
                                         String? sContactNo = prefs.getString('sContactNo');
-                                        String? sTranNo = prefs.getString('sTranNo');
-
-                                        print("-------607----$sTranNo");
-
+                                         sTranNoStop = prefs.getInt('sTranNo');
+                                        //int? sTranNo = prefs.getInt('sTranNo');
+                                        setState(() {
+                                        });
                                         if (_formKey.currentState!.validate() &&
                                             edtOdometer != null &&
                                             uplodedImage != null) {
@@ -622,22 +628,20 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                                   sContactNo!,
                                                   lat,
                                                   long,
-                                                  sTranNo!,
                                                   uplodedImage,
                                                   edtOdometer,
-                                                  dTripDateTime);
-
-                                            print('----572---$tripEnd');
-
+                                                  dTripDateTime,
+                                                 locationAddress,
+                                              timestamp
+                                          );
+                                          print('----572---$tripEnd');
                                           String Msg = "${tripEnd[0]['Msg']}";
-
                                           prefs.setString('tripMsg', Msg);
                                           setState(() {
                                             tripMsg = Msg;
                                             isTripStarted = false;
                                           });
                                           print('-----576---$tripMsg');
-
                                           _takeAction.clear();
                                           image == null;
                                           print('---487---$tripMsg');
@@ -675,8 +679,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
                                         } else {
                                           //displayToast(Msg);
                                         }
-                                      },
 
+
+                                      },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: getButtonColorStoptrip(
                                       tripMsg ?? "Not a value"),

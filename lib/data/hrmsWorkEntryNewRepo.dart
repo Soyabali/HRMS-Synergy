@@ -17,13 +17,16 @@ class HrmsWorkEntryNewRepo {
     var sEmpCode = prefs.getString('sEmpCode');
 
     try {
+
+      print("------21----$combinedList");
       var baseURL = BaseRepo().baseurl;
       /// TODO CHANGE HERE
-      var endPoint = "hrmsworkstatusentrynew/hrmsworkstatusentrynew";
+      //var endPoint = "hrmsworkstatusentrynew/hrmsworkstatusentrynew";
+      var endPoint = "hrmsworkstatusentrynewV2/hrmsworkstatusentrynewV2";
       var hrmsWorkStatusApi = "$baseURL$endPoint";
       print('------------39---hrmsWorkStatusApi---$hrmsWorkStatusApi');
       // here pass parameter as  a array :
-      String jsonResponse = '{"sEmpCode":"$sEmpCode","TEmployeeWorkStatusType":$combinedList}';
+      String jsonResponse = '{"sEmpCode":"$sEmpCode","TEmployeeWorkStatusType_V2":$combinedList}';
 
 // Print the updated JSON response (optional)
       print(jsonResponse);
