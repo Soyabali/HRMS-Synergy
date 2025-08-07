@@ -17,7 +17,7 @@ class HrmsWorkEntryNewRepo {
     var sEmpCode = prefs.getString('sEmpCode');
 
     try {
-
+      showLoader();
       print("------21----$combinedList");
       var baseURL = BaseRepo().baseurl;
       /// TODO CHANGE HERE

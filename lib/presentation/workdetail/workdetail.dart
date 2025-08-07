@@ -1,13 +1,10 @@
 
 import 'dart:io';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:untitled/data/hrmsTimeScheduleRepo.dart';
-import 'package:untitled/presentation/workdetail/workdetailComponent/buildCupertinoHeaderImage.dart';
 import 'package:untitled/presentation/workdetail/workdetailComponent/buildCupertinoProjectCard.dart';
 import 'package:untitled/presentation/workdetail/workdetailComponent/buildMaterialProjectCard.dart';
 import '../../data/baseProjectRepo.dart';
@@ -183,7 +180,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
     if(result=="1")
     {
-
+    // print("---msg--$msg");
       showDialog(
         context: context,
         builder: (BuildContext context)
@@ -191,13 +188,16 @@ class _MyHomePageState extends State<WorkDetailPage> {
           return _buildDialogSucces2(context,msg);
         },
       );
+
       print("----117---");
       print('-------------118--------');
     }else{
+      //print("---msg--$msg");
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return _buildDialogSucces2(context,msg);
+          return _buildDialogInformation(context,msg);
         },
       );
     }
@@ -422,56 +422,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
 
-                // GestureDetector(
-                //   onTap: () {
-                //     FocusScope.of(context).unfocus();
-                //   },
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 0, bottom: 10),
-                //     child: SizedBox(
-                //       height: 150,
-                //       width: double.infinity, // Ensure width is defined
-                //       child: SvgPicture.asset(
-                //         'assets/images/ic_work_sheet_header.svg',
-                //         fit: BoxFit.cover,
-                //         placeholderBuilder: (BuildContext context) => Center(
-                //           child: CircularProgressIndicator(),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                // SvgPicture.asset(
-                //   'assets/images/ic_work_sheet_header.svg',
-                //   fit: BoxFit.cover,
-                //   height: 150,
-                //   placeholderBuilder: (BuildContext context) => Center(
-                //     child: CircularProgressIndicator(),
-                //   ),
-                // ),
-                // GestureDetector(
-                //   onTap: () {
-                //     FocusScope.of(context).unfocus();
-                //   },
-                //   child: Padding(
-                //     padding: const EdgeInsets.only(top: 0, bottom: 10),
-                //     child: SizedBox(
-                //       height: 150,
-                //       width: double.infinity,
-                //       child: Opacity(
-                //         opacity: 0.9,
-                //         child: SvgPicture.asset(
-                //           'assets/images/ic_work_sheet_header.svg',
-                //           fit: BoxFit.cover,
-                //           placeholderBuilder: (BuildContext context) => Center(
-                //             child: CircularProgressIndicator(),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 GestureDetector(
                   onTap: (){
                     FocusScope.of(context).unfocus();
@@ -486,7 +436,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
                       child: Opacity(
                         opacity: 0.8,
                         child: Image.asset(
-                          'assets/images/ic_work_sheet_header.png',
+                          'assets/images/workstatus3.jpeg',
                           fit: BoxFit.fill, // or BoxFit.fill / contain / fitWidth
                         ),
                       ),
@@ -741,18 +691,16 @@ class _MyHomePageState extends State<WorkDetailPage> {
                     ElevatedButton(
                       onPressed: () {
 
-                        // you should clear stack here
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => const DashBoard()),
-                              (Route<dynamic> route) => false, // Remove all previous routes
-                        );
+                       if(msg=="Work status has been submitted"){
 
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => DashBoard()),
-                        // );
-                        //Navigator.of(context).pop();
+                         Navigator.pushAndRemoveUntil(
+                           context,
+                           MaterialPageRoute(builder: (context) => const DashBoard()),
+                               (Route<dynamic> route) => false, // Remove all previous routes
+                         );
+                       }else{
+                         Navigator.pop(context);
+                       }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the background color to white
@@ -784,6 +732,101 @@ class _MyHomePageState extends State<WorkDetailPage> {
               child: ClipOval(
                 child: Image.asset(
                   'assets/images/sussess.jpeg', // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _buildDialogInformation(BuildContext context,String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 190,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey[600],
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+
+                        if(msg=="Work status has been submitted"){
+
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => const DashBoard()),
+                                (Route<dynamic> route) => false, // Remove all previous routes
+                          );
+                        }else{
+                          Navigator.pop(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Set the background color to white
+                        foregroundColor: Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     getLocation();
+                    //     Navigator.of(context).pop();
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.white, // Set the background color to white
+                    //     foregroundColor: Colors.black, // Set the text color to black
+                    //   ),
+                    //   child: Text('OK',style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    // )
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/information.jpeg', // Replace with your asset image path
                   fit: BoxFit.cover,
                   width: 60,
                   height: 60,
