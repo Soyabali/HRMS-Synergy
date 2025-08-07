@@ -52,7 +52,7 @@ dependencies:
 #  google_maps_flutter: ^2.6.1
   flutter_svg_provider: ^1.0.7
   octo_image: ^2.0.0
-  flutter_svg: ^2.0.10
+  flutter_svg: ^2.2.0
   dotted_border: ^2.1.0
   syncfusion_flutter_pdfviewer: ^27.1.48
   device_info_plus: ^10.1.2
@@ -117,6 +117,7 @@ flutter:
     - assets/images/invite_friends_ic.svg
     - assets/images/logout_ic.svg
     - assets/images/ic_profile_phone.svg
+    - assets/images/ic_work_sheet_header.svg
     - assets/json/empty.json
     - assets/json/error.json
     - assets/json/loading.json

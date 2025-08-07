@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
     lat = position.latitude;
     long = position.longitude;
   }
+
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,

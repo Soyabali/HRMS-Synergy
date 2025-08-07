@@ -26,6 +26,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 
 
@@ -66,6 +67,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   var sFirstName, sCompEmailId, sLastName, fullName;
   var token;
   var locationAddress;
+  String _version = '';
 
   // internet Connectivity
   Future<bool> isInternetAvailable() async {
@@ -629,63 +631,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   }
 
 
-  // void getLocation() async {
-  //   showLoader();
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     hideLoader();
-  //     return Future.error('Location services are disabled.');
-  //   }
-  //
-  //   permission = await Geolocator.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await Geolocator.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       hideLoader();
-  //       return Future.error('Location permissions are denied.');
-  //     }
-  //   }
-  //
-  //   if (permission == LocationPermission.deniedForever) {
-  //     hideLoader();
-  //     return Future.error('Location permissions are permanently denied.');
-  //   }
-  //
-  //   // Get the current location
-  //   Position position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //
-  //   // Convert latitude and longitude to an address
-  //   List<Placemark> placemarks = await placemarkFromCoordinates(
-  //       position.latitude, position.longitude);
-  //
-  //   Placemark place = placemarks[0]; // Extract relevant details
-  //   String address =
-  //       "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
-  //
-  //   // Update state with location and address
-  //   setState(() {
-  //     lat = position.latitude;
-  //     long = position.longitude;
-  //     locationAddress = address; // Store the converted address
-  //   });
-  //    print('-------490------$locationAddress');
-  //   print('-------491--lat----$lat');
-  //   print('-------492--long----$long');
-  //   hideLoader();
-  //   var lat22;
-  //   if (lat != null && long != null) {
-  //     // Call API with latitude, longitude, and address
-  //     attendaceapi(lat, long, locationAddress);
-  //   } else {
-  //     hideLoader();
-  //      displayToast("Please select your location to proceed.");
-  //   }
-  // }
-
   attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
         context, lat, long,locationAddress);
@@ -695,7 +640,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
       var msg = "${attendance[0]['Msg']}";
       var result = "${attendance[0]['Result']}";
       setState(() {
-
       });
       // here you should apply logic if result 0 then show info Dialog otherwise show
       // sucess Dialog
@@ -816,13 +760,22 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
    print("-----517---notification Response----$Notiresponse");
 
   }
+  // get a packageVersion
+  Future<void> getAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-   @override
+    setState(() {
+      _version = packageInfo.version;
+    });
+    print("-----770---$_version");
+  }
+  @override
   void initState() {
     // TODO: implement initState
      isInternetAvailable();
      getLocalDataInfo();
      setupPushNotifications();
+     getAppVersion();
      super.initState();
      // firebase foreground msg
      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -926,11 +879,11 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                         ),
                       ),
                     ),
-                        const Positioned(
+                        Positioned(
                           bottom: 10, // Position from the bottom
                           right: 28,  // Position from the right
                           child: Text(
-                            'Version 1.1',
+                            'Version $_version',
                             style: TextStyle(
                               color: Colors.white, // Text color
                               fontSize: 12,        // Text size
@@ -1530,7 +1483,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(builder: (context) => WorkDetail()),
                               );
@@ -1652,4 +1605,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
   }
 
 }
+
+
 

@@ -26,6 +26,7 @@ import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 import 'dart:math';
 import '../expense_management.dart';
+import 'DotInputFormatter.dart';
 
 class ShopSurvey extends StatelessWidget {
   const ShopSurvey({super.key});
@@ -1762,13 +1763,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                             Expanded(
                                               child: TextFormField(
                                                 controller: _quantityController,
+                                                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                               // maxLength: 8, // max 8 characters
+                                                inputFormatters: [
+                                                  DotInputFormatter(),
+                                                ],
                                                 decoration: InputDecoration(
                                                   labelText: "Quantity",
                                                   border: OutlineInputBorder(
                                                     borderRadius: BorderRadius.circular(8.0),
                                                   ),
                                                 ),
-                                                keyboardType: TextInputType.number,
                                               ),
                                             ),
                                             SizedBox(width: 16.0),

@@ -1,18 +1,24 @@
 
+import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:untitled/data/hrmsTimeScheduleRepo.dart';
+import 'package:untitled/presentation/workdetail/workdetailComponent/buildCupertinoHeaderImage.dart';
+import 'package:untitled/presentation/workdetail/workdetailComponent/buildCupertinoProjectCard.dart';
+import 'package:untitled/presentation/workdetail/workdetailComponent/buildMaterialProjectCard.dart';
 import '../../data/baseProjectRepo.dart';
 import '../../data/hrmsWorkEntryNewRepo.dart';
-import '../../data/workinghoursRepo.dart';
 import '../dashboard/dashboard.dart';
 import 'dart:convert';
 import '../resources/app_text_style.dart';
+import 'dart:io';
+
 
 class WorkDetail extends StatelessWidget {
-
   const WorkDetail({super.key});
 
   @override
@@ -83,6 +89,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
     {"fWorkingHrs": "20", "sWorkingHrsName": "20 Hour"}
   ];
 
+  FocusNode workDetailfocus = FocusNode();
+
   List<TextEditingController> _controllers = [];
   List<String> projectNames = [];
   List<String> workDetails = [];
@@ -95,7 +103,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
   List<String?> _selectedDropDownValues = [];
   //List<String> _selectedHourCodes = [];
   List<Map<String, dynamic>> _selectedHourCodes = [];
-
 
   //
   // List<Map<String, String>> hrmsTimeScheduleList = [
@@ -138,11 +145,17 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
       _selectedDropDownValues = List.generate(
           baseProjectList!.length, (_) => null);
-
       setState(() {});
     }
   }
+  // projectCard
+  Widget buildCard(BuildContext context, int index) {
+    final projectName = baseProjectList?[index]['sProjectName'] ?? '';
 
+    return Platform.isIOS
+        ? buildCupertinoProjectCard(context, projectName)
+        : buildMaterialProjectCard(context, projectName); // Your original widget
+  }
 
   @override
   void initState() {
@@ -156,11 +169,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
         if (_selectedDropDownValues.length != baseProjectList?.length) {
           _selectedDropDownValues = List.generate(baseProjectList!.length, (_) => null);
         }
-       // staticWorkingHours.add(null);//Initilize dropdown value
-        void initializeDropDownValues() {
-          // Only if not already initialized
 
-        }
       }
       }
   }
@@ -174,6 +183,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
 
     if(result=="1")
     {
+
       showDialog(
         context: context,
         builder: (BuildContext context)
@@ -243,40 +253,10 @@ class _MyHomePageState extends State<WorkDetailPage> {
                         'fWorkingHrs': _selectHoursTime,
                       };
 
-                      // if (_selectedHourCodes.length <= index) {
-                      //   _selectedHourCodes.length = baseProjectList!.length;
-                      // }
-                      // _selectedHourCodes[index] = {
-                      //   'fWorkingHrs': _selectHoursTime,
-                      // };
-
                     }
                   });
                 },
 
-                // onChanged: (newValue) {
-              //   setState(() {
-              //     _selectedDropDownValues[index] = newValue;
-              //
-              //     final selectedItem = staticWorkingHours.firstWhere(
-              //           (element) => element['sWorkingHrsName'] == newValue,
-              //       orElse: () => {
-              //             },
-              //     );
-              //     _selectHoursTime = selectedItem['fWorkingHrs'].toString();
-              //     if (_selectHoursTime!=null) {
-              //      // _selectedHourCodes[index] = _selectHoursTime;
-              //       //  to add time slot into the list
-              //       setState(() {
-              //         _selectedHourCodes.add({
-              //           'fWorkingHrs': _selectHoursTime,
-              //         });
-              //       });
-              //     }
-              //   });
-              //   print("----242----$_selectedHourCodes"); // to send this value api first of all adda list after that send
-              //   print("----244---$newValue");// you add this value into the list
-              // },
               items: staticWorkingHours.map<DropdownMenuItem<String>>((item) {
                 final name = item['sWorkingHrsName'].toString();
 
@@ -305,6 +285,8 @@ class _MyHomePageState extends State<WorkDetailPage> {
     FocusScope.of(context).unfocus();
     super.dispose();
   }
+  // this is a  topBar images codes
+
   // submit Form
   void _submitForm() {
     workDetails.clear();
@@ -334,7 +316,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
           // Also add to the combined list here if hrmsTimeScheduleList has corresponding entries
           final hourCode = _selectedHourCodes.length > i ? _selectedHourCodes[i] : null;
 
-          if (staticWorkingHours != null && i < staticWorkingHours.length) {
+          if (staticWorkingHours != null && i < staticWorkingHours.length && workDetails!=null && workDetail.isNotEmpty) {
             combinedList.add({
               'sProjectName': projectCode,
               'sEmpWorkStatus': workDetail,
@@ -378,6 +360,9 @@ class _MyHomePageState extends State<WorkDetailPage> {
       );
     }
   }
+  // willPopScope
+
+  // load svg or png
 
   @override
   Widget build(BuildContext context) {
@@ -386,205 +371,328 @@ class _MyHomePageState extends State<WorkDetailPage> {
       onTap: (){
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          // statusBarColore
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color  // 2a697b
-            statusBarColor: Color(0xFF2a697b),
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
-          ),
-          // backgroundColor: Colors.blu
-          backgroundColor: Color(0xFF0098a6),
-          leading: InkWell(
-            onTap: () {
-              // Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DashBoard()),
-              );
-            },
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5.0),
-              child: Icon(
-                Icons.arrow_back_ios,
-                size: 24,
-                color: Colors.white,
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            // statusBarColore
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              // Status bar color  // 2a697b
+              statusBarColor: Color(0xFF2a697b),
+              // Status bar brightness (optional)
+              statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+              statusBarBrightness: Brightness.light, // For iOS (dark icons)
+            ),
+            // backgroundColor: Colors.blu
+            backgroundColor: Color(0xFF0098a6),
+            leading: InkWell(
+              onTap: () {
+                // Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const DashBoard()),
+                );
+              },
+              child: const Padding(
+                padding: EdgeInsets.only(left: 5.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  size: 24,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ),
-          title: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Work Detail',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.normal,
-                fontFamily: 'Montserrat',
+            title: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Work Detail',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'Montserrat',
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          ), // Removes shadow under the AppBar
-        ),
-        //
-        body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 0, bottom: 10),
-                child: SizedBox(
-                  height: 150, // Height of the container
-                  width: MediaQuery.of(context).size.width,
-                  child: Opacity(
-                    opacity: 0.9,
-                    child: Image.asset('assets/images/deshboardtop.jpeg',
-                      fit: BoxFit.fill, // Adjust the image fit to cover the container
+            ), // Removes shadow under the AppBar
+          ),
+          //
+          body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+
+                // GestureDetector(
+                //   onTap: () {
+                //     FocusScope.of(context).unfocus();
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 0, bottom: 10),
+                //     child: SizedBox(
+                //       height: 150,
+                //       width: double.infinity, // Ensure width is defined
+                //       child: SvgPicture.asset(
+                //         'assets/images/ic_work_sheet_header.svg',
+                //         fit: BoxFit.cover,
+                //         placeholderBuilder: (BuildContext context) => Center(
+                //           child: CircularProgressIndicator(),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
+                // SvgPicture.asset(
+                //   'assets/images/ic_work_sheet_header.svg',
+                //   fit: BoxFit.cover,
+                //   height: 150,
+                //   placeholderBuilder: (BuildContext context) => Center(
+                //     child: CircularProgressIndicator(),
+                //   ),
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     FocusScope.of(context).unfocus();
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 0, bottom: 10),
+                //     child: SizedBox(
+                //       height: 150,
+                //       width: double.infinity,
+                //       child: Opacity(
+                //         opacity: 0.9,
+                //         child: SvgPicture.asset(
+                //           'assets/images/ic_work_sheet_header.svg',
+                //           fit: BoxFit.cover,
+                //           placeholderBuilder: (BuildContext context) => Center(
+                //             child: CircularProgressIndicator(),
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                GestureDetector(
+                  onTap: (){
+                    FocusScope.of(context).unfocus();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0, bottom: 10),
+                    child:
+                    SizedBox(
+                      height: 150,
+                     // width: double.infinity,
+                      width: MediaQuery.of(context).size.width-10,
+                      child: Opacity(
+                        opacity: 0.8,
+                        child: Image.asset(
+                          'assets/images/ic_work_sheet_header.png',
+                          fit: BoxFit.fill, // or BoxFit.fill / contain / fitWidth
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                    itemCount: baseProjectList?.length ?? 0,
-                    itemBuilder: (context,index){
-                      // Make sure the _controllers list is initialized properly
-                      if (_controllers.length < baseProjectList!.length)
-                      {
-                        _controllers.add(TextEditingController());
-                      }
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5),
-                          child: Container(
-                              width: MediaQuery.of(context).size.width - 10,
-                              decoration: BoxDecoration(
-                                  color: Colors.white, // Background color of the container
-                                  borderRadius: BorderRadius.circular(5),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5), // Color of the shadow
-                                      spreadRadius: 5, // Spread radius
-                                      blurRadius: 7, // Blur radius
-                                      offset: Offset(0, 3), // Offset of the shadow
-                                    ),
-                                  ]),
-                              child: Padding(
-                                  padding: const EdgeInsets.only(left: 10, right: 10),
-                                  child: Form(
-                                    // key: _formKey,
-                                      child: Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
-                                          child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  child: Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    children: [
-                                                      SizedBox(height: 10),
-                                                      Container(
-                                                        alignment: Alignment.centerLeft,
-                                                        child: DottedBorder(
-                                                          color: Colors.grey,
-                                                          strokeWidth: 1.0,
-                                                          dashPattern: [4, 2],
-                                                          borderType: BorderType.RRect,
-                                                          radius: const Radius.circular(5.0),
-                                                          child: Padding(
-                                                            padding: EdgeInsets.all(8.0),
-                                                            child: Row(
-                                                              mainAxisSize: MainAxisSize.min, // This ensures the Row only takes up as much space as needed
-                                                              children: [
-                                                                Image.asset('assets/images/workdetail.jpeg',
-                                                                  height: 25,
-                                                                  width: 25,
-                                                                  fit: BoxFit.fill,
-                                                                ),
-                                                                // const Icon(Icons.camera_alt_outlined,
-                                                                //     size: 25),
-                                                                SizedBox(width: 5),
-                                                                Flexible(
-                                                                  child: Text(
-                                                                    '${baseProjectList?[index]['sProjectName']}',
-                                                                    style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                                                    overflow: TextOverflow.ellipsis,
-                                                                  ),
+                //  pre mages name :  ic_work_sheet_header.png'
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: baseProjectList?.length ?? 0,
+                      itemBuilder: (context,index) {
+                        // Make sure the _controllers list is initialized properly
+                        if (_controllers.length < baseProjectList!.length)
+                        {
+                          _controllers.add(TextEditingController());
+                        }
+                        return Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5,bottom: 5,top: 5),
+                            child: Container(
+                                width: MediaQuery.of(context).size.width - 10,
+                                decoration: BoxDecoration(
+                                    color: Colors.white, // Background color of the container
+                                    borderRadius: BorderRadius.circular(5),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.5), // Color of the shadow
+                                        spreadRadius: 5, // Spread radius
+                                        blurRadius: 7, // Blur radius
+                                        offset: Offset(0, 3), // Offset of the shadow
+                                      ),
+                                    ]),
+                                child: Padding(
+                                    padding: const EdgeInsets.only(left: 10, right: 10),
+                                    child: Form(
+                                      // key: _formKey,
+                                        child: Padding(
+                                            padding: const EdgeInsets.only(bottom: 10),
+                                            child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Container(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.start,
+                                                      children: [
+                                                        SizedBox(height: 10),
+                                                        // card as a project aname
+                                                        buildCard(context,index),
 
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(height: 15),
-                                                      _bindSector(index),
-                                                     // _bindSector(),
-                                                      SizedBox(height: 15),
-
-                                                      Container(
-                                                        //  height: 65,
-                                                        color: Color(0xFFf2f3f5),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left: 0),
-                                                          child: TextFormField(
-                                                            focusNode: FocusNode(),
+                                                        // Container(
+                                                        //   alignment: Alignment.centerLeft,
+                                                        //   child: DottedBorder(
+                                                        //     color: Colors.grey,
+                                                        //     strokeWidth: 1.0,
+                                                        //     dashPattern: [4, 2],
+                                                        //     borderType: BorderType.RRect,
+                                                        //     radius: const Radius.circular(5.0),
+                                                        //     child: Padding(
+                                                        //       padding: EdgeInsets.all(8.0),
+                                                        //       child: Row(
+                                                        //         mainAxisSize: MainAxisSize.min, // This ensures the Row only takes up as much space as needed
+                                                        //         children: [
+                                                        //           Image.asset('assets/images/workdetail.jpeg',
+                                                        //             height: 25,
+                                                        //             width: 25,
+                                                        //             fit: BoxFit.fill,
+                                                        //           ),
+                                                        //           // const Icon(Icons.camera_alt_outlined,
+                                                        //           //     size: 25),
+                                                        //           SizedBox(width: 5),
+                                                        //           Flexible(
+                                                        //             child: Text(
+                                                        //               '${baseProjectList?[index]['sProjectName']}',
+                                                        //               style: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                                        //               overflow: TextOverflow.ellipsis,
+                                                        //             ),
+                                                        //
+                                                        //           ),
+                                                        //         ],
+                                                        //       ),
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+                                                        SizedBox(height: 15),
+                                                        _bindSector(index),
+                                                       // _bindSector(),
+                                                        SizedBox(height: 15),
+                                                        Platform.isIOS
+                                                        ? Container(
+                                                          //color: const Color(0xFFf2f3f5),
+                                                          //padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                                          child: CupertinoTextField(
                                                             controller: _controllers[index],
+                                                            placeholder: "Enter work detail",
+                                                            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 10.0),
+                                                            maxLines: null,
+                                                            keyboardType: TextInputType.multiline,
                                                             textInputAction: TextInputAction.next,
                                                             onEditingComplete: () => FocusScope.of(context).nextFocus(),
-                                                            maxLines: null, // Allows for multiline input and auto-adjusts height
-                                                            keyboardType: TextInputType.multiline, // Enables multiline input from keyboard
-                                                            decoration: InputDecoration(
-                                                              labelText: "Enter work detail",
-                                                              labelStyle: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
-                                                              border: const OutlineInputBorder(),
-                                                              contentPadding: const EdgeInsets.symmetric(
-                                                                vertical: 10, // Adjust vertical padding for better layout
-                                                                horizontal: 10,
-                                                              ),
+
+                                                            // ✅ Native iOS-style font
+                                                            style: const TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CupertinoColors.black,
+                                                              fontFamily: '.SF Pro Text', // Native iOS font
                                                             ),
-                                                            autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                                                            // ✅ Native-style placeholder
+                                                            placeholderStyle: const TextStyle(
+                                                              fontSize: 16.0,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CupertinoColors.placeholderText,
+                                                              fontFamily: '.SF Pro Text',
+                                                            ),
+
+                                                            // ✅ iOS-style border
+                                                            decoration: BoxDecoration(
+                                                              color: CupertinoColors.white,
+                                                              border: Border.all(color: CupertinoColors.systemGrey4, width: 1.0),
+                                                              borderRadius: BorderRadius.circular(8.0), // Rounded corners as per iOS
+                                                            ),
                                                           ),
+                                                        )
+                                                        :
+                                                        Container(
+                                                          //  height: 65,
+                                                          color: Color(0xFFf2f3f5),
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(left: 0),
+                                                            child: TextFormField(
+                                                              controller: _controllers[index],
+                                                              textInputAction: TextInputAction.next,
+                                                              onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                                                              maxLines: null, // Allows for multiline input and auto-adjusts height
+                                                              keyboardType: TextInputType.multiline, // Enables multiline input from keyboard
+                                                              decoration: InputDecoration(
+                                                                labelText: "Enter work detail",
+                                                                labelStyle: AppTextStyle.font14OpenSansRegularBlack45TextStyle,
+                                                                border: const OutlineInputBorder(),
+                                                                contentPadding: const EdgeInsets.symmetric(
+                                                                  vertical: 10, // Adjust vertical padding for better layout
+                                                                  horizontal: 10,
+                                                                ),
+                                                              ),
+                                                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                            ),
 
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              ]
-                                          )
-                                      )
-                                  )
-                              )
-                          )
-                      );
+                                                      ],
+                                                    ),
+                                                  )
+                                                ]
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        );
 
-                    }),
-              ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 10,
-                    bottom: 10), // Adjust padding as necessary
-                child: ElevatedButton(
-                  onPressed: _submitForm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF0098a6), // Green color
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 12),
-                    shape: RoundedRectangleBorder(
+                      }),
+                ),
+                SizedBox(height: 10),
+                Platform.isIOS ?
+                Padding(
+                  padding: const EdgeInsets.only(top: 5, bottom: 20,left: 15,right: 15),
+                  child: SizedBox(
+                    width: double.infinity, // Full-width button
+                    child: CupertinoButton(
+                     // padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                      color: const Color(0xFF0098a6), // Custom iOS-like teal color
                       borderRadius: BorderRadius.circular(8),
+                      onPressed: _submitForm,
+                      child: const Text(
+                        'SUBMIT',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: CupertinoColors.white, // iOS white color
+                          fontFamily: '.SF Pro Text', // Native iOS font
+                        ),
+                      ),
                     ),
                   ),
-                  child: const Text(
-                    'SUBMIT',
-                    style: TextStyle(fontSize: 16, color: Colors.white),
+                )
+                :
+                Padding(
+                  padding: const EdgeInsets.only(top: 0, bottom: 10), // Adjust padding as necessary
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF0098a6), // Green color
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    child: const Text(
+                      'SUBMIT',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ]
+              ]
+          ),
         ),
       ),
     );
@@ -633,10 +741,17 @@ class _MyHomePageState extends State<WorkDetailPage> {
                     ElevatedButton(
                       onPressed: () {
 
-                        Navigator.push(
+                        // you should clear stack here
+                        Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => DashBoard()),
+                          MaterialPageRoute(builder: (context) => const DashBoard()),
+                              (Route<dynamic> route) => false, // Remove all previous routes
                         );
+
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(builder: (context) => DashBoard()),
+                        // );
                         //Navigator.of(context).pop();
                       },
                       style: ElevatedButton.styleFrom(
