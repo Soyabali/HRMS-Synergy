@@ -178,6 +178,7 @@ class _MyHomePageState extends State<WorkDetailPage> {
     var msg = "${workEntryNew[0]["Msg"]}";
     print("----Result ---115--$result");
 
+
     if(result=="1")
     {
     // print("---msg--$msg");
@@ -292,66 +293,68 @@ class _MyHomePageState extends State<WorkDetailPage> {
     workDetails.clear();
     projectNames.clear();
     List<Map<String, dynamic>> combinedList = [];
-    bool isAtLeastOneFieldFilled = false;   // Track if at least one field is filled
-    // Check if baseProjectList exists and has elements
+    bool isAtLeastOneFieldFilled = false;
 
     if (baseProjectList != null && baseProjectList!.isNotEmpty) {
-      // Ensure that _controllers has the same length as baseProjectList
       if (_controllers.length != baseProjectList!.length) {
         _controllers.clear();
         for (int i = 0; i < baseProjectList!.length; i++) {
           _controllers.add(TextEditingController());
         }
       }
-      // Iterate over the baseProjectList and corresponding controllers
+
       for (int i = 0; i < baseProjectList!.length; i++) {
         String workDetail = _controllers[i].text.trim();
-        // Check if the field is not empty
-        if (workDetail.isNotEmpty) {
-          isAtLeastOneFieldFilled = true; // At least one field is filled
-          // Collect project code and work detail for filled fields only
+        var selectedHour = (_selectedHourCodes.length > i) ? _selectedHourCodes[i] : null;
+
+        bool isWorkDetailFilled = workDetail.isNotEmpty;
+        bool isHourFilled = selectedHour != null && selectedHour['fWorkingHrs'] != null;
+
+        // If user filled one field but not the other, show toast and return
+        if ((isWorkDetailFilled && !isHourFilled) || (!isWorkDetailFilled && isHourFilled)) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Please fill both Work Detail and Working Hours for project: ${baseProjectList![i]['sProjectName']}',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+          return; // stop execution
+        }
+
+        // If both fields are filled, add to final list
+        if (isWorkDetailFilled && isHourFilled) {
+          isAtLeastOneFieldFilled = true;
+
           String projectCode = baseProjectList![i]['sProjectCode'] ?? '';
+
           workDetails.add(workDetail);
           projectNames.add(projectCode);
-          // Also add to the combined list here if hrmsTimeScheduleList has corresponding entries
-          final hourCode = _selectedHourCodes.length > i ? _selectedHourCodes[i] : null;
 
-          if (staticWorkingHours != null && i < staticWorkingHours.length && workDetails!=null && workDetail.isNotEmpty) {
-            combinedList.add({
-              'sProjectName': projectCode,
-              'sEmpWorkStatus': workDetail,
-              'sHourCode': hrmsTimeScheduleList2![i]['sHourCode'],
-              'fWorkingHrs': (_selectedHourCodes.length > i && _selectedHourCodes[i] != null)
-                  ? _selectedHourCodes[i]['fWorkingHrs']
-                  : '',           // 'fWorkingHrs': _selectedHourCodes[i]['fWorkingHrs'],            //'sHourCode': staticWorkingHours[i]['fWorkingHrs'],
-            });
-          }
+          combinedList.add({
+            'sProjectName': projectCode,
+            'sEmpWorkStatus': workDetail,
+            'sHourCode': hrmsTimeScheduleList2![i]['sHourCode'],
+            'fWorkingHrs': selectedHour['fWorkingHrs'],
+          });
         }
       }
-      // If at least one field is filled, proceed with the submission
 
       if (isAtLeastOneFieldFilled) {
-        // Proceed with the form submission logic
-        print("Filtered ProjectNames: $projectNames");
-        print("Filtered WorkDetails: $workDetails");
-        print("Combined List: $combinedList");
-
         String jsonString = jsonEncode(combinedList);
         print("JSON Payload: $jsonString");
 
-        // Send data to API
-        sendCurrentWorkNew(jsonString);
+        sendCurrentWorkNew(jsonString); // call your API
       } else {
-        // Show a notification if all fields are empty
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Kindly enter your work detail!'),
+            content: Text('Kindly enter your work detail and working hours!'),
             backgroundColor: Colors.black45,
           ),
         );
       }
     } else {
-      // Show a notification if there are no projects to fill
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('No projects to fill in'),
@@ -360,7 +363,6 @@ class _MyHomePageState extends State<WorkDetailPage> {
       );
     }
   }
-  // willPopScope
 
   // load svg or png
 

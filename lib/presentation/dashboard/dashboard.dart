@@ -1483,10 +1483,16 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
-                              Navigator.pushReplacement(
+
+                              Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(builder: (context) => WorkDetail()),
+                                    (Route<dynamic> route) => false, // Remove all previous routes
                               );
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => WorkDetail()),
+                              // );
                             },
                             child: Container(
                               height: 85.0,
