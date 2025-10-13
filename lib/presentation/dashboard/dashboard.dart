@@ -28,10 +28,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-
-
 class DashBoard extends StatelessWidget {
-
   const DashBoard({super.key});
 
   @override
