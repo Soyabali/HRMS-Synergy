@@ -626,8 +626,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                           children: <Widget>[
                                                             GestureDetector(
                                                               onTap: () {
-                                                                var images = leaveStatus
-                                                                    .sImageLink;
+                                                                var images = leaveStatus.sImageLink;
                                                                 var designation =
                                                                     leaveStatus.sDesg;
                                                                 openFullScreenDialog(
@@ -648,10 +647,7 @@ class _MyHomePageState extends State<AllLeaveStatusPage> {
                                                                       width: 35,  // Adjust width as needed
                                                                       fit: BoxFit.cover, // Make the image cover the container
                                                                     )
-                                                                        : Text(
-                                                                      'No image',
-                                                                      style: TextStyle(fontSize: 16), // Optional: adjust text style as needed
-                                                                    ),
+                                                                    : Icon(Icons.image_outlined,size: 35),
                                                                   ),
                                                                 ),
                                                               ),

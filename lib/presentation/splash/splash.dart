@@ -9,6 +9,8 @@ import '../../data/appversionrepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class SplashView extends StatefulWidget {
 
@@ -25,6 +27,7 @@ class _SplashViewState extends State<SplashView> {
   // to check Internet is connected or not
   bool activeConnection = false;
   String T = "";
+  StreamSubscription? subscription;
 
   Future checkUserConnection() async {
     try {
@@ -93,9 +96,34 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
     getLocalDataInfo();
+    // check internet connection
+    checkInternetConnection();
 
 
   }
+  // check internetConnection
+
+  Future<void> checkInternetConnection() async {
+    // Check if connected to Wi-Fi or Mobile
+    var connectivityResult = await Connectivity().checkConnectivity();
+
+    if (connectivityResult == ConnectivityResult.none) {
+      print("❌ No network connection (Neither Wi-Fi nor Mobile Data)");
+      displayToast("No network connection (Neither Wi-Fi nor Mobile Data");
+      return;
+    }
+
+    // Check if actual internet access is available
+    bool isConnected = await InternetConnection().hasInternetAccess;
+    if (isConnected) {
+     // print("✅ Connected to the Internet");
+      displayToast("✅ Connected to the Internet");
+    } else {
+      displayToast("⚠️ Connected to network but no Internet access");
+      print("⚠️ Connected to network but no Internet access");
+    }
+  }
+
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
@@ -104,7 +132,6 @@ class _SplashViewState extends State<SplashView> {
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
-
      if(result=="1"){
 
        Navigator.pushNamed(
