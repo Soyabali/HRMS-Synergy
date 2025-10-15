@@ -14,7 +14,7 @@ class HrmstripdetailRepo {
  // GeneralFunction  throw Exception('Unauthorized access');
   GeneralFunction generalFunction = new GeneralFunction();
 
-  Future<List<TripDetailModel>>  hrmsTripDetail(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth) async{
+  Future<List<TripDetailModel>>  hrmsTripDetail(BuildContext context, String firstOfMonthDay, String lastDayOfCurrentMonth) async {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -39,8 +39,8 @@ class HrmstripdetailRepo {
         "sContactNo": contactNo,
         "dFromDate": firstOfMonthDay,
         "dToDate": lastDayOfCurrentMonth,
-
       });
+
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
       if(response.statusCode == 200) {

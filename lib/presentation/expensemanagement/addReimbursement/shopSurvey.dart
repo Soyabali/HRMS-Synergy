@@ -29,6 +29,7 @@ import '../expense_management.dart';
 import 'DotInputFormatter.dart';
 
 class ShopSurvey extends StatelessWidget {
+
   const ShopSurvey({super.key});
 
   @override
@@ -158,6 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
       image4 = null;
     });
   }
+  // uplode image camera 1
 
   Future pickImage() async {
     image=null;
@@ -180,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } catch (e) {}
   }
   Future pickImage2() async {
-    clearAllImages();
+   // clearAllImages();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -194,9 +196,8 @@ class _MyHomePageState extends State<MyHomePage> {
         });
         print('Image File path Id Proof--camra-----195----->$image2');
         // multipartProdecudre();
-
-        print('token----$sToken');
-        print('Images----$image2');
+          print('token----$sToken');
+          print('Images----$image2');
 
         uploadImage2(sToken!, image2!);
 
@@ -214,7 +215,6 @@ class _MyHomePageState extends State<MyHomePage> {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.camera, imageQuality: 65);
       if (pickFileid != null) {
-
         setState(() {
           image3 = File(pickFileid.path);
         });
@@ -269,9 +269,8 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   Future pickImageGallery2() async {
-    clearAllImages();
+   // clearAllImages();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
@@ -297,7 +296,6 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
     print('---Token----113--$sToken');
-
     try {
       final pickFileid = await ImagePicker()
           .pickImage(source: ImageSource.gallery, imageQuality: 65);
@@ -332,7 +330,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
-
   // multifilepath
   // toast
   void displayToast(String msg) {
@@ -376,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
       List<dynamic> responseData = json.decode(response.body);
       // Extracting the image path
       uplodedImage = responseData[0]['Data'][0]['sImagePath'];
-      print('Uploaded Image Path----362--: $uplodedImage');
+      print('Uploaded Image Path----375--: $uplodedImage');
       hideLoader();
     } catch (error) {
       hideLoader();
@@ -1093,8 +1090,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     if (element["sExpHeadName"] == _dropDownValueShopeType) {
                       setState(() {
                         _selectedShopId = element['sExpHeadCode'];
-                        print(
-                            '----349--sExpHeadCode id ------$_selectedShopId');
+                        print('----349--sExpHeadCode id ------$_selectedShopId');
                       });
                       //print('-----Point id----241---$_selectedShopId');
                       if (_selectedShopId != null) {
@@ -1197,7 +1193,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
   /// Algo.  First of all create repo, secodn get repo data in the main page after that apply list data on  dropdown.
 
   @override
@@ -1410,8 +1405,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                        margin:
-                                            EdgeInsets.only(left: 0, right: 2),
+                                        margin: EdgeInsets.only(left: 0, right: 2),
                                         child: const Icon(
                                           Icons.forward_sharp,
                                           size: 12,
@@ -1428,8 +1422,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                               // this is my TextFormFoield
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 0),
+                                padding: const EdgeInsets.only(left: 10, right: 0),
                                 child: Container(
                                   height: 70,
                                   // Increased height to accommodate error message without resizing
@@ -1455,8 +1448,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ],
                                             decoration: const InputDecoration(
                                               border: OutlineInputBorder(),
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
+                                              contentPadding: EdgeInsets.symmetric(
                                                       vertical: 10.0,
                                                       horizontal: 10.0),
                                               filled: true,
@@ -1469,8 +1461,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   value.isEmpty) {
                                                 return 'Please enter amount';
                                               }
-                                              final doubleValue =
-                                                  double.tryParse(value);
+                                              final doubleValue = double.tryParse(value);
                                               if (doubleValue == null ||
                                                   doubleValue <= 0) {
                                                 return 'Enter an amount greater than 0';
@@ -1817,14 +1808,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(bottom: 5, top: 5),
+                                padding: const EdgeInsets.only(bottom: 5, top: 5),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                        margin:
-                                            EdgeInsets.only(left: 0, right: 2),
+                                        margin: EdgeInsets.only(left: 0, right: 2),
                                         child: const Icon(
                                           Icons.forward_sharp,
                                           size: 12,
@@ -1855,8 +1844,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     // Equal padding on all sides
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         // Center the row contents
                                         children: [
                                           Column(
@@ -1932,14 +1920,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 behavior:
                                                     HitTestBehavior.translucent,
                                                 onTap: () {
-                                                  // Navigator.push(
-                                                  //     context,
-                                                  //     MaterialPageRoute(
-                                                  //         builder: (context) =>
-                                                  //             FullScreenPage(
-                                                  //               child: image!,
-                                                  //               dark: true,
-                                                  //             )));
                                                 },
                                                 child: Container(
                                                     color:
@@ -1957,6 +1937,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   child: IconButton(
                                                     onPressed: () {
                                                       image = null;
+                                                      uplodedImage=null;
+                                                      /// todo here you should also clear uplodeImage
                                                       setState(() {});
                                                     },
                                                     icon: const Icon(
@@ -1981,8 +1963,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Container(
-                                        margin:
-                                            EdgeInsets.only(left: 0, right: 2),
+                                        margin: EdgeInsets.only(left: 0, right: 2),
                                         child: const Icon(
                                           Icons.forward_sharp,
                                           size: 12,
@@ -2120,6 +2101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   child: IconButton(
                                                     onPressed: () {
                                                       image2 = null;
+                                                      uplodedImage2 = null;
                                                       setState(() {});
                                                     },
                                                     icon: const Icon(
@@ -2270,8 +2252,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   //             )));
                                                 },
                                                 child: Container(
-                                                    color:
-                                                        Colors.lightGreenAccent,
+                                                    color: Colors.lightGreenAccent,
                                                     height: 100,
                                                     width: 70,
                                                     child: Image.file(
@@ -2285,6 +2266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   child: IconButton(
                                                     onPressed: () {
                                                       image3 = null;
+                                                      uplodedImage3 = null;
                                                       setState(() {});
                                                     },
                                                     icon: const Icon(
@@ -2415,8 +2397,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               SizedBox(height: 10),
                               // see the fouth image
                               Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     image4 != null
                                         ? Stack(
@@ -2450,6 +2431,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   child: IconButton(
                                                     onPressed: () {
                                                       image4 = null;
+                                                      uplodedImage4=null;
                                                       setState(() {});
                                                     },
                                                     icon: const Icon(
@@ -2489,9 +2471,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       _selectedShopId != null &&
                                       dExpDate != null &&
                                       amount != null &&
-                                      expenseDetails != null &&
-                                      uplodedImage != null &&
-                                      sContactNo != null) {
+                                      expenseDetails.isNotEmpty &&
+                                      sContactNo != null &&
+                                      uplodedImage!=null
+                                  ) {
                                     // Call Api
                                     print('---call Api---');
 

@@ -6,7 +6,9 @@ import '../../app/generalFunction.dart';
 import '../../data/changePassword_Repo2.dart';
 import '../dashboard/dashboard.dart';
 import '../login/loginScreen.dart';
+import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
+import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChangePassword extends StatelessWidget {
@@ -195,26 +197,28 @@ class _LoginPageState extends State<changePassWordPage> {
                                   children: [
                                     // old Password
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: AppPadding.p15, right: AppPadding.p15),
-                                      // passWord TextFormField
+                                      padding: const EdgeInsets.only(left: 15,right: 15),
                                       child: TextFormField(
-                                        focusNode: _oldPasswordfocus,
-                                        controller: _oldPasswordController,
                                         obscureText: _isObscured,
+                                        controller: _oldPasswordController,
                                         decoration: InputDecoration(
-                                          labelText: "Old Password",
+                                          labelText: 'Old Password',
+                                          labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                                           border: const OutlineInputBorder(),
                                           contentPadding: const EdgeInsets.symmetric(
                                             vertical: AppPadding.p10,
-                                            horizontal: AppPadding.p10, // Add horizontal padding
+                                            horizontal: AppPadding.p10,
                                           ),
-                                          prefixIcon: const Icon(Icons.lock,
-                                              color: Color(0xFF255899)),
+                                          prefixIcon: const Icon(
+                                            Icons.lock,
+                                            color: AppColors.loginbutton,
+                                          ),
                                           suffixIcon: IconButton(
-                                            icon: Icon(_isObscured
-                                                ? Icons.visibility
-                                                : Icons.visibility_off),
+                                            icon: Icon(
+                                              // 👇 Swapped logic here
+                                              _isObscured ? Icons.visibility_off : Icons.visibility,
+                                              color: AppColors.loginbutton,
+                                            ),
                                             onPressed: () {
                                               setState(() {
                                                 _isObscured = !_isObscured;
@@ -222,42 +226,81 @@ class _LoginPageState extends State<changePassWordPage> {
                                             },
                                           ),
                                         ),
-                                        autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Enter password';
-                                          }
-                                          if (value.length < 1) {
-                                            return 'Please enter Valid Name';
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter Old Password';
                                           }
                                           return null;
                                         },
                                       ),
                                     ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       left: AppPadding.p15, right: AppPadding.p15),
+                                    //   // passWord TextFormField
+                                    //   child: TextFormField(
+                                    //     focusNode: _oldPasswordfocus,
+                                    //     controller: _oldPasswordController,
+                                    //     obscureText: _isObscured,
+                                    //     decoration: InputDecoration(
+                                    //       labelText: "Old Password",
+                                    //       border: const OutlineInputBorder(),
+                                    //       contentPadding: const EdgeInsets.symmetric(
+                                    //         vertical: AppPadding.p10,
+                                    //         horizontal: AppPadding.p10, // Add horizontal padding
+                                    //       ),
+                                    //       prefixIcon: const Icon(Icons.lock,
+                                    //           color: Color(0xFF255899)),
+                                    //       suffixIcon: IconButton(
+                                    //         icon: Icon(_isObscured
+                                    //             ? Icons.visibility
+                                    //             : Icons.visibility_off),
+                                    //         onPressed: () {
+                                    //           setState(() {
+                                    //             _isObscured = !_isObscured;
+                                    //           });
+                                    //         },
+                                    //       ),
+                                    //     ),
+                                    //     autovalidateMode:
+                                    //     AutovalidateMode.onUserInteraction,
+                                    //     validator: (value) {
+                                    //       if (value!.isEmpty) {
+                                    //         return 'Enter password';
+                                    //       }
+                                    //       if (value.length < 1) {
+                                    //         return 'Please enter Valid Name';
+                                    //       }
+                                    //       return null;
+                                    //     },
+                                    //   ),
+                                    // ),
                                     SizedBox(height: 10),
-                                    // new Password
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: AppPadding.p15, right: AppPadding.p15),
-                                      // passWord TextFormField
+                                      padding: const EdgeInsets.only(left: 15,right: 15),
                                       child: TextFormField(
                                         focusNode: _newPasswordfocus,
-                                        controller: _newPasswordController,
                                         obscureText: _isObscured2,
+                                        controller: _newPasswordController,
                                         decoration: InputDecoration(
-                                          labelText: "New Password",
+                                          labelText: 'new Password',
+                                          labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                                           border: const OutlineInputBorder(),
                                           contentPadding: const EdgeInsets.symmetric(
                                             vertical: AppPadding.p10,
-                                            horizontal: AppPadding.p10, // Add horizontal padding
+                                            horizontal: AppPadding.p10,
                                           ),
-                                          prefixIcon: const Icon(Icons.lock,
-                                              color: Color(0xFF255899)),
+                                          prefixIcon: const Icon(
+                                            Icons.lock,
+                                            color: AppColors.loginbutton,
+                                          ),
                                           suffixIcon: IconButton(
-                                            icon: Icon(_isObscured2
-                                                ? Icons.visibility
-                                                : Icons.visibility_off),
+                                            icon: Icon(
+                                              // 👇 Swapped logic here
+                                              _isObscured2 ? Icons.visibility_off : Icons.visibility,
+                                              color: AppColors.loginbutton,
+                                            ),
                                             onPressed: () {
                                               setState(() {
                                                 _isObscured2 = !_isObscured2;
@@ -265,42 +308,83 @@ class _LoginPageState extends State<changePassWordPage> {
                                             },
                                           ),
                                         ),
-                                        autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Enter password';
-                                          }
-                                          if (value.length < 1) {
-                                            return 'Please enter Valid Name';
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter new Password';
                                           }
                                           return null;
                                         },
                                       ),
                                     ),
+                                    // new Password
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       left: AppPadding.p15, right: AppPadding.p15),
+                                    //   // passWord TextFormField
+                                    //   child: TextFormField(
+                                    //     focusNode: _newPasswordfocus,
+                                    //     controller: _newPasswordController,
+                                    //     obscureText: _isObscured2,
+                                    //     decoration: InputDecoration(
+                                    //       labelText: "New Password",
+                                    //       border: const OutlineInputBorder(),
+                                    //       contentPadding: const EdgeInsets.symmetric(
+                                    //         vertical: AppPadding.p10,
+                                    //         horizontal: AppPadding.p10, // Add horizontal padding
+                                    //       ),
+                                    //       prefixIcon: const Icon(Icons.lock,
+                                    //           color: Color(0xFF255899)),
+                                    //       suffixIcon: IconButton(
+                                    //         icon: Icon(_isObscured2
+                                    //             ? Icons.visibility
+                                    //             : Icons.visibility_off),
+                                    //         onPressed: () {
+                                    //           setState(() {
+                                    //             _isObscured2 = !_isObscured2;
+                                    //           });
+                                    //         },
+                                    //       ),
+                                    //     ),
+                                    //     autovalidateMode:
+                                    //     AutovalidateMode.onUserInteraction,
+                                    //     validator: (value) {
+                                    //       if (value!.isEmpty) {
+                                    //         return 'Enter password';
+                                    //       }
+                                    //       if (value.length < 1) {
+                                    //         return 'Please enter Valid Name';
+                                    //       }
+                                    //       return null;
+                                    //     },
+                                    //   ),
+                                    // ),
                                     SizedBox(height: 10),
                                     // ConfirePassword
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: AppPadding.p15, right: AppPadding.p15),
-                                      // confirm Password TextFormField
+                                      padding: const EdgeInsets.only(left: 15,right: 15),
                                       child: TextFormField(
                                         focusNode: _confirmPasswordfocus,
-                                        controller: _confirmPasswordController,
                                         obscureText: _isObscured3,
+                                        controller: _confirmPasswordController,
                                         decoration: InputDecoration(
-                                          labelText: "Confirm Password",
+                                          labelText: 'Confirm Password',
+                                          labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
                                           border: const OutlineInputBorder(),
                                           contentPadding: const EdgeInsets.symmetric(
                                             vertical: AppPadding.p10,
-                                            horizontal: AppPadding.p10, // Add horizontal padding
+                                            horizontal: AppPadding.p10,
                                           ),
-                                          prefixIcon: const Icon(Icons.lock,
-                                              color: Color(0xFF255899)),
+                                          prefixIcon: const Icon(
+                                            Icons.lock,
+                                            color: AppColors.loginbutton,
+                                          ),
                                           suffixIcon: IconButton(
-                                            icon: Icon(_isObscured3
-                                                ? Icons.visibility
-                                                : Icons.visibility_off),
+                                            icon: Icon(
+                                              // 👇 Swapped logic here
+                                              _isObscured3 ? Icons.visibility_off : Icons.visibility,
+                                              color: AppColors.loginbutton,
+                                            ),
                                             onPressed: () {
                                               setState(() {
                                                 _isObscured3 = !_isObscured3;
@@ -308,19 +392,56 @@ class _LoginPageState extends State<changePassWordPage> {
                                             },
                                           ),
                                         ),
-                                        autovalidateMode:
-                                        AutovalidateMode.onUserInteraction,
+                                        autovalidateMode: AutovalidateMode.onUserInteraction,
                                         validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Enter password';
-                                          }
-                                          if (value.length < 1) {
-                                            return 'Please enter Valid Name';
+                                          if (value == null || value.isEmpty) {
+                                            return 'Enter Confirm Password';
                                           }
                                           return null;
                                         },
                                       ),
                                     ),
+                                    // Padding(
+                                    //   padding: const EdgeInsets.only(
+                                    //       left: AppPadding.p15, right: AppPadding.p15),
+                                    //   // confirm Password TextFormField
+                                    //   child: TextFormField(
+                                    //     focusNode: _confirmPasswordfocus,
+                                    //     controller: _confirmPasswordController,
+                                    //     obscureText: _isObscured3,
+                                    //     decoration: InputDecoration(
+                                    //       labelText: "Confirm Password",
+                                    //       border: const OutlineInputBorder(),
+                                    //       contentPadding: const EdgeInsets.symmetric(
+                                    //         vertical: AppPadding.p10,
+                                    //         horizontal: AppPadding.p10, // Add horizontal padding
+                                    //       ),
+                                    //       prefixIcon: const Icon(Icons.lock,
+                                    //           color: Color(0xFF255899)),
+                                    //       suffixIcon: IconButton(
+                                    //         icon: Icon(_isObscured3
+                                    //             ? Icons.visibility
+                                    //             : Icons.visibility_off),
+                                    //         onPressed: () {
+                                    //           setState(() {
+                                    //             _isObscured3 = !_isObscured3;
+                                    //           });
+                                    //         },
+                                    //       ),
+                                    //     ),
+                                    //     autovalidateMode:
+                                    //     AutovalidateMode.onUserInteraction,
+                                    //     validator: (value) {
+                                    //       if (value!.isEmpty) {
+                                    //         return 'Enter password';
+                                    //       }
+                                    //       if (value.length < 1) {
+                                    //         return 'Please enter Valid Name';
+                                    //       }
+                                    //       return null;
+                                    //     },
+                                    //   ),
+                                    // ),
                                     SizedBox(height: 10),
 
                                     Padding(

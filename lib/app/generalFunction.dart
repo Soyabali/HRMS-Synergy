@@ -9,6 +9,7 @@ import '../presentation/actionOnLeave/actionOnLeave.dart';
 import '../presentation/allLeaveStatus/allLeaveStatus.dart';
 import '../presentation/changePassword/changepassword.dart';
 import '../presentation/employeeList/employeelist.dart';
+import '../presentation/expensemanagement/pendingteamreimb/duplicateExpenseEntry.dart';
 import '../presentation/leaveCancellationRequest/leaveCancellationRequest.dart';
 import '../presentation/login/loginScreen.dart';
 import '../presentation/myLeaveStatus/myLeaveStatus.dart';
@@ -38,43 +39,102 @@ class GeneralFunction {
     print("-------43------$iIsEligibleShLv"); // This will print the actual value
     print("-------44------$sEmpImage");
   }
+  // Open ImageFullScreenDialog
+  void showFullScreenImageDialog(BuildContext context, String imageUrl) {
+    showDialog(
+      context: context,
+      barrierDismissible: true, // tap outside to close
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.black,
+          insetPadding: EdgeInsets.zero, // full screen
+          child: Stack(
+            children: [
+              // Internet image
+              InteractiveViewer( // for zoom, drag, etc.
+                child: Center(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Text(
+                          'Failed to load image',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              // Close button
+              Positioned(
+                top: 40,
+                right: 20,
+                child: IconButton(
+                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   /// A function that returns a circular widget to display an image from the internet.
   Widget internetImage(String imageUrl, {double size = 80.0, BoxFit fit = BoxFit.cover}) {
     return ClipOval(
-      child: Image.network(
-        imageUrl,
-        width: size,
-        height: size,
-        fit: fit,
-        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-          if (loadingProgress == null) {
-            return child; // Image is fully loaded, so display it
-          } else {
-            // Show a CircularProgressIndicator while the image is loading
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                    : null,
+      child: GestureDetector(
+        onTap: (){
+          var image = imageUrl;
+          print("-----48-----------$image");
+
+          // to Open imageOn a full Screen
+
+        },
+        child: Image.network(
+          imageUrl,
+          width: size,
+          height: size,
+          fit: fit,
+          loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+            if (loadingProgress == null) {
+              return child; // Image is fully loaded, so display it
+            } else {
+              // Show a CircularProgressIndicator while the image is loading
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            }
+          },
+          errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+            // Show an error icon if the image fails to load
+            return Container(
+              height: 50, // Set the height of the container
+              width: 50,  // Set the width of the container
+              decoration: BoxDecoration(
+                color: Colors.grey.shade400, // Background color
+                borderRadius: BorderRadius.circular(50), // Make the corners rounded
+              ),
+              child: ClipOval( // Clip the child to a circle
               ),
             );
-          }
-        },
-        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-          // Show an error icon if the image fails to load
-          return Container(
-            height: 50, // Set the height of the container
-            width: 50,  // Set the width of the container
-            decoration: BoxDecoration(
-              color: Colors.grey.shade400, // Background color
-              borderRadius: BorderRadius.circular(50), // Make the corners rounded
-            ),
-            child: ClipOval( // Clip the child to a circle
-            ),
-          );
-          // return Icon(Icons.error, color: Colors.red, size: size / 2);
-        },
+            // return Icon(Icons.error, color: Colors.red, size: size / 2);
+          },
+        ),
       ),
     );
   }
@@ -88,6 +148,7 @@ class GeneralFunction {
      sCompEmailId = prefs.getString('sCompEmailId');
     iIsEligibleShLv = prefs.getString('iIsEligibleShLv');
     print('-----37----XXX--$iIsEligibleShLv');
+    print("----firstName :----$sFirstName");
 
     prefs.remove("sEmpCode");
     prefs.remove("sCompEmpCode");
@@ -95,7 +156,7 @@ class GeneralFunction {
     prefs.remove("sLastName");
 
     prefs.remove("sLastName");
-    prefs.remove("sContactNo");
+    //prefs.remove("sContactNo");
     prefs.remove("dDOJ");
     prefs.remove("dDOB");
 
@@ -132,8 +193,7 @@ class GeneralFunction {
     prefs.remove("sMngrContactNo");
     prefs.remove("iIsEligibleShLv");
     prefs.remove("setPin");
-    prefs.clear();
-
+   // prefs.clear();
     goNext(context);
   }
   // dialogBOX

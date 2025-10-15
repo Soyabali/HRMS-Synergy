@@ -11,6 +11,7 @@ import '../resources/values_manager.dart';
 import 'applyLeave.dart';
 
 class ApplyLeaveSubmitFormHome extends StatefulWidget {
+
   final sLvDesc, sFirstName, sLvTypeCode,sLastName;
   const ApplyLeaveSubmitFormHome(
       this.sLvDesc, this.sFirstName, this.sLvTypeCode,this.sLastName,
@@ -23,7 +24,6 @@ class ApplyLeaveSubmitFormHome extends StatefulWidget {
 class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
 
   String _selectedValue = "Full Day";
-
   List stateList = [];
   List<dynamic> distList = [];
   List<dynamic> expenseList = [];
@@ -297,8 +297,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
     DateTime? toDate2 = dateFormat.parse(toDate!);
 
     setState(() {
-      totalDays = toDate2.difference(fromDate2).inDays +
-          1; // Adding 1 to include both start and end dates
+      totalDays = toDate2.difference(fromDate2).inDays + 1; // Adding 1 to include both start and end dates
     });
     setState(() {
       if (totalDays <= 1) {
@@ -350,7 +349,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       displayToast("To Date can not be less than From Date");
     }
   }
-
   void fromDateSelectLogic() {
     DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
     DateTime? fromDate2 = dateFormat.parse(formDate!);
@@ -364,7 +362,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
       displayToast("From date can not be greater than To Date");
     }
   }
-
   //
   void compareDates(String fromDate, String toDate) {
     String fromDateString = "29/Aug/2024";
@@ -571,9 +568,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           });
                                           fromDateSelectLogic();
                                         }
-
-
-                                      },
+                                        },
                                       child: Container(
                                         height: 30,
                                         color: Colors.grey[100], // Background color for the second container
@@ -833,8 +828,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                                   _selectedValue = value!;
                                                 });
                                                 if (_selectedValue != null) {
-                                                  print(
-                                                      "Selected Radio Value: $_selectedValue");
+                                                  print("Selected Radio Value: $_selectedValue");
                                                   // You can also set this value to a Text widget
                                                   displayText = _selectedValue;
                                                 }
@@ -855,15 +849,14 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Radio<String>(
-                                              value: "First Half",
+                                              value: "F",
                                               groupValue: _selectedValue,
                                               onChanged: (value) {
                                                 setState(() {
                                                   _selectedValue = value!;
                                                 });
                                                 if (_selectedValue != null) {
-                                                  print(
-                                                      "Selected Radio Value: $_selectedValue");
+                                                  print("Selected Radio Value: $_selectedValue");
                                                   // You can also set this value to a Text widget
                                                   displayText = _selectedValue;
                                                 }
@@ -884,7 +877,7 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                           mainAxisAlignment: MainAxisAlignment.start,
                                           children: [
                                             Radio<String>(
-                                              value: "Second Half",
+                                              value: "S",
                                               groupValue: _selectedValue,
                                               onChanged: (value) {
                                                 setState(() {
@@ -958,13 +951,16 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                       '${widget.sLvDesc}',
                                       '${widget.sLvTypeCode}',
                                     );
-
                                     if (hrmsPopWarning.isNotEmpty) {
+
                                       result = "${hrmsPopWarning[0]['Result']}";
                                       msg = "${hrmsPopWarning[0]['Msg']}";
-
                                       // Check if API result is successful
+
+                                      print("----962---$hrmsPopWarning");
+
                                       if (result == '1') {
+
                                         print('-----result--811---$result');
                                             showDialog(
                                                 context: context,
@@ -999,7 +995,6 @@ class _MyHomePageState extends State<ApplyLeaveSubmitFormHome> {
                                   }
                                 }
                               },
-
                               child: Container(
                                 width: double.infinity,
                                 // Make container fill the width of its parent

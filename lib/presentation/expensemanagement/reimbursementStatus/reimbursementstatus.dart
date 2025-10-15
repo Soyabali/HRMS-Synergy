@@ -44,6 +44,7 @@ class Reimbursementstatus extends StatelessWidget {
 }
 
 class ReimbursementstatusPage extends StatefulWidget {
+
   const ReimbursementstatusPage({super.key});
 
   @override
@@ -53,6 +54,7 @@ class ReimbursementstatusPage extends StatefulWidget {
 class _MyHomePageState extends State<ReimbursementstatusPage> {
 
   List<Map<String, dynamic>>? reimbursementStatusList;
+
  // List<Map<String, dynamic>> _filteredData = [];
   ///List<dynamic>  hrmsReimbursementLis
   ///
@@ -74,6 +76,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   List blockList = [];
   List shopTypeList = [];
   var result2, msg2;
+  String? tempDate;
+  String? formDate;
   late Future<List<Hrmsreimbursementstatusv3model>> reimbursementStatusV3;
   List<Hrmsreimbursementstatusv3model> _allData = [];  // Holds original data
   List<Hrmsreimbursementstatusv3model> _filteredData = [];  // Holds filtered data
@@ -149,6 +153,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
   var fromPicker;
   var toPicker;
   var sTranCode;
+  String? toDate;
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -169,6 +174,25 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
         print('no image selected');
       }
     } catch (e) {}
+  }
+  //
+  void toDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (toDate2.isBefore(fromDate2)) {
+      setState(() {
+        toDate = tempDate;
+        // call api
+      });
+      displayToast("To Date can not be less than From Date");
+    } else {
+
+      // hrmsLeaveStatus = ApprovedTeamReimbursementRepo().approvedTeamReimbursementList(
+      //     context, formDate!,toDate!,iStatus,empCode);
+      /// here you change a tab and update date on a ispecific tab
+    }
   }
 
   // multifilepath
@@ -280,6 +304,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     // TODO: implement initState
     getLocation();
     getCurrentdate();
+    getACurrentDate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
     super.initState();
     _shopfocus = FocusNode();
@@ -287,6 +312,37 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
     _contactfocus = FocusNode();
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
+  }
+
+  // getCurrentDate
+  getACurrentDate() {
+    DateTime now = DateTime.now();
+    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+    formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    setState(() {});
+
+    DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    setState(() {});
+  }
+  // fromDateSelectedLogic
+
+  void fromDateSelectLogic() {
+
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(formDate!);
+    DateTime? toDate2 = dateFormat.parse(toDate!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        formDate = tempDate;
+      });
+      displayToast("From date can not be greater than To Date");
+    } else {
+
+      //here apply logic to change tab and update date
+    }
   }
   // location
   void getLocation() async {
@@ -420,49 +476,98 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
                             );
-                            // Check if a date was picked
                             if (pickedDate != null) {
-                              // Format the picked date
-                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                              // Update the state with the picked date
+                              String formattedDate =
+                              DateFormat('dd/MMM/yyyy')
+                                  .format(pickedDate);
                               setState(() {
-                                firstOfMonthDay = formattedDate;
-                               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                                tempDate = formDate; // Save the current formDate before updating
+                                formDate = formattedDate;
                               });
-                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                               print('---formPicker--$firstOfMonthDay');
-                              // Call API
-                              //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                             // print('---formPicker--$firstOfMonthDay');
+                              print("-----237---$formDate");
 
-                              // Display the selected date as a toast
-                              //displayToast(dExpDate.toString());
-                            } else {
-                              // Handle case where no date was selected
-                              //displayToast("No date selected");
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+
+
+                              //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              fromDateSelectLogic();
                             }
                           },
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors.white, // Change this to your preferred color
+                              color: Colors.white,
+                              // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
                               child: Text(
-                                '$firstOfMonthDay',
-                                style: TextStyle(
-                                  color: Colors.grey, // Change this to your preferred text color
-                                  fontSize: 12.0, // Adjust font size as needed
+                                '$formDate',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
+                                  fontSize:
+                                  12.0, // Adjust font size as needed
                                 ),
                               ),
                             ),
                           ),
                         ),
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     /// TODO Open Date picke and get a date
+                        //     DateTime? pickedDate = await showDatePicker(
+                        //       context: context,
+                        //       initialDate: DateTime.now(),
+                        //       firstDate: DateTime(2000),
+                        //       lastDate: DateTime(2100),
+                        //     );
+                        //     // Check if a date was picked
+                        //     if (pickedDate != null) {
+                        //       // Format the picked date
+                        //       String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                        //       // Update the state with the picked date
+                        //       setState(() {
+                        //         firstOfMonthDay = formattedDate;
+                        //        // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //       });
+                        //       hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //      // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                        //       print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                        //       hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //        print('---formPicker--$firstOfMonthDay');
+                        //       // Call API
+                        //       //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //      // print('---formPicker--$firstOfMonthDay');
+                        //
+                        //       // Display the selected date as a toast
+                        //       //displayToast(dExpDate.toString());
+                        //     } else {
+                        //       // Handle case where no date was selected
+                        //       //displayToast("No date selected");
+                        //     }
+                        //   },
+                        //   child: Container(
+                        //     height: 35,
+                        //     padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white, // Change this to your preferred color
+                        //       borderRadius: BorderRadius.circular(15),
+                        //     ),
+                        //     child: Center(
+                        //       child: Text(
+                        //         '$firstOfMonthDay',
+                        //         style: TextStyle(
+                        //           color: Colors.grey, // Change this to your preferred text color
+                        //           fontSize: 12.0, // Adjust font size as needed
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(width: 6),
                         Container(
                           height: 32,
@@ -483,47 +588,95 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                         ),),
                         SizedBox(width: 5),
                         GestureDetector(
-                          onTap: ()async{
+                          onTap: () async {
                             DateTime? pickedDate = await showDatePicker(
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
                             );
-                            // Check if a date was picked
                             if (pickedDate != null) {
-                              // Format the picked date
-                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                              // Update the state with the picked date
+                              String formattedDate =
+                              DateFormat('dd/MMM/yyyy')
+                                  .format(pickedDate);
                               setState(() {
-                                lastDayOfCurrentMonth = formattedDate;
-                               // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                                tempDate = toDate; // Save the current toDate before updating
+                                toDate = formattedDate;
+                                // calculateTotalDays();
                               });
+                              //
+                              print("-------300----$toDate");
                               hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                              //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
 
-                            } else {
+                              // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              toDateSelectLogic();
                             }
                           },
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors.white, // Change this to your preferred color
+                              color: Colors.white,
+                              // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
                               child: Text(
-                                '$lastDayOfCurrentMonth',
-                                style: TextStyle(
-                                  color: Colors.grey, // Change this to your preferred text color
-                                  fontSize: 12.0, // Adjust font size as needed
+                                '$toDate',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
+                                  fontSize:
+                                  12.0, // Adjust font size as needed
                                 ),
                               ),
                             ),
                           ),
                         ),
+                        // GestureDetector(
+                        //   onTap: ()async{
+                        //     DateTime? pickedDate = await showDatePicker(
+                        //       context: context,
+                        //       initialDate: DateTime.now(),
+                        //       firstDate: DateTime(2000),
+                        //       lastDate: DateTime(2100),
+                        //     );
+                        //     // Check if a date was picked
+                        //     if (pickedDate != null) {
+                        //       // Format the picked date
+                        //       String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                        //       // Update the state with the picked date
+                        //       setState(() {
+                        //         lastDayOfCurrentMonth = formattedDate;
+                        //        // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //       });
+                        //       hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                        //       //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                        //       print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                        //
+                        //     } else {
+                        //     }
+                        //   },
+                        //   child: Container(
+                        //     height: 35,
+                        //     padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                        //     decoration: BoxDecoration(
+                        //       color: Colors.white, // Change this to your preferred color
+                        //       borderRadius: BorderRadius.circular(15),
+                        //     ),
+                        //     child: Center(
+                        //       child: Text(
+                        //         '$lastDayOfCurrentMonth',
+                        //         style: TextStyle(
+                        //           color: Colors.grey, // Change this to your preferred text color
+                        //           fontSize: 12.0, // Adjust font size as needed
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

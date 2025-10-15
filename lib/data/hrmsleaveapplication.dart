@@ -5,17 +5,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
-
 class HrmsLeaveApplicationRepo
 {
   List<dynamic>  hrmsleaveapplication = [];
 
-
   Future<List> hrmsleave(BuildContext context, String? formDate, String? toDate, String reason, String address, String selectedValue, String sFirstName, String sLvDesc, String sLvTypeCode) async
   {
 
-
-       //showLoader();
+    //showLoader();
     int currentYear = DateTime.now().year;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
@@ -27,6 +24,16 @@ class HrmsLeaveApplicationRepo
     print('------------30---hrmsLeaveApplication---$hrmsLeaveApplication');
 
     showLoader();
+
+    print("------30---$sEmpCode");
+    print("------31---$sLvTypeCode");
+    print("------32---$formDate");
+    print("------33---$toDate");
+    print("------34---$reason");
+    print("------35---$address");
+    print("------36---$sFirstName");
+    print("------37---$selectedValue");
+    print("------38---$currentYear");
 
     try
     {
@@ -43,7 +50,7 @@ class HrmsLeaveApplicationRepo
         "sLeaveReason": reason,
         "sContactableAddress": address,
         "sLeaveAppBy": sFirstName,
-        "sFullHalfDay": selectedValue,
+        "sFullHalfDay": selectedValue,   //   selectedValue
         "iLeaveYear": currentYear,
       });
       request.headers.addAll(headers);

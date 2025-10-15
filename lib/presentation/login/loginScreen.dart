@@ -27,6 +27,7 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -57,6 +58,8 @@ class _LoginPageState extends State<LoginPage> {
   double? lat, long;
   bool _isChecked = false;
   GeneralFunction generalFunction = GeneralFunction();
+  late SharedPreferences prefs;
+
 
   void getLocation() async {
     bool serviceEnabled;
@@ -111,7 +114,17 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // TODO: implement initState
+    toGetCreditialValue();
     super.initState();
+  }
+  toGetCreditialValue() async{
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? phone = prefs.getString('phone');
+    String? password = prefs.getString('password');
+    print("----121-----phone:--$phone");
+    print("----122-----password:--$password");
+    print("-------------126--------");
   }
 
   @override
@@ -217,7 +230,6 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: <Widget>[
                               SizedBox(height: AppPadding.p20),
-
                               TextFormField(
                                 focusNode: phoneNumberfocus,
                                 controller: _phoneNumberController,
@@ -255,52 +267,53 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               SizedBox(height: AppPadding.p10),
                               TextFormField(
-                                obscureText: _isObscured,
-                                controller: passwordController,
-                                decoration: InputDecoration(
-                                  labelText: AppStrings.txtPassword,
-                                  labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
-                                  border: const OutlineInputBorder(),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                    vertical: AppPadding.p10,
-                                    horizontal: AppPadding
-                                        .p10, // Add horizontal padding
-                                  ),
-                                  prefixIcon: const Icon(Icons.lock,
-                                      color: AppColors.loginbutton
-                                  ),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _isObscured
-                                          ? Icons.visibility
-                                          : Icons.visibility_off,
-                                      color: AppColors.loginbutton, // Apply your custom color here
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _isObscured = !_isObscured;
-                                      });
-                                    },
-                                  ),
+                              obscureText: _isObscured,
+                              controller: passwordController,
+                              decoration: InputDecoration(
+                                labelText: AppStrings.txtPassword,
+                                labelStyle: AppTextStyle.font16OpenSansRegularBlack45TextStyle,
+                                border: const OutlineInputBorder(),
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: AppPadding.p10,
+                                  horizontal: AppPadding.p10,
                                 ),
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return AppStrings.txtPasswordValidation;
-                                  }
-                                  if (value.length < 1) {
-                                    return AppStrings.txtPasswordValidation;
-                                  }
-                                  return null;
-                                },
+                                prefixIcon: const Icon(
+                                  Icons.lock,
+                                  color: AppColors.loginbutton,
+                                ),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    // 👇 Swapped logic here
+                                    _isObscured ? Icons.visibility_off : Icons.visibility,
+                                    color: AppColors.loginbutton,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isObscured = !_isObscured;
+                                    });
+                                  },
+                                ),
                               ),
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppStrings.txtPasswordValidation;
+                                }
+                                return null;
+                              },
+                            ),
                               SizedBox(height: AppPadding.p10),
                               /// LoginButton code and onclik Operation
                               InkWell(
                                 onTap: () async {
                                    var phone = _phoneNumberController.text;
                                    var password = passwordController.text;
+                                   /// todo here locally store phone and password and get a initState
+                                   /// if data is here then set TextFormField and otherWise set a empty.
+                                   SharedPreferences prefs2 = await SharedPreferences.getInstance();
+                                   prefs2.setString('phone',phone);
+                                   prefs2.setString('password',password);
+
 
                                    if(_formKey.currentState!.validate() && phone != null && password != null){
                                      // Call Api
@@ -352,7 +365,8 @@ class _LoginPageState extends State<LoginPage> {
 
                                       // To store value in  a SharedPreference
 
-                                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                                       prefs = await SharedPreferences.getInstance();
+
                                       prefs.setString('sEmpCode',sEmpCode);
                                       prefs.setString('sCompEmpCode',sCompEmpCode);
                                       prefs.setString('sFirstName',sFirstName);
@@ -425,22 +439,53 @@ class _LoginPageState extends State<LoginPage> {
                                   InkWell(
                                     onTap: (){
 
-                                    },
+                                      },
                                     child: Checkbox(
                                       value: _isChecked,
-                                      onChanged: (bool? value) {
-                                        setState(() async {
+                                      onChanged: (bool? value) async {
+                                        // 1️⃣ Update checkbox state first (synchronously)
+                                        setState(() {
                                           _isChecked = value ?? false;
-                                         // print("-------426-----");
-                                          var MobileNo = _phoneNumberController.text;
-                                          var password = passwordController.text;
-                                          // To save store value in  a  SharedPreference
-                                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                                          prefs.setString('MobileNo',MobileNo);
-                                          prefs.setString('password',password);
                                         });
+                                        // 2️⃣ Then handle async work outside of setState()
+                                        var mobileNo_2 = _phoneNumberController.text;
+                                        var password_2 = passwordController.text;
+
+                                        if (mobileNo_2.isNotEmpty && password_2.isNotEmpty) {
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                          prefs.setString('mobileNo',mobileNo_2);
+                                          prefs.setString('password',password_2);
+                                          // get a storedValue
+                                          var mobileNo = prefs.getString('mobileNo');
+                                          var password = prefs.getString('password');
+
+                                          print("---mobileNo-----xxx----471---$mobileNo");
+                                          print("---password----472----$password");
+                                          displayToast("Credentials stored.");
+
+                                        }else{
+                                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                                          var mobileNo = prefs.getString('sContactNo');
+                                          var password = prefs.getString('password');
+
+                                          print("---mobileNo-----xxx----483---$mobileNo");
+                                          print("---password----484----$password");
+                                          if(password !=null){
+                                            setState(() {
+                                              passwordController.text = password;
+                                              _phoneNumberController.text = mobileNo!;
+                                            });
+
+
+
+                                          }else{
+                                            displayToast("Credentials not stored.");
+                                          }
+                                        }
                                       },
-                                    ),
+                                    )
+
                                   ),
                                   Text(
                                     AppStrings.txtStayConnected,

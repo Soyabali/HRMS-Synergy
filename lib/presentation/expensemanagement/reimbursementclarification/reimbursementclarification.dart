@@ -137,6 +137,9 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   String? lastDayOfCurrentMonth;
   var fromPicker;
   var toPicker;
+  String? tempDate;
+  String? formDate;
+  String? toDate;
   // Uplode Id Proof with gallary
 
   Future pickImage() async {
@@ -307,6 +310,40 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
     debugPrint("Latitude: ----1056--- $lat and Longitude: $long");
     debugPrint(position.toString());
   }
+  // fromDate and toDate logic
+  void toDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(firstOfMonthDay!);
+    DateTime? toDate2 = dateFormat.parse(lastDayOfCurrentMonth!);
+
+    if (toDate2.isBefore(fromDate2)) {
+      setState(() {
+        lastDayOfCurrentMonth = tempDate;
+        // call api
+      });
+      displayToast("To Date can not be less than From Date");
+    } else {
+      hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+      /// here you change a tab and update date on a ispecific tab
+    }
+  }
+
+  void fromDateSelectLogic() {
+
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(firstOfMonthDay!);
+    DateTime? toDate2 = dateFormat.parse(lastDayOfCurrentMonth!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        firstOfMonthDay = tempDate;
+      });
+      displayToast("From date can not be greater than To Date");
+    } else {
+      hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+      //here apply logic to change tab and update date
+    }
+  }
   // didUpdateWidget
 
   @override
@@ -376,133 +413,267 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                 Container(
                   height: 45,
                   color: Color(0xFF2a697b),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(width: 4),
-                      Icon(Icons.calendar_month,size: 15,color: Colors.white),
-                      const SizedBox(width: 4),
-                      const Text('From',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal
-                      ),),
-                      SizedBox(width: 4),
-                      GestureDetector(
-                        onTap: () async {
-                          /// TODO Open Date picke and get a date
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              firstOfMonthDay = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            print('---formPicker--$firstOfMonthDay');
-                            // Call API
-                            //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            // print('---formPicker--$firstOfMonthDay');
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10,bottom: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(width: 4),
+                        Icon(Icons.calendar_month,
+                            size: 15, color: Colors.white),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'From',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () async {
+                            /// TODO Open Date picke and get a date
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                              setState(() {
+                                tempDate = firstOfMonthDay; // Save the current formDate before updating
+                                firstOfMonthDay = formattedDate;
+                              });
+                              print("-----237---$firstOfMonthDay");
+                              //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              fromDateSelectLogic();
+                            }
+                          },
+                          child: Container(
+                            height: 35,
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$firstOfMonthDay',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
+                                  fontSize:
+                                  12.0, // Adjust font size as needed
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 6),
+                        Container(
+                          height: 32,
+                          width: 32,
+                          child: Image.asset(
+                            "assets/images/reimicon_2.png",
+                            fit: BoxFit
+                                .contain, // or BoxFit.cover depending on the desired effect
+                          ),
+                        ),
+                        //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                        SizedBox(width: 8),
+                        const Icon(Icons.calendar_month,
+                            size: 16, color: Colors.white),
+                        SizedBox(width: 5),
+                        const Text(
+                          'To',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal),
+                        ),
+                        SizedBox(width: 5),
+                        GestureDetector(
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                            );
+                            if (pickedDate != null) {
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
 
-                            // Display the selected date as a toast
-                            //displayToast(dExpDate.toString());
-                          } else {
-                            // Handle case where no date was selected
-                            //displayToast("No date selected");
-                          }
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$firstOfMonthDay',
-                              style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
+                              setState(() {
+                                tempDate = lastDayOfCurrentMonth; // Save the current toDate before updating
+                                lastDayOfCurrentMonth = formattedDate;
+                                // calculateTotalDays();
+                              });
+                              //
+                              print("-------518----$lastDayOfCurrentMonth");
+                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              toDateSelectLogic();
+                            }
+                          },
+                          child: Container(
+                            height: 35,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              // Change this to your preferred color
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$lastDayOfCurrentMonth',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  // Change this to your preferred text color
+                                  fontSize:
+                                  12.0, // Adjust font size as needed
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 6),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        child: Image.asset(
-                          "assets/images/reimicon_2.png",
-                          fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
-                        ),
-                      ),
-                      //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                      SizedBox(width: 8),
-                      Icon(Icons.calendar_month,size: 16,color: Colors.white),
-                      SizedBox(width: 5),
-                      const Text('To',style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.normal
-                      ),),
-                      SizedBox(width: 5),
-                      GestureDetector(
-                        onTap:()async {
-                          DateTime? pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                          );
-                          // Check if a date was picked
-                          if (pickedDate != null) {
-                            // Format the picked date
-                            String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                            // Update the state with the picked date
-                            setState(() {
-                              lastDayOfCurrentMonth = formattedDate;
-                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            });
-                            hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                            //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                            print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                          } else {
-                          }
-                        },
-                        child: Container(
-                          height: 35,
-                          padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
-                          decoration: BoxDecoration(
-                            color: Colors.white, // Change this to your preferred color
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '$lastDayOfCurrentMonth',
-                              style: TextStyle(
-                                color: Colors.grey, // Change this to your preferred text color
-                                fontSize: 12.0, // Adjust font size as needed
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  // child: Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: [
+                  //     const SizedBox(width: 4),
+                  //     Icon(Icons.calendar_month,size: 15,color: Colors.white),
+                  //     const SizedBox(width: 4),
+                  //     const Text('From',style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 12,
+                  //         fontWeight: FontWeight.normal
+                  //     ),),
+                  //     SizedBox(width: 4),
+                  //     GestureDetector(
+                  //       onTap: () async {
+                  //         /// TODO Open Date picke and get a date
+                  //         DateTime? pickedDate = await showDatePicker(
+                  //           context: context,
+                  //           initialDate: DateTime.now(),
+                  //           firstDate: DateTime(2000),
+                  //           lastDate: DateTime(2100),
+                  //         );
+                  //         // Check if a date was picked
+                  //         if (pickedDate != null) {
+                  //           // Format the picked date
+                  //           String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                  //           // Update the state with the picked date
+                  //           setState(() {
+                  //             firstOfMonthDay = formattedDate;
+                  //             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           });
+                  //           hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                  //           print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
+                  //           hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           print('---formPicker--$firstOfMonthDay');
+                  //           // Call API
+                  //           //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           // print('---formPicker--$firstOfMonthDay');
+                  //
+                  //           // Display the selected date as a toast
+                  //           //displayToast(dExpDate.toString());
+                  //         } else {
+                  //           // Handle case where no date was selected
+                  //           //displayToast("No date selected");
+                  //         }
+                  //       },
+                  //       child: Container(
+                  //         height: 35,
+                  //         padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white, // Change this to your preferred color
+                  //           borderRadius: BorderRadius.circular(15),
+                  //         ),
+                  //         child: Center(
+                  //           child: Text(
+                  //             '$firstOfMonthDay',
+                  //             style: TextStyle(
+                  //               color: Colors.grey, // Change this to your preferred text color
+                  //               fontSize: 12.0, // Adjust font size as needed
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 6),
+                  //     Container(
+                  //       height: 32,
+                  //       width: 32,
+                  //       child: Image.asset(
+                  //         "assets/images/reimicon_2.png",
+                  //         fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
+                  //       ),
+                  //     ),
+                  //     //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
+                  //     SizedBox(width: 8),
+                  //     Icon(Icons.calendar_month,size: 16,color: Colors.white),
+                  //     SizedBox(width: 5),
+                  //     const Text('To',style: TextStyle(
+                  //         color: Colors.white,
+                  //         fontSize: 12,
+                  //         fontWeight: FontWeight.normal
+                  //     ),),
+                  //     SizedBox(width: 5),
+                  //     GestureDetector(
+                  //       onTap:()async {
+                  //         DateTime? pickedDate = await showDatePicker(
+                  //           context: context,
+                  //           initialDate: DateTime.now(),
+                  //           firstDate: DateTime(2000),
+                  //           lastDate: DateTime(2100),
+                  //         );
+                  //         // Check if a date was picked
+                  //         if (pickedDate != null) {
+                  //           // Format the picked date
+                  //           String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
+                  //           // Update the state with the picked date
+                  //           setState(() {
+                  //             lastDayOfCurrentMonth = formattedDate;
+                  //             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           });
+                  //           hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                  //           //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
+                  //           print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
+                  //         } else {
+                  //         }
+                  //       },
+                  //       child: Container(
+                  //         height: 35,
+                  //         padding: EdgeInsets.symmetric(horizontal: 14.0), // Optional: Adjust padding for horizontal space
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.white, // Change this to your preferred color
+                  //           borderRadius: BorderRadius.circular(15),
+                  //         ),
+                  //         child: Center(
+                  //           child: Text(
+                  //             '$lastDayOfCurrentMonth',
+                  //             style: TextStyle(
+                  //               color: Colors.grey, // Change this to your preferred text color
+                  //               fontSize: 12.0, // Adjust font size as needed
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ),
+
                 SizedBox(height: 10),
                 // SizedBox(height: 10),
                 Expanded(

@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/profile/profile_education.dart';
 import 'package:untitled/presentation/profile/profile_jobDetails.dart';
 import 'package:untitled/presentation/profile/profile_personal.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
 
@@ -472,8 +473,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                        children: [
                                          Icon(Icons.call,size: 16),
                                          SizedBox(width: 5),
-                                         Text('$sMngrContactNo',style: AppTextStyle
-                                             .font12OpenSansRegularBlack45TextStyle),
+                                         // Text('$sMngrContactNo',style: AppTextStyle
+                                         //     .font12OpenSansRegularBlack45TextStyle),
+                                         GestureDetector(
+                                           onTap: () async {
+                                             final phoneNumber = sMngrContactNo; // your mobile number
+                                             final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+
+                                             if (await canLaunchUrl(phoneUri)) {
+                                               await launchUrl(phoneUri);
+                                             } else {
+                                               print('Could not launch dialer');
+                                             }
+                                           },
+                                           child: Text(
+                                             '$sMngrContactNo',
+                                             style: AppTextStyle.font12OpenSansRegularBlack45TextStyle.copyWith(
+                                               color: Colors.blue,
+                                               decoration: TextDecoration.underline, // optional styling
+                                             ),
+                                           ),
+                                         )
                                        ],
                                      ),
                                    ),
@@ -522,8 +542,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                        children: [
                                          Icon(Icons.call,size: 16),
                                          SizedBox(width: 5),
-                                         Text('$sEmergencyContactNo',style: AppTextStyle
-                                             .font12OpenSansRegularBlack45TextStyle),
+                                         GestureDetector(
+                                           onTap: () async {
+                                             final phoneNumber = sMngrContactNo; // your mobile number
+                                             final Uri phoneUri = Uri(scheme: 'tel', path: phoneNumber);
+
+                                             if (await canLaunchUrl(phoneUri)) {
+                                               await launchUrl(phoneUri);
+                                             } else {
+                                               print('Could not launch dialer');
+                                             }
+                                           },
+                                           child: Text(
+                                             '$sEmergencyContactNo',
+                                             style: AppTextStyle.font12OpenSansRegularBlack45TextStyle.copyWith(
+                                               color: Colors.blue,
+                                               decoration: TextDecoration.underline, // optional styling
+                                             ),
+                                           ),
+                                         )
+                                         // Text('$sEmergencyContactNo',style: AppTextStyle
+                                         //     .font12OpenSansRegularBlack45TextStyle),
 
                                        ],
                                      ),

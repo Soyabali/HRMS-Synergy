@@ -124,6 +124,9 @@ class _MyHomePageState extends State<TripListPage> {
   var fromPicker;
   var toPicker;
   var sTripEndLocation;
+  String? tempDate;
+  String? formDate;
+  String? toDate;
 
   // Uplode Id Proof with gallary
   Future pickImage() async {
@@ -202,11 +205,13 @@ class _MyHomePageState extends State<TripListPage> {
     DateTime now = DateTime.now();
     DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
     firstOfMonthDay = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    print("-----208---$firstOfMonthDay");
     // last day of the current month
     DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
     DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
     lastDayOfCurrentMonth = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
     setState(() {});
+    print("-----214---$lastDayOfCurrentMonth");
     if (firstDayOfNextMonth != null && lastDayOfCurrentMonth != null) {
       print('You should call api');
     } else {
@@ -219,6 +224,7 @@ class _MyHomePageState extends State<TripListPage> {
   void initState() {
     // TODO: implement initState
     getCurrentdate();
+   // getACurrentDate();
     hrmsTripList(firstOfMonthDay!, lastDayOfCurrentMonth!);
     super.initState();
   }
@@ -228,6 +234,54 @@ class _MyHomePageState extends State<TripListPage> {
     // TODO: implement dispose
     FocusScope.of(context).unfocus();
     super.dispose();
+  }
+  // fromDate and toDate select logic
+  void fromDateSelectLogic() {
+
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(firstOfMonthDay!);
+    DateTime? toDate2 = dateFormat.parse(lastDayOfCurrentMonth!);
+
+    if (fromDate2.isAfter(toDate2)) {
+      setState(() {
+        firstOfMonthDay = tempDate;
+      });
+      displayToast("From date can not be greater than To Date");
+    } else {
+      hrmsTripList(firstOfMonthDay!, lastDayOfCurrentMonth!);
+      //here apply logic to change tab and update date
+    }
+  }
+  // toDate selectLogic
+  void toDateSelectLogic() {
+    DateFormat dateFormat = DateFormat("dd/MMM/yyyy");
+    DateTime? fromDate2 = dateFormat.parse(firstOfMonthDay!);
+    DateTime? toDate2 = dateFormat.parse(lastDayOfCurrentMonth!);
+
+    if (toDate2.isBefore(fromDate2)) {
+      setState(() {
+        lastDayOfCurrentMonth = tempDate;
+        // call api
+      });
+      displayToast("To Date can not be less than From Date");
+    } else {
+      hrmsTripList(firstOfMonthDay!, lastDayOfCurrentMonth!);
+      // hrmsLeaveStatus = ApprovedTeamReimbursementRepo().approvedTeamReimbursementList(
+      //     context, formDate!,toDate!,iStatus,empCode);
+      /// here you change a tab and update date on a ispecific tab
+    }
+  }
+  // getCurrentDate
+  getACurrentDate() {
+    DateTime now = DateTime.now();
+    DateTime firstDayOfMonth = DateTime(now.year, now.month, 1);
+    formDate = DateFormat('dd/MMM/yyyy').format(firstDayOfMonth);
+    setState(() {});
+
+    DateTime firstDayOfNextMonth = DateTime(now.year, now.month + 1, 1);
+    DateTime lastDayOfMonth = firstDayOfNextMonth.subtract(Duration(days: 1));
+    toDate = DateFormat('dd/MMM/yyyy').format(lastDayOfMonth);
+    setState(() {});
   }
 
   // google lunche code
@@ -303,7 +357,6 @@ class _MyHomePageState extends State<TripListPage> {
                 ),
               ), // Removes shadow under the AppBar
             ),
-
             body: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
@@ -314,17 +367,14 @@ class _MyHomePageState extends State<TripListPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         const SizedBox(width: 4),
-                        Icon(Icons.calendar_month, size: 15, color: Colors.white),
+                        Icon(Icons.calendar_month,size: 15,color: Colors.white),
                         const SizedBox(width: 4),
-                        const Text(
-                          'From',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
+                        const Text('From',style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal
+                        ),),
                         SizedBox(width: 4),
-
                         GestureDetector(
                           onTap: () async {
                             /// TODO Open Date picke and get a date
@@ -334,79 +384,62 @@ class _MyHomePageState extends State<TripListPage> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
                             );
-                            // Check if a date was picked
                             if (pickedDate != null) {
-                              // Format the picked date
-                              String formattedDate =
-                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
-                              // Update the state with the picked date
+                              String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
+                                tempDate = firstOfMonthDay; // Save the current formDate before updating
                                 firstOfMonthDay = formattedDate;
-                                // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                               });
-                              hrmsTripList(
-                                  firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              print(
-                                  '--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                              hrmsTripList(
-                                  firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              print('---formPicker--$firstOfMonthDay');
-                              // Call API
-                              //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                              // print('---formPicker--$firstOfMonthDay');
+                              print("-----237---$firstOfMonthDay");
 
-                              // Display the selected date as a toast
-                              //displayToast(dExpDate.toString());
-                            } else {
-                              // Handle case where no date was selected
-                              //displayToast("No date selected");
+                              hrmsTripList(firstOfMonthDay!, lastDayOfCurrentMonth!);
+
+                             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+
+
+                              //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              fromDateSelectLogic();
                             }
                           },
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    14.0), // Optional: Adjust padding for horizontal space
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Change this to your preferred color
+                              color: Colors.white,
+                              // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
                               child: Text(
-                                '$firstOfMonthDay',
-                                style: TextStyle(
-                                  color: Colors
-                                      .grey, // Change this to your preferred text color
-                                  fontSize: 12.0, // Adjust font size as needed
+                                firstOfMonthDay ?? '',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12.0,
                                 ),
                               ),
                             ),
                           ),
                         ),
-
                         SizedBox(width: 6),
                         Container(
                           height: 32,
                           width: 32,
                           child: Image.asset(
                             "assets/images/reimicon_2.png",
-                            fit: BoxFit
-                                .contain, // or BoxFit.cover depending on the desired effect
+                            fit: BoxFit.contain, // or BoxFit.cover depending on the desired effect
                           ),
                         ),
                         //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
                         SizedBox(width: 8),
-                        Icon(Icons.calendar_month, size: 16, color: Colors.white),
+                        Icon(Icons.calendar_month,size: 16,color: Colors.white),
                         SizedBox(width: 5),
-                        const Text(
-                          'To',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal),
-                        ),
+                        const Text('To',style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal
+                        ),),
                         SizedBox(width: 5),
                         GestureDetector(
                           onTap: () async {
@@ -416,40 +449,40 @@ class _MyHomePageState extends State<TripListPage> {
                               firstDate: DateTime(2000),
                               lastDate: DateTime(2100),
                             );
-                            // Check if a date was picked
                             if (pickedDate != null) {
-                              // Format the picked date
                               String formattedDate =
-                                  DateFormat('dd/MMM/yyyy').format(pickedDate);
-                              // Update the state with the picked date
+                              DateFormat('dd/MMM/yyyy').format(pickedDate);
                               setState(() {
+                                tempDate = lastDayOfCurrentMonth; // Save the current toDate before updating
                                 lastDayOfCurrentMonth = formattedDate;
-                                // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                                // calculateTotalDays();
                               });
+                              //
+                              print("-------300----$toDate");
                               hrmsTripList(
                                   firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                              print(
-                                  '--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                            } else {}
+                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+
+                              // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
+                              toDateSelectLogic();
+                            }
                           },
                           child: Container(
                             height: 35,
-                            padding: EdgeInsets.symmetric(
-                                horizontal:
-                                    14.0), // Optional: Adjust padding for horizontal space
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0),
+                            // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Change this to your preferred color
+                              color: Colors.white,
+                              // Change this to your preferred color
                               borderRadius: BorderRadius.circular(15),
                             ),
                             child: Center(
                               child: Text(
-                                '$lastDayOfCurrentMonth',
-                                style: TextStyle(
-                                  color: Colors
-                                      .grey, // Change this to your preferred text color
-                                  fontSize: 12.0, // Adjust font size as needed
+                                lastDayOfCurrentMonth ?? '',
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12.0,
                                 ),
                               ),
                             ),
@@ -458,6 +491,7 @@ class _MyHomePageState extends State<TripListPage> {
                       ],
                     ),
                   ),
+
                   SizedBox(height: 10),
                   // ui part
                   /// todo this is a start journey ui

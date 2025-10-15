@@ -283,7 +283,6 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                            fontWeight: FontWeight.normal),
                                      ),
                                      SizedBox(width: 4),
-
                                      GestureDetector(
                                        onTap: () async {
                                          /// TODO Open Date picke and get a date
@@ -295,8 +294,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                          );
                                          if (pickedDate != null) {
                                            String formattedDate =
-                                           DateFormat('dd/MMM/yyyy')
-                                               .format(pickedDate);
+                                           DateFormat('dd/MMM/yyyy').format(pickedDate);
                                            setState(() {
                                              tempDate =
                                                  formDate; // Save the current formDate before updating
@@ -367,8 +365,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                            DateFormat('dd/MMM/yyyy')
                                                .format(pickedDate);
                                            setState(() {
-                                             tempDate =
-                                                 toDate; // Save the current toDate before updating
+                                             tempDate = toDate; // Save the current toDate before updating
                                              toDate = formattedDate;
                                              // calculateTotalDays();
                                            });
