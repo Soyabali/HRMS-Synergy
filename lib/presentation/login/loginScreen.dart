@@ -27,7 +27,6 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 

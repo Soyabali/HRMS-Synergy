@@ -916,6 +916,86 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
       ),
     );
   }
+  Widget _buildDialogInfo(BuildContext context, String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 210,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text(
+                    'Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
+                ),
+                SizedBox(height: 10),
+                SingleChildScrollView(
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.justify, // Justify the text
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor: Colors
+                            .black, // Set the text color to black
+                      ),
+                      child: Text('Ok', style: AppTextStyle
+                          .font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/information.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   // datepicker
   // InitState
@@ -2650,6 +2730,9 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
 
                                   result = "${hrmsPostReimbursement[0]['Result']}";
                                   msg = "${hrmsPostReimbursement[0]['Msg']}";
+                                  print("-----2653---$hrmsPostReimbursement");
+                                  print("-----2654---$result");
+                                  print("-----2655---$msg");
 
                                   if (result == "1") {
                                     showDialog(
@@ -2659,6 +2742,15 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                       },
                                     );
                                   }
+                                  if (result == "0") {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return _buildDialogInfo(context, msg);
+                                      },
+                                    );
+                                  }
+
                                 } else {
                                   if (sTranCode == null) {
                                     displayToast('Generate Random Number');

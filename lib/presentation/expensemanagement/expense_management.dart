@@ -30,7 +30,6 @@ class ExpenseManagement extends StatelessWidget {
 }
 
 class ExpenseManagementHome extends StatefulWidget {
-
   const ExpenseManagementHome({super.key});
 
   @override
@@ -173,7 +172,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                               child: Container(
                                 margin: EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/ic_profile_dashboard.PNG',
+                                  'assets/images/addReimbursement.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -229,7 +228,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                               child: Container(
                                 margin: EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/ic_reminder_dashboard.PNG',
+                                  'assets/images/rbStatus.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -284,7 +283,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                               child: Container(
                                 margin: EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/ic_attendance_dashboard.PNG',
+                                  'assets/images/clarification.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -339,7 +338,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                               child: Container(
                                 margin: EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/ic_attendance_dashboard.PNG',
+                                  'assets/images/pReim.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -394,7 +393,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                               child: Container(
                                 margin: EdgeInsets.all(8.0),
                                 child: Image.asset(
-                                  'assets/images/ic_attendance_dashboard.PNG',
+                                  'assets/images/tReimStatus.png',
                                   fit: BoxFit.contain,
                                 ),
                               ),

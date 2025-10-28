@@ -7,7 +7,9 @@ import '../resources/values_manager.dart';
 import 'payslip.dart';
 import '../resources/app_text_style.dart';
 
+
 class Setpin extends StatelessWidget {
+
   const Setpin({super.key});
 
   @override
@@ -103,7 +105,7 @@ class _setPinScrenState extends State<SetPinScren> {
     //prefs.setInt('setPin',pin);
   }
 
-  Future<String?> loadPinFromLocalDatabase()async {
+  Future<String?> loadPinFromLocalDatabase() async {
     // Add your logic to load the stored PIN from local database, if any
     // Return the stored PIN or null if it hasn't been set
     SharedPreferences prefs = await SharedPreferences.getInstance();

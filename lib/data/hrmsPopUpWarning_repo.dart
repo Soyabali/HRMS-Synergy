@@ -6,7 +6,6 @@ import 'package:untitled/app/generalFunction.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
-
 class HrmsPopUpWarningRepo {
 
   // this is a loginApi call functin
@@ -19,7 +18,6 @@ class HrmsPopUpWarningRepo {
       print('----sEmpCode--18---$sEmpCode');
       print('----dExpDate--19---$dExpDate');
       print('----amount--20---$amount');
-
 
       var baseURL = BaseRepo().baseurl;
       var endPoint = "hrmsReimPopupWarning/hrmsReimPopupWarning";

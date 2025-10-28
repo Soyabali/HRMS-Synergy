@@ -29,8 +29,10 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
 
   // month name list
   late Future<List<HolidayListModel>> holidayList;
+
   List<HolidayListModel> filteredHolidayList = [];
 // Default month
+
   List<String> months = [
     'Jan',
     'Feb',
@@ -46,7 +48,6 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     'Dec'
   ];
 
-
   final List<Color> colorList = [
     Color(0xFF4DB6AC),
     Color(0xFFE1A245),
@@ -55,8 +56,9 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
     Color(0xFFA6A869),
     Color(0xFF379BF3),
   ];
+
   var randomColor;
-  late String selectedMonth ;
+  late String selectedMonth;
   late ScrollController _scrollController;
 
 
@@ -189,7 +191,6 @@ class _PolicydocScreenState extends State<HolidaylistScreen> {
               ),
             ), // Removes shadow under the AppBar
           ),
-
           body: Column(
             children: [
               // Horizontal Month ListView

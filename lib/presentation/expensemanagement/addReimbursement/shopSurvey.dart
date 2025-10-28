@@ -121,6 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
   FocusNode _addressfocus = FocusNode();
 
   // FocusNode descriptionfocus = FocusNode();
+
   String? todayDate;
   String? consumableList;
   int count = 0;
@@ -415,53 +416,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error uploading image: $error');
     }
   }
-  // Future<void> uploadImage2(String token, File imageFile) async {
-  //   print('----image file path--374---$imageFile');
-  //   //uplodedImage2=null;
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //
-  //     // Extracting the image path
-  //     uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
-  //     setState(() {
-  //      // uplodedImage2 = responseData[0]['Data'][0]['sImagePath'];
-  //     });
-  //     print('Uploaded Image Path----405--: $uplodedImage');
-  //
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
-
   Future<void> uploadImage3(String token, File imageFile) async {
     print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
@@ -497,46 +451,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error uploading image: $error');
     }
   }
-  // Future<void> uploadImage3(String token, File imageFile) async {
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //
-  //     // Extracting the image path
-  //     uplodedImage3 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----500--: $uplodedImage');
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
   Future<void> uploadImage4(String token, File imageFile) async {
     print('----image file path--338---$imageFile');
     var baseURL = BaseRepo().baseurl;
@@ -573,47 +487,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // Future<void> uploadImage4(String token, File imageFile) async {
-  //   var baseURL = BaseRepo().baseurl;
-  //   var endPoint = "UploadTrackingImage/UploadTrackingImage";
-  //   var uplodeImageApi = "$baseURL$endPoint";
-  //   try {
-  //     print('-----xx-x----214----');
-  //     showLoader();
-  //     // Create a multipart request
-  //     var request = http.MultipartRequest(
-  //       'POST',
-  //       Uri.parse('$uplodeImageApi'),
-  //     );
-  //
-  //     // Add headers
-  //     request.headers['token'] = token;
-  //
-  //     // Add the image file as a part of the request
-  //     request.files.add(await http.MultipartFile.fromPath(
-  //       'sImagePath',
-  //       imageFile.path,
-  //     ));
-  //
-  //     // Send the request
-  //     var streamedResponse = await request.send();
-  //
-  //     // Get the response
-  //     var response = await http.Response.fromStream(streamedResponse);
-  //
-  //     // Parse the response JSON
-  //     List<dynamic> responseData = json.decode(response.body);
-  //
-  //     // Extracting the image path
-  //     uplodedImage4 = responseData[0]['Data'][0]['sImagePath'];
-  //     print('Uploaded Image Path----245--: $uplodedImage');
-  //
-  //     hideLoader();
-  //   } catch (error) {
-  //     hideLoader();
-  //     print('Error uploading image: $error');
-  //   }
-  // }
 
 
   // build dialog sucess
@@ -663,7 +536,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Color(0xFF0098a6),
                         // Set the background color to white
                         foregroundColor: Colors.black, // Set the text color to black
                       ),
@@ -911,7 +784,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // TODO: implement initState
     updatedSector();
     shopType();
-    getLocation();
+   // getLocation();
     expenseCategory();
     bindreimUom();
     super.initState();
@@ -1725,7 +1598,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           SizedBox(width: 8.0),
                                           Expanded(
                                               child: Text(
-                                                  "Uploaded Consumable Item $count",
+                                                  "Uploaded Consumable Item ${_itemsList.length}",
                                                   style: AppTextStyle.font16OpenSansRegularBlack45TextStyle)),
                                           Icon(Icons.arrow_forward_ios,
                                               color: Colors.grey),
@@ -2452,11 +2325,12 @@ class _MyHomePageState extends State<MyHomePage> {
                               // send Reimbursement Button
                               InkWell(
                                 onTap: () async {
+
                                   SharedPreferences prefs = await SharedPreferences.getInstance();
                                   String? sEmpCode = prefs.getString('sEmpCode');
                                   String? sContactNo = prefs.getString('sContactNo');
-
                                   print('----sEmpCode--15---$sEmpCode');
+
                                   /// TODO GET A RANDOM NUMBER
                                   Random random = Random();
                                   int sTranCode = 10000000 + random.nextInt(90000000);
@@ -2534,12 +2408,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                     // displayToast(msg);
                                     /// todo here to show the dialog sucess
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return _buildDialogSucces2(context, msg);
-                                      },
-                                    );
+
+                                    /// todo here you should clear  a Dialog
+                                    if(result=="1"){
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return _buildDialogSucces2(context, msg);
+                                        },
+                                      );
+                                    }else{
+                                      displayToast(msg);
+                                    }
+
                                   } else {
                                     showCustomDialog(context, msg);
                                     //displayToast(msg);

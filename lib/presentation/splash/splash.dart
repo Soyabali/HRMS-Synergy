@@ -68,7 +68,7 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
-  getLocalDataInfo()async{
+  getLocalDataInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // get a stored value
     setState(() {
@@ -89,7 +89,6 @@ class _SplashViewState extends State<SplashView> {
   //
   Future<void> getUserValueFromLocalDataBase() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
   }
 
   @override

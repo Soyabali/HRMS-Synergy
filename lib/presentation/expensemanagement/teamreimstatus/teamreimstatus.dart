@@ -415,8 +415,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                  child: Padding(
                                    padding: const EdgeInsets.all(2.0),
                                    child: Row(
-                                     mainAxisAlignment:
-                                     MainAxisAlignment.spaceEvenly,
+                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                      children: [
                                        _buildTextButton('Approved'),
                                        _buildTextButton('Rejected'),
@@ -449,9 +448,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                         // Handle the case where the data is empty or null
                                         return Center(child: Text('No Data'));
                                       }
-                                      final polocyDocList =
-                                      snapshot.data!; // Access the resolved data
-                            
+                                      final polocyDocList = snapshot.data!;    // Access the resolved data
                                       return ListView.builder(
                                           itemCount: polocyDocList.length,
                                           itemBuilder: (context, index) {
@@ -509,8 +506,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                             // Wrap the column in Flexible to prevent overflow
                                                             Flexible(
                                                               child: Column(
-                                                                crossAxisAlignment:
-                                                                CrossAxisAlignment.start,
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                                 children: <Widget>[
                                                                   Text(
                                                                     '${empinfo.sExpHeadName}',
@@ -518,22 +514,19 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                                         .font12OpenSansRegularBlackTextStyle,
                                                                     maxLines: 2,
                                                                     // Limits the text to 2 lines
-                                                                    overflow: TextOverflow
-                                                                        .ellipsis, // Truncates with an ellipsis if too long
+                                                                    overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
                                                                   ),
                                                                   SizedBox(height: 4),
                                                                   // Add spacing between texts if needed
                                                                   Padding(
-                                                                    padding: const EdgeInsets.only(
-                                                                        right: 10),
+                                                                    padding: const EdgeInsets.only(right: 10),
                                                                     child: Text(
                                                                       "Project Name : ${empinfo.sProjectName}",
                                                                       style: AppTextStyle
                                                                           .font12OpenSansRegularBlackTextStyle,
                                                                       maxLines: 2,
                                                                       // Limits the text to 2 lines
-                                                                      overflow: TextOverflow
-                                                                          .ellipsis, // Truncates with an ellipsis if too long
+                                                                      overflow: TextOverflow.ellipsis, // Truncates with an ellipsis if too long
                                                                     ),
                                                                   ),
                                                                 ],
@@ -553,8 +546,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                         ),
                                                         SizedBox(height: 5),
                                                         Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: <Widget>[
                                                             Container(
                                                               height: 10.0,
@@ -562,15 +554,13 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                               decoration: BoxDecoration(
                                                                 color: Colors.black,
                                                                 // Change this to your preferred color
-                                                                borderRadius:
-                                                                BorderRadius.circular(5.0),
+                                                                borderRadius: BorderRadius.circular(5.0),
                                                               ),
                                                             ),
                                                             SizedBox(width: 5),
                                                             //  '‣ Sector',
                                                             Text('Employee Name',
-                                                                style: AppTextStyle
-                                                                    .font12OpenSansRegularBlackTextStyle)
+                                                                style: AppTextStyle.font12OpenSansRegularBlackTextStyle)
                                                           ],
                                                         ),
                                                         Padding(
@@ -582,8 +572,7 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                         ),
                                                         SizedBox(height: 5),
                                                         Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.start,
+                                                          mainAxisAlignment: MainAxisAlignment.start,
                                                           children: <Widget>[
                                                             Container(
                                                               height: 10.0,
@@ -941,9 +930,11 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
           ),
         ),
         onPressed: () {
+
           setState(() {
             selectedButton = text;
           });
+
           // to apply logic to get a code accoding to selected value
           iStatus;
           if(selectedButton=="Approved"){

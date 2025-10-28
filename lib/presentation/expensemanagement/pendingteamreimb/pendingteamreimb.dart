@@ -26,7 +26,6 @@ import '../reimbursementStatus/reimbursementlog.dart';
 import 'duplicateExpenseEntry.dart';
 
 class PendingTeamReimbPage extends StatefulWidget {
-
   const PendingTeamReimbPage({super.key});
 
   @override
@@ -401,16 +400,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
       ),
     );
   }
-  // void displayToast(String msg) {
-  //   Fluttertoast.showToast(
-  //       msg: msg,
-  //       toastLength: Toast.LENGTH_SHORT,
-  //       gravity: ToastGravity.CENTER,
-  //       timeInSecForIosWeb: 1,
-  //       backgroundColor: Colors.red,
-  //       textColor: Colors.white,
-  //       fontSize: 16.0);
-  // }
 
   // image code
   Future<void> uploadImage(String token, File imageFile) async {
@@ -566,7 +555,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
   hrmsReimbursementStatus(String firstOfMonthDay, String lastDayOfCurrentMonth) async {
     getPendingApprovalReim = GetPendingforApprovalReimRepo().getPendingApprovalReim(context, firstOfMonthDay, lastDayOfCurrentMonth);
-    print("------xxx---536---xxx000---$getPendingApprovalReim");
+    print("------xxx---558---xxx000---$getPendingApprovalReim");
 
     getPendingApprovalReim.then((data) {
       setState(() {
@@ -693,8 +682,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                           },
                           child: Container(
                             height: 35,
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 14.0),
+                            padding: EdgeInsets.symmetric(horizontal: 14.0),
                             // Optional: Adjust padding for horizontal space
                             decoration: BoxDecoration(
                               color: Colors.white,

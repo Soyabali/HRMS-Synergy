@@ -8,12 +8,15 @@ import '../resources/app_text_style.dart';
 import 'applyleaveSubmitForm.dart';
 
 class Applyleave extends StatefulWidget {
+  Applyleave();
+
 
   @override
   _LeaveScreenState createState() => _LeaveScreenState();
 }
 
 class _LeaveScreenState extends State<Applyleave> {
+
   late Future<List<LeaveData>> futureLeaveData;
   Color? containerColor;
   Color? textColor;
@@ -42,7 +45,7 @@ class _LeaveScreenState extends State<Applyleave> {
   void initState() {
     super.initState();
     futureLeaveData = Hrmsleavebalacev2Repo().getHrmsleavebalacev2(context);
-    print('---35--response---$futureLeaveData');
+    print('---46--response---$futureLeaveData');
   }
 
   @override

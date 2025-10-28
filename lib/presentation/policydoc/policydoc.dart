@@ -3,13 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:untitled/presentation/policydoc/policyDocPdf.dart';
 import '../../app/generalFunction.dart';
 import '../../data/companyPolicy_repo.dart';
-import '../../data/policyDocAcceptRepo.dart';
-import '../../data/policyDocRejectRepo.dart';
 import '../../domain/policy_model.dart';
 import '../dashboard/dashboard.dart';
-import '../resources/app_colors.dart';
 import '../resources/app_text_style.dart';
-import '../resources/values_manager.dart';
 
 class PolicyDoc extends StatelessWidget {
   const PolicyDoc({super.key});
@@ -24,6 +20,7 @@ class PolicyDoc extends StatelessWidget {
 }
 
 class PolicydocScreen extends StatefulWidget {
+
   const PolicydocScreen({super.key});
 
   @override
@@ -31,6 +28,7 @@ class PolicydocScreen extends StatefulWidget {
 }
 
 class _PolicydocScreenState extends State<PolicydocScreen> {
+
   late Future<List<PolicyDocModel>> polocyDocList;
   var result, msg;
   GeneralFunction generalFunction = GeneralFunction();
@@ -56,7 +54,7 @@ class _PolicydocScreenState extends State<PolicydocScreen> {
     // TODO: implement initState
     super.initState();
     polocyDocList = HrmsPolicyDocRepo().policyDocList(context);
-    print('----40--$polocyDocList');
+    print('----57---ssss--$polocyDocList');
   }
 
   @override

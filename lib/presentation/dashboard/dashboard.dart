@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/presentation/applyleave/applyLeave.dart';
@@ -627,7 +628,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     }
   }
 
-
   attendaceapi(double? lat, double? long, locationAddress) async {
     var attendance = await HrmsAttendanceRepo().hrmsattendance(
         context, lat, long,locationAddress);
@@ -1142,11 +1142,13 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           ),
                           GestureDetector(
                             onTap: (){
+
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>  Applyleave()),
                               );
-                            },
+
+                              },
                             child: Container(
                               height: 85.0,
                               decoration: BoxDecoration(

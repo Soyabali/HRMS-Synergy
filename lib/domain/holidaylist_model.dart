@@ -1,4 +1,5 @@
 class HolidayListModel {
+
   final String sDate;
   final String sDayName;
   final String sHolidayName;

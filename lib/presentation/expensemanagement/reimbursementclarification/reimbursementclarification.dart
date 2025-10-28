@@ -20,7 +20,6 @@ import '../../resources/app_text_style.dart';
 import '../expense_management.dart';
 
 class ReimbursementClarification extends StatelessWidget {
-
   const ReimbursementClarification({super.key});
 
   @override
@@ -74,7 +73,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   // Distic List
   hrmsReimbursementStatus(String firstOfMonthDay,String lastDayOfCurrentMonth) async {
     reimbursementStatusV3 = HrmsreimbursementClarificationRepo().hrmsReimbursementClarificationList(context, firstOfMonthDay, lastDayOfCurrentMonth);
-    print('-----91---$reimbursementStatusV3');
+    print('-----76--xxxx----xxx-----$reimbursementStatusV3');
 
     reimbursementStatusV3.then((data) {
       setState(() {
@@ -262,7 +261,7 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
   @override
   void initState() {
     // TODO: implement initState
-    getLocation();
+   // getLocation();
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
 
@@ -673,7 +672,6 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                   //   ],
                   // ),
                 ),
-
                 SizedBox(height: 10),
                 // SizedBox(height: 10),
                 Expanded(

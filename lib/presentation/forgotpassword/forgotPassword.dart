@@ -8,9 +8,7 @@ import '../login/loginScreen.dart';
 import '../resources/values_manager.dart';
 import 'otpPage.dart';
 
-
 class ForgotPassword extends StatelessWidget {
-
   const ForgotPassword({super.key});
 
   @override
