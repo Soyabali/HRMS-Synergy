@@ -7,7 +7,6 @@ import 'package:untitled/data/loader_helper.dart';
 import '../data/baseurl.dart';
 import 'GetPendingForApprovalReimModel.dart';
 
-
 class GetPendingforApprovalReimRepo {
 
   var getPendingForApprovalList = [];
@@ -42,10 +41,10 @@ class GetPendingforApprovalReimRepo {
         "dToDate": lastDayOfCurrentMonth,
       });
       request.headers.addAll(headers);
-
       http.StreamedResponse response = await request.send();
 
       if (response.statusCode == 200) {
+
         hideLoader();
         // Convert the response stream to a string
         String responseBody = await response.stream.bytesToString();

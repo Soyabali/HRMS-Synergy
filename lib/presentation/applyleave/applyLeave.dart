@@ -97,6 +97,7 @@ class _LeaveScreenState extends State<Applyleave> {
                 ),
               ), // Removes shadow under the AppBar
             ),
+
             body: Padding(
               padding: const EdgeInsets.only(left: 5, right: 5, top: 5),
               child: Container(
@@ -127,8 +128,8 @@ class _LeaveScreenState extends State<Applyleave> {
                             containerColor = Color(0xFF0098a6);
                             textColor = Colors.black;
                           }
-                          final randomColor =
-                              colorList[index % colorList.length];
+                          final randomColor = colorList[index % colorList.length];
+
                           return Container(
                             child: Card(
                               color: Colors.white,
@@ -218,75 +219,30 @@ class _LeaveScreenState extends State<Applyleave> {
                                       Column(
                                         children: [
                                           Material(
-                                            elevation:
-                                                5, // Elevation of the container
-                                            borderRadius: BorderRadius.circular(20),
+                                            elevation: 4, // Elevation of the container
+                                            borderRadius: BorderRadius.circular(25),
                                             // Border radius
                                             child: Container(
-                                              width: 50, // outer circle size (radius*2 + border)
+                                              width: 50,
                                               height: 50,
-                                              padding: const EdgeInsets.all(3), // thickness of gradient border
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    Colors.grey,
-                                                    Colors.grey,
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
+                                                color: Colors.white, // inner background color
+                                                border: Border.all(
+                                                  color: Colors.grey, // light gray border color
+                                                  width: 2, // border thickness
                                                 ),
                                               ),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white, // inner circle color
-                                                ),
-                                                alignment: Alignment.center,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    child: Text(
-                                                      leaveData.fOpeningBal,
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                leaveData.fOpeningBal,
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            // child: CircleAvatar(
-                                            //   backgroundColor: Colors.white,
-                                            //   radius: 30, // circle size (change as needed)
-                                            //   child: Text(
-                                            //     '89.98',
-                                            //     style: const TextStyle(
-                                            //       color: Colors.grey,
-                                            //       fontSize: 16,
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            // child: Container(
-                                            //   padding: const EdgeInsets.all(10), // give some space inside the circle
-                                            //   decoration: BoxDecoration(
-                                            //     color: Colors.white,
-                                            //    // border: Border.all(color: Colors.grey, width: 1),
-                                            //     shape: BoxShape.circle, // ✅ makes it always circular
-                                            //   ),
-                                            //   alignment: Alignment.center,
-                                            //   child: Text(
-                                            //      "" ,//leaveData.fOpeningBal, // dynamic text
-                                            //     style: const TextStyle(
-                                            //       color: Colors.grey,
-                                            //       fontSize: 16,
-                                            //     ),
-                                            //     textAlign: TextAlign.center,
-                                            //   ),
-                                            // )
-
 
                                           ),
                                           const SizedBox(height: 10),
@@ -304,66 +260,28 @@ class _LeaveScreenState extends State<Applyleave> {
                                           Material(
                                             elevation:
                                                 5, // Elevation of the container
-                                            borderRadius: BorderRadius.circular(
-                                                20), // Border radius
-                                            child: Container(
-                                              width: 50, // outer circle size (radius*2 + border)
-                                              height: 50,
-                                              padding: const EdgeInsets.all(3), // thickness of gradient border
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    Colors.grey,
-                                                    Colors.grey,
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                ),
-                                              ),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white, // inner circle color
-                                                ),
-                                                alignment: Alignment.center,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    child: Text(
-                                                      leaveData.fEntitlement,
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            // child: Container(
-                                            //   height:
-                                            //       40, // Height of the container
-                                            //   width:
-                                            //       40, // Width of the container
-                                            //   decoration: BoxDecoration(
-                                            //     color: Colors.white, // Background color of the container
-                                            //     border: Border.all(
-                                            //         color: Colors.grey,
-                                            //         width: 1), // Outer border color and width
-                                            //     borderRadius: BorderRadius.circular(20), // Border radius
-                                            //   ),
-                                            //   alignment: Alignment.center, // Center the text within the container
-                                            //   child: Text(
-                                            //     leaveData.fEntitlement,
-                                            //     //temple.fEntitlement, // The text to display
-                                            //     style: TextStyle(
-                                            //       color: Colors.grey, // Text color
-                                            //       fontSize: 16, // Text size
-                                            //     ),
-                                            //   ),
-                                            // ),
+                                            borderRadius: BorderRadius.circular(25), // Border radius
+                                             child: Container(
+                                               width: 50,
+                                               height: 50,
+                                               decoration: BoxDecoration(
+                                                 shape: BoxShape.circle,
+                                                 color: Colors.white, // inner background color
+                                                 border: Border.all(
+                                                   color: Colors.grey, // light gray border color
+                                                   width: 2, // border thickness
+                                                 ),
+                                               ),
+                                               alignment: Alignment.center,
+                                               child: Text(
+                                                 leaveData.fEntitlement,
+                                                 style: const TextStyle(
+                                                   color: Colors.grey,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.bold,
+                                                 ),
+                                               ),
+                                             ),
                                           ),
                                           SizedBox(height: 10),
                                           Text(
@@ -380,67 +298,28 @@ class _LeaveScreenState extends State<Applyleave> {
                                           Material(
                                             elevation:
                                                 5, // Elevation of the container
-                                            borderRadius: BorderRadius.circular(
-                                                20), // Border radius
-                                            child: Container(
-                                              width: 50, // outer circle size (radius*2 + border)
-                                              height: 50,
-                                              padding: const EdgeInsets.all(3), // thickness of gradient border
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    Colors.grey,
-                                                    Colors.grey,
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
-                                                ),
-                                              ),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white, // inner circle color
-                                                ),
-                                                alignment: Alignment.center,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    child: Text(
-                                                      leaveData.fAvailed,
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            // child: Container(
-                                            //   height:
-                                            //       40, // Height of the container
-                                            //   width:
-                                            //       40, // Width of the container
-                                            //   decoration: BoxDecoration(
-                                            //     color: Colors.white, // Background color of the container
-                                            //     border: Border.all(
-                                            //         color: Colors.grey,
-                                            //         width: 1), // Outer border color and width
-                                            //     borderRadius: BorderRadius.circular(20), // Border radius
-                                            //   ),
-                                            //   alignment: Alignment.center, // Center the text within the container
-                                            //   child: Text(
-                                            //     leaveData
-                                            //         .fAvailed, // The text to display
-                                            //     style: TextStyle(
-                                            //       color:
-                                            //           Colors.grey, // Text color
-                                            //       fontSize: 16, // Text size
-                                            //     ),
-                                            //   ),
-                                            // ),
+                                            borderRadius: BorderRadius.circular(25), // Border radius
+                                             child: Container(
+                                               width: 50,
+                                               height: 50,
+                                               decoration: BoxDecoration(
+                                                 shape: BoxShape.circle,
+                                                 color: Colors.white, // inner background color
+                                                 border: Border.all(
+                                                   color: Colors.grey, // light gray border color
+                                                   width: 2, // border thickness
+                                                 ),
+                                               ),
+                                               alignment: Alignment.center,
+                                               child: Text(
+                                                 leaveData.fAvailed,
+                                                 style: const TextStyle(
+                                                   color: Colors.grey,
+                                                   fontSize: 16,
+                                                   fontWeight: FontWeight.bold,
+                                                 ),
+                                               ),
+                                             ),
                                           ),
                                           SizedBox(height: 10),
                                           Text(
@@ -457,72 +336,28 @@ class _LeaveScreenState extends State<Applyleave> {
                                           Material(
                                             elevation:
                                                 5, // Elevation of the container
-                                            borderRadius: BorderRadius.circular(
-                                                20), // Border radius
+                                            borderRadius: BorderRadius.circular(25), // Border radius
                                             child: Container(
-                                              width: 50, // outer circle size (radius*2 + border)
+                                              width: 50,
                                               height: 50,
-                                              padding: const EdgeInsets.all(3), // thickness of gradient border
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                gradient: const LinearGradient(
-                                                  colors: [
-                                                    Colors.grey,
-                                                    Colors.grey,
-                                                  ],
-                                                  begin: Alignment.topLeft,
-                                                  end: Alignment.bottomRight,
+                                                color: Colors.white, // inner background color
+                                                border: Border.all(
+                                                  color: Colors.grey, // light gray border color
+                                                  width: 2, // border thickness
                                                 ),
                                               ),
-                                              child: Container(
-                                                decoration: const BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white, // inner circle color
-                                                ),
-                                                alignment: Alignment.center,
-                                                child: Center(
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.all(2.0),
-                                                    child: Text(
-                                                      leaveData.fClosingBalance,
-                                                      style: TextStyle(
-                                                        color: Colors.grey,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                leaveData.fClosingBalance,
+                                                style: const TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            // child: Container(
-                                            //   height:
-                                            //       40, // Height of the container
-                                            //   width:
-                                            //       40, // Width of the container
-                                            //   decoration: BoxDecoration(
-                                            //     color: Colors
-                                            //         .white, // Background color of the container
-                                            //     border: Border.all(
-                                            //         color: Colors.grey,
-                                            //         width:
-                                            //             1), // Outer border color and width
-                                            //     borderRadius:
-                                            //         BorderRadius.circular(
-                                            //             20), // Border radius
-                                            //   ),
-                                            //   alignment: Alignment
-                                            //       .center, // Center the text within the container
-                                            //   child: Text(
-                                            //     leaveData
-                                            //         .fClosingBalance, // The text to display
-                                            //     style: TextStyle(
-                                            //       color:
-                                            //           Colors.grey, // Text color
-                                            //       fontSize: 16, // Text size
-                                            //     ),
-                                            //   ),
-                                            // ),
                                           ),
                                           SizedBox(height: 10),
                                           Text(

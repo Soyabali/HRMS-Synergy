@@ -25,7 +25,6 @@ import '../../resources/app_colors.dart';
 import '../../resources/app_text_style.dart';
 import '../../resources/values_manager.dart';
 
-
 class ReimbursementrevertPage extends StatefulWidget {
 
   final sProjectName,
@@ -764,8 +763,12 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     String? sToken = prefs.getString('sToken');
 
     var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
-    var request = http.Request('POST',
-        Uri.parse('https://upegov.in/noidaoneapi/Api/PostImage/PostImage'));
+    // header
+    var baseURL = BaseRepo().baseurl;
+    var endPoint = "UploadTrackingImage/UploadTrackingImage";
+    var postImageUrl = "$baseURL$endPoint";
+
+    var request = http.Request('POST',Uri.parse('$postImageUrl'));
     request.body = json.encode({"sImagePath": "$image"});
     request.headers.addAll(headers);
   }

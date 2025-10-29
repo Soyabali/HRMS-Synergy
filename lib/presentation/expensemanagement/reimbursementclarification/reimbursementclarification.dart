@@ -679,142 +679,76 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                     child: FutureBuilder<List<HrmsReimbursementClarificationModel>>(
                         future: reimbursementStatusV3,
                         builder: (context, snapshot) {
-                          return ListView.builder(
-                            // itemCount: snapshot.data!.length ?? 0,
-                            // itemBuilder: (context, index)
-                              itemCount: _filteredData.length?? 0,
-                              itemBuilder: (context, index)
-                              {
-                                final leaveData = _filteredData[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 10, right: 10),
-                                  child: Card(
-                                    elevation: 1,
-                                    color: Colors.white,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        border: Border.all(
-                                          color: Colors.grey, // Outline border color
-                                          width: 0.2, // Outline border width
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            return Center(
+                                child: Text('No data available'));
+                          } else {
+                            return ListView.builder(
+                              // itemCount: snapshot.data!.length ?? 0,
+                              // itemBuilder: (context, index)
+                                itemCount: _filteredData.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  final leaveData = _filteredData[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    child: Card(
+                                      elevation: 1,
+                                      color: Colors.white,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              5.0),
+                                          border: Border.all(
+                                            color: Colors.grey,
+                                            // Outline border color
+                                            width: 0.2, // Outline border width
+                                          ),
                                         ),
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                        const EdgeInsets.only(left: 8, right: 8),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                    width: 30.0,
-                                                    height: 30.0,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                      BorderRadius.circular(15.0),
-                                                      border: Border.all(
-                                                        color: Color(0xFF255899),
-                                                        // Outline border color
-                                                        width:
-                                                        0.5, // Outline border width
-                                                      ),
-                                                      color: Colors.white,
-                                                    ),
-                                                    child: Center(
-                                                      child: Icon(Icons.email,size: 20,color: Color(0xFF0098a6),)
-                                                    )),
-                                                SizedBox(width: 10),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                                  children: <Widget>[
-                                                    Text(
-                                                      leaveData.sExpHeadName,
-                                                      style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                      maxLines: 2, // Limits the text to 2 lines
-                                                      overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                      softWrap: true,
-                                                    ),
-                                                    SizedBox(height: 2),
-                                                    Row(
-                                                      mainAxisAlignment: MainAxisAlignment.start,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Icon(Icons.location_on, color: Color(0xFF0098a6), size: 20),
-                                                        Text(
-                                                          'Project Name :',
-                                                          style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                          maxLines: 1, // Limits the text to 1 line
-                                                          overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        ),
-                                                        SizedBox(width: 2),
-                                                         Text(
-                                                            leaveData.sProjectName,
-                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                            maxLines: null, // Limits the text to 1 line
-                                                            overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                            softWrap: false, // Prevents the text from wrapping to a new line
-                                                          ),
-                                                      ],
-                                                    )
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                            const SizedBox(height: 10),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 15, right: 15),
-                                              child: Container(
-                                                height: 0.5,
-                                                color: Color(0xff3f617d),
-                                              ),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                Container(
-                                                  height: 10.0,
-                                                  width: 10.0,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.black,
-                                                    // Change this to your preferred color
-                                                    borderRadius: BorderRadius.circular(5.0),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 5),
-                                                //  '‣ Sector',
-                                                Text('Expense Details',
-                                                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle
-                                                )
-                                              ],
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.only(left: 15),
-                                              child: Text(
-                                                  leaveData.sExpDetails,
-                                                  //item['dExpDate'] ??'',
-                                                  style: AppTextStyle.font12OpenSansRegularBlack45TextStyle
-                                              ),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 5),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.only(
+                                              left: 8, right: 8),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                                 children: <Widget>[
                                                   Container(
-                                                      width: 20.0,
-                                                      height: 20.0,
+                                                      width: 30.0,
+                                                      height: 30.0,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.0),
+                                                        border: Border.all(
+                                                          color: Color(
+                                                              0xFF255899),
+                                                          // Outline border color
+                                                          width:
+                                                          0.5, // Outline border width
+                                                        ),
+                                                        color: Colors.white,
+                                                      ),
                                                       child: Center(
-                                                          child: Icon(Icons.calendar_today,size: 16,color: Color(0xFF0098a6),)
+                                                          child: Icon(
+                                                            Icons.email,
+                                                            size: 20,
+                                                            color: Color(
+                                                                0xFF0098a6),)
                                                       )),
                                                   SizedBox(width: 10),
                                                   Column(
@@ -824,182 +758,376 @@ class _MyHomePageState extends State<ReimbursementClarificationPage> {
                                                     CrossAxisAlignment.start,
                                                     children: <Widget>[
                                                       Text(
-                                                        leaveData.dEntryAt,
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                        leaveData.sExpHeadName,
+                                                        style: AppTextStyle
+                                                            .font12OpenSansRegularBlackTextStyle,
+                                                        maxLines: 2,
+                                                        // Limits the text to 2 lines
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        // Truncates the text with an ellipsis if it's too long
                                                         softWrap: true,
                                                       ),
                                                       SizedBox(height: 2),
-                                                      Text(
-                                                        'Entry At',
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .start,
+                                                        crossAxisAlignment: CrossAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Icon(
+                                                              Icons.location_on,
+                                                              color: Color(
+                                                                  0xFF0098a6),
+                                                              size: 20),
+                                                          Text(
+                                                            'Project Name :',
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle,
+                                                            maxLines: 1,
+                                                            // Limits the text to 1 line
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Truncates the text with an ellipsis if it's too long
+                                                          ),
+                                                          SizedBox(width: 2),
+                                                          Text(
+                                                            leaveData
+                                                                .sProjectName,
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle,
+                                                            maxLines: null,
+                                                            // Limits the text to 1 line
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            // Truncates the text with an ellipsis if it's too long
+                                                            softWrap: false, // Prevents the text from wrapping to a new line
+                                                          ),
+                                                        ],
+                                                      )
                                                     ],
-                                                  ),
-                                                  Spacer(),
-                                                  Container(
-                                                    height: 25,
-                                                    width: 100,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(17), // Border radius of 17
-                                                      border: Border.all(color: Colors.grey, width: 1), // Red border color
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        '₹ ${leaveData.fAmount}', // Replace with your text
-                                                          style: AppTextStyle
-                                                              .font12OpenSansRegularBlackTextStyle
-                                                      ),
-                                                    ),
                                                   )
                                                 ],
                                               ),
-                                            ),
-                                            SizedBox(height: 15),
-                                            Padding(
-                                              padding: const EdgeInsets.only(left: 10,right: 10),
-                                              child: Container(
-                                                color: Colors.grey,
-                                                height: 1,
+                                              const SizedBox(height: 10),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 15, right: 15),
+                                                child: Container(
+                                                  height: 0.5,
+                                                  color: Color(0xff3f617d),
+                                                ),
                                               ),
-                                            ),
-                                            SizedBox(height: 15),
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 5),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                              SizedBox(height: 5),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment
+                                                    .start,
                                                 children: <Widget>[
                                                   Container(
-                                                      width: 20.0,
-                                                      height: 20.0,
-                                                      child: Center(
-                                                          child: Icon(Icons.notes_outlined,size: 16,color: Color(0xFF0098a6),)
-                                                      )),
-                                                  SizedBox(width: 10),
-                                                  Column(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: <Widget>[
-                                                      Text('Remark',
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
-                                                      SizedBox(height: 2), // sRemarks
-                                                      Text(
-                                                        leaveData.sRemarks,
-                                                        // item['sExpHeadName'] ?? '',
-                                                        style: AppTextStyle
-                                                            .font12OpenSansRegularBlackTextStyle,
-                                                        maxLines: 2, // Limits the text to 2 lines
-                                                        overflow: TextOverflow.ellipsis, // Truncates the text with an ellipsis if it's too long
-                                                        softWrap: true,
-                                                      ),
-                                                    ],
+                                                    height: 10.0,
+                                                    width: 10.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black,
+                                                      // Change this to your preferred color
+                                                      borderRadius: BorderRadius
+                                                          .circular(5.0),
+                                                    ),
                                                   ),
-                                                  Spacer(),
-                                                  Container(
-                                                    height: 25,
-                                                    child: Row(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                      children: [
-                                                      Text('Bill Date :', // Replace with your text
-                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                  SizedBox(width: 5),
+                                                  //  '‣ Sector',
+                                                  Text('Expense Details',
+                                                      style: AppTextStyle
+                                                          .font14OpenSansRegularBlackTextStyle
+                                                  )
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 15),
+                                                child: Text(
+                                                    leaveData.sExpDetails,
+                                                    //item['dExpDate'] ??'',
+                                                    style: AppTextStyle
+                                                        .font12OpenSansRegularBlack45TextStyle
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: 20.0,
+                                                        height: 20.0,
+                                                        child: Center(
+                                                            child: Icon(Icons
+                                                                .calendar_today,
+                                                              size: 16,
+                                                              color: Color(
+                                                                  0xFF0098a6),)
+                                                        )),
+                                                    SizedBox(width: 10),
+                                                    Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                          leaveData.dEntryAt,
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 2,
+                                                          // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
                                                         ),
-                                                      SizedBox(width: 5),
-                                                      Text('${leaveData.dRemarksAt}', // Replace with your text
-                                                            style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                                        SizedBox(height: 2),
+                                                        Text(
+                                                          'Entry At',
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 2,
+                                                          // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
                                                         ),
                                                       ],
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                            SizedBox(height: 15),
-                                            GestureDetector(
-                                              onTap: (){
-                                                // Reimbursementrevert
-                                                /// todo here get a value from a form and send to next activity
-                                                  var sProjectName = leaveData.sProjectName;
-                                                  var sExpHeadName = leaveData.sExpHeadName; // dEntryAt
-                                                  var dEntryAt = leaveData.dEntryAt;
-                                                  var fAmount = leaveData.fAmount;
-                                                  var sExpDetails = leaveData.sExpDetails;
-                                                  var sExpBillPhoto = leaveData.sExpBillPhoto;
-                                                  var sExpBillPhoto2 = leaveData.sExpBillPhoto2;
-                                                  var sExpBillPhoto3 = leaveData.sExpBillPhoto3;
-                                                  var sExpBillPhoto4 = leaveData.sExpBillPhoto4;
-                                                 var sProjectCode = leaveData.sProjectCode;
-                                                  var sExpHeadCode = leaveData.sExpHeadCode;
-                                                  var sTranCode = leaveData.sTranCode;
-                                                  var dExpDate = leaveData.dExpDate;
-                                                  // sRemarks
-                                                  var sRemarks = leaveData.sRemarks;
-
-                                                  print('--sExpBillPhoto-------$sExpBillPhoto');
-                                                  print('--sExpBillPhoto2-------$sExpBillPhoto2');
-                                                  print('--sExpBillPhoto3-------$sExpBillPhoto3');
-                                                  print('--sExpBillPhoto4-------$sExpBillPhoto4');
-                                                  print('--sTranCode-----xx--$sTranCode');
-                                                  print('--dExpDate-------$dExpDate');
-                                                  print('--sExpHeadName-------$sExpHeadName');
-                                                //
-                                                  Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(builder: (context) => ReimbursementrevertPage(sProjectName,sExpHeadName,dEntryAt,fAmount,sExpDetails,sExpBillPhoto,sProjectCode,sExpHeadCode,sExpBillPhoto2,sExpBillPhoto3,sExpBillPhoto4,sTranCode,dExpDate,sRemarks)),
-                                                );
-
-                                              },
-                                              child: Container(
-                                                height: 40,
-                                                color: Colors.grey[300], // Light gray background
-                                                padding: EdgeInsets.symmetric(horizontal: 10), // Padding to give space for the content
-                                                child: const Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align text and icon at the ends
-                                                  children: [
-                                                    Center(
-                                                      child: Text(
-                                                        'Revert', // Centered text
-                                                        style: TextStyle(
-                                                          color: Colors.red, // Text color
-                                                          fontSize: 16, // Adjust font size if needed
+                                                    Spacer(),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius
+                                                            .circular(17),
+                                                        // Border radius of 17
+                                                        border: Border.all(
+                                                            color: Colors.grey,
+                                                            width: 1), // Red border color
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                            '₹ ${leaveData
+                                                                .fAmount}',
+                                                            // Replace with your text
+                                                            style: AppTextStyle
+                                                                .font12OpenSansRegularBlackTextStyle
                                                         ),
                                                       ),
-                                                    ),
-                                                    Icon(
-                                                      Icons.arrow_forward_ios, // iOS forward icon
-                                                      color: Colors.red, // Icon color
-                                                      size: 16, // Adjust icon size if needed
-                                                    ),
+                                                    )
                                                   ],
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(height: 15),
-                                          ],
+                                              SizedBox(height: 15),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 10, right: 10),
+                                                child: Container(
+                                                  color: Colors.grey,
+                                                  height: 1,
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                        width: 20.0,
+                                                        height: 20.0,
+                                                        child: Center(
+                                                            child: Icon(Icons
+                                                                .notes_outlined,
+                                                              size: 16,
+                                                              color: Color(
+                                                                  0xFF0098a6),)
+                                                        )),
+                                                    SizedBox(width: 10),
+                                                    Column(
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .start,
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .start,
+                                                      children: <Widget>[
+                                                        Text('Remark',
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 2,
+                                                          // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
+                                                        ),
+                                                        SizedBox(height: 2),
+                                                        // sRemarks
+                                                        Text(
+                                                          leaveData.sRemarks,
+                                                          // item['sExpHeadName'] ?? '',
+                                                          style: AppTextStyle
+                                                              .font12OpenSansRegularBlackTextStyle,
+                                                          maxLines: 2,
+                                                          // Limits the text to 2 lines
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          // Truncates the text with an ellipsis if it's too long
+                                                          softWrap: true,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Spacer(),
+                                                    Container(
+                                                      height: 25,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .end,
+                                                        children: [
+                                                          Text('Bill Date :',
+                                                              // Replace with your text
+                                                              style: AppTextStyle
+                                                                  .font12OpenSansRegularBlackTextStyle
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('${leaveData
+                                                              .dRemarksAt}',
+                                                              // Replace with your text
+                                                              style: AppTextStyle
+                                                                  .font12OpenSansRegularBlackTextStyle
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                              GestureDetector(
+                                                onTap: () {
+                                                  // Reimbursementrevert
+                                                  /// todo here get a value from a form and send to next activity
+                                                  var sProjectName = leaveData
+                                                      .sProjectName;
+                                                  var sExpHeadName = leaveData
+                                                      .sExpHeadName; // dEntryAt
+                                                  var dEntryAt = leaveData
+                                                      .dEntryAt;
+                                                  var fAmount = leaveData
+                                                      .fAmount;
+                                                  var sExpDetails = leaveData
+                                                      .sExpDetails;
+                                                  var sExpBillPhoto = leaveData
+                                                      .sExpBillPhoto;
+                                                  var sExpBillPhoto2 = leaveData
+                                                      .sExpBillPhoto2;
+                                                  var sExpBillPhoto3 = leaveData
+                                                      .sExpBillPhoto3;
+                                                  var sExpBillPhoto4 = leaveData
+                                                      .sExpBillPhoto4;
+                                                  var sProjectCode = leaveData
+                                                      .sProjectCode;
+                                                  var sExpHeadCode = leaveData
+                                                      .sExpHeadCode;
+                                                  var sTranCode = leaveData
+                                                      .sTranCode;
+                                                  var dExpDate = leaveData
+                                                      .dExpDate;
+                                                  // sRemarks
+                                                  var sRemarks = leaveData
+                                                      .sRemarks;
+
+                                                  print(
+                                                      '--sExpBillPhoto-------$sExpBillPhoto');
+                                                  print(
+                                                      '--sExpBillPhoto2-------$sExpBillPhoto2');
+                                                  print(
+                                                      '--sExpBillPhoto3-------$sExpBillPhoto3');
+                                                  print(
+                                                      '--sExpBillPhoto4-------$sExpBillPhoto4');
+                                                  print(
+                                                      '--sTranCode-----xx--$sTranCode');
+                                                  print(
+                                                      '--dExpDate-------$dExpDate');
+                                                  print(
+                                                      '--sExpHeadName-------$sExpHeadName');
+                                                  //
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            ReimbursementrevertPage(
+                                                                sProjectName,
+                                                                sExpHeadName,
+                                                                dEntryAt,
+                                                                fAmount,
+                                                                sExpDetails,
+                                                                sExpBillPhoto,
+                                                                sProjectCode,
+                                                                sExpHeadCode,
+                                                                sExpBillPhoto2,
+                                                                sExpBillPhoto3,
+                                                                sExpBillPhoto4,
+                                                                sTranCode,
+                                                                dExpDate,
+                                                                sRemarks)),
+                                                  );
+                                                },
+                                                child: Container(
+                                                  height: 40,
+                                                  color: Colors.grey[300],
+                                                  // Light gray background
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                                  // Padding to give space for the content
+                                                  child: const Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .spaceBetween,
+                                                    // Align text and icon at the ends
+                                                    children: [
+                                                      Center(
+                                                        child: Text(
+                                                          'Revert',
+                                                          // Centered text
+                                                          style: TextStyle(
+                                                            color: Colors.red,
+                                                            // Text color
+                                                            fontSize: 16, // Adjust font size if needed
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Icon(
+                                                        Icons.arrow_forward_ios,
+                                                        // iOS forward icon
+                                                        color: Colors.red,
+                                                        // Icon color
+                                                        size: 16, // Adjust icon size if needed
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 15),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-
-                              });
-
-                        }
-
-                    ),
+                                  );
+                                });
+                          }
+                        }),
                   ),
                 ),
 

@@ -443,10 +443,10 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                         return Center(child: CircularProgressIndicator());
                                       } else if (snapshot.hasError) {
                                         // Handle error scenario
-                                        return Center(child: Text('No Data'));
+                                        return Center(child: Text('No data available'));
                                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                         // Handle the case where the data is empty or null
-                                        return Center(child: Text('No Data'));
+                                        return Center(child: Text('No data available'));
                                       }
                                       final polocyDocList = snapshot.data!;    // Access the resolved data
                                       return ListView.builder(

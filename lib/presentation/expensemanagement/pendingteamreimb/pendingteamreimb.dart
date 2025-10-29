@@ -25,7 +25,9 @@ import '../reimbursementStatus/consumableItem.dart';
 import '../reimbursementStatus/reimbursementlog.dart';
 import 'duplicateExpenseEntry.dart';
 
+
 class PendingTeamReimbPage extends StatefulWidget {
+
   const PendingTeamReimbPage({super.key});
 
   @override
@@ -52,6 +54,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   String? toDate;
 
    // DialogBox Code
+
   Dialog showTakeActionDialog(BuildContext context, String sTranCode) {
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -212,6 +215,8 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     var result = "${apprejreim[0]['Result']}";
     var msg = "${apprejreim[0]['Msg']}";
 
+    print("--------218--xxxx--------$msg");
+
     if (result == "1") {
       // close the dialog
       Navigator.pop(context);
@@ -267,7 +272,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
 
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
+                              backgroundColor: Color(0xFF0098a6),
                               // Set the background color to white
                               foregroundColor: Colors.black, // Set the text color to black
                             ),
@@ -489,6 +494,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
     getCurrentdate();
     hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
     shopType();
+    _filteredData = _allData;
 
    // _takeAction = TextEditingController();
     super.initState();
@@ -561,6 +567,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
       setState(() {
         _allData = data; // Store the data
         _filteredData = _allData; // Initially, no filter applied
+        print("-----566---xxxx-----${_filteredData}");
       });
     });
   }
@@ -569,12 +576,10 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
   void filterData(String query) {
     setState(() {
       if (query.isEmpty) {
-        _filteredData = _allData; // Show all data if search query is empty
+        _filteredData = _allData;  // Show all data if search query is empty
       } else {
         _filteredData = _allData.where((item) {
-          return item.sProjectName
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) || // Filter by project name
+          return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
               item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
               item.sEmpName.toLowerCase().contains(query.toLowerCase());
           // Filter by employee name
@@ -582,6 +587,22 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
       }
     });
   }
+  // void filterData(String query) {
+  //   setState(() {
+  //     if (query.isEmpty) {
+  //       _filteredData = _allData; // Show all data if search query is empty
+  //     } else {
+  //       _filteredData = _allData.where((item) {
+  //         return item.sProjectName
+  //                 .toLowerCase()
+  //                 .contains(query.toLowerCase()) || // Filter by project name
+  //             item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
+  //             item.sEmpName.toLowerCase().contains(query.toLowerCase());
+  //         // Filter by employee name
+  //       }).toList();
+  //     }
+  //   });
+  // }
   // currentDate
 
   @override
@@ -638,7 +659,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
           body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-
                 Container(
                   height: 45,
                   color: Color(0xFF2a697b),
@@ -901,155 +921,6 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                   //   ],
                   // ),
                 ),
-
-                // Container(
-                //   height: 45,
-                //   color: Color(0xFF2a697b),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.start,
-                //     children: [
-                //       const SizedBox(width: 4),
-                //       Icon(Icons.calendar_month, size: 15, color: Colors.white),
-                //       const SizedBox(width: 4),
-                //       const Text(
-                //         'From',
-                //         style: TextStyle(
-                //             color: Colors.white,
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.normal),
-                //       ),
-                //       SizedBox(width: 4),
-                //       GestureDetector(
-                //         onTap: () async {
-                //           /// TODO Open Date picke and get a date
-                //           DateTime? pickedDate = await showDatePicker(
-                //             context: context,
-                //             initialDate: DateTime.now(),
-                //             firstDate: DateTime(2000),
-                //             lastDate: DateTime(2100),
-                //           );
-                //           // Check if a date was picked
-                //           if (pickedDate != null) {
-                //             // Format the picked date
-                //             String formattedDate = DateFormat('dd/MMM/yyyy').format(pickedDate);
-                //             // Update the state with the picked date
-                //             setState(() {
-                //               firstOfMonthDay = formattedDate;
-                //                hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             });
-                //
-                //             /// todo call api here to change date to that that is reflect
-                //             ///
-                //             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             // reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                //             //print('--FirstDayOfCurrentMonth----$firstOfMonthDay');
-                //             // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             //print('---formPicker--$firstOfMonthDay');
-                //             // Call API
-                //             //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             // print('---formPicker--$firstOfMonthDay');
-                //
-                //             // Display the selected date as a toast
-                //             //displayToast(dExpDate.toString());
-                //           } else {
-                //             // Handle case where no date was selected
-                //             displayToast("No date selected");
-                //           }
-                //         },
-                //         child: Container(
-                //           height: 35,
-                //           padding: EdgeInsets.symmetric(horizontal: 14.0),
-                //           // Optional: Adjust padding for horizontal space
-                //           decoration: BoxDecoration(
-                //             color: Colors.white,
-                //             // Change this to your preferred color
-                //             borderRadius: BorderRadius.circular(15),
-                //           ),
-                //           child: Center(
-                //             child: Text(
-                //               '$firstOfMonthDay',
-                //               style: TextStyle(
-                //                 color: Colors.grey,
-                //                 // Change this to your preferred text color
-                //                 fontSize: 12.0, // Adjust font size as needed
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //       SizedBox(width: 6),
-                //       Container(
-                //         height: 32,
-                //         width: 32,
-                //         child: Image.asset(
-                //           "assets/images/reimicon_2.png",
-                //           fit: BoxFit
-                //               .contain, // or BoxFit.cover depending on the desired effect
-                //         ),
-                //       ),
-                //       //Icon(Icons.arrow_back_ios,size: 16,color: Colors.white),
-                //       SizedBox(width: 8),
-                //       Icon(Icons.calendar_month, size: 16, color: Colors.white),
-                //       SizedBox(width: 5),
-                //       const Text(
-                //         'To',
-                //         style: TextStyle(
-                //             color: Colors.white,
-                //             fontSize: 12,
-                //             fontWeight: FontWeight.normal),
-                //       ),
-                //       SizedBox(width: 5),
-                //       GestureDetector(
-                //         onTap: () async {
-                //           DateTime? pickedDate = await showDatePicker(
-                //             context: context,
-                //             initialDate: DateTime.now(),
-                //             firstDate: DateTime(2000),
-                //             lastDate: DateTime(2100),
-                //           );
-                //           // Check if a date was picked
-                //           if (pickedDate != null) {
-                //             // Format the picked date
-                //             String formattedDate =
-                //                 DateFormat('dd/MMM/yyyy').format(pickedDate);
-                //             // Update the state with the picked date
-                //             setState(() {
-                //               lastDayOfCurrentMonth = formattedDate;
-                //                hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             });
-                //
-                //             /// todo call api here such that live data reflected
-                //             //hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                //             //reimbursementStatusV3 = Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context, firstOfMonthDay!, lastDayOfCurrentMonth!);
-                //             // print('--LastDayOfCurrentMonth----$lastDayOfCurrentMonth');
-                //           } else {}
-                //         },
-                //         child: Container(
-                //           height: 35,
-                //           padding: EdgeInsets.symmetric(horizontal: 14.0),
-                //           // Optional: Adjust padding for horizontal space
-                //           decoration: BoxDecoration(
-                //             color: Colors.white,
-                //             // Change this to your preferred color
-                //             borderRadius: BorderRadius.circular(15),
-                //           ),
-                //           child: Center(
-                //             child: Text(
-                //               '$lastDayOfCurrentMonth',
-                //               style: TextStyle(
-                //                 color: Colors.grey,
-                //                 // Change this to your preferred text color
-                //                 fontSize: 12.0, // Adjust font size as needed
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-
-
                 SizedBox(height: 10),
                 Center(
                   child: Padding(
@@ -1790,6 +1661,7 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                                                     iStatus = "5"; // Clarification Required
                                                                                                   }
                                                                                                   print('-----167-----$iStatus');
+                                                                                                  _takeAction.clear();
 
                                                                                                   // Validate iStatus and remarks before API call
                                                                                                   if (iStatus == null || iStatus == '') {

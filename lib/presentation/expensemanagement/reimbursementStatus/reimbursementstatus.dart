@@ -92,11 +92,12 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
         _filteredData = _allData;  // Initially, no filter applied
       });
     });
-     // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
+    // reimbursementStatusV3 = (await Hrmsreimbursementstatusv3Repo().hrmsReimbursementStatusList(context,firstOfMonthDay,lastDayOfCurrentMonth)) as Future<List<Hrmsreimbursementstatusv3model>>;
    // _filteredData = List<Map<String, dynamic>>.from(reimbursementStatusList ?? []);
-    print(" -----xxxxx-  reimbursementStatusList--98-----> $reimbursementStatusList");
+    print(" -----xxxxx-  _filteredData--98-----> $_filteredData");
     // setState(() {});
   }
+
   // filter data
   void filterData(String query) {
     setState(() {
@@ -636,14 +637,28 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                       child: FutureBuilder<List<Hrmsreimbursementstatusv3model>>(
                           future: reimbursementStatusV3,
                           builder: (context, snapshot) {
-                            return ListView.builder(
+                            return (_filteredData == null || _filteredData.isEmpty)
+                              ? Center(
+                              child: Text(
+                                "No data available",
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
+                                :
+                            ListView.builder(
                                 // itemCount: snapshot.data!.length ?? 0,
                                 // itemBuilder: (context, index)
                                 itemCount: _filteredData.length?? 0,
                                 itemBuilder: (context, index)
                                 {
+
                                   final leaveData = _filteredData[index];
                                   var sExpHeadCode = leaveData.sExpHeadCode;
+
                                  // Hrmsreimbursementstatusv3model leaveData = snapshot.data![index];
                               return Padding(
                                 padding: const EdgeInsets.only(left: 10, right: 10,top: 10),
