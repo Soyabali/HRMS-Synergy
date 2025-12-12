@@ -16,6 +16,7 @@ import '../presentation/myLeaveStatus/myLeaveStatus.dart';
 import '../presentation/resources/app_text_style.dart';
 import '../presentation/tripList/tripList.dart';
 import '../presentation/tripdetails/tripdetail.dart';
+import 'package:get/get.dart';
 
 
 String? sFirstName;
@@ -90,6 +91,55 @@ class GeneralFunction {
     );
   }
 
+
+  void showFullScreenImageDialog_2(String imageUrl) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.black,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            // zoomable image
+            InteractiveViewer(
+              child: Center(
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Center(
+                      child: Text(
+                        'Failed to load image',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            // close button
+            Positioned(
+              top: 40,
+              right: 20,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 35),
+                onPressed: () => Get.back(),
+              ),
+            ),
+          ],
+        ),
+      ),
+      barrierDismissible: true,
+    );
+  }
+
+
   /// A function that returns a circular widget to display an image from the internet.
   Widget internetImage(String imageUrl, {double size = 80.0, BoxFit fit = BoxFit.cover}) {
     return ClipOval(
@@ -97,8 +147,11 @@ class GeneralFunction {
         onTap: (){
           var image = imageUrl;
           print("-----48-----------$image");
-
           // to Open imageOn a full Screen
+         // showFullScreenImageDialog(context, image);
+          // to open DialogBox
+          showFullScreenImageDialog_2(image);
+
 
         },
         child: Image.network(
@@ -363,16 +416,20 @@ class GeneralFunction {
           DrawerHeader(
             decoration: const BoxDecoration(
               color: Color(0xFF0098a6),
-
             ),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  internetImage(
-                    '$sEmpImage',
-                    fit: BoxFit.cover,
+                  InkWell(
+                    onTap: (){
+                      print("---ImagePath:  $sEmpImage");
+                    },
+                    child: internetImage(
+                      '$sEmpImage',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   // Container(
                   //   width: 80,

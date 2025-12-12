@@ -27,6 +27,7 @@ class _SplashViewState extends State<SplashView> {
   // to check Internet is connected or not
   bool activeConnection = false;
   String T = "";
+  bool prelogin = false;
   StreamSubscription? subscription;
 
   Future checkUserConnection() async {
@@ -59,7 +60,7 @@ class _SplashViewState extends State<SplashView> {
   void displayToast(String msg) {
     Fluttertoast.showToast(
       msg,
-      duration: Duration(seconds: 1),
+      duration: Duration(seconds: 2),
       position: Fluttertoast.ToastPosition.center,
       backgroundColor: Colors.black45,
       textStyle: TextStyle(
@@ -68,7 +69,8 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
-  getLocalDataInfo() async {
+
+   getLocalDataInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // get a stored value
     setState(() {
@@ -94,9 +96,24 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    getLocalDataInfo();
+    print("----splace---------");
+    InternetConnection().onStatusChange.listen((status) {
+      if (status == InternetStatus.connected) {
+        print("Internet Connected → Auto Syncing...");
+       // versionAliCall();
+        handleInternetConnected();
+
+       // _handlePush();   // 🔥 Auto Push / Sync Hive Data
+      } else {
+        // show toast
+        displayToast("Please check your internet connection.");
+      }
+    });
+
+
+   // getLocalDataInfo();
     // check internet connection
-    checkInternetConnection();
+    //checkInternetConnection();
 
 
   }
@@ -123,10 +140,36 @@ class _SplashViewState extends State<SplashView> {
     }
   }
 
+  Future<void> handleInternetConnected() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? sFirstName = prefs.getString('sFirstName');
+
+    // ----------------------------
+    // 1️⃣ USER ALREADY LOGGED IN
+    // ----------------------------
+    if (sFirstName != null && sFirstName.isNotEmpty) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => DashBoard()),
+            (Route<dynamic> route) => false,
+      );
+      return;
+    }
+
+    // --------------------------------
+    // 2️⃣ USER NOT LOGGED IN → CHECK VERSION API
+    // --------------------------------
+    versionAliCall();
+  }
+  //
+
+
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
+    // here to apply logic if user is already login then direct send on  a dashboard
     var loginMap = await AppVersionRepo().appversion(context,'19');  //  16
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
@@ -137,6 +180,7 @@ class _SplashViewState extends State<SplashView> {
          context,
          '/loginScreen',
        );
+
      }else{
       showDialog(context: context,
         builder: (BuildContext context) {
