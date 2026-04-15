@@ -17,7 +17,6 @@ import '../../data/hrmsattendance.dart';
 import '../resources/app_text_style.dart';
 
 class MarkAttendanceScreen extends StatefulWidget {
-
   const MarkAttendanceScreen({super.key});
 
   @override
@@ -25,18 +24,17 @@ class MarkAttendanceScreen extends StatefulWidget {
 }
 
 class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
-
   bool isChecked = false;
   String? timeString = "Loading...";
   Timer? _timer;
 
-   var fullName,sEmpImage,sContactNo,sDsgName,sLocName;
-   var imageurl ;
-  double? lat, long,distanceInMeters;
+  var fullName, sEmpImage, sContactNo, sDsgName, sLocName;
+  var imageurl;
+  double? lat, long, distanceInMeters;
   var locationAddress;
   DateTime? internetTime;
   var timeInternet;
-  double staticLat =  27.20354;
+  double staticLat = 27.20354;
   double staticLng = 78.00586;
   double threshold = 100.00;
   var locationCheck;
@@ -49,17 +47,17 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     return Geolocator.distanceBetween(startLat, startLng, endLat, endLng);
   }
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
-     getLocalDatabaseValue();
-     checkInternetAndGetLocation();
-     _startUpdatingTime();
-     checkLocationService();
+    getLocalDatabaseValue();
+    checkInternetAndGetLocation();
+    _startUpdatingTime();
+    checkLocationService();
     // getCurrentLocationInMeter();
-     // calculate distance
-     super.initState();
-      imageurl = "https://picsum.photos/200";
+    // calculate distance
+    super.initState();
+    imageurl = "https://picsum.photos/200";
   }
 
   // gps is on or off
@@ -70,17 +68,16 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     if (!serviceEnabled) {
       print("🔴 Location services are OFF");
-      locationCheck="Off";
+      locationCheck = "Off";
       print('-----71---$locationCheck');
       // You can prompt user to turn it on
     } else {
       print("🟢 Location services are ON");
-      locationCheck="On";
+      locationCheck = "On";
       print('-----76--OFF---$locationCheck');
       // Safe to proceed with location tasks
     }
   }
-
 
   @override
   void dispose() {
@@ -126,8 +123,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sFirstName = prefs.getString('sFirstName');
     String? sLastName = prefs.getString('sLastName');
-     sLocCode = prefs.getString('sLocCode');
-     print("------128----xx---$sLocCode");
+    sLocCode = prefs.getString('sLocCode');
+    print("------128----xx---$sLocCode");
     // sLocCode
 
     setState(() {
@@ -159,6 +156,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       displayToast("Please connect internet");
     }
   }
+
   // toast function
   void displayToast(String msg) {
     Fluttertoast.showToast(
@@ -172,6 +170,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       ),
     );
   }
+
   // getLocation function
   void getLocation() async {
     showLoader();
@@ -182,9 +181,10 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       hideLoader();
-      displayToast("Location services are disabled. Please enable them in settings.");
+      displayToast(
+          "Location services are disabled. Please enable them in settings.");
       // AppSettings.openLocationSettings(); // Redirect to location settings
-      AppSettings.openAppSettings();// on ios to open a settongs
+      AppSettings.openAppSettings(); // on ios to open a settongs
       return;
     }
     // Check permission status
@@ -200,7 +200,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
 
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      displayToast("Location permission permanently denied. Please enable it in app settings.");
+      displayToast(
+          "Location permission permanently denied. Please enable it in app settings.");
       AppSettings.openAppSettings(); // Redirect to app settings
       return;
     }
@@ -215,7 +216,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       );
 
       Placemark place = placemarks[0];
-      String address = "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
+      String address =
+          "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
 
       // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
 
@@ -234,14 +236,14 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         print('---------210----$lat');
         print('---------211----$long');
         // call a distance metrics.
-         distanceInMeters = calculateDistanceInMeters(
-            staticLat, staticLng, lat!, long!);
+        distanceInMeters =
+            calculateDistanceInMeters(staticLat, staticLng, lat!, long!);
 
         print('-----216---Distance in M---$distanceInMeters');
 
         /// TODO HERE YOU SHOULD NOT CALL A ATTENDACE API YOU SHOULD CAL THIS API
         /// ON A SUBMIT BUTTON
-       // attendaceapi(lat, long, locationAddress);
+        // attendaceapi(lat, long, locationAddress);
       } else {
         displayToast("Please select your location to proceed.");
       }
@@ -252,28 +254,27 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       hideLoader();
     }
   }
+
   /// Attendance repo
   attendaceapi(double? lat, double? long, locationAddress) async {
-    var attendance = await HrmsAttendanceRepo().hrmsattendance(
-        context, lat, long,locationAddress);
+    var attendance = await HrmsAttendanceRepo()
+        .hrmsattendance(context, lat, long, locationAddress);
     print("---Attendace response-----494-----$attendance");
 
     if (attendance != null) {
       var msg = "${attendance[0]['Msg']}";
       var result = "${attendance[0]['Result']}";
-      setState(() {
-
-      });
+      setState(() {});
       // here you should apply logic if result 0 then show info Dialog otherwise show
       // sucess Dialog
-      if(result==0){
+      if (result == 0) {
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return _buildDialogSucces2(context, msg);
           },
         );
-      }else{
+      } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -283,11 +284,11 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       }
       // dialog
       /// todo mark Attendance Success Dialog
-
     } else {
       displayToast("Attendance not confirmed.");
     }
   }
+
   // ---build dialog sucess
   Widget _buildDialogSucces2(BuildContext context, String msg) {
     return Dialog(
@@ -311,10 +312,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Success',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 SingleChildScrollView(
                   child: Text(
@@ -337,11 +336,12 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         // Set the background color to white
-                        foregroundColor: Colors
-                            .black, // Set the text color to black
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok', style: AppTextStyle
-                          .font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -368,6 +368,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       ),
     );
   }
+
   // dialoginfo
   Widget _buildDialogInfo(BuildContext context, String msg) {
     return Dialog(
@@ -391,10 +392,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(height: 0), // Space for the image
-                Text(
-                    'Information',
-                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle
-                ),
+                Text('Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
                 SizedBox(height: 10),
                 SingleChildScrollView(
                   child: Text(
@@ -413,16 +412,16 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         // Set the background color to white
-                        foregroundColor: Colors
-                            .black, // Set the text color to black
+                        foregroundColor:
+                            Colors.black, // Set the text color to black
                       ),
-                      child: Text('Ok', style: AppTextStyle
-                          .font16OpenSansRegularBlackTextStyle),
+                      child: Text('Ok',
+                          style:
+                              AppTextStyle.font16OpenSansRegularBlackTextStyle),
                     ),
                   ],
                 )
@@ -450,54 +449,53 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-    // statusBarColore
-    systemOverlayStyle: SystemUiOverlayStyle(
-    // Status bar color  // 2a697b
-    statusBarColor: Color(0xFF2a697b),
-    // Status bar brightness (optional)
-    statusBarIconBrightness: Brightness.dark,
-    // For Android (dark icons)
-    statusBarBrightness: Brightness.light, // For iOS (dark icons)
-    ),
-    // backgroundColor: Colors.blu
-    backgroundColor: Color(0xFF0098a6),
-    leading: InkWell(
-    onTap: () {
-    // Navigator.pop(context);
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const DashBoard()),
-    );
-    },
-    child: const Padding(
-    padding: EdgeInsets.only(left: 5.0),
-    child: Icon(
-    Icons.arrow_back_ios,
-    size: 24,
-    color: Colors.white,
-    ),
-    ),
-    ),
-    title: const Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.0),
-    child: Text(
-    'Mark Attendance',
-    style: TextStyle(
-    color: Colors.white,
-    fontSize: 18,
-    fontWeight: FontWeight.normal,
-    fontFamily: 'Montserrat',
-    ),
-    textAlign: TextAlign.center,
-    ),
-    ), // Removes shadow under the AppBar
-    ),
+        // statusBarColore
+        systemOverlayStyle: SystemUiOverlayStyle(
+          // Status bar color  // 2a697b
+          statusBarColor: Color(0xFF2a697b),
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark,
+          // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        ),
+        // backgroundColor: Colors.blu
+        backgroundColor: Color(0xFF0098a6),
+        leading: InkWell(
+          onTap: () {
+            // Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const DashBoard()),
+            );
+          },
+          child: const Padding(
+            padding: EdgeInsets.only(left: 5.0),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 24,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        title: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Mark Attendance',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Montserrat',
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ), // Removes shadow under the AppBar
+      ),
       body: SingleChildScrollView(
         //padding: const EdgeInsets.all(16),
         child: Column(
@@ -527,36 +525,38 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 25),
                       child: Column(
-                       // mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                        CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.grey.shade200,
-                        child: ClipOval(
-                          child: Image.network(
-                            sEmpImage ?? '',
-                            width: 60,
-                            height: 60,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/actionOnLeave.jpeg',
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.grey.shade200,
+                            child: ClipOval(
+                              child: Image.network(
+                                sEmpImage ?? '',
                                 width: 60,
                                 height: 60,
                                 fit: BoxFit.cover,
-                              );
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return const SizedBox(
-                                width: 30,
-                                height: 30,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              );
-                            },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/actionOnLeave.jpeg',
+                                    width: 60,
+                                    height: 60,
+                                    fit: BoxFit.cover,
+                                  );
+                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                        ),
                           SizedBox(height: 5),
                           Text(
                             fullName ?? "No name",
@@ -587,7 +587,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Card(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16), // Rounded edges
+                        borderRadius:
+                            BorderRadius.circular(16), // Rounded edges
                       ),
                       elevation: 6,
                       shadowColor: Colors.black26, // Stronger shadow visibility
@@ -627,8 +628,10 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                     ),
                                     const SizedBox(width: 8),
                                     Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           sContactNo ?? "No Contact",
@@ -684,8 +687,10 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             sLocName ?? "No Location",
@@ -715,7 +720,6 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                       ),
                     ),
                   ),
-
                 ),
               ],
             ),
@@ -731,7 +735,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                   height: 70,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(12), // ✅ Same radius as Card
+                    borderRadius:
+                        BorderRadius.circular(12), // ✅ Same radius as Card
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black12,
@@ -785,7 +790,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                               bottomRight: Radius.circular(12),
                             ),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 8),
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: SizedBox(
@@ -817,7 +823,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                   height: 110,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(12), // ✅ Match Card radius
+                    borderRadius:
+                        BorderRadius.circular(12), // ✅ Match Card radius
                     boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
@@ -831,9 +838,9 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                       // 🟩 Left Half - Location Text
                       Expanded(
                         child: Container(
-
-                         // color: Colors.grey,
-                          padding: const EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                          // color: Colors.grey,
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 10, bottom: 10),
                           decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
@@ -855,22 +862,21 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                     ),
                                   ),
                                   SizedBox(width: 4),
-                                  locationCheck =='On'?
-                                  Text(
-                                    '(GPS ON)',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.green,
-                                      fontSize: 14,
-                                    ),
-                                  ):
-                                  Text(
-                                    '(GPS OFF)',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.red,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-
+                                  locationCheck == 'On'
+                                      ? Text(
+                                          '(GPS ON)',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.green,
+                                            fontSize: 14,
+                                          ),
+                                        )
+                                      : Text(
+                                          '(GPS OFF)',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.red,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                 ],
                               ),
                               const SizedBox(height: 2),
@@ -906,7 +912,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                                 bottomRight: Radius.circular(12),
                               ),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: SizedBox(
@@ -928,160 +935,167 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
             ),
             SizedBox(height: 5),
             // 6084110826  agra code
-            sLocCode=="6084110826" ?
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // ✅ Rounded corners
-                ),
-                elevation: 6,
-                shadowColor: Colors.black26, // ✅ Stronger shadow
-                child: Container(
-                  height: 75,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
+            sLocCode == "6084110826"
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(8), // ✅ Rounded corners
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      // 🟩 Left Half
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              bottomLeft: Radius.circular(12),
+                      elevation: 6,
+                      shadowColor: Colors.black26, // ✅ Stronger shadow
+                      child: Container(
+                        height: 75,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
                             ),
-                          ),
-                          padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Agra Smart City Limited',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14,
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            // 🟩 Left Half
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.only(
+                                    left: 10, top: 10, right: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Agra Smart City Limited',
+                                      style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Icon(
+                                          Icons.close,
+                                          size: 20,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 5),
+
+                                        // ✅ Distance Text (Dynamic)
+                                        if (distanceInMeters != null)
+                                          Expanded(
+                                            child: Text(
+                                              distanceInMeters! > threshold
+                                                  ? 'Too far: ${distanceInMeters!.toStringAsFixed(2)} meters'
+                                                  : 'Within range: ${distanceInMeters!.toStringAsFixed(2)} meters',
+                                              style: TextStyle(
+                                                color: distanceInMeters! >
+                                                        threshold
+                                                    ? Colors.red
+                                                    : Colors.green,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          )
+                                        else
+                                          const Text(
+                                            'Calculating distance...',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10),
+                                          ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(height: 5),
+                            ),
 
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Icon(
-                                    Icons.close,
-                                    size: 20,
-                                    color: Colors.red,
+                            // ⬛ Right Half (Image)
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
                                   ),
-                                  const SizedBox(width: 5),
-
-                                  // ✅ Distance Text (Dynamic)
-                                  if (distanceInMeters != null)
-                                    Expanded(
-                                      child: Text(
-                                        distanceInMeters! > threshold
-                                            ? 'Too far: ${distanceInMeters!.toStringAsFixed(2)} meters'
-                                            : 'Within range: ${distanceInMeters!.toStringAsFixed(2)} meters',
-                                        style: TextStyle(
-                                          color: distanceInMeters! > threshold ? Colors.red : Colors.green,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    )
-                                  else
-                                    const Text(
-                                      'Calculating distance...',
-                                      style: TextStyle(color: Colors.grey, fontSize: 10),
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 8),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: SizedBox(
+                                    height: 40,
+                                    width: 40,
+                                    child: Image.asset(
+                                      'assets/images/agralocation.png',
+                                      fit: BoxFit.contain,
                                     ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      // ⬛ Right Half (Image)
-                      Expanded(
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(12),
-                              bottomRight: Radius.circular(12),
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Image.asset(
-                                'assets/images/agralocation.png',
-                                fit: BoxFit.contain,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  )
+                : Container(),
+            SizedBox(height: 5),
+            ElevatedButton(
+              onPressed: () {
+                if (lat != null && long != null) {
+                  hideLoader();
+                  attendaceapi(lat, long, locationAddress);
+                } else {
+                  displayToast("Please select your location to proceed.");
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  Color(0xFF00B3C6), // ✅ Converted hex color with 100% opacity
+                ),
+                foregroundColor: MaterialStateProperty.all(Colors.white),
+                padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                shape: MaterialStateProperty.all(
+                  const StadiumBorder(),
+                ),
+                overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Colors.grey.shade300; // Ripple color on press
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              child: Text(
+                'Submit',
+                style: GoogleFonts.poppins(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             )
-            :Container(),
-            SizedBox(height: 5),
-            ElevatedButton(
-        onPressed: () {
-          if (lat != null && long != null) {
-            hideLoader();
-            attendaceapi(lat, long, locationAddress);
-          } else {
-            displayToast("Please select your location to proceed.");
-          }
-        },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Color(0xFF00B3C6), // ✅ Converted hex color with 100% opacity
-          ),
-          foregroundColor: MaterialStateProperty.all(Colors.white),
-          padding: MaterialStateProperty.all(
-            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-          ),
-          shape: MaterialStateProperty.all(
-            const StadiumBorder(),
-          ),
-          overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
-                return Colors.grey.shade300; // Ripple color on press
-              }
-              return null;
-            },
-          ),
-        ),
-        child: Text(
-          'Submit',
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      )
           ],
         ),
       ),
     );
   }
-
 }

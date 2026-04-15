@@ -50,7 +50,7 @@ class _SplashViewState extends State<SplashView> {
     }
   }
   void _launchGooglePlayStore() async {
-    const url = 'https://play.google.com/store/apps/details?id=com.instagram.android&hl=en_IN&gl=US'; // Replace <YOUR_APP_ID> with your app's package name
+    const url = 'https://apps.apple.com/app/6738343449'; // Replace <YOUR_APP_ID> with your app's package name
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -170,23 +170,27 @@ class _SplashViewState extends State<SplashView> {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
     // here to apply logic if user is already login then direct send on  a dashboard
-    var loginMap = await AppVersionRepo().appversion(context,'19');  //  16
+    var loginMap = await AppVersionRepo().appversion(context,'20');  //  16
+    print("Login map :-----174------$loginMap");
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
-     if(result=="1"){
+     if(msg=="20"){
 
-       Navigator.pushNamed(
-         context,
-         '/loginScreen',
-       );
+       print("--------179---$result");
+       print("--------msg---$msg");
+
+       // Navigator.pushNamed(
+       //   context,
+       //   '/loginScreen',
+       // );
 
      }else{
       showDialog(context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('New Version Available'),
-            content: const Text('Download the latest version of the app from the Play Store.'),
+            content: const Text('Download the latest version of the app from the App Store.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
