@@ -100,7 +100,7 @@ class _SplashViewState extends State<SplashView> {
     InternetConnection().onStatusChange.listen((status) {
       if (status == InternetStatus.connected) {
         print("Internet Connected → Auto Syncing...");
-       // versionAliCall();
+        versionAliCall();
         handleInternetConnected();
 
        // _handlePush();   // 🔥 Auto Push / Sync Hive Data
@@ -180,10 +180,10 @@ class _SplashViewState extends State<SplashView> {
        print("--------179---$result");
        print("--------msg---$msg");
 
-       // Navigator.pushNamed(
-       //   context,
-       //   '/loginScreen',
-       // );
+       Navigator.pushNamed(
+         context,
+         '/loginScreen',
+       );
 
      }else{
       showDialog(context: context,
