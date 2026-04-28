@@ -3,7 +3,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:untitled/presentation/dashboard/dashboard.dart';
 import 'package:untitled/presentation/login/loginScreen.dart';
-
 import '../presentation/resources/theme_manager.dart';
 import '../presentation/splash/splash.dart';
 

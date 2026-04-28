@@ -246,7 +246,7 @@ class GeneralFunction {
     prefs.remove("sMngrContactNo");
     prefs.remove("iIsEligibleShLv");
     prefs.remove("setPin");
-   // prefs.clear();
+    prefs.clear();
     goNext(context);
   }
   // dialogBOX

@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
-
 class AppVersionRepo {
 
   // this is a loginApi call functin

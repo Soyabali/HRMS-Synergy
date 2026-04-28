@@ -100,8 +100,9 @@ class _SplashViewState extends State<SplashView> {
     InternetConnection().onStatusChange.listen((status) {
       if (status == InternetStatus.connected) {
         print("Internet Connected → Auto Syncing...");
-        versionAliCall();
-        handleInternetConnected();
+       // versionAliCall();
+        toFetchCredentail();
+       // handleInternetConnected();
 
        // _handlePush();   // 🔥 Auto Push / Sync Hive Data
       } else {
@@ -163,8 +164,52 @@ class _SplashViewState extends State<SplashView> {
     versionAliCall();
   }
   //
+ /// TODO CREATE A NEW FUNCTION HERE TO CHECK IF CREDENTAL ALREADY STORED THEN dIRECT SEND A dASHBOARD OTHERWISE TO CLASS THE API AGAIN
+  ///
+  //  void toFetchCredentail() async {
+  //         /// to creae a two part first is to check a stored value
+  //        SharedPreferences prefs = await SharedPreferences.getInstance();
+  //         String version = prefs.getString('version') ?? '';
+  //
+  //         // if(version!=null){
+  //         //   print("--------179---$version");
+  //         //   Navigator.pushNamed(
+  //         //     context,
+  //         //     '/loginScreen',
+  //         //   );
+  //         // }
+  //    /// TODO HERE YOU SHOULD check api versions
+  //
+  //  }
+  void toFetchCredentail() async {
+    /// Step 1: Get stored value
+    final prefs = await SharedPreferences.getInstance();
+    String? version = prefs.getString('version');
 
+    /// Step 2: Check value
+    if (version != null && version.isNotEmpty) {
+      // ✅ Version exists → Go to Dashboard
+      print("Version found: $version");
 
+      // Navigator.pushReplacementNamed(
+      //   context,
+      //   '/dashboardScreen',
+      // );
+      print("------197----xxx-----DashBoard-----");
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => DashBoard()),
+            (Route<dynamic> route) => false,
+      );
+
+    } else {
+      // ❌ Version is null or empty → Call API
+      print("Version not found → Call API");
+
+      //callNewVersionApi();
+      versionAliCall();
+    }
+  }
   // version api call
   versionAliCall() async {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
@@ -175,11 +220,20 @@ class _SplashViewState extends State<SplashView> {
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
+    /// TODO FIRST TIME YOU SHOULD STORE A CREDENTIAL STORE
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('version', msg);
+
+    String version = prefs.getString('version') ?? '';
+
+    print("-----197---xxxxxx--$version");
+
      if(msg=="20"){
 
        print("--------179---$result");
        print("--------msg---$msg");
-
+       /// todo here you should check a stored version if version is already store then send a HomeScreen otherwise to send a Login Screen
+       ///
        Navigator.pushNamed(
          context,
          '/loginScreen',
