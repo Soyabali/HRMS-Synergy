@@ -564,7 +564,6 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     showLoader();
     bool serviceEnabled;
     LocationPermission permission;
-
     // Check if location service is enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {

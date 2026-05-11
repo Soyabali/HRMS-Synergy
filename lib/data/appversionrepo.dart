@@ -31,7 +31,7 @@ class AppVersionRepo {
       var map;
       var data = await response.stream.bytesToString();
       map = json.decode(data);
-      print('----------20---version RESPONSE----$map');
+      print('----------34---version RESPONSE----$map');
       if (response.statusCode == 200) {
         hideLoader();
         print('----------22-----$map');

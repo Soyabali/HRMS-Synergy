@@ -317,6 +317,7 @@ class _LoginPageState extends State<LoginPage> {
                                    if(_formKey.currentState!.validate() && phone != null && password != null){
                                      // Call Api
                                              loginMap = await LoginRepo().login(context, phone!, password!);
+                                             print("------320----$loginMap");
                                              result = "${loginMap[0]['Result']}";
                                              msg = "${loginMap[0]['Msg']}";
 
@@ -327,7 +328,10 @@ class _LoginPageState extends State<LoginPage> {
                                        passWordfocus.requestFocus();
                                      }
                                    } // condition to fetch a response form a api
-                                  if(result=="1"){
+                                   if(result =="0"){
+                                     //displayToast(msg);
+                                   }
+                                   if(result=="1"){
                                       var sEmpCode = "${loginMap[0]['sEmpCode']}";
                                       var sCompEmpCode = "${loginMap[0]['sCompEmpCode']}";
                                       var sFirstName = "${loginMap[0]['sFirstName']}";
@@ -363,9 +367,7 @@ class _LoginPageState extends State<LoginPage> {
                                       var iIsEligibleShLv = "${loginMap[0]['iIsEligibleShLv']}";
 
                                       // To store value in  a SharedPreference
-
-                                       prefs = await SharedPreferences.getInstance();
-
+                                      prefs = await SharedPreferences.getInstance();
                                       prefs.setString('sEmpCode',sEmpCode);
                                       prefs.setString('sCompEmpCode',sCompEmpCode);
                                       prefs.setString('sFirstName',sFirstName);

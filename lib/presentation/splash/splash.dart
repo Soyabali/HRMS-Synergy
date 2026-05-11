@@ -7,6 +7,7 @@ import 'package:untitled/presentation/resources/values_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/appversionrepo.dart';
 import '../dashboard/dashboard.dart';
+import '../login/loginScreen.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -96,20 +97,35 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    print("----splace---------");
-    InternetConnection().onStatusChange.listen((status) {
-      if (status == InternetStatus.connected) {
-        print("Internet Connected → Auto Syncing...");
-       // versionAliCall();
-        toFetchCredentail();
-       // handleInternetConnected();
+    versionAliCall();
+    //handleInternetConnected();
+    // Future.delayed(
+    //   const Duration(seconds: 2),
+    //       () {
+    //
+    //     if (!mounted) return;
+    //
+    //     handleInternetConnected();
+    //
+    //   },
+    // );
 
-       // _handlePush();   // 🔥 Auto Push / Sync Hive Data
-      } else {
-        // show toast
-        displayToast("Please check your internet connection.");
-      }
-    });
+    print("----splace---------");
+    // check internet connection
+    //checkInternetConnection();
+    // InternetConnection().onStatusChange.listen((status) {
+    //   if (status == InternetStatus.connected) {
+    //     print("Internet Connected → Auto Syncing...");
+    //     versionAliCall();
+    //    // toFetchCredentail();
+    //
+    //
+    //    // _handlePush();   // 🔥 Auto Push / Sync Hive Data
+    //   } else {
+    //     // show toast
+    //     displayToast("Please check your internet connection.");
+    //   }
+    // });
 
 
    // getLocalDataInfo();
@@ -134,7 +150,8 @@ class _SplashViewState extends State<SplashView> {
     bool isConnected = await InternetConnection().hasInternetAccess;
     if (isConnected) {
      // print("✅ Connected to the Internet");
-      displayToast("✅ Connected to the Internet");
+     // displayToast("✅ Connected to the Internet");
+      versionAliCall();
     } else {
       displayToast("⚠️ Connected to network but no Internet access");
       print("⚠️ Connected to network but no Internet access");
@@ -143,8 +160,9 @@ class _SplashViewState extends State<SplashView> {
 
   Future<void> handleInternetConnected() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     String? sFirstName = prefs.getString('sFirstName');
+
+    print("------149--FirstName------$sFirstName");
 
     // ----------------------------
     // 1️⃣ USER ALREADY LOGGED IN
@@ -156,6 +174,19 @@ class _SplashViewState extends State<SplashView> {
             (Route<dynamic> route) => false,
       );
       return;
+    }
+    else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (_) => LoginScreen(),
+        ),
+            (Route<dynamic> route) => false,
+      );
+      return;
+
+      // OR if you want API call then:
+      // versionAliCall();
     }
 
     // --------------------------------
@@ -207,7 +238,7 @@ class _SplashViewState extends State<SplashView> {
       print("Version not found → Call API");
 
       //callNewVersionApi();
-      versionAliCall();
+     // versionAliCall();
     }
   }
   // version api call
@@ -216,7 +247,7 @@ class _SplashViewState extends State<SplashView> {
     /// HERE YOU PASS variable _appVersion
     // here to apply logic if user is already login then direct send on  a dashboard
     var loginMap = await AppVersionRepo().appversion(context,'20');  //  16
-    print("Login map :-----174------$loginMap");
+    print("Login map :-----235--xxxxx-------$loginMap");
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
      print('----117---$result');
@@ -225,7 +256,6 @@ class _SplashViewState extends State<SplashView> {
     prefs.setString('version', msg);
 
     String version = prefs.getString('version') ?? '';
-
     print("-----197---xxxxxx--$version");
 
      if(msg=="20"){
@@ -234,12 +264,14 @@ class _SplashViewState extends State<SplashView> {
        print("--------msg---$msg");
        /// todo here you should check a stored version if version is already store then send a HomeScreen otherwise to send a Login Screen
        ///
-       Navigator.pushNamed(
-         context,
-         '/loginScreen',
-       );
+       handleInternetConnected();
+       // Navigator.pushNamed(
+       //   context,
+       //   '/loginScreen',
+       // );
 
      }else{
+       print("----version is not match-------");
       showDialog(context: context,
         builder: (BuildContext context) {
           return AlertDialog(

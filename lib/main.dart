@@ -50,7 +50,6 @@ Future<void> _requestPermissions() async {
     // Request location permission
     await Permission.location.request();
   }
-
   // Check the status of camera permission
   var cameraStatus = await Permission.camera.status;
   if (cameraStatus.isDenied || cameraStatus.isPermanentlyDenied) {
