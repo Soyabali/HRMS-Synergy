@@ -97,42 +97,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    versionAliCall();
-    //handleInternetConnected();
-    // Future.delayed(
-    //   const Duration(seconds: 2),
-    //       () {
-    //
-    //     if (!mounted) return;
-    //
-    //     handleInternetConnected();
-    //
-    //   },
-    // );
-
-    print("----splace---------");
-    // check internet connection
-    //checkInternetConnection();
-    // InternetConnection().onStatusChange.listen((status) {
-    //   if (status == InternetStatus.connected) {
-    //     print("Internet Connected → Auto Syncing...");
-    //     versionAliCall();
-    //    // toFetchCredentail();
-    //
-    //
-    //    // _handlePush();   // 🔥 Auto Push / Sync Hive Data
-    //   } else {
-    //     // show toast
-    //     displayToast("Please check your internet connection.");
-    //   }
-    // });
-
-
-   // getLocalDataInfo();
-    // check internet connection
-    //checkInternetConnection();
-
-
+    checkInternetConnection();
   }
   // check internetConnection
 

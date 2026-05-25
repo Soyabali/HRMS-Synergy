@@ -59,9 +59,6 @@ dependencies:
   change_app_package_name: ^1.4.0
   dio: ^5.7.0
   table_calendar: ^3.1.2
-  firebase_core: ^3.4.0
-  firebase_messaging: ^15.1.0
-  flutter_local_notifications: ^18.0.1
   oktoast: ^3.4.0
   geocoding: ^4.0.0
   app_settings: ^6.1.1
@@ -69,6 +66,10 @@ dependencies:
   cached_network_image: ^3.4.0
   internet_connection_checker_plus: ^2.7.2
   get: ^4.7.3
+  lottie: ^3.3.3
+  flutter_animate: ^4.5.2
+  flutter_animated_dialog: ^2.0.1
+  readmore: ^3.0.0
 
 
 dev_dependencies:

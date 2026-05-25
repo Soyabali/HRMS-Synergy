@@ -14,7 +14,6 @@ import 'dart:convert';
 import '../resources/app_text_style.dart';
 import 'dart:io';
 
-
 class WorkDetail extends StatelessWidget {
   const WorkDetail({super.key});
 

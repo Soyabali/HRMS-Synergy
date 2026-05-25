@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,11 +22,12 @@ import '../resources/app_text_style.dart';
 import '../setpin/setpin.dart';
 import '../userquery/userQuery.dart';
 import '../workdetail/workdetail.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:app_settings/app_settings.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+
+import '../workdetail/workdetail_new.dart';
 
 class DashBoard extends StatelessWidget {
   const DashBoard({super.key});
@@ -691,71 +691,71 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
   // firebase get token code---
 
-  void setupPushNotifications() async {
-    final fcm = FirebaseMessaging.instance;
-    await fcm.requestPermission();
-    token = await fcm.getToken();
-    print("🔥 Firebase Messaging Instance Info:");
-    print("📌 Token:----550----xxx $token");
-
-    NotificationSettings settings = await fcm.getNotificationSettings();
-    print("🔔 Notification Permissions:");
-    print("  - Authorization Status: ${settings.authorizationStatus}");
-    print("  - Alert: ${settings.alert}");
-    print("  - Sound: ${settings.sound}");
-    print("  - Badge: ${settings.badge}");
-
-    // ✅ Ensure notifications play default sound
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("📩 New foreground notification received!");
-      print("📦 Data Payload----563---xx--: ${message.data}");
-      if (message.notification != null) {
-        _showNotification(message.notification!);
-      }
-    });
-
-    if (token != null && token!.isNotEmpty) {
-      notificationResponse(token);
-    } else {
-      print("🚨 No Token Received!");
-    }
-  }
+  // void setupPushNotifications() async {
+  //   final fcm = FirebaseMessaging.instance;
+  //   await fcm.requestPermission();
+  //   token = await fcm.getToken();
+  //   print("🔥 Firebase Messaging Instance Info:");
+  //   print("📌 Token:----550----xxx $token");
+  //
+  //   NotificationSettings settings = await fcm.getNotificationSettings();
+  //   print("🔔 Notification Permissions:");
+  //   print("  - Authorization Status: ${settings.authorizationStatus}");
+  //   print("  - Alert: ${settings.alert}");
+  //   print("  - Sound: ${settings.sound}");
+  //   print("  - Badge: ${settings.badge}");
+  //
+  //   // ✅ Ensure notifications play default sound
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     print("📩 New foreground notification received!");
+  //     print("📦 Data Payload----563---xx--: ${message.data}");
+  //     if (message.notification != null) {
+  //       _showNotification(message.notification!);
+  //     }
+  //   });
+  //
+  //   if (token != null && token!.isNotEmpty) {
+  //     notificationResponse(token);
+  //   } else {
+  //     print("🚨 No Token Received!");
+  //   }
+  // }
 
 // ✅ Show Notification with Default Sound
-  void _showNotification(RemoteNotification notification) async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      'default_channel',
-      'Default Notifications',
-      importance: Importance.high,
-      priority: Priority.high,
-      playSound: true, // 🔊 Ensure sound is enabled
-    );
-
-    const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
-      presentSound: true, // 🔊 Enable sound for iOS
-    );
-
-    const NotificationDetails details = NotificationDetails(
-      android: androidDetails,
-      iOS: iosDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0, // Notification ID
-      notification.title,
-      notification.body,
-      details,
-    );
-  }
+//   void _showNotification(RemoteNotification notification) async {
+//     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
+//
+//     const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+//       'default_channel',
+//       'Default Notifications',
+//       importance: Importance.high,
+//       priority: Priority.high,
+//       playSound: true, // 🔊 Ensure sound is enabled
+//     );
+//
+//     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
+//       presentSound: true, // 🔊 Enable sound for iOS
+//     );
+//
+//     const NotificationDetails details = NotificationDetails(
+//       android: androidDetails,
+//       iOS: iosDetails,
+//     );
+//
+//     await flutterLocalNotificationsPlugin.show(
+//       0, // Notification ID
+//       notification.title,
+//       notification.body,
+//       details,
+//     );
+//   }
 
   notificationResponse(token) async {
    var   Notiresponse = await HrmsUpdateGsmidIosRepo().updateGsmidIos(context,token);
    print("-----517---notification Response----$Notiresponse");
-
   }
+
   // get a packageVersion
   Future<void> getAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -770,23 +770,23 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
     // TODO: implement initState
      isInternetAvailable();
      getLocalDataInfo();
-     setupPushNotifications();
+     //setupPushNotifications();
      getAppVersion();
      super.initState();
      // firebase foreground msg
-     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-       // Handle the foreground notification here
-       print("Received message:---530-- ${message.notification?.title}");
-       // You can show a dialog or display the notification in the UI
-       // dialog
-       showDialog(
-         context: context,
-         builder: (_) => AlertDialog(
-           title: Text(message.notification?.title ?? 'New Notification',style:AppTextStyle.font12OpenSansRegularBlackTextStyle),
-           content: Text(message.notification?.body ?? 'You have a new message',style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
-         ),
-       );
-     });
+     // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+     //   // Handle the foreground notification here
+     //   print("Received message:---530-- ${message.notification?.title}");
+     //   // You can show a dialog or display the notification in the UI
+     //   // dialog
+     //   showDialog(
+     //     context: context,
+     //     builder: (_) => AlertDialog(
+     //       title: Text(message.notification?.title ?? 'New Notification',style:AppTextStyle.font12OpenSansRegularBlackTextStyle),
+     //       content: Text(message.notification?.body ?? 'You have a new message',style: AppTextStyle.font12OpenSansRegularBlackTextStyle),
+     //     ),
+     //   );
+     // });
   }
 
   @override
@@ -1482,11 +1482,20 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                           GestureDetector(
                             onTap: (){
 
+                              /// todo here you coment old screen in a future its may on
+
                               Navigator.pushAndRemoveUntil(
                                 context,
-                                MaterialPageRoute(builder: (context) => WorkDetail()),
+                                MaterialPageRoute(builder: (context) => WorkDetailNew()),
                                     (Route<dynamic> route) => false, // Remove all previous routes
                               );
+
+
+                              // Navigator.pushAndRemoveUntil(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => WorkDetail()),
+                              //       (Route<dynamic> route) => false, // Remove all previous routes
+                              // );
                               // Navigator.pushReplacement(
                               //   context,
                               //   MaterialPageRoute(builder: (context) => WorkDetail()),
