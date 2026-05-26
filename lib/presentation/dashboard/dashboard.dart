@@ -976,9 +976,7 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
                                 context,
                                 MaterialPageRoute(builder: (context) => const MarkAttendanceScreen()),
                               );
-
-
-                            },
+                              },
                             child: Container(
                               height: 85.0,
                               decoration: BoxDecoration(
@@ -1484,10 +1482,14 @@ class _DashBoardHomePageState extends State<DashBoardHomePage> {
 
                               /// todo here you coment old screen in a future its may on
 
-                              Navigator.pushAndRemoveUntil(
+                              // Navigator.pushAndRemoveUntil(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => WorkDetailNew()),
+                              //       (Route<dynamic> route) => false, // Remove all previous routes
+                              // );
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(builder: (context) => WorkDetailNew()),
-                                    (Route<dynamic> route) => false, // Remove all previous routes
                               );
 
 

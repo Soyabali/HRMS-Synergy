@@ -34,7 +34,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'baseurl.dart';
-
+import 'loader_helper.dart';
 
 class ProjectRepo
 {
@@ -51,9 +51,7 @@ class ProjectRepo
     var endPoint = "hrmsprojectlist/hrmsprojectlist";
     var projectList = "$baseURL$endPoint";
     print('------------17---loginApi---$projectList');
-
-    //showLoader();
-
+    showLoader();
     try
     {
       var headers = {
@@ -69,6 +67,7 @@ class ProjectRepo
 
       if (response.statusCode == 200)
       {
+        hideLoader();
         var data = await response.stream.bytesToString();
         //print('--74---xxx---${jsonDecode(data)}');
        // Map<String, dynamic> parsedJson = jsonDecode(data);
@@ -78,10 +77,12 @@ class ProjectRepo
         return distList;
       } else
       {
+        hideLoader();
         return distList;
       }
     } catch (e)
     {
+      hideLoader();
       throw (e);
     }
   }

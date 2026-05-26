@@ -1,5 +1,12 @@
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
+import '../../data/district_repo.dart';
+import '../../data/hrmsDailyActivityNewRepo.dart';
+import '../dashboard/dashboard.dart';
+import '../resources/app_text_style.dart';
 
 class WorkDetailNew extends StatefulWidget {
   const WorkDetailNew({super.key});
@@ -18,252 +25,418 @@ class _DailyWorkStatusScreenState
 
   final TextEditingController timeSpentController =
   TextEditingController();
+  List<dynamic>?  baseProjectList;
+  List<dynamic> distList = [];
+  var _dropDownSector;
+  final sectorFocus = GlobalKey();
+  var _selectedProjectCode;
 
   /// DROPDOWN
   String? selectedProject;
 
-  final List<String> projects = [
-    "HRMS Project",
-    "Visitor Management",
-    "Employee Tracker",
-  ];
+  // project API Call
+  @override
+  void initState() {
+    updateProject();
+    super.initState();
+  }
+
+
+  updateProject() async {
+    distList = await ProjectRepo().projectList();
+    print(" -----xxxxx-  projectList--46---> $distList");
+    setState(() {});
+  }
+  // update Project DreopDown
+  Widget _bindProject() {
+    return Container(
+      height: 52,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          //color: Colors.grey.shade400, // SAME OUTLINE
+           color: Color(0xFF12B8C6),
+          width: 1,
+        ),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          isExpanded: true,
+          value: _dropDownSector,
+          hint: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              "Select Project",
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 15,
+              ),
+            ),
+          ),
+
+          icon: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Icon(Icons.keyboard_arrow_down),
+          ),
+
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+
+          onChanged: (newValue) {
+            setState(() {
+              _dropDownSector = newValue;
+
+              distList.forEach((element) {
+                if (element["sProjectName"] == _dropDownSector) {
+                  _selectedProjectCode = element['sProjectCode'];
+                }
+              });
+              print("--------94-----projectCODE--$_selectedProjectCode");
+
+            });
+          },
+
+          items: distList.map<DropdownMenuItem<String>>((dynamic item) {
+            return DropdownMenuItem<String>(
+              value: item["sProjectName"].toString(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  item['sProjectName'].toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+  // widget
+  Widget buildPlatformImageCard({
+    required String imagePath,
+    double height = 150,
+  }) {
+    return Container(
+      height: height,
+      width: double.infinity,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: Platform.isIOS
+            ? CupertinoColors.white
+            : Colors.white,
+      ),
+      child: Image.asset(
+        imagePath,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      ),
+    );
+  }
+  // here you take TextFormField as a plaform
+
 
   @override
   Widget build(BuildContext context) {
 
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
 
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF12B8C6),
-        elevation: 0,
-        centerTitle: true,
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+       // backgroundColor: const Color(0xFFF7F9FC),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF12B8C6),
+          elevation: 0,
+          centerTitle: true,
 
-        title: const Text(
-          'Daily Work Status',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-
-          children: [
-
-            /// ====================================
-            /// TOP IMAGE
-            /// ====================================
-
-            Container(
-              height: 220,
-              width: double.infinity,
+          title: const Text(
+            'Daily Work Status',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
               color: Colors.white,
-
-              child: Image.asset(
-                'assets/images/workstatus3.jpeg',
-                fit: BoxFit.cover,
-              ),
             ),
+          ),
 
-            const SizedBox(height: 14),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            ),
+            onPressed: () {
+             // Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DashBoard()),
+              );
+            },
+          ),
+        ),
 
-            /// ====================================
-            /// FORM CARD
-            /// ====================================
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
+              /// ====================================
+              /// TOP IMAGE
+              /// ====================================
 
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(28),
+              buildPlatformImageCard(
+                imagePath: 'assets/images/workstatus3.jpeg',
+              ),
+              const SizedBox(height: 0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
 
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(.05),
-                      blurRadius: 20,
-                      offset: const Offset(0, 8),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(.05),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+
+                  child: Column(
+                    children: [
+                      /// PROJECT NAME
+                      buildInputRow(
+                        icon: Icons.work_outline_rounded,
+                        title: "Project Name",
+                        child: _bindProject()
+                      ),
+                      const SizedBox(height: 10),
+                      /// WORK DETAIL
+                      buildInputRow(
+                        icon: Icons.file_copy_outlined,
+                        title: "Work Detail",
+                        child: TextFormField(
+                          controller: workDetailController,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: null,
+                          decoration: inputDecoration(
+                            'Enter work detail',
+                          ),
+                        )
+                      ),
+                      const SizedBox(height: 10),
+                      /// TIME SPENT
+                      buildInputRow(
+                        icon: Icons.watch_later_rounded,
+                        title: "Time Spent (Minutes)",
+                        child: TextFormField(
+                          controller: timeSpentController,
+                          keyboardType: TextInputType.multiline,
+                          minLines: 1,
+                          maxLines: null,
+                          decoration: inputDecoration(
+                            'Enter Minutes',
+                          ),
+                        )
+                      ),
+                     // const SizedBox(height: 10),
+                      /// SUBMIT BUTTON
+                      SizedBox(
+                        width: size.width * .55,
+                        height: 45,
+
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                            const Color(0xFF12B8C6),
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(40),
+                            ),
+                            elevation: 3,
+                          ),
+                          onPressed: () async {
+
+                            print("-------xxxx----");
+
+                            var projectCode = _selectedProjectCode;
+                            var workDetail = workDetailController.text.trim();
+                            var timeSpent = timeSpentController.text.trim();
+
+                            print("-------projectCode--------$projectCode");
+                            print("-------workDetail--------$workDetail");
+                            print("-------timeSpent--------$timeSpent");
+
+                            /// PROJECT VALIDATION
+                            if (projectCode == null || projectCode.toString().isEmpty) {
+
+                              // Fluttertoast.showToast(
+                              //   msg: "Please select a project",
+                              // );
+                              displayToast("Please select a project");
+
+                              return;
+                            }
+
+                            /// WORK DETAIL VALIDATION
+                            if (workDetail.isEmpty) {
+
+                              // Fluttertoast.showToast(
+                              //   msg: "Please enter work detail",
+                              // );
+                              displayToast("Please enter work detail");
+
+                              return;
+                            }
+
+                            /// TIME SPENT VALIDATION
+                            if (timeSpent.isEmpty) {
+
+                              displayToast("Please enter time spent");
+                              // Fluttertoast.showToast(
+                              //   msg: "Please enter time spent",
+                              // );
+
+                              return;
+                            }
+                            /// ALL VALIDATION SUCCESS
+                            print("All fields are valid");
+
+                            /// TODO API CALL
+                            var map = await HrmsDailyActivityNew()
+                                .hrmsDailyActivityNew(context,projectCode,workDetail,timeSpent);
+                            print("-------Daily Activity Response--------");
+                            print(map);
+                            var result = int.parse(map[0]['Result'].toString()); //map[0]['Result'];
+                            var message = map[0]['Msg'];
+                            print("-----result-------$result");
+                            print("-----message-------$message");
+                            if(result==1){
+                              // sucess DIalog
+                             // _buildDialogSucces2(context,message);
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    _buildDialogSucces2(context, message),
+                              );
+
+                            }else{
+                              // info Dialog
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    _buildDialogInfo(context, message),
+                              );
+                            }
+
+                            },
+                          // onPressed: () async{
+                          //   print("-------xxxx----");
+                          //   var projectCode = _selectedProjectCode;
+                          //   var workDetail = workDetailController.text;
+                          //   var timeSpent = timeSpentController.text;
+                          //
+                          //   print("-------xxxxx------projectCode--------$projectCode");
+                          //   print("-------xxxxx------workDetail--------$workDetail");
+                          //   print("-------xxxxx------timeSpent--------$timeSpent");
+                          //
+                          //
+                          //   /// todo here uncomment api hit code
+                          //   ///
+                          //   // to call a api
+                          //   // var map = await HrmsDailyActivityNew().hrmsDailyActivityNew(context);
+                          //   // print("-------xxxxx------283----Daily Activity--------");
+                          //   // print(map);
+                          //
+                          //
+                          //
+                          // },
+
+                          child: const Text(
+                            "Submit",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              /// ====================================
+              /// TODAY STATUS TITLE
+              /// ====================================
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children:[
+                    Container(
+                      margin: const EdgeInsets.only(
+                          left: 0, right: 10, top: 10),
+                      child: Image.asset(
+                        'assets/images/ic_expense.png',
+                        // Replace with your image asset path
+                        width: 24,
+                        height: 24,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      "Today's Work Status",
+                      style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(height: 10),
 
-                child: Column(
-                  children: [
-                    /// PROJECT NAME
-                    buildInputRow(
-                      icon: Icons.work_outline_rounded,
-                      title: "Project Name",
-                      child: DropdownButtonFormField<String>(
-                        value: selectedProject,
-                        isExpanded: true,
+              /// ====================================
+              /// HORIZONTAL LIST
+              /// ====================================
 
-                        decoration:
-                        inputDecoration('Select Project'),
+              Container(
+                color: Colors.white,
+                child: SizedBox(
+                  height: 290,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
 
-                        icon: const Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                        ),
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16),
 
-                        items: projects.map((item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
+                    itemCount: 5,
 
-                        onChanged: (value) {
-                          setState(() {
-                            selectedProject = value;
-                          });
-                        },
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// WORK DETAIL
-                    buildInputRow(
-                      icon: Icons.file_copy_outlined,
-                      title: "Work Detail",
-
-                      child: TextFormField(
-                        controller: workDetailController,
-
-                        decoration:
-                        inputDecoration('Enter work detail'),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    /// TIME SPENT
-                    buildInputRow(
-                      icon: Icons.watch_later_rounded,
-                      title: "Time Spent (Minutes)",
-
-                      child: TextFormField(
-                        controller: timeSpentController,
-                        keyboardType: TextInputType.number,
-
-                        decoration:
-                        inputDecoration('Enter minutes'),
-                      ),
-                    ),
-
-                    const SizedBox(height: 26),
-
-                    /// SUBMIT BUTTON
-                    SizedBox(
-                      width: size.width * .55,
-                      height: 52,
-
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                          const Color(0xFF12B8C6),
-
-                          shape: RoundedRectangleBorder(
-                            borderRadius:
-                            BorderRadius.circular(40),
-                          ),
-
-                          elevation: 3,
-                        ),
-
-                        onPressed: () {},
-
-                        child: const Text(
-                          "Submit",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+                    itemBuilder: (context, index) {
+                      return taskCard();
+                    },
+                  ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 28),
-
-            /// ====================================
-            /// TODAY STATUS TITLE
-            /// ====================================
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-
-              child: Row(
-                children: const [
-
-                  Icon(
-                    Icons.widgets_rounded,
-                    color: Color(0xFF12B8C6),
-                    size: 28,
-                  ),
-
-                  SizedBox(width: 10),
-
-                  Text(
-                    "Today's Work Status",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF1E293B),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 18),
-
-            /// ====================================
-            /// HORIZONTAL LIST
-            /// ====================================
-
-            SizedBox(
-              height: 290,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-
-                padding:
-                const EdgeInsets.symmetric(horizontal: 16),
-
-                itemCount: 5,
-
-                itemBuilder: (context, index) {
-                  return taskCard();
-                },
-              ),
-            ),
-
-            const SizedBox(height: 20),
-          ],
+              const SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );
@@ -278,53 +451,68 @@ class _DailyWorkStatusScreenState
     required String title,
     required Widget child,
   }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final bool isIOS = Platform.isIOS;
 
-      children: [
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: isIOS ? 10 : 8,
+        horizontal: isIOS ? 2 : 0,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+           Padding(
+             padding: const EdgeInsets.only(top: 27),
+             child: Container(
+               height: 45,
+               width: 45,
+               child: Center(
+                 child: Icon(icon,
+                  color: Color(0xFF12B8C6),
+                  size: 25,
+                 ),
+               ),
+             ),
+           ),
 
-        /// ICON BOX
-        Container(
-          height: 65,
-          width: 65,
+          SizedBox(width: isIOS ? 5 : 6),
+          /// TEXT + FIELD SECTION
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// TITLE
+                Text(
+                  title,
+                  style: Platform.isIOS
 
-          decoration: BoxDecoration(
-            color: const Color(0xFFF2FCFD),
-            borderRadius: BorderRadius.circular(18),
-          ),
+                  /// IOS STYLE
+                      ? const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.3,
+                    height: 1.3,
+                    //color: Color(0xFF1E2230),
+                    color: Colors.black
+                  )
 
-          child: Icon(
-            icon,
-            color: const Color(0xFF12B8C6),
-            size: 30,
-          ),
-        ),
-
-        const SizedBox(width: 14),
-
-        /// INPUT FIELD
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF1E2230),
+                  /// ANDROID MATERIAL STYLE
+                      : const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.1,
+                    height: 1.4,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-
-              const SizedBox(height: 10),
-
-              child,
-            ],
+                SizedBox(height: isIOS ? 10 : 8),
+                /// INPUT CHILD
+                child,
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -340,12 +528,12 @@ class _DailyWorkStatusScreenState
       fillColor: Colors.white,
 
       contentPadding: const EdgeInsets.symmetric(
-        horizontal: 18,
-        vertical: 16,
+        horizontal: 4,
+        vertical: 5,
       ),
 
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(4),
 
         borderSide: BorderSide(
           color: Colors.grey.shade300,
@@ -371,11 +559,12 @@ class _DailyWorkStatusScreenState
 
     return Container(
       width: 340,
+      color: Colors.white,
       margin: const EdgeInsets.only(right: 14, bottom: 10),
 
       child: Card(
         elevation: 5,
-        shadowColor: Colors.black12,
+        //shadowColor: Colors.black12,
 
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
@@ -384,709 +573,367 @@ class _DailyWorkStatusScreenState
         child: Padding(
           padding: const EdgeInsets.all(16),
 
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Container(
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                /// TOP HEADER
+                Row(
+                  children: [
+                    /// IMAGE BOX
+                    Container(
+                      height: 50,
+                      width: 50,
+                      //color: Colors.white,
 
-            children: [
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF2FCFD),
+                        borderRadius: BorderRadius.circular(18),
 
-              /// TOP HEADER
-              Row(
-                children: [
+                        border: Border.all(
+                          color: const Color(0xFF12B8C6)
+                              .withOpacity(.25),
+                        ),
+                      ),
 
-                  /// IMAGE BOX
-                  Container(
-                    height: 72,
-                    width: 72,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
 
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFF2FCFD),
-                      borderRadius: BorderRadius.circular(18),
-
-                      border: Border.all(
-                        color: const Color(0xFF12B8C6)
-                            .withOpacity(.25),
+                        child: Image.asset(
+                          'assets/images/tripicon.jpeg',
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
 
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
+                    const SizedBox(width: 10),
 
-                      child: Image.asset(
-                        'assets/images/appicon.jpeg',
-                        fit: BoxFit.contain,
+                    /// TITLE
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children:[
+
+                          Text(
+                            'Head Office',
+                            style: Platform.isIOS
+
+                            /// IOS STYLE
+                                ? const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: -0.3,
+                                height: 1.3,
+                                //color: Color(0xFF1E2230),
+                                color: Colors.black
+                            )
+
+                            /// ANDROID MATERIAL STYLE
+                                : const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.1,
+                              height: 1.4,
+                              color: Colors.black,
+                            ),
+                          ),
+
+                          SizedBox(height: 6),
+
+                          Text(
+                            "Project Name",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+
+                            // style: TextStyle(
+                            //   fontSize: 14,
+                            //   color: Colors.black54,
+                            // ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
+                  ],
+                ),
+                Divider(
+                  color: Colors.grey.shade200,
+                  thickness: 1,
+                ),
 
-                  const SizedBox(width: 14),
+                const SizedBox(height: 10),
 
-                  /// TITLE
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
+                /// TASK DETAIL ROW
+                Row(
+                  children: [
 
-                      children: const [
+                    Expanded(
+                      child: Row(
+                        children:[
 
-                        Text(
-                          "Head Office",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF1E293B),
-                          ),
-                        ),
-
-                        SizedBox(height: 6),
-
-                        Text(
-                          "Project Name",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-
-                          style: TextStyle(
-                            fontSize: 14,
+                          Icon(
+                            Icons.menu_open_rounded,
+                            size: 20,
                             color: Colors.black54,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
 
-              const SizedBox(height: 18),
+                          SizedBox(width: 6),
 
-              Divider(
-                color: Colors.grey.shade200,
-                thickness: 1,
-              ),
-
-              const SizedBox(height: 12),
-
-              /// TASK DETAIL ROW
-              Row(
-                children: [
-
-                  Expanded(
-                    child: Row(
-                      children: const [
-
-                        Icon(
-                          Icons.menu_open_rounded,
-                          size: 20,
-                          color: Colors.black54,
-                        ),
-
-                        SizedBox(width: 6),
-
-                        Text(
-                          "Task Details",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black54,
+                          Text(
+                            "Task Details",
+                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  /// TIME CONTAINER
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
+                        ],
+                      ),
                     ),
 
-                    decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(.08),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
+                    /// TIME CONTAINER
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
 
-                    child: Row(
-                      children: const [
+                      decoration: BoxDecoration(
+                        color: Colors.red.withOpacity(.08),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
 
-                        Icon(
-                          Icons.watch_later_rounded,
-                          size: 16,
-                          color: Colors.red,
-                        ),
+                      child: Row(
+                        children: const [
 
-                        SizedBox(width: 5),
-
-                        Text(
-                          "2 Hr 30 Min",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
+                          Icon(
+                            Icons.watch_later_rounded,
+                            size: 16,
                             color: Colors.red,
                           ),
-                        ),
-                      ],
+
+                          SizedBox(width: 5),
+
+                          Text(
+                            "2 Hr 30 Min",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 10),
 
-              /// DESCRIPTION
-              Expanded(
-                child: ReadMoreText(
-                  '''
+                /// DESCRIPTION
+                Expanded(
+                  child: ReadMoreText(
+                    '''
 Testing of VMS design test case, maintain test cases in excel sheet, perform black box testing and regression testing for daily workflow and reporting.
                   ''',
 
-                  trimLines: 3,
-                  trimMode: TrimMode.Line,
+                    trimLines: 3,
+                    trimMode: TrimMode.Line,
 
-                  trimCollapsedText: ' Read More',
-                  trimExpandedText: ' Read Less',
+                    trimCollapsedText: ' Read More',
+                    trimExpandedText: ' Read Less',
 
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.6,
-                    color: Color(0xFF5B6475),
-                  ),
+                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
 
-                  moreStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF12B8C6),
-                  ),
+                    moreStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF12B8C6),
+                    ),
 
-                  lessStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.red,
+                    lessStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.red,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
+  void displayToast(String msg) {
+    Fluttertoast.showToast(
+      msg,
+      duration: Duration(seconds: 1),
+      position: Fluttertoast.ToastPosition.center,
+      backgroundColor: Colors.black45,
+      textStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 16.0,
+      ),
+    );
+  }
+  // Sucess and info Dialog
 
-// import 'package:flutter/material.dart';
-// import 'package:flutter_animate/flutter_animate.dart';
-// import 'package:lottie/lottie.dart';
-// import 'package:readmore/readmore.dart';
-//
-// class WorkDetailNew extends StatefulWidget {
-//   const WorkDetailNew({super.key});
-//
-//   @override
-//   State<WorkDetailNew> createState() => _DailyWorkStatusScreenState();
-// }
-//
-// class _DailyWorkStatusScreenState extends State<WorkDetailNew> with SingleTickerProviderStateMixin {
-//
-//   late final AnimationController _controller;
-//
-//   final List<String> projects = [
-//     'Project Alpha',
-//     'Project Beta',
-//     'Project Gamma',
-//     'Project Delta',
-//   ];
-//
-//   String? selectedProject;
-//   final TextEditingController workDetailController = TextEditingController();
-//   final TextEditingController timeSpentController = TextEditingController();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     selectedProject = projects.first;
-//     _controller = AnimationController(
-//       vsync: this,
-//       duration: const Duration(seconds: 2),
-//     )..repeat(reverse: true);
-//   }
-//
-//   @override
-//   void dispose() {
-//     workDetailController.dispose();
-//     timeSpentController.dispose();
-//     _controller.dispose();
-//     super.dispose();
-//   }
-//
-//   InputDecoration _inputDecoration(String hint) {
-//     return InputDecoration(
-//       hintText: hint,
-//       contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-//       border: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(18),
-//         borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 1.2),
-//       ),
-//       enabledBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(18),
-//         borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 1.2),
-//       ),
-//       focusedBorder: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(18),
-//         borderSide: const BorderSide(color: Color(0xFF12B8C6), width: 1.5),
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final size = MediaQuery.of(context).size;
-//
-//     return Scaffold(
-//       backgroundColor: const Color(0xFFF7F9FC),
-//       appBar: AppBar(
-//         backgroundColor: const Color(0xFF12B8C6),
-//         elevation: 0,
-//         centerTitle: true,
-//         title: const Text(
-//           'Daily Work Status',
-//           style: TextStyle(
-//             fontSize: 22,
-//             fontWeight: FontWeight.w500,
-//             color: Colors.white,
-//           ),
-//         ),
-//         leading: IconButton(
-//           icon: const Icon(Icons.arrow_back, color: Colors.white),
-//           onPressed: () => Navigator.pop(context),
-//         ),
-//       ),
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Container(
-//             height: 200,
-//             width: double.infinity,
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(16),
-//             ),
-//             clipBehavior: Clip.antiAlias,
-//             child: Image.asset(
-//               'assets/images/workstatus3.jpeg',
-//               fit: BoxFit.cover,
-//             ),
-//           ),
-//           SizedBox(height: 10),
-//           SizedBox(
-//             height: size.height * 0.44,
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 16),
-//               child: Container(
-//                 width: double.infinity,
-//                 padding: const EdgeInsets.all(20),
-//                 decoration: BoxDecoration(
-//                   color: Colors.white,
-//                   borderRadius: BorderRadius.circular(28),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.black.withOpacity(0.08),
-//                       blurRadius: 20,
-//                       offset: const Offset(0, 8),
-//                     ),
-//                   ],
-//                   border: Border.all(
-//                     color: const Color(0xFFE8EEF5),
-//                     width: 1,
-//                   ),
-//                 ),
-//                 child: Column(
-//                   children: [
-//                     Row(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         Padding(
-//                           padding: const EdgeInsets.only(top: 39),
-//                           child: Icon(
-//                             Icons.work_outline_rounded,
-//                             size: 35,
-//                             color: const Color(0xFF12B8C6),
-//                           ),
-//                         ),
-//                         // Padding(
-//                         //   padding: const EdgeInsets.only(top: 12),
-//                         //   child: _projectHeader(),
-//                         // ),
-//                         const SizedBox(width: 14),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             mainAxisSize: MainAxisSize.min,
-//                             children: [
-//                               const Text(
-//                                 'Project Name',
-//                                 style: TextStyle(
-//                                   fontSize: 16,
-//                                   fontWeight: FontWeight.w600,
-//                                   color: Color(0xFF1E2230),
-//                                 ),
-//                               ),
-//                               const SizedBox(height: 10),
-//                               DropdownButtonFormField<String>(
-//                                 value: selectedProject,
-//                                 isExpanded: true,
-//                                 decoration: _inputDecoration('Select Project'),
-//                                 icon: const Icon(Icons.keyboard_arrow_down_rounded),
-//                                 items: projects
-//                                     .map(
-//                                       (item) => DropdownMenuItem<String>(
-//                                     value: item,
-//                                     child: Text(item),
-//                                   ),
-//                                 )
-//                                     .toList(),
-//                                 onChanged: (value) {
-//                                   setState(() {
-//                                     selectedProject = value;
-//                                   });
-//                                 },
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(height: 10),
-//                     Row(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         Padding(
-//                           padding: const EdgeInsets.only(top: 39),
-//                           child: Icon(
-//                             Icons.file_copy,
-//                             size: 35,
-//                             color: const Color(0xFF12B8C6),
-//                           ),
-//                         ),
-//                         // Padding(
-//                         //   padding: const EdgeInsets.only(top: 12),
-//                         //   child: _projectHeaderWork(),
-//                         // ),
-//                         const SizedBox(width: 14),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             mainAxisSize: MainAxisSize.min,
-//                             children: [
-//                               const Text(
-//                                 'Work Detail',
-//                                 style: TextStyle(
-//                                   fontSize: 16,
-//                                   fontWeight: FontWeight.w600,
-//                                   color: Color(0xFF1E2230),
-//                                 ),
-//                               ),
-//                               const SizedBox(height: 10),
-//                               TextFormField(
-//                                 controller: workDetailController,
-//                                 decoration: _inputDecoration('Enter work detail'),
-//                                 maxLines: 1,
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(height: 10),
-//                     Row(
-//                       crossAxisAlignment: CrossAxisAlignment.center,
-//                       children: [
-//                         Padding(
-//                           padding: const EdgeInsets.only(top: 39),
-//                           child: Icon(
-//                             Icons.watch_later_rounded,
-//                             size: 35,
-//                             color: const Color(0xFF12B8C6),
-//                           ),
-//                         ),
-//                         // Padding(
-//                         //   padding: const EdgeInsets.only(top: 12),
-//                         //   child: _projectHeaderTime(),
-//                         // ),
-//                         const SizedBox(width: 14),
-//                         Expanded(
-//                           child: Column(
-//                             crossAxisAlignment: CrossAxisAlignment.start,
-//                             mainAxisSize: MainAxisSize.min,
-//                             children: [
-//                               const Text(
-//                                 'Time Spent (Minutes)',
-//                                 style: TextStyle(
-//                                   fontSize: 16,
-//                                   fontWeight: FontWeight.w600,
-//                                   color: Color(0xFF1E2230),
-//                                 ),
-//                               ),
-//                               const SizedBox(height: 10),
-//                               TextFormField(
-//                                 controller: timeSpentController,
-//                                 keyboardType: TextInputType.number,
-//                                 decoration: _inputDecoration('Enter minutes'),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                     const SizedBox(height: 10),
-//                     Center(
-//                       child: ElevatedButton(
-//                         style: ElevatedButton.styleFrom(
-//                           backgroundColor: const Color(0xFF12B8C6),
-//                         ),
-//                         onPressed: () {},
-//                         child: const Text(
-//                           'Submit',
-//                           style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: 14,
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//           SizedBox(height: 0),
-//           Expanded(
-//             child: Container(
-//               color: Colors.grey,
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//                 children: [
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     children: [
-//                       Icon(Icons.widgets,color: Color(0xFF12B8C6),
-//                       size:35,
-//                       ),
-//                       SizedBox(width: 14),
-//                       Text("Today Work's Status",style: TextStyle(
-//                         color: Colors.black45,
-//                         fontSize: 22
-//                       ),)
-//                     ],
-//                   ),
-//                   SizedBox(height: 10),
-//                   // ListView.builder(
-//                   //   scrollDirection: Axis.horizontal,
-//                   //   itemCount: 2,
-//                   //   itemBuilder: (context, index) {
-//                   //     return taskCard();
-//                   //   },
-//                   // ),
-//                  // ListView.builder(
-//                  //      scrollDirection: Axis.horizontal,
-//                  //      itemCount: 2,
-//                  //      itemBuilder: (context, index) {
-//                  //        return taskCard();
-//                  //      },
-//                  //    ),
-//                 ],
-//               ),
-//             ),
-//           )
-//         ],
-//       )
-//     );
-//   }
-//   // list card
-//   /// CARD FUNCTION
-//   Widget taskCard() {
-//     return Container(
-//       width: 320,
-//       margin: const EdgeInsets.symmetric(horizontal: 12),
-//
-//       child: Card(
-//         elevation: 4,
-//         shadowColor: Colors.black12,
-//
-//         shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(20),
-//         ),
-//
-//         child: Padding(
-//           padding: const EdgeInsets.all(12),
-//
-//           child: Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//
-//             children: [
-//
-//               /// TOP ROW
-//               Row(
-//                 mainAxisAlignment: MainAxisAlignment.start,
-//
-//                 children: [
-//                   Container(
-//                     height: 65,
-//                     width: 65,
-//                     margin: const EdgeInsets.all(8),
-//
-//                     decoration: BoxDecoration(
-//                       color: Colors.white,
-//                       borderRadius: BorderRadius.circular(16),
-//
-//                       border: Border.all(
-//                         color: const Color(0xFF12B8C6),
-//                         width: 1,
-//                       ),
-//                     ),
-//
-//                     child: Center(
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(10),
-//
-//                         child: Image.asset(
-//                           'assets/images/appicon.jpeg',
-//                           fit: BoxFit.contain,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//
-//                   const SizedBox(width: 10),
-//
-//                   Column(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//
-//                     children: const [
-//                       Text(
-//                         "Head Office",
-//                         style: TextStyle(
-//                           color: Colors.black87,
-//                           fontSize: 18,
-//                           fontWeight: FontWeight.w600,
-//                         ),
-//                       ),
-//
-//                       SizedBox(height: 5),
-//
-//                       Text(
-//                         "Project Name",
-//                         style: TextStyle(
-//                           color: Colors.black45,
-//                           fontSize: 14,
-//                         ),
-//                       ),
-//                     ],
-//                   )
-//                 ],
-//               ),
-//
-//               const SizedBox(height: 10),
-//
-//               /// SECOND ROW
-//               Padding(
-//                 padding: const EdgeInsets.all(8.0),
-//
-//                 child: Row(
-//                   children: [
-//
-//                     /// LEFT SIDE
-//                     Row(
-//                       children: const [
-//                         Icon(
-//                           Icons.menu_open_rounded,
-//                           size: 20,
-//                           color: Colors.black45,
-//                         ),
-//
-//                         SizedBox(width: 5),
-//
-//                         Text(
-//                           "Task Details",
-//                           style: TextStyle(
-//                             color: Colors.black45,
-//                             fontSize: 14,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//
-//                     const Spacer(),
-//
-//                     /// RIGHT SIDE
-//                     Row(
-//                       children: const [
-//                         Icon(
-//                           Icons.watch_later_rounded,
-//                           size: 20,
-//                           color: Colors.red,
-//                         ),
-//
-//                         SizedBox(width: 5),
-//
-//                         Text(
-//                           "Pending",
-//                           style: TextStyle(
-//                             color: Colors.red,
-//                             fontSize: 14,
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//
-//               const SizedBox(height: 10),
-//
-//               /// DESCRIPTION
-//               Expanded(
-//                 child: Padding(
-//                   padding: const EdgeInsets.all(16.0),
-//
-//                   child: ReadMoreText(
-//                     '''
-// Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-// Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
-//
-// It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-//                     ''',
-//
-//                     trimLines: 3,
-//                     trimMode: TrimMode.Line,
-//
-//                     trimCollapsedText: ' Read More',
-//                     trimExpandedText: ' Read Less',
-//
-//                     moreStyle: const TextStyle(
-//                       fontSize: 14,
-//                       fontWeight: FontWeight.bold,
-//                       color: Color(0xFF12B8C6),
-//                     ),
-//
-//                     lessStyle: const TextStyle(
-//                       fontSize: 14,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.red,
-//                     ),
-//
-//                     style: const TextStyle(
-//                       fontSize: 15,
-//                       height: 1.5,
-//                       color: Colors.black87,
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
+  // ---build dialog sucess
+  Widget _buildDialogSucces2(BuildContext context, String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 210,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text('Success',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                SizedBox(height: 10),
+                SingleChildScrollView(
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.justify, // Justify the text
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor:
+                        Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',
+                          style:
+                          AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/sussess.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // dialoginfo
+  Widget _buildDialogInfo(BuildContext context, String msg) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            height: 210,
+            padding: EdgeInsets.fromLTRB(20, 45, 20, 20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 0), // Space for the image
+                Text('Information',
+                    style: AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                SizedBox(height: 10),
+                SingleChildScrollView(
+                  child: Text(
+                    msg,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[600],
+                    ),
+                    textAlign: TextAlign.justify, // Justify the text
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        // Set the background color to white
+                        foregroundColor:
+                        Colors.black, // Set the text color to black
+                      ),
+                      child: Text('Ok',
+                          style:
+                          AppTextStyle.font16OpenSansRegularBlackTextStyle),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            top: -30, // Position the image at the top center
+            child: CircleAvatar(
+              radius: 30,
+              backgroundColor: Colors.blueAccent,
+              child: ClipOval(
+                child: Image.asset(
+                  'assets/images/information.jpeg',
+                  // Replace with your asset image path
+                  fit: BoxFit.cover,
+                  width: 60,
+                  height: 60,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
