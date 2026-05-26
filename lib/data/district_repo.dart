@@ -59,9 +59,6 @@ class ProjectRepo
         'Content-Type': 'application/json'
       };
       var request = http.Request('GET', Uri.parse('$projectList'));
-      // request.body = json.encode({
-      //   "iUserId": "$iUserId"
-      // });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
 
@@ -69,10 +66,6 @@ class ProjectRepo
       {
         hideLoader();
         var data = await response.stream.bytesToString();
-        //print('--74---xxx---${jsonDecode(data)}');
-       // Map<String, dynamic> parsedJson = jsonDecode(data);
-        //distList = parsedJson['Data'];
-       // distList = jsonDecode(data);
         List<dynamic> distList = jsonDecode(data);
         return distList;
       } else

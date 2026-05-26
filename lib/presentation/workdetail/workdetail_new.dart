@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
 import '../../data/district_repo.dart';
+import '../../data/hrmsActivityListRepo.dart';
 import '../../data/hrmsDailyActivityNewRepo.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
@@ -30,6 +31,9 @@ class _DailyWorkStatusScreenState
   var _dropDownSector;
   final sectorFocus = GlobalKey();
   var _selectedProjectCode;
+  List<dynamic> activityList = [];
+
+  bool isLoading = false;
 
   /// DROPDOWN
   String? selectedProject;
@@ -38,15 +42,46 @@ class _DailyWorkStatusScreenState
   @override
   void initState() {
     updateProject();
+    hrmsActivityList();
     super.initState();
   }
 
+  // HrmsActivityList
+  //   void hrmsActivityList() async {
+  //     var map = await HrmsActivityList()
+  //         .hrmsActivityList(context);
+  //     print("--------50------HRMS Daily Activity--------");
+  //     print(map);
+  // }
+
+  void hrmsActivityList() async {
+
+    setState(() {
+      isLoading = true;
+    });
+
+    var map = await HrmsActivityList()
+        .hrmsActivityList(context);
+
+    print("--------50------HRMS Daily Activity--------");
+    print(map);
+
+    setState(() {
+
+      activityList = map ?? [];
+
+      isLoading = false;
+    });
+  }
+
+  // Project List API Call
 
   updateProject() async {
     distList = await ProjectRepo().projectList();
     print(" -----xxxxx-  projectList--46---> $distList");
     setState(() {});
   }
+
   // update Project DreopDown
   Widget _bindProject() {
     return Container(
@@ -285,10 +320,6 @@ class _DailyWorkStatusScreenState
 
                             /// PROJECT VALIDATION
                             if (projectCode == null || projectCode.toString().isEmpty) {
-
-                              // Fluttertoast.showToast(
-                              //   msg: "Please select a project",
-                              // );
                               displayToast("Please select a project");
 
                               return;
@@ -297,11 +328,7 @@ class _DailyWorkStatusScreenState
                             /// WORK DETAIL VALIDATION
                             if (workDetail.isEmpty) {
 
-                              // Fluttertoast.showToast(
-                              //   msg: "Please enter work detail",
-                              // );
                               displayToast("Please enter work detail");
-
                               return;
                             }
 
@@ -309,9 +336,6 @@ class _DailyWorkStatusScreenState
                             if (timeSpent.isEmpty) {
 
                               displayToast("Please enter time spent");
-                              // Fluttertoast.showToast(
-                              //   msg: "Please enter time spent",
-                              // );
 
                               return;
                             }
@@ -328,8 +352,8 @@ class _DailyWorkStatusScreenState
                             print("-----result-------$result");
                             print("-----message-------$message");
                             if(result==1){
-                              // sucess DIalog
-                             // _buildDialogSucces2(context,message);
+                              // call Daily Activity list
+                             hrmsActivityList();
                               showDialog(
                                 context: context,
                                 builder: (context) =>
@@ -344,30 +368,7 @@ class _DailyWorkStatusScreenState
                                     _buildDialogInfo(context, message),
                               );
                             }
-
                             },
-                          // onPressed: () async{
-                          //   print("-------xxxx----");
-                          //   var projectCode = _selectedProjectCode;
-                          //   var workDetail = workDetailController.text;
-                          //   var timeSpent = timeSpentController.text;
-                          //
-                          //   print("-------xxxxx------projectCode--------$projectCode");
-                          //   print("-------xxxxx------workDetail--------$workDetail");
-                          //   print("-------xxxxx------timeSpent--------$timeSpent");
-                          //
-                          //
-                          //   /// todo here uncomment api hit code
-                          //   ///
-                          //   // to call a api
-                          //   // var map = await HrmsDailyActivityNew().hrmsDailyActivityNew(context);
-                          //   // print("-------xxxxx------283----Daily Activity--------");
-                          //   // print(map);
-                          //
-                          //
-                          //
-                          // },
-
                           child: const Text(
                             "Submit",
                             style: TextStyle(
@@ -414,25 +415,64 @@ class _DailyWorkStatusScreenState
               /// HORIZONTAL LIST
               /// ====================================
 
-              Container(
+              isLoading
+                  ? const SizedBox(
+                height: 290,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+
+                  : activityList.isEmpty
+
+                  ? Container()
+
+                  : Container(
                 color: Colors.white,
+
                 child: SizedBox(
                   height: 290,
+
                   child: ListView.builder(
+
                     scrollDirection: Axis.horizontal,
+
                     physics: const BouncingScrollPhysics(),
 
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
 
-                    itemCount: 5,
+                    itemCount: activityList.length,
 
                     itemBuilder: (context, index) {
-                      return taskCard();
+
+                      var item = activityList[index];
+
+                      return taskCard(item);
                     },
                   ),
                 ),
               ),
+              // Container(
+              //   color: Colors.white,
+              //   child: SizedBox(
+              //     height: 290,
+              //     child: ListView.builder(
+              //       scrollDirection: Axis.horizontal,
+              //       physics: const BouncingScrollPhysics(),
+              //
+              //       padding:
+              //       const EdgeInsets.symmetric(horizontal: 16),
+              //
+              //       itemCount: 5,
+              //
+              //       itemBuilder: (context, index) {
+              //         return taskCard();
+              //       },
+              //     ),
+              //   ),
+              // ),
 
               const SizedBox(height: 10),
             ],
@@ -555,7 +595,7 @@ class _DailyWorkStatusScreenState
   /// TASK CARD
   /// ====================================
 
-  Widget taskCard() {
+  Widget taskCard(item) {
 
     return Container(
       width: 340,
@@ -617,7 +657,7 @@ class _DailyWorkStatusScreenState
                         children:[
 
                           Text(
-                            'Head Office',
+                            item['sProject'] ?? "",
                             style: Platform.isIOS
 
                             /// IOS STYLE
@@ -702,7 +742,7 @@ class _DailyWorkStatusScreenState
                       ),
 
                       child: Row(
-                        children: const [
+                        children: [
 
                           Icon(
                             Icons.watch_later_rounded,
@@ -713,7 +753,7 @@ class _DailyWorkStatusScreenState
                           SizedBox(width: 5),
 
                           Text(
-                            "2 Hr 30 Min",
+                            item['WorkingHrs'] ?? "",
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
@@ -731,9 +771,7 @@ class _DailyWorkStatusScreenState
                 /// DESCRIPTION
                 Expanded(
                   child: ReadMoreText(
-                    '''
-Testing of VMS design test case, maintain test cases in excel sheet, perform black box testing and regression testing for daily workflow and reporting.
-                  ''',
+                    item['Activity'] ?? "",
 
                     trimLines: 3,
                     trimMode: TrimMode.Line,
@@ -752,7 +790,7 @@ Testing of VMS design test case, maintain test cases in excel sheet, perform bla
                     lessStyle: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                      color: Colors.red,
+                      color: Color(0xFF12B8C6),
                     ),
                   ),
                 ),
