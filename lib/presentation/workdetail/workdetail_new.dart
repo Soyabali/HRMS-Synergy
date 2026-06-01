@@ -1,13 +1,16 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
 import '../../data/district_repo.dart';
 import '../../data/hrmsActivityListRepo.dart';
 import '../../data/hrmsDailyActivityNewRepo.dart';
+import '../../data/projectemploybase.dart';
 import '../dashboard/dashboard.dart';
 import '../resources/app_text_style.dart';
+import 'package:intl/intl.dart';
 
 class WorkDetailNew extends StatefulWidget {
   const WorkDetailNew({super.key});
@@ -32,6 +35,7 @@ class _DailyWorkStatusScreenState
   final sectorFocus = GlobalKey();
   var _selectedProjectCode;
   List<dynamic> activityList = [];
+  String currentDate = "";
 
   bool isLoading = false;
 
@@ -43,17 +47,13 @@ class _DailyWorkStatusScreenState
   void initState() {
     updateProject();
     hrmsActivityList();
+    currentDate =
+        DateFormat('dd-MMM-yyyy')
+            .format(DateTime.now());
+
+    print(currentDate);
     super.initState();
   }
-
-  // HrmsActivityList
-  //   void hrmsActivityList() async {
-  //     var map = await HrmsActivityList()
-  //         .hrmsActivityList(context);
-  //     print("--------50------HRMS Daily Activity--------");
-  //     print(map);
-  // }
-
   void hrmsActivityList() async {
 
     setState(() {
@@ -77,8 +77,8 @@ class _DailyWorkStatusScreenState
   // Project List API Call
 
   updateProject() async {
-    distList = await ProjectRepo().projectList();
-    print(" -----xxxxx-  projectList--46---> $distList");
+    distList = await ProjectEmployRepo().projectList();
+    print(" -----xxxxx-  projectList--81---> $distList");
     setState(() {});
   }
 
@@ -235,151 +235,171 @@ class _DailyWorkStatusScreenState
               const SizedBox(height: 0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
+                child: Card(
+                  elevation: 5,
 
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(.05),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
 
-                  child: Column(
-                    children: [
-                      /// PROJECT NAME
-                      buildInputRow(
-                        icon: Icons.work_outline_rounded,
-                        title: "Project Name",
-                        child: _bindProject()
-                      ),
-                      const SizedBox(height: 10),
-                      /// WORK DETAIL
-                      buildInputRow(
-                        icon: Icons.file_copy_outlined,
-                        title: "Work Detail",
-                        child: TextFormField(
-                          controller: workDetailController,
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          maxLines: null,
-                          decoration: inputDecoration(
-                            'Enter work detail',
-                          ),
-                        )
-                      ),
-                      const SizedBox(height: 10),
-                      /// TIME SPENT
-                      buildInputRow(
-                        icon: Icons.watch_later_rounded,
-                        title: "Time Spent (Minutes)",
-                        child: TextFormField(
-                          controller: timeSpentController,
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          maxLines: null,
-                          decoration: inputDecoration(
-                            'Enter Minutes',
-                          ),
-                        )
-                      ),
-                     // const SizedBox(height: 10),
-                      /// SUBMIT BUTTON
-                      SizedBox(
-                        width: size.width * .55,
-                        height: 45,
+                  child: Container(
+                    width: double.infinity,
 
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                            const Color(0xFF12B8C6),
+                    padding: const EdgeInsets.all(10),
 
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.circular(40),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+
+                    child: Column(
+                      children: [
+                        /// PROJECT NAME
+                        buildInputRow(
+                            icon: Icons.work_outline_rounded,
+                            title: "Project Name",
+                            child: _bindProject()
+                        ),
+                        const SizedBox(height: 10),
+                        /// WORK DETAIL
+                        buildInputRow(
+                            icon: Icons.file_copy_outlined,
+                            title: "Work Detail",
+                            child: TextFormField(
+                              controller: workDetailController,
+                              keyboardType: TextInputType.multiline,
+                              minLines: 1,
+                              maxLines: null,
+                              decoration: inputDecoration(
+                                'Enter work detail',
+                              ),
+                            )
+                        ),
+                        const SizedBox(height: 10),
+                        /// TIME SPENT
+                        buildInputRow(
+                            icon: Icons.watch_later_rounded,
+                            title: "Time Spent (Minutes)",
+                            child: TextFormField(
+                              controller: timeSpentController,
+
+                              keyboardType: TextInputType.number,
+
+                              inputFormatters: [
+
+                                /// ONLY INTEGER
+                                FilteringTextInputFormatter.digitsOnly,
+
+                                /// MAX 3 DIGITS
+                                LengthLimitingTextInputFormatter(3),
+                              ],
+
+                              decoration: inputDecoration(
+                                'Enter Minutes',
+                              ),
+                            )
+                          // child: TextFormField(
+                          //   controller: timeSpentController,
+                          //   keyboardType: TextInputType.multiline,
+                          //   minLines: 1,
+                          //   maxLines: null,
+                          //   decoration: inputDecoration(
+                          //     'Enter Minutes',
+                          //   ),
+                          // )
+                        ),
+                        // const SizedBox(height: 10),
+                        /// SUBMIT BUTTON
+                        SizedBox(
+                          width: size.width * .55,
+                          height: 45,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                              const Color(0xFF12B8C6),
+
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(40),
+                              ),
+                              elevation: 3,
                             ),
-                            elevation: 3,
-                          ),
-                          onPressed: () async {
+                            onPressed: () async {
 
-                            print("-------xxxx----");
+                              print("-------xxxx----");
 
-                            var projectCode = _selectedProjectCode;
-                            var workDetail = workDetailController.text.trim();
-                            var timeSpent = timeSpentController.text.trim();
+                              var projectCode = _selectedProjectCode;
+                              var workDetail = workDetailController.text.trim();
+                              var timeSpent = timeSpentController.text.trim();
 
-                            print("-------projectCode--------$projectCode");
-                            print("-------workDetail--------$workDetail");
-                            print("-------timeSpent--------$timeSpent");
+                              print("-------projectCode--------$projectCode");
+                              print("-------workDetail--------$workDetail");
+                              print("-------timeSpent--------$timeSpent");
 
-                            /// PROJECT VALIDATION
-                            if (projectCode == null || projectCode.toString().isEmpty) {
-                              displayToast("Please select a project");
+                              /// PROJECT VALIDATION
+                              if (projectCode == null || projectCode.toString().isEmpty) {
+                                displayToast("Please select a project");
 
-                              return;
-                            }
+                                return;
+                              }
 
-                            /// WORK DETAIL VALIDATION
-                            if (workDetail.isEmpty) {
+                              /// WORK DETAIL VALIDATION
+                              if (workDetail.isEmpty) {
 
-                              displayToast("Please enter work detail");
-                              return;
-                            }
+                                displayToast("Please enter work detail");
+                                return;
+                              }
 
-                            /// TIME SPENT VALIDATION
-                            if (timeSpent.isEmpty) {
+                              /// TIME SPENT VALIDATION
+                              if (timeSpent.isEmpty) {
 
-                              displayToast("Please enter time spent");
+                                displayToast("Please enter time spent");
 
-                              return;
-                            }
-                            /// ALL VALIDATION SUCCESS
-                            print("All fields are valid");
+                                return;
+                              }
+                              /// ALL VALIDATION SUCCESS
+                              print("All fields are valid");
 
-                            /// TODO API CALL
-                            var map = await HrmsDailyActivityNew()
-                                .hrmsDailyActivityNew(context,projectCode,workDetail,timeSpent);
-                            print("-------Daily Activity Response--------");
-                            print(map);
-                            var result = int.parse(map[0]['Result'].toString()); //map[0]['Result'];
-                            var message = map[0]['Msg'];
-                            print("-----result-------$result");
-                            print("-----message-------$message");
-                            if(result==1){
-                              // call Daily Activity list
-                             hrmsActivityList();
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    _buildDialogSucces2(context, message),
-                              );
+                              /// TODO API CALL
+                              var map = await HrmsDailyActivityNew()
+                                  .hrmsDailyActivityNew(context,projectCode,workDetail,timeSpent);
+                              print("-------Daily Activity Response--------");
+                              print(map);
+                              var result = int.parse(map[0]['Result'].toString()); //map[0]['Result'];
+                              var message = map[0]['Msg'];
+                              print("-----result-------$result");
+                              print("-----message-------$message");
+                              if(result==1){
+                                // call Daily Activity list
+                                hrmsActivityList();
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      _buildDialogSucces2(context, message),
+                                );
 
-                            }else{
-                              // info Dialog
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    _buildDialogInfo(context, message),
-                              );
-                            }
+                              }else{
+                                // info Dialog
+                                showDialog(
+                                  context: context,
+                                  builder: (context) =>
+                                      _buildDialogInfo(context, message),
+                                );
+                              }
                             },
-                          child: const Text(
-                            "Submit",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
+                            child: const Text(
+                              "Submit",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -387,8 +407,21 @@ class _DailyWorkStatusScreenState
               /// ====================================
               /// TODAY STATUS TITLE
               /// ====================================
+              isLoading
+                  ? SizedBox(
+                height: 320,
+                child: Container(),
+                // child: Center(
+                //   child: CircularProgressIndicator(),
+                // ),
+              )
+
+                  : activityList.isEmpty
+
+                  ? Container()
+              :
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Row(
                   children:[
                     Container(
@@ -402,22 +435,31 @@ class _DailyWorkStatusScreenState
                       ),
                     ),
                     SizedBox(width: 10),
-                    Text(
-                      "Today's Work Status",
-                      style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
-                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Today's Work Status",
+                          style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                        ),
+                        SizedBox(height: 5),
+                        Text('$currentDate',style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF12B8C6),
+                        ),)
+                      ],
+                    )
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-
               /// ====================================
               /// HORIZONTAL LIST
               /// ====================================
 
               isLoading
                   ? const SizedBox(
-                height: 290,
+                height: 320,
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
@@ -426,54 +468,77 @@ class _DailyWorkStatusScreenState
                   : activityList.isEmpty
 
                   ? Container()
+                 : Card(
+                elevation: 5,
 
-                  : Container(
                 color: Colors.white,
 
-                child: SizedBox(
-                  height: 290,
+                margin: const EdgeInsets.all(10),
 
-                  child: ListView.builder(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
 
-                    scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
 
-                    physics: const BouncingScrollPhysics(),
+                  child: Container(
+                    color: Colors.white,
 
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                    child: SizedBox(
+                      height: 260,
+
+                      child: ListView.builder(
+
+                        scrollDirection: Axis.horizontal,
+
+                        physics: const BouncingScrollPhysics(),
+
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
+
+                        itemCount: activityList.length,
+
+                        itemBuilder: (context, index) {
+
+                          var item = activityList[index];
+
+                          return taskCard(item);
+                        },
+                      ),
                     ),
-
-                    itemCount: activityList.length,
-
-                    itemBuilder: (context, index) {
-
-                      var item = activityList[index];
-
-                      return taskCard(item);
-                    },
                   ),
                 ),
               ),
-              // Container(
-              //   color: Colors.white,
+
+              //     : Container(
+              //    color: Colors.white,
+              //
               //   child: SizedBox(
               //     height: 290,
+              //
               //     child: ListView.builder(
+              //
               //       scrollDirection: Axis.horizontal,
+              //
               //       physics: const BouncingScrollPhysics(),
               //
-              //       padding:
-              //       const EdgeInsets.symmetric(horizontal: 16),
+              //       padding: const EdgeInsets.symmetric(
+              //         horizontal: 16,
+              //       ),
               //
-              //       itemCount: 5,
+              //       itemCount: activityList.length,
               //
               //       itemBuilder: (context, index) {
-              //         return taskCard();
+              //
+              //         var item = activityList[index];
+              //
+              //         return taskCard(item);
               //       },
               //     ),
               //   ),
               // ),
-
               const SizedBox(height: 10),
             ],
           ),
@@ -506,13 +571,30 @@ class _DailyWorkStatusScreenState
              child: Container(
                height: 45,
                width: 45,
+
+               decoration: BoxDecoration(
+                 color: const Color(0xFF12B8C6).withOpacity(0.10),
+                 borderRadius: BorderRadius.circular(12),
+               ),
+
                child: Center(
-                 child: Icon(icon,
-                  color: Color(0xFF12B8C6),
-                  size: 25,
+                 child: Icon(
+                   icon,
+                   color: const Color(0xFF12B8C6),
+                   size: 25,
                  ),
                ),
              ),
+             // child: Container(
+             //   height: 45,
+             //   width: 45,
+             //   child: Center(
+             //     child: Icon(icon,
+             //      color: Color(0xFF12B8C6),
+             //      size: 25,
+             //     ),
+             //   ),
+             // ),
            ),
 
           SizedBox(width: isIOS ? 5 : 6),
@@ -594,213 +676,249 @@ class _DailyWorkStatusScreenState
   /// ====================================
   /// TASK CARD
   /// ====================================
-
   Widget taskCard(item) {
 
     return Container(
       width: 340,
-      color: Colors.white,
-      margin: const EdgeInsets.only(right: 14, bottom: 10),
+
+      margin: const EdgeInsets.only(
+        right: 14,
+        bottom: 10,
+      ),
 
       child: Card(
-        elevation: 5,
-        //shadowColor: Colors.black12,
+
+        color: Colors.white, // TOTAL WHITE
+
+        elevation: 3,
+
+        shadowColor: Colors.black12,
+
+        margin: EdgeInsets.zero,
 
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(16),
         ),
 
         child: Padding(
           padding: const EdgeInsets.all(16),
 
-          child: Container(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /// TOP HEADER
-                Row(
-                  children: [
-                    /// IMAGE BOX
-                    Container(
-                      height: 50,
-                      width: 50,
-                      //color: Colors.white,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            children: [
+
+              /// TOP HEADER
+              Row(
+                children: [
+
+                  /// IMAGE BOX
+                  Padding(
+                    padding: const EdgeInsets.only(top: 27),
+                    child: Container(
+                      height: 45,
+                      width: 45,
 
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF2FCFD),
-                        borderRadius: BorderRadius.circular(18),
-
-                        border: Border.all(
-                          color: const Color(0xFF12B8C6)
-                              .withOpacity(.25),
-                        ),
+                        color: const Color(0xFF12B8C6).withOpacity(0.10),
+                        borderRadius: BorderRadius.circular(12),
                       ),
 
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-
-                        child: Image.asset(
-                          'assets/images/tripicon.jpeg',
-                          fit: BoxFit.contain,
+                      child: Center(
+                        child: Icon(
+                          Icons.work_outline_rounded,
+                          color: const Color(0xFF12B8C6),
+                          size: 25,
                         ),
                       ),
                     ),
+                    // child: Container(
+                    //   height: 45,
+                    //   width: 45,
+                    //   child: Center(
+                    //     child: Icon(icon,
+                    //      color: Color(0xFF12B8C6),
+                    //      size: 25,
+                    //     ),
+                    //   ),
+                    // ),
+                  ),
+                  // Container(
+                  //   height: 50,
+                  //   width: 50,
+                  //
+                  //   decoration: BoxDecoration(
+                  //     color: const Color(0xFFF2FCFD),
+                  //
+                  //     borderRadius:
+                  //     BorderRadius.circular(18),
+                  //
+                  //     border: Border.all(
+                  //       color: const Color(0xFF12B8C6)
+                  //           .withOpacity(.25),
+                  //     ),
+                  //   ),
+                  //
+                  //   child: const Padding(
+                  //     padding: EdgeInsets.all(16),
+                  //
+                  //     child: Icon(
+                  //       Icons.work_outline_rounded,
+                  //       color: Color(0xFF12B8C6),
+                  //       size: 25,
+                  //     ),
+                  //   ),
+                  // ),
 
-                    const SizedBox(width: 10),
+                  const SizedBox(width: 10),
 
-                    /// TITLE
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children:[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment:
+                      CrossAxisAlignment.start,
 
-                          Text(
-                            item['sProject'] ?? "",
-                            style: Platform.isIOS
+                      children: [
 
-                            /// IOS STYLE
-                                ? const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: -0.3,
-                                height: 1.3,
-                                //color: Color(0xFF1E2230),
-                                color: Colors.black
-                            )
+                        Text(
+                          item['sProject'] ?? "",
 
-                            /// ANDROID MATERIAL STYLE
-                                : const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.1,
-                              height: 1.4,
-                              color: Colors.black,
-                            ),
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
                           ),
+                        ),
 
-                          SizedBox(height: 6),
+                        const SizedBox(height: 6),
 
-                          Text(
-                            "Project Name",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                        Text(
+                          "Project Name",
 
-                            // style: TextStyle(
-                            //   fontSize: 14,
-                            //   color: Colors.black54,
-                            // ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Divider(
-                  color: Colors.grey.shade200,
-                  thickness: 1,
-                ),
+                          maxLines: 1,
 
-                const SizedBox(height: 10),
+                          overflow:
+                          TextOverflow.ellipsis,
 
-                /// TASK DETAIL ROW
-                Row(
-                  children: [
-
-                    Expanded(
-                      child: Row(
-                        children:[
-
-                          Icon(
-                            Icons.menu_open_rounded,
-                            size: 20,
-                            color: Colors.black54,
-                          ),
-
-                          SizedBox(width: 6),
-
-                          Text(
-                            "Task Details",
-                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// TIME CONTAINER
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-
-                      decoration: BoxDecoration(
-                        color: Colors.red.withOpacity(.08),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-
-                      child: Row(
-                        children: [
-
-                          Icon(
-                            Icons.watch_later_rounded,
-                            size: 16,
-                            color: Colors.red,
-                          ),
-
-                          SizedBox(width: 5),
-
-                          Text(
-                            item['WorkingHrs'] ?? "",
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-
-                const SizedBox(height: 10),
-
-                /// DESCRIPTION
-                Expanded(
-                  child: ReadMoreText(
-                    item['Activity'] ?? "",
-
-                    trimLines: 3,
-                    trimMode: TrimMode.Line,
-
-                    trimCollapsedText: ' Read More',
-                    trimExpandedText: ' Read Less',
-
-                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
-
-                    moreStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF12B8C6),
-                    ),
-
-                    lessStyle: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      color: Color(0xFF12B8C6),
+                          style: AppTextStyle
+                              .font14OpenSansRegularBlackTextStyle,
+                        ),
+                      ],
                     ),
                   ),
+                ],
+              ),
+
+              Divider(
+                color: Colors.grey.shade200,
+                thickness: 1,
+              ),
+
+              const SizedBox(height: 0),
+
+              /// TASK DETAIL ROW
+              Row(
+                children: [
+
+                  Expanded(
+                    child: Row(
+                      children: [
+
+                        const Icon(
+                          Icons.menu_open_rounded,
+                          size: 20,
+                          color: Colors.black54,
+                        ),
+
+                        const SizedBox(width: 6),
+
+                        Text(
+                          "Task Details",
+
+                          style: AppTextStyle
+                              .font14OpenSansRegularBlackTextStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Container(
+                    padding:
+                    const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+
+                    decoration: BoxDecoration(
+                      color:
+                      Colors.red.withOpacity(.08),
+
+                      borderRadius:
+                      BorderRadius.circular(30),
+                    ),
+
+                    child: Row(
+                      children: [
+
+                        const Icon(
+                          Icons.watch_later_rounded,
+                          size: 16,
+                          color: Colors.red,
+                        ),
+
+                        const SizedBox(width: 5),
+
+                        Text(
+                          item['WorkingHrs'] ?? "",
+
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 10),
+
+              Expanded(
+                child: ReadMoreText(
+                  item['Activity'] ?? "",
+
+                  trimLines: 3,
+
+                  trimMode: TrimMode.Line,
+
+                  trimCollapsedText: ' Read More',
+
+                  trimExpandedText: ' Read Less',
+
+                  style: AppTextStyle
+                      .font14OpenSansRegularBlackTextStyle,
+
+                  moreStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF12B8C6),
+                  ),
+
+                  lessStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF12B8C6),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
   void displayToast(String msg) {
     Fluttertoast.showToast(
       msg,

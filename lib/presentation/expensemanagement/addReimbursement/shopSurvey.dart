@@ -248,6 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
+  // you shold add 1 more
 
   // pick image from a Gallery
   Future pickImageGallery() async {
@@ -331,6 +332,8 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     } catch (e) {}
   }
+  // you shold add 1 more
+
   // multifilepath
   // toast
   void displayToast(String msg) {
@@ -486,8 +489,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Error uploading image: $error');
     }
   }
-
-
+  //   // you shold add 1 more
 
   // build dialog sucess
   Widget _buildDialogSucces2(BuildContext context, String msg) {

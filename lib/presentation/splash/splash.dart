@@ -211,7 +211,7 @@ class _SplashViewState extends State<SplashView> {
     /// TODO HERE YOU SHOULD CHANGE APP VERSION FLUTTER VERSION MIN 3 DIGIT SUCH AS 1.0.0
     /// HERE YOU PASS variable _appVersion
     // here to apply logic if user is already login then direct send on  a dashboard
-    var loginMap = await AppVersionRepo().appversion(context,'20');  //  16
+    var loginMap = await AppVersionRepo().appversion(context,'21');  //  16
     print("Login map :-----235--xxxxx-------$loginMap");
     var result = "${loginMap[0]['Msg']}";
      var msg = "${loginMap[0]['sVersonName']}";
@@ -223,7 +223,7 @@ class _SplashViewState extends State<SplashView> {
     String version = prefs.getString('version') ?? '';
     print("-----197---xxxxxx--$version");
 
-     if(msg=="20"){
+     if(msg=="21"){
 
        print("--------179---$result");
        print("--------msg---$msg");

@@ -36,21 +36,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
-class ProjectRepo
+class ProjectEmployRepo
 {
   List<dynamic>  distList = [];
   Future<List> projectList() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
+    String? sEmpCode = prefs.getString('sEmpCode');
 
-    print('-----22---$sToken');
+    print('-----48---$sToken');
+    print('-----49---$sEmpCode');
+
 
 
     var baseURL = BaseRepo().baseurl;
-    var endPoint = "hrmsprojectlist/hrmsprojectlist";
+    var endPoint = "EmpBasedProject/EmpBasedProject";
     var projectList = "$baseURL$endPoint";
-    print('------------17---loginApi---$projectList');
+    print('------------17---EmpBasedProject---$projectList');
     showLoader();
     try
     {
@@ -58,7 +61,10 @@ class ProjectRepo
         'token': '$sToken',
         'Content-Type': 'application/json'
       };
-      var request = http.Request('GET', Uri.parse('$projectList'));
+      var request = http.Request('POST', Uri.parse('$projectList'));
+      request.body = json.encode({
+        "sEmpCode": sEmpCode,
+      });
 
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
