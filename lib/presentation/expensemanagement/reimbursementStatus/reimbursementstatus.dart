@@ -484,11 +484,10 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                 tempDate = formDate; // Save the current formDate before updating
                                 formDate = formattedDate;
                               });
-                              print("-----237---$formDate");
+                              print("-----487---$formDate");
 
-                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-
-
+                              hrmsReimbursementStatus(formDate!,lastDayOfCurrentMonth!);
+                              // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
                               //  hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                               fromDateSelectLogic();
                             }
@@ -553,7 +552,7 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                               });
                               //
                               print("-------300----$toDate");
-                              hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
+                              hrmsReimbursementStatus(firstOfMonthDay!,toDate!);
                               // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${formDate}", "${toDate}",status);
                               toDateSelectLogic();
                             }

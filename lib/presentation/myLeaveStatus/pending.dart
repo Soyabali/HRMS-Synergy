@@ -26,12 +26,72 @@ class _PendingPageState extends State<PendingPage> {
   @override
   void initState() {
     // TODO: implement initState
-    print('----------28-----Pending');
-    print("------30----fromDate---${widget.formDate}");
-    print("------31----toDate---${widget.toDate}");
-    print("------32----P---");
-    hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+    // print('----------28-----Pending');
+    // print("------30----fromDate---${widget.formDate}");
+    // print("------31----toDate---${widget.toDate}");
+    // print("------32----P---");
+    // hrmsLeaveStatus = HrmsLeaveStatusRepo().hrmsLeveStatusList(context, "${widget.formDate}", "${widget.toDate}","P");
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   if (!mounted) return;
+    //
+    //   setState(() {
+    //     hrmsLeaveStatus =
+    //         HrmsLeaveStatusRepo().hrmsLeveStatusList(
+    //           context,
+    //           "${widget.formDate}",
+    //           "${widget.toDate}",
+    //           "P",
+    //         );
+    //   });
+    //   print("------46----xxxx--$hrmsLeaveStatus");
+    // });
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   if (!mounted) return;
+    //
+    //   setState(() {
+    //     hrmsLeaveStatus =
+    //         HrmsLeaveStatusRepo().hrmsLeveStatusList(
+    //           context,
+    //           widget.formDate,
+    //           widget.toDate,
+    //           "P",
+    //         );
+    //   });
+    // });
+    var fromDate2= "${widget.formDate}";
+    var toDate2= "${widget.toDate}";
+
+   // loadPendingLeave(fromDate2,toDate2);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadPendingLeave(fromDate2,toDate2);
+    });
     super.initState();
+
+  }
+
+
+  //
+  Future<void> loadPendingLeave(String fromDate2, String toDate2) async {
+
+    print("-----73----73--xx--$fromDate2");
+    print("-----74----xxxx----$fromDate2");
+    try {
+      final future =
+      HrmsLeaveStatusRepo().hrmsLeveStatusList(
+        context,
+        fromDate2,
+        toDate2,
+        "P",
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        hrmsLeaveStatus = future;
+      });
+    } catch (e) {
+      print("ERROR => $e");
+    }
   }
 
 
@@ -527,14 +587,7 @@ class _PendingPageState extends State<PendingPage> {
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        // call api again
-                        // hrmsReimbursementStatus(firstOfMonthDay!,lastDayOfCurrentMonth!);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(builder: (context) => const ExpenseManagement()),
-                        // );
-
-                      },
+                        },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Set the background color to white
                         foregroundColor: Colors.black, // Set the text color to black

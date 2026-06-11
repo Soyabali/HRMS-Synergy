@@ -170,11 +170,24 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                             ),
                             child: Center(
                               child: Container(
-                                margin: EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  'assets/images/addReimbursement.png',
-                                  fit: BoxFit.contain,
+                                margin: EdgeInsets.only(
+                                  bottom: 4,
+                                  top: 4
                                 ),
+                                child: Icon(
+                                  Icons.monetization_on,
+                                  size: 40,
+                                  color: const Color(0xFF0098A6),
+                                ),
+                                // child: Image.asset(
+                                //   'assets/images/rbStatus.png',
+                                //   fit: BoxFit.contain,
+                                // ),
+                               // child: Icon(Icons.monetization_on, size: 40),
+                               //  child: Image.asset(
+                               //    'assets/images/addReimbursement.png',
+                               //    fit: BoxFit.contain,
+                               //  ),
                               ),
                             ),
                           ),
