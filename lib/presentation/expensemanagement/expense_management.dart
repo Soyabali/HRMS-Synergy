@@ -175,7 +175,7 @@ class _AttendaceListHomeState extends State<ExpenseManagementHome> {
                                   top: 4
                                 ),
                                 child: Icon(
-                                  Icons.monetization_on,
+                                  Icons.currency_rupee,
                                   size: 40,
                                   color: const Color(0xFF0098A6),
                                 ),
