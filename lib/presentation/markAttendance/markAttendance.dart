@@ -172,23 +172,19 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   }
 
   // getLocation function
-  void getLocation() async {
+  Future<void> getLocation() async {
     showLoader();
-    bool serviceEnabled;
-    LocationPermission permission;
 
-    // Check if location service is enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    // 1) check location service & permissions (keeps your existing logic)
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       hideLoader();
-      displayToast(
-          "Location services are disabled. Please enable them in settings.");
-      // AppSettings.openLocationSettings(); // Redirect to location settings
-      AppSettings.openAppSettings(); // on ios to open a settongs
+      displayToast("Location services are disabled. Please enable them in settings.");
+      AppSettings.openAppSettings();
       return;
     }
-    // Check permission status
-    permission = await Geolocator.checkPermission();
+
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -197,54 +193,89 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         return;
       }
     }
-
     if (permission == LocationPermission.deniedForever) {
       hideLoader();
-      displayToast(
-          "Location permission permanently denied. Please enable it in app settings.");
-      AppSettings.openAppSettings(); // Redirect to app settings
+      displayToast("Location permission permanently denied. Please enable it in app settings.");
+      AppSettings.openAppSettings();
       return;
     }
+
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+      // 2) Try to get a stable/accurate position using getPositionStream for a short window
+      Position? best;
+      final stream = Geolocator.getPositionStream(
+          locationSettings: LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 0));
+      final completer = Completer<Position>();
+      Timer timeout = Timer(Duration(seconds: 6), () {
+        if (!completer.isCompleted) {
+          completer.completeError('timeout');
+        }
+      });
 
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-        position.latitude,
-        position.longitude,
-      );
+      final sub = stream.listen((pos) {
+        // pick first position with acceptable accuracy, or keep best seen
+        if (best == null || (pos.accuracy < best!.accuracy)) {
+          best = pos;
+        }
+        if (pos.accuracy <= 25) { // threshold: 25 meters is pretty good
+          if (!completer.isCompleted) completer.complete(pos);
+        }
+      });
 
-      Placemark place = placemarks[0];
-      print("------219----xxx----place : $place");
-      String address =
-          "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
+      // If we get no good fix within the timeout, fall back
+      Position position;
+      try {
+        position = await completer.future;
+      } catch (_) {
+        // did not get a good stream position in time — fall back to single call
+        position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      } finally {
+        timeout.cancel();
+        await sub.cancel();
+      }
 
-      // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      // 3) Reverse geocode (use locale if you want, e.g. localeIdentifier: 'en')
+      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude/*, localeIdentifier: 'en'*/);
 
+      String address = '';
+      if (placemarks.isNotEmpty) {
+        final place = placemarks.first;
+        print("----243----xxx--$place");
+
+        // Build address from the best available parts, skipping null/empty fields
+        final parts = <String>[];
+        if ((place.name ?? '').isNotEmpty) parts.add(place.name!); // building name or POI
+        if ((place.subThoroughfare ?? '').isNotEmpty) parts.add(place.subThoroughfare!); // number
+        if ((place.thoroughfare ?? '').isNotEmpty) parts.add(place.thoroughfare!); // street
+        //if ((place.subLocality ?? '').isNotEmpty) parts.add(place.subLocality!);
+        if ((place.locality ?? '').isNotEmpty) parts.add(place.locality!); // city
+        //if ((place.subAdministrativeArea ?? '').isNotEmpty) parts.add(place.subAdministrativeArea!);
+        if ((place.administrativeArea ?? '').isNotEmpty) parts.add(place.administrativeArea!); // state
+        if ((place.postalCode ?? '').isNotEmpty) parts.add(place.postalCode!);
+        if ((place.country ?? '').isNotEmpty) parts.add(place.country!);
+
+        address = parts.join(', ');
+      }
+
+      // Optional: if placemark yields nothing useful, you can call Google Geocoding API here (requires API key)
+      // if (address.isEmpty) { ... call google maps geocoding endpoint with lat/lng ... }
+
+      // 4) Update state
       setState(() {
         lat = position.latitude;
         long = position.longitude;
-        locationAddress = address;
+        locationAddress = (address.isNotEmpty) ? address : 'Lat:${position.latitude}, Lon:${position.longitude}';
       });
 
       print('Address: $locationAddress');
       print('Latitude: $lat');
       print('Longitude: $long');
 
+      // compute distance etc
       if (lat != null && long != null) {
-        hideLoader();
-        print('---------210----$lat');
-        print('---------211----$long');
-        // call a distance metrics.
-        distanceInMeters =
-            calculateDistanceInMeters(staticLat, staticLng, lat!, long!);
-
-        print('-----216---Distance in M---$distanceInMeters');
-
-        /// TODO HERE YOU SHOULD NOT CALL A ATTENDACE API YOU SHOULD CAL THIS API
-        /// ON A SUBMIT BUTTON
-        // attendaceapi(lat, long, locationAddress);
+        distanceInMeters = calculateDistanceInMeters(staticLat, staticLng, lat!, long!);
+        print('Distance: $distanceInMeters meters');
+        // do not auto-call attendaceapi — keep on submit as you do
       } else {
         displayToast("Please select your location to proceed.");
       }
@@ -255,6 +286,89 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       hideLoader();
     }
   }
+  // void getLocation() async {
+  //   showLoader();
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //
+  //   // Check if location service is enabled
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     hideLoader();
+  //     displayToast(
+  //         "Location services are disabled. Please enable them in settings.");
+  //     // AppSettings.openLocationSettings(); // Redirect to location settings
+  //     AppSettings.openAppSettings(); // on ios to open a settongs
+  //     return;
+  //   }
+  //   // Check permission status
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       hideLoader();
+  //       displayToast("Location permission denied.");
+  //       return;
+  //     }
+  //   }
+  //
+  //   if (permission == LocationPermission.deniedForever) {
+  //     hideLoader();
+  //     displayToast(
+  //         "Location permission permanently denied. Please enable it in app settings.");
+  //     AppSettings.openAppSettings(); // Redirect to app settings
+  //     return;
+  //   }
+  //   try {
+  //     Position position = await Geolocator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high,
+  //     );
+  //
+  //     List<Placemark> placemarks = await placemarkFromCoordinates(
+  //       position.latitude,
+  //       position.longitude,
+  //     );
+  //
+  //     Placemark place = placemarks[0];
+  //     print("------219----xxx----place : $place");
+  //     String address =
+  //         "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
+  //
+  //     // String address = "${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+  //
+  //     setState(() {
+  //       lat = position.latitude;
+  //       long = position.longitude;
+  //       locationAddress = address;
+  //     });
+  //
+  //     print('Address: $locationAddress');
+  //     print('Latitude: $lat');
+  //     print('Longitude: $long');
+  //
+  //     if (lat != null && long != null) {
+  //       hideLoader();
+  //       print('---------210----$lat');
+  //       print('---------211----$long');
+  //       // call a distance metrics.
+  //       distanceInMeters =
+  //           calculateDistanceInMeters(staticLat, staticLng, lat!, long!);
+  //
+  //       print('-----216---Distance in M---$distanceInMeters');
+  //
+  //       /// TODO HERE YOU SHOULD NOT CALL A ATTENDACE API YOU SHOULD CAL THIS API
+  //       /// ON A SUBMIT BUTTON
+  //       // attendaceapi(lat, long, locationAddress);
+  //     } else {
+  //       displayToast("Please select your location to proceed.");
+  //     }
+  //   } catch (e) {
+  //     hideLoader();
+  //     displayToast("Failed to get location: $e");
+  //   } finally {
+  //     hideLoader();
+  //   }
+  // }
 
   /// Attendance repo
   attendaceapi(double? lat, double? long, locationAddress) async {
