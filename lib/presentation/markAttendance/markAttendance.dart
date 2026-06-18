@@ -216,6 +216,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       );
 
       Placemark place = placemarks[0];
+      print("------219----xxx----place : $place");
       String address =
           "${place.street}, ${place.subLocality},${place.locality},${place.administrativeArea},${place.postalCode},${place.country}";
 
@@ -271,14 +272,16 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return _buildDialogSucces2(context, msg);
+            //return _buildDialogSucces2(context, msg);
+            return _buildDialogInfo(context, msg);
           },
         );
       } else {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            return _buildDialogInfo(context, msg);
+            //return _buildDialogInfo(context, msg);
+            return _buildDialogSucces2(context, msg);
           },
         );
       }

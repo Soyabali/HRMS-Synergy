@@ -102,24 +102,46 @@ class _SplashViewState extends State<SplashView> {
   // check internetConnection
 
   Future<void> checkInternetConnection() async {
-    // Check if connected to Wi-Fi or Mobile
+    // First check whether device has any network (Wi-Fi or Mobile)
     var connectivityResult = await Connectivity().checkConnectivity();
 
     if (connectivityResult == ConnectivityResult.none) {
+      // No network at all
       print("❌ No network connection (Neither Wi-Fi nor Mobile Data)");
-      displayToast("No network connection (Neither Wi-Fi nor Mobile Data");
+      displayToast("No network connection (Neither Wi-Fi nor Mobile Data)");
       return;
     }
 
-    // Check if actual internet access is available
-    bool isConnected = await InternetConnection().hasInternetAccess;
-    if (isConnected) {
-     // print("✅ Connected to the Internet");
-     // displayToast("✅ Connected to the Internet");
-      versionAliCall();
-    } else {
-      displayToast("⚠️ Connected to network but no Internet access");
-      print("⚠️ Connected to network but no Internet access");
+    // If we have a network (Wi-Fi or Mobile), verify actual internet access.
+    // Try a quick DNS lookup first (works well on mobile and Wi-Fi). If that
+    // fails, fall back to the InternetConnection helper.
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        print("✅ Internet available (DNS lookup)");
+        versionAliCall();
+        return;
+      }
+    } on SocketException catch (_) {
+      // DNS lookup failed — we'll try the internet_connection_checker as a fallback
+      print('DNS lookup failed, trying InternetConnection check...');
+    }
+
+    // Fallback: use InternetConnection (from internet_connection_checker_plus)
+    try {
+      bool isConnected = await InternetConnection().hasInternetAccess;
+      if (isConnected) {
+        print("✅ Internet available (InternetConnection)");
+        versionAliCall();
+        return;
+      } else {
+        displayToast("⚠️ Connected to network but no Internet access");
+        print("⚠️ Connected to network but no Internet access");
+      }
+    } catch (e) {
+      // Final fallback: inform the user
+      print('Error while checking internet access: $e');
+      displayToast('Unable to verify internet connection');
     }
   }
 
