@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'dart:convert';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:permission_handler/permission_handler.dart' as AppSettings;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -34,8 +35,8 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   var locationAddress;
   DateTime? internetTime;
   var timeInternet;
-  double staticLat = 27.20354;
-  double staticLng = 78.00586;
+  double staticLat =  27.20354; //27.20354;  //27.20354;
+  double staticLng =  78.00586;//78.00586;   //78.00586;
   double threshold = 100.00;
   var locationCheck;
   //var locationCode="6084110826"; // Agra
@@ -50,10 +51,15 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    getLocalDatabaseValue();
-    checkInternetAndGetLocation();
-    _startUpdatingTime();
     checkLocationService();
+    getLocalDatabaseValue();
+   // checkInternetAndGetLocation();
+
+    _startUpdatingTime();
+    Future.delayed(Duration(milliseconds: 500), () {
+      checkInternetAndGetLocation();
+    });
+
     // getCurrentLocationInMeter();
     // calculate distance
     super.initState();
@@ -234,31 +240,138 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
         await sub.cancel();
       }
 
-      // 3) Reverse geocode (use locale if you want, e.g. localeIdentifier: 'en')
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude/*, localeIdentifier: 'en'*/);
+      // 3) Reverse geocode using Google Geocoding API for accurate address
+      print("-----239----xxx-----${position.latitude}");
+      print("-----240----xxx-----${position.longitude}");
 
       String address = '';
-      if (placemarks.isNotEmpty) {
-        final place = placemarks.first;
-        print("----243----xxx--$place");
 
-        // Build address from the best available parts, skipping null/empty fields
-        final parts = <String>[];
-        if ((place.name ?? '').isNotEmpty) parts.add(place.name!); // building name or POI
-        if ((place.subThoroughfare ?? '').isNotEmpty) parts.add(place.subThoroughfare!); // number
-        if ((place.thoroughfare ?? '').isNotEmpty) parts.add(place.thoroughfare!); // street
-        //if ((place.subLocality ?? '').isNotEmpty) parts.add(place.subLocality!);
-        if ((place.locality ?? '').isNotEmpty) parts.add(place.locality!); // city
-        //if ((place.subAdministrativeArea ?? '').isNotEmpty) parts.add(place.subAdministrativeArea!);
-        if ((place.administrativeArea ?? '').isNotEmpty) parts.add(place.administrativeArea!); // state
-        if ((place.postalCode ?? '').isNotEmpty) parts.add(place.postalCode!);
-        if ((place.country ?? '').isNotEmpty) parts.add(place.country!);
+      try {
+        // Get Google API key from config or SharedPreferences
+        // TODO: Store your API key securely. For now, replace 'YOUR_GOOGLE_API_KEY' with your actual key
+        // Best practice: Use environment variables or secure storage instead
+        const googleApiKey = 'AIzaSyAkUfhrldqKHWEk5wEHLrTTPSaURHcmwPQ';
 
-        address = parts.join(', ');
+        // Only proceed if API key is configured (check if it's not the placeholder)
+        if (googleApiKey.isNotEmpty && !googleApiKey.contains('YOUR_GOOGLE_API_KEY')) {
+          final geocodeUrl = Uri.parse(
+            'https://maps.googleapis.com/maps/api/geocode/json'
+            '?latlng=${position.latitude},${position.longitude}'
+            '&language=en'
+            '&key=$googleApiKey',
+          );
+
+          final geocodeResp = await http.get(geocodeUrl).timeout(Duration(seconds: 8));
+
+          if (geocodeResp.statusCode == 200) {
+            final map = json.decode(geocodeResp.body) as Map<String, dynamic>;
+            if ((map['status'] as String?) == 'OK' && (map['results'] as List).isNotEmpty) {
+              final results = map['results'] as List;
+
+              // Get the FIRST result (usually most accurate for the exact lat/lng)
+              final firstResult = results.first as Map<String, dynamic>;
+
+              // Build detailed address from address_components (includes building number, street, etc.)
+              final comps = (firstResult['address_components'] as List<dynamic>?)?.cast<Map<String, dynamic>>() ?? [];
+              final componentMap = <String, String>{};
+
+              // Extract all components and map by type
+              for (final comp in comps) {
+                final longName = comp['long_name'] as String? ?? '';
+                final types = (comp['types'] as List<dynamic>?)?.cast<String>() ?? [];
+                for (final type in types) {
+                  componentMap[type] = longName;
+                }
+              }
+
+              // Build address in priority order: building details → street → city → state → postal → country
+              final parts = <String>[];
+
+              // 1. Start with street number if available
+              if ((componentMap['street_number']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['street_number']!);
+              }
+
+              // 2. Add detailed premises (building names, colonies, etc.)
+              if ((componentMap['subpremise']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['subpremise']!);
+              }
+              if ((componentMap['premise']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['premise']!);
+              }
+
+             // 3. Add street/route name
+              if ((componentMap['route']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['route']!);
+              }
+
+              // 4. Add sub-locality (area/neighborhood)
+              if ((componentMap['sublocality_level_2']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['sublocality_level_2']!);
+              }
+              if ((componentMap['sublocality_level_1']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['sublocality_level_1']!);
+              }
+              if ((componentMap['sublocality']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['sublocality']!);
+              }
+
+              // 5. Add city
+              if ((componentMap['locality']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['locality']!);
+              }
+
+              // 6. Add state
+              if ((componentMap['administrative_area_level_1']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['administrative_area_level_1']!);
+              }
+
+              // 7. Add postal code
+              if ((componentMap['postal_code']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['postal_code']!);
+              }
+
+              // 8. Add country
+              if ((componentMap['country']?.isNotEmpty ?? false)) {
+                parts.add(componentMap['country']!);
+              }
+
+              // Join all parts
+              address = parts.join(', ');
+
+              if (address.isNotEmpty) {
+                print('✅ Google Geocode Result: $address');
+              } else {
+                // Ultimate fallback: use formatted_address
+                final formatted = firstResult['formatted_address'] as String? ?? '';
+                address = formatted;
+                print('⚠️  Using formatted_address as fallback: $formatted');
+              }
+            }
+          } else {
+            print('❌ Google Geocode API error: ${geocodeResp.statusCode}');
+          }
+        } else {
+          print('⚠️  Google API key not configured. Using platform geocoding as fallback.');
+          // Fallback to platform geocoding if API key not available
+          List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+          if (placemarks.isNotEmpty) {
+            final place = placemarks.first;
+            final parts = <String>[];
+            if ((place.name ?? '').isNotEmpty) parts.add(place.name!);
+            if ((place.subThoroughfare ?? '').isNotEmpty) parts.add(place.subThoroughfare!);
+            if ((place.thoroughfare ?? '').isNotEmpty) parts.add(place.thoroughfare!);
+            if ((place.subLocality ?? '').isNotEmpty) parts.add(place.subLocality!);
+            if ((place.locality ?? '').isNotEmpty) parts.add(place.locality!);
+            if ((place.administrativeArea ?? '').isNotEmpty) parts.add(place.administrativeArea!);
+            if ((place.postalCode ?? '').isNotEmpty) parts.add(place.postalCode!);
+            if ((place.country ?? '').isNotEmpty) parts.add(place.country!);
+            address = parts.join(', ');
+          }
+        }
+      } catch (err) {
+        print('❌ Geocoding error: $err');
       }
-
-      // Optional: if placemark yields nothing useful, you can call Google Geocoding API here (requires API key)
-      // if (address.isEmpty) { ... call google maps geocoding endpoint with lat/lng ... }
 
       // 4) Update state
       setState(() {
@@ -268,6 +381,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       });
 
       print('Address: $locationAddress');
+      print("---322----xx address---$address");
       print('Latitude: $lat');
       print('Longitude: $long');
 
@@ -286,6 +400,206 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
       hideLoader();
     }
   }
+  // Future<void> getLocation() async {
+  //   showLoader();
+  //
+  //   // 1) check location service & permissions (keeps your existing logic)
+  //   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     hideLoader();
+  //     displayToast("Location services are disabled. Please enable them in settings.");
+  //     AppSettings.openAppSettings();
+  //     return;
+  //   }
+  //
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       hideLoader();
+  //       displayToast("Location permission denied.");
+  //       return;
+  //     }
+  //   }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     hideLoader();
+  //     displayToast("Location permission permanently denied. Please enable it in app settings.");
+  //     AppSettings.openAppSettings();
+  //     return;
+  //   }
+  //
+  //   try {
+  //     // 2) Try to get a stable/accurate position using getPositionStream for a short window
+  //     Position? best;
+  //     final stream = Geolocator.getPositionStream(
+  //         locationSettings: LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 0));
+  //     final completer = Completer<Position>();
+  //     Timer timeout = Timer(Duration(seconds: 6), () {
+  //       if (!completer.isCompleted) {
+  //         completer.completeError('timeout');
+  //       }
+  //     });
+  //
+  //     final sub = stream.listen((pos) {
+  //       // pick first position with acceptable accuracy, or keep best seen
+  //       if (best == null || (pos.accuracy < best!.accuracy)) {
+  //         best = pos;
+  //       }
+  //       if (pos.accuracy <= 25) { // threshold: 25 meters is pretty good
+  //         if (!completer.isCompleted) completer.complete(pos);
+  //       }
+  //     });
+  //
+  //     // If we get no good fix within the timeout, fall back
+  //     Position position;
+  //     try {
+  //       position = await completer.future;
+  //     } catch (_) {
+  //       // did not get a good stream position in time — fall back to single call
+  //       position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //     } finally {
+  //       timeout.cancel();
+  //       await sub.cancel();
+  //     }
+  //
+  //     // 3) Reverse geocode (use locale if you want, e.g. localeIdentifier: 'en')
+  //     print("-----239----xxx-----${position.latitude}");
+  //     print("-----240----xxx-----${position.longitude}");
+  //     List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude/*, localeIdentifier: 'en'*/);
+  //
+  //     String address = '';
+  //     if (placemarks.isNotEmpty) {
+  //       final place = placemarks.first;
+  //       // Build address from the best available parts, skipping null/empty fields
+  //       final parts = <String>[];
+  //       if ((place.name ?? '').isNotEmpty) parts.add(place.name!); // building name or POI
+  //       if ((place.subThoroughfare ?? '').isNotEmpty) parts.add(place.subThoroughfare!); // number
+  //       if ((place.thoroughfare ?? '').isNotEmpty) parts.add(place.thoroughfare!); // street
+  //       if ((place.subLocality ?? '').isNotEmpty) parts.add(place.subLocality!);
+  //       if ((place.locality ?? '').isNotEmpty) parts.add(place.locality!); // city
+  //       if ((place.subAdministrativeArea ?? '').isNotEmpty) parts.add(place.subAdministrativeArea!);
+  //       if ((place.administrativeArea ?? '').isNotEmpty) parts.add(place.administrativeArea!); // state
+  //       if ((place.postalCode ?? '').isNotEmpty) parts.add(place.postalCode!);
+  //       if ((place.country ?? '').isNotEmpty) parts.add(place.country!);
+  //
+  //       address = parts.join(', ');
+  //     }
+  //
+  //     // 2) If placemark didn't provide a clear POI/premise, call Google Geocoding API for a better formatted address.
+  //     //    This helps get establishment / building names when the platform placemark is generic (e.g. "Civil Lines").
+  //     if (address.isEmpty || (placemarks.isNotEmpty && (placemarks.first.name == null || placemarks.first.name!.isEmpty))) {
+  //       try {
+  //         // IMPORTANT: replace with your real API key and keep it secure (do not hardcode for production)
+  //         const googleApiKey = 'YOUR_GOOGLE_API_KEY';
+  //
+  //         final geocodeUrl = Uri.parse(
+  //           'https://maps.googleapis.com/maps/api/geocode/json'
+  //               '?latlng=${position.latitude},${position.longitude}'
+  //               '&language=en'
+  //               '&key=$googleApiKey',
+  //         );
+  //
+  //         final geocodeResp = await http.get(geocodeUrl).timeout(Duration(seconds: 8));
+  //
+  //         if (geocodeResp.statusCode == 200) {
+  //           final map = json.decode(geocodeResp.body) as Map<String, dynamic>;
+  //           if ((map['status'] as String?) == 'OK' && (map['results'] as List).isNotEmpty) {
+  //             final results = map['results'] as List;
+  //
+  //             // Prefer results that look like an establishment/premise/point_of_interest or street address
+  //             Map<String, dynamic>? chosen;
+  //             for (var r in results) {
+  //               final types = (r['types'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+  //               if (types.any((t) => ['premise', 'establishment', 'point_of_interest', 'street_address', 'subpremise', 'route'].contains(t))) {
+  //                 chosen = r as Map<String, dynamic>;
+  //                 break;
+  //               }
+  //             }
+  //
+  //             // If none matched the preferred types, pick the first result
+  //             chosen ??= results.first as Map<String, dynamic>;
+  //
+  //             final formatted = chosen['formatted_address'] as String?;
+  //             if (formatted != null && formatted.isNotEmpty) {
+  //               address = formatted;
+  //             } else {
+  //               // As backup, build from address_components (try to pick named component like premise/establishment)
+  //               final comps = (chosen['address_components'] as List<dynamic>?)?.cast<Map<String, dynamic>>() ?? [];
+  //               final componentMap = <String, String>{};
+  //               for (final c in comps) {
+  //                 final types = (c['types'] as List<dynamic>).cast<String>();
+  //                 final longName = c['long_name'] as String? ?? '';
+  //                 for (final t in types) {
+  //                   componentMap[t] = longName;
+  //                 }
+  //               }
+  //               // try some useful component keys
+  //               final candidateParts = <String>[];
+  //               if (componentMap['premise']?.isNotEmpty ?? false) candidateParts.add(componentMap['premise']!);
+  //               if (componentMap['establishment']?.isNotEmpty ?? false) candidateParts.add(componentMap['establishment']!);
+  //               if (componentMap['point_of_interest']?.isNotEmpty ?? false) candidateParts.add(componentMap['point_of_interest']!);
+  //               if (componentMap['route']?.isNotEmpty ?? false) candidateParts.add(componentMap['route']!);
+  //               if (componentMap['street_number']?.isNotEmpty ?? false) candidateParts.add(componentMap['street_number']!);
+  //               if (componentMap['locality']?.isNotEmpty ?? false) candidateParts.add(componentMap['locality']!);
+  //               if (componentMap['administrative_area_level_1']?.isNotEmpty ?? false) candidateParts.add(componentMap['administrative_area_level_1']!);
+  //               if (componentMap['postal_code']?.isNotEmpty ?? false) candidateParts.add(componentMap['postal_code']!);
+  //               if (candidateParts.isNotEmpty) address = candidateParts.join(', ');
+  //             }
+  //           }
+  //         }
+  //       } catch (err) {
+  //         // Non-fatal: keep whatever address we have or fallback to lat/lon later
+  //         print('Google geocode error: $err');
+  //       }
+  //     }
+  //     // if (placemarks.isNotEmpty) {
+  //     //   final place = placemarks.first;
+  //     //   print("----243----xxx--$place");
+  //     //
+  //     //   // Build address from the best available parts, skipping null/empty fields
+  //     //   final parts = <String>[];
+  //     //   if ((place.name ?? '').isNotEmpty) parts.add(place.name!); // building name or POI
+  //     //   if ((place.subThoroughfare ?? '').isNotEmpty) parts.add(place.subThoroughfare!); // number
+  //     //   if ((place.thoroughfare ?? '').isNotEmpty) parts.add(place.thoroughfare!); // street
+  //     //   //if ((place.subLocality ?? '').isNotEmpty) parts.add(place.subLocality!);
+  //     //   if ((place.locality ?? '').isNotEmpty) parts.add(place.locality!); // city
+  //     //   //if ((place.subAdministrativeArea ?? '').isNotEmpty) parts.add(place.subAdministrativeArea!);
+  //     //   if ((place.administrativeArea ?? '').isNotEmpty) parts.add(place.administrativeArea!); // state
+  //     //   if ((place.postalCode ?? '').isNotEmpty) parts.add(place.postalCode!);
+  //     //   if ((place.country ?? '').isNotEmpty) parts.add(place.country!);
+  //     //
+  //     //   address = parts.join(', ');
+  //     // }
+  //
+  //     // Optional: if placemark yields nothing useful, you can call Google Geocoding API here (requires API key)
+  //     // if (address.isEmpty) { ... call google maps geocoding endpoint with lat/lng ... }
+  //
+  //     // 4) Update state
+  //     setState(() {
+  //       lat = position.latitude;
+  //       long = position.longitude;
+  //       locationAddress = (address.isNotEmpty) ? address : 'Lat:${position.latitude}, Lon:${position.longitude}';
+  //     });
+  //
+  //     print('Address: $locationAddress');
+  //     print('Latitude: $lat');
+  //     print('Longitude: $long');
+  //
+  //     // compute distance etc
+  //     if (lat != null && long != null) {
+  //       distanceInMeters = calculateDistanceInMeters(staticLat, staticLng, lat!, long!);
+  //       print('Distance: $distanceInMeters meters');
+  //       // do not auto-call attendaceapi — keep on submit as you do
+  //     } else {
+  //       displayToast("Please select your location to proceed.");
+  //     }
+  //   } catch (e) {
+  //     hideLoader();
+  //     displayToast("Failed to get location: $e");
+  //   } finally {
+  //     hideLoader();
+  //   }
+  // }
   // void getLocation() async {
   //   showLoader();
   //   bool serviceEnabled;
@@ -1000,14 +1314,21 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                               Expanded(
                                 child: SingleChildScrollView(
                                   physics: BouncingScrollPhysics(),
-                                  child: Text(
-                                    locationAddress ?? "No Address Found",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.black38,
-                                      fontSize: 12,
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 500),
+                                    transitionBuilder: (child, animation) {
+                                      return FadeTransition(opacity: animation, child: child);
+                                    },
+                                    child: Text(
+                                      locationAddress ?? "No Address Found",
+                                      key: ValueKey<String>(locationAddress ?? "No Address Found"),
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.black38,
+                                        fontSize: 12,
+                                      ),
+                                      softWrap: true,
+                                      overflow: TextOverflow.fade,
                                     ),
-                                    softWrap: true,
-                                    overflow: TextOverflow.fade,
                                   ),
                                 ),
                               ),
