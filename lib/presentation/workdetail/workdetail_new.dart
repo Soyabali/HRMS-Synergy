@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/ActivitiesParametersRepo.dart';
 import '../../data/hrmsActivityListRepo.dart';
 import '../../data/hrmsDailyActivityNewRepo.dart';
@@ -35,11 +37,14 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   var _selectedProjectCode;
   List<dynamic> activityList = [];
   String currentDate = "";
-
   bool isLoading = false;
-
   /// DROPDOWN
   String? selectedProject;
+  var fCTC_firstCard,fMontlyCTC_secondCard,fDayWiseSalary_thirdCard,weeklyoffFourthCard,weeklyoffFiveCard,holidayleavesixCard;
+  var compleName,Acknowledgement;
+  /// STAT CARDS AUTO-SCROLL
+  final ScrollController _statScrollController = ScrollController();
+  Timer? _statAutoScrollTimer;
 
   // project API Call
   @override
@@ -47,12 +52,49 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     updateProject();
     activityParameterResponse();
     hrmsActivityList();
+    getLocaldata();
     currentDate =
         DateFormat('dd-MMM-yyyy')
             .format(DateTime.now());
 
     print(currentDate);
+    _startStatCardAutoScroll();
     super.initState();
+  }
+
+  getLocaldata() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var sFirstName = prefs.getString('sFirstName');
+    var sLastName = prefs.getString('sLastName');
+    compleName = "$sFirstName $sLastName";
+    setState(() {
+
+    });
+    print("-----69--$compleName");
+
+  }
+
+  @override
+  void dispose() {
+    _statAutoScrollTimer?.cancel();
+    _statScrollController.dispose();
+    super.dispose();
+  }
+
+  /// AUTO-SCROLL THE TOP STAT CARDS LEFT -> RIGHT, LOOPING BACK TO START
+  void _startStatCardAutoScroll() {
+    _statAutoScrollTimer = Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      if (!_statScrollController.hasClients) return;
+
+      final double maxScroll = _statScrollController.position.maxScrollExtent;
+      final double next = _statScrollController.offset + 1.2;
+
+      if (next >= maxScroll) {
+        _statScrollController.jumpTo(0);
+      } else {
+        _statScrollController.jumpTo(next);
+      }
+    });
   }
   void hrmsActivityList() async {
 
@@ -84,7 +126,38 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   // Activity Parameter
   activityParameterResponse() async {
     activityParameter = await ActivitiesParametersRepo().activityparameter();
-    print(" -----xxxxx-  ---87---> $activityParameter");
+
+    print("Response: $activityParameter");
+
+    // Wait for 1 second
+    await Future.delayed(const Duration(seconds: 1));
+
+    if (activityParameter.isNotEmpty) {
+      fCTC_firstCard = activityParameter[0]["fCTC"] ?? 0;
+      fMontlyCTC_secondCard = activityParameter[0]["fMontlyCTC"] ?? 0;
+      fDayWiseSalary_thirdCard = activityParameter[0]["fDayWiseSalary"] ?? 0;
+
+      var fAbsent = activityParameter[0]["fAbsent"] ?? 0;
+      var fPresents = activityParameter[0]["fPresents"] ?? 0;
+      weeklyoffFourthCard = "$fAbsent/$fPresents";
+
+      weeklyoffFiveCard = activityParameter[0]["WeeklyOff"] ?? 0;
+
+      var holidays = activityParameter[0]["Holidays"] ?? 0;
+      var fLeaves = activityParameter[0]["fLeaves"] ?? 0;
+      holidayleavesixCard = "$holidays/$fLeaves";
+      //  Acknowledgement
+      Acknowledgement = activityParameter[0]["Acknowledgement"] ?? 0;
+      print("fCTC: $fCTC_firstCard");
+      print("fMontlyCTC_secondCard: $fMontlyCTC_secondCard");
+      print("fDayWiseSalary_thirdCard: $fDayWiseSalary_thirdCard");
+      print("weeklyoffFourthCard: $weeklyoffFourthCard");
+      print("weeklyoffFiveCard: $weeklyoffFiveCard");
+      print("holidayleavesixCard: $holidayleavesixCard");
+      print("----157--$Acknowledgement");
+
+    }
+
     setState(() {});
   }
 
@@ -162,142 +235,179 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   /// ====================================
   /// TOP STAT CARDS DATA (bind your real values here)
   /// ====================================
-  final List<Map<String, dynamic>> statCardList = [
+  /// 'bgColor'    -> main card background (#EAF5FF sample)
+  /// 'corner1'    -> bottom-right corner shape, lighter layer  (#CBEFFD sample)
+  /// 'corner2'    -> bottom-right corner shape, darker layer   (#A8E1F7 sample)
+  /// 'iconColor'  -> color of the icon inside the white circle
+  /// 'iconAsset'  -> optional asset image path; when set, replaces the Icon
+  ///                 inside the circle (share the assets and this will just work)
+  List<Map<String, dynamic>> get statCardList => [
     {
       'icon': Icons.currency_rupee_rounded,
-      'title': 'Monthly Salary',
-      'value': '₹338',
-      'gradient': [Color(0xFF11998E), Color(0xFF38EF7D)],
+      'title': 'CTC',
+      'value': fCTC_firstCard ?? 0,
+      'bgColor': Color(0xFFEAF5FF),
+      'corner1': Color(0xFFCBEFFD),
+      'corner2': Color(0xFFA8E1F7),
+      'iconColor': Color(0xFF11998E),
     },
     {
       'icon': Icons.event_available_rounded,
-      'title': 'Present Days',
-      'value': '24',
-      'gradient': [Color(0xFF2193B0), Color(0xFF6DD5ED)],
+      'title': 'Monthly Salary',
+      'value': fMontlyCTC_secondCard ?? 0,
+      'bgColor': Color(0xFFE9F8EB),
+      'corner1': Color(0xFFD0FFE1),
+      'corner2': Color(0xFFBBF2C8),
+      'iconColor': Color(0xFF2E9E4F),
     },
     {
       'icon': Icons.event_busy_rounded,
-      'title': 'Absent Days',
-      'value': '2',
-      'gradient': [Color(0xFFFF5F6D), Color(0xFFFFC371)],
+      'title': 'Per Day Salary',
+      'value': fDayWiseSalary_thirdCard ?? 0,
+      'bgColor': Color(0xFFFFF9F3),
+      'corner1': Color(0xFFFFF0E3),
+      'corner2': Color(0xFFFFDCC2),
+      'iconColor': Color(0xFFEF8C3C),
     },
     {
       'icon': Icons.access_time_filled_rounded,
-      'title': 'Total Hours',
-      'value': '186h',
-      'gradient': [Color(0xFF7F00FF), Color(0xFFE100FF)],
+      'title': 'Absent/Present',
+      'value': weeklyoffFourthCard ?? 0,
+      'bgColor': Color(0xFFE7E9F6),
+      'corner1': Color(0xFFB4BFFA),
+      'corner2': Color(0xFF6679E4),
+      'iconColor': Color(0xFF6679E4),
     },
     {
       'icon': Icons.beach_access_rounded,
-      'title': 'Leave Balance',
-      'value': '8',
-      'gradient': [Color(0xFFF7971E), Color(0xFFFFD200)],
+      'title': 'Weekly Off',
+      'value': weeklyoffFiveCard ?? 0,
+      'bgColor': Color(0xFFF6E9E8),
+      'corner1': Color(0xFFF8BCB8),
+      'corner2': Color(0xFFF44336),
+      'iconColor': Color(0xFFF44336),
     },
     {
       'icon': Icons.timer_outlined,
-      'title': 'Overtime',
-      'value': '12h',
-      'gradient': [Color(0xFF667EEA), Color(0xFF764BA2)],
-    },
-    {
-      'icon': Icons.watch_later_outlined,
-      'title': 'Late Marks',
-      'value': '3',
-      'gradient': [Color(0xFFEE0979), Color(0xFFFF6A00)],
-    },
-    {
-      'icon': Icons.pending_actions_rounded,
-      'title': 'Half Day',
-      'value': '1',
-      'gradient': [Color(0xFF56CCF2), Color(0xFF2F80ED)],
+      'title': 'Holiday/Leave',
+      'value': holidayleavesixCard ?? 0,
+      'bgColor': Color(0xFFEAFBF9),
+      'corner1': Color(0xFFB5F8F1),
+      'corner2': Color(0xFF009688),
+      'iconColor': Color(0xFF009688),
     },
   ];
 
   /// ====================================
-  /// STAT CARD WIDGET (icon + title + value)
+  /// STAT CARD WIDGET (circle icon + title + value)
   /// ====================================
   Widget buildStatCard(Map<String, dynamic> data) {
-    final List<Color> gradient = data['gradient'] as List<Color>;
+    final Color bgColor = data['bgColor'] as Color? ?? const Color(0xFFEAF5FF);
+    final Color corner1 = data['corner1'] as Color? ?? const Color(0xFFCBEFFD);
+    final Color corner2 = data['corner2'] as Color? ?? const Color(0xFFA8E1F7);
+    final Color iconColor = data['iconColor'] as Color? ?? const Color(0xFF12B8C6);
+    final String? iconAsset = data['iconAsset'] as String?;
 
     return Container(
-      width: 158,
+      width: 180,
+      height: 190,
       margin: const EdgeInsets.only(right: 14),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: gradient,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(22),
-        boxShadow: [
-          BoxShadow(
-            color: gradient.last.withOpacity(0.35),
-            blurRadius: 14,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          /// DECORATIVE FAINT BACKGROUND ICON
-          Positioned(
-            right: -22,
-            bottom: -22,
-            child: Icon(
-              data['icon'] as IconData,
-              size: 100,
-              color: Colors.white.withOpacity(0.12),
-            ),
-          ),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        child: Container(
+          color: bgColor,
+          child: Stack(
             children: [
-              /// ICON BADGE
-              Container(
-                height: 46,
-                width: 46,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.22),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Icon(
-                  data['icon'] as IconData,
-                  color: Colors.white,
-                  size: 24,
-                ),
-              ),
-
-              const Spacer(),
-
-              /// TITLE
-              Text(
-                data['title'] as String,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
+              /// BOTTOM-RIGHT TWO-TONE DECORATIVE SHAPE
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: SizedBox(
+                  height: 80,
+                  child: CustomPaint(
+                    size: const Size(180, 80),
+                    painter: _CardCornerPainter(
+                      color1: corner1,
+                      color2: corner2,
+                    ),
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 6),
+              /// CARD CONTENT
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 25,
+                  right: 14,
+                  top: 22,
+                  bottom: 18,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    /// ICON CIRCLE (~70 x 70, white background)
+                    Container(
+                      height: 70,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.08),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: iconAsset != null
+                          ? ClipOval(
+                        child: Image.asset(
+                          iconAsset,
+                          width: 36,
+                          height: 36,
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                          : Icon(
+                        data['icon'] as IconData,
+                        color: iconColor,
+                        size: 32,
+                      ),
+                    ),
 
-              /// VALUE
-              Text(
-                data['value'] as String,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                    const SizedBox(height: 16),
+
+                    /// TITLE
+                    Text(
+                      data['title'] as String,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFF5B6472),
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+
+                    const SizedBox(height: 4),
+
+                    /// VALUE
+                    Text(
+                      data['value'].toString(),
+                      style: const TextStyle(
+                        color: Color(0xFF1E2230),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -354,8 +464,9 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
               /// ====================================
 
               SizedBox(
-                height: 220,
+                height: 210,
                 child: ListView.builder(
+                  controller: _statScrollController,
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
@@ -366,6 +477,45 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                   itemBuilder: (context, index) {
                     return buildStatCard(statCardList[index]);
                   },
+                ),
+              ),
+              //SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Dear $compleName',style: TextStyle(
+                  color:Colors.red,
+                  fontSize: 16,
+                ),
+                ),
+              ),
+              //SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ReadMoreText(
+                  Acknowledgement ?? "",
+
+                  trimLines: 3,
+
+                  trimMode: TrimMode.Line,
+
+                  trimCollapsedText: ' Read More',
+
+                  trimExpandedText: ' Read Less',
+
+                  style: AppTextStyle
+                      .font14OpenSansRegularBlackTextStyle,
+
+                  moreStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF12B8C6),
+                  ),
+
+                  lessStyle: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF12B8C6),
+                  ),
                 ),
               ),
 
@@ -1216,5 +1366,46 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
         ],
       ),
     );
+  }
+}
+
+/// ====================================
+/// STAT CARD BOTTOM-RIGHT CORNER PAINTER
+/// (ported from the Android VectorDrawable path data,
+/// scaled to fit whatever size it's painted into)
+/// ====================================
+class _CardCornerPainter extends CustomPainter {
+  final Color color1;
+  final Color color2;
+
+  _CardCornerPainter({required this.color1, required this.color2});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double sx = size.width / 180;
+    final double sy = size.height / 80;
+
+    // Layer 1 - #CBEFFD
+    final Path path1 = Path()
+      ..moveTo(65 * sx, 80 * sy)
+      ..cubicTo(95 * sx, 72 * sy, 112 * sx, 55 * sy, 132 * sx, 38 * sy)
+      ..cubicTo(148 * sx, 25 * sy, 162 * sx, 15 * sy, 180 * sx, 0 * sy)
+      ..lineTo(180 * sx, 80 * sy)
+      ..close();
+    canvas.drawPath(path1, Paint()..color = color1);
+
+    // Layer 2 - #A8E1F7
+    final Path path2 = Path()
+      ..moveTo(108 * sx, 80 * sy)
+      ..cubicTo(128 * sx, 66 * sy, 144 * sx, 52 * sy, 158 * sx, 36 * sy)
+      ..cubicTo(168 * sx, 24 * sy, 175 * sx, 15 * sy, 180 * sx, 10 * sy)
+      ..lineTo(180 * sx, 80 * sy)
+      ..close();
+    canvas.drawPath(path2, Paint()..color = color2);
+  }
+
+  @override
+  bool shouldRepaint(covariant _CardCornerPainter oldDelegate) {
+    return oldDelegate.color1 != color1 || oldDelegate.color2 != color2;
   }
 }
