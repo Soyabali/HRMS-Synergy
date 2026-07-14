@@ -1,10 +1,9 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
-import '../../data/district_repo.dart';
+import '../../data/ActivitiesParametersRepo.dart';
 import '../../data/hrmsActivityListRepo.dart';
 import '../../data/hrmsDailyActivityNewRepo.dart';
 import '../../data/projectemploybase.dart';
@@ -20,8 +19,7 @@ class WorkDetailNew extends StatefulWidget {
       _DailyWorkStatusScreenState();
 }
 
-class _DailyWorkStatusScreenState
-    extends State<WorkDetailNew> {
+class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
   /// CONTROLLERS
   final TextEditingController workDetailController =
@@ -31,6 +29,7 @@ class _DailyWorkStatusScreenState
   TextEditingController();
   List<dynamic>?  baseProjectList;
   List<dynamic> distList = [];
+  List<dynamic> activityParameter = [];
   var _dropDownSector;
   final sectorFocus = GlobalKey();
   var _selectedProjectCode;
@@ -46,6 +45,7 @@ class _DailyWorkStatusScreenState
   @override
   void initState() {
     updateProject();
+    activityParameterResponse();
     hrmsActivityList();
     currentDate =
         DateFormat('dd-MMM-yyyy')
@@ -79,6 +79,12 @@ class _DailyWorkStatusScreenState
   updateProject() async {
     distList = await ProjectEmployRepo().projectList();
     print(" -----xxxxx-  projectList--81---> $distList");
+    setState(() {});
+  }
+  // Activity Parameter
+  activityParameterResponse() async {
+    activityParameter = await ActivitiesParametersRepo().activityparameter();
+    print(" -----xxxxx-  ---87---> $activityParameter");
     setState(() {});
   }
 
@@ -153,25 +159,145 @@ class _DailyWorkStatusScreenState
       ),
     );
   }
-  // widget
-  Widget buildPlatformImageCard({
-    required String imagePath,
-    double height = 150,
-  }) {
+  /// ====================================
+  /// TOP STAT CARDS DATA (bind your real values here)
+  /// ====================================
+  final List<Map<String, dynamic>> statCardList = [
+    {
+      'icon': Icons.currency_rupee_rounded,
+      'title': 'Monthly Salary',
+      'value': '₹338',
+      'gradient': [Color(0xFF11998E), Color(0xFF38EF7D)],
+    },
+    {
+      'icon': Icons.event_available_rounded,
+      'title': 'Present Days',
+      'value': '24',
+      'gradient': [Color(0xFF2193B0), Color(0xFF6DD5ED)],
+    },
+    {
+      'icon': Icons.event_busy_rounded,
+      'title': 'Absent Days',
+      'value': '2',
+      'gradient': [Color(0xFFFF5F6D), Color(0xFFFFC371)],
+    },
+    {
+      'icon': Icons.access_time_filled_rounded,
+      'title': 'Total Hours',
+      'value': '186h',
+      'gradient': [Color(0xFF7F00FF), Color(0xFFE100FF)],
+    },
+    {
+      'icon': Icons.beach_access_rounded,
+      'title': 'Leave Balance',
+      'value': '8',
+      'gradient': [Color(0xFFF7971E), Color(0xFFFFD200)],
+    },
+    {
+      'icon': Icons.timer_outlined,
+      'title': 'Overtime',
+      'value': '12h',
+      'gradient': [Color(0xFF667EEA), Color(0xFF764BA2)],
+    },
+    {
+      'icon': Icons.watch_later_outlined,
+      'title': 'Late Marks',
+      'value': '3',
+      'gradient': [Color(0xFFEE0979), Color(0xFFFF6A00)],
+    },
+    {
+      'icon': Icons.pending_actions_rounded,
+      'title': 'Half Day',
+      'value': '1',
+      'gradient': [Color(0xFF56CCF2), Color(0xFF2F80ED)],
+    },
+  ];
+
+  /// ====================================
+  /// STAT CARD WIDGET (icon + title + value)
+  /// ====================================
+  Widget buildStatCard(Map<String, dynamic> data) {
+    final List<Color> gradient = data['gradient'] as List<Color>;
+
     return Container(
-      height: height,
-      width: double.infinity,
-      clipBehavior: Clip.antiAlias,
+      width: 158,
+      margin: const EdgeInsets.only(right: 14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Platform.isIOS
-            ? CupertinoColors.white
-            : Colors.white,
+        gradient: LinearGradient(
+          colors: gradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: gradient.last.withOpacity(0.35),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
-      child: Image.asset(
-        imagePath,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          /// DECORATIVE FAINT BACKGROUND ICON
+          Positioned(
+            right: -22,
+            bottom: -22,
+            child: Icon(
+              data['icon'] as IconData,
+              size: 100,
+              color: Colors.white.withOpacity(0.12),
+            ),
+          ),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// ICON BADGE
+              Container(
+                height: 46,
+                width: 46,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.22),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  data['icon'] as IconData,
+                  color: Colors.white,
+                  size: 24,
+                ),
+              ),
+
+              const Spacer(),
+
+              /// TITLE
+              Text(
+                data['title'] as String,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+
+              const SizedBox(height: 6),
+
+              /// VALUE
+              Text(
+                data['value'] as String,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -180,9 +306,7 @@ class _DailyWorkStatusScreenState
 
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
-
 
     return GestureDetector(
       onTap: () {
@@ -226,18 +350,30 @@ class _DailyWorkStatusScreenState
             children: [
 
               /// ====================================
-              /// TOP IMAGE
+              /// TOP STAT CARDS (HORIZONTAL LIST)
               /// ====================================
 
-              buildPlatformImageCard(
-                imagePath: 'assets/images/workstatus3.jpeg',
+              SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 10,
+                  ),
+                  itemCount: statCardList.length,
+                  itemBuilder: (context, index) {
+                    return buildStatCard(statCardList[index]);
+                  },
+                ),
               ),
+
               const SizedBox(height: 0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Card(
                   elevation: 5,
-
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -249,10 +385,8 @@ class _DailyWorkStatusScreenState
 
                     decoration: BoxDecoration(
                       color: Colors.white,
-
                       borderRadius: BorderRadius.circular(10),
                     ),
-
                     child: Column(
                       children: [
                         /// PROJECT NAME
@@ -299,15 +433,6 @@ class _DailyWorkStatusScreenState
                                 'Enter Minutes',
                               ),
                             )
-                          // child: TextFormField(
-                          //   controller: timeSpentController,
-                          //   keyboardType: TextInputType.multiline,
-                          //   minLines: 1,
-                          //   maxLines: null,
-                          //   decoration: inputDecoration(
-                          //     'Enter Minutes',
-                          //   ),
-                          // )
                         ),
                         // const SizedBox(height: 10),
                         /// SUBMIT BUTTON

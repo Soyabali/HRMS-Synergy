@@ -36,20 +36,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'baseurl.dart';
 import 'loader_helper.dart';
 
-class ProjectEmployRepo
+class ActivitiesParametersRepo
 {
   List<dynamic>  distList = [];
-  Future<List> projectList() async
+  Future<List> activityparameter() async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? sToken = prefs.getString('sToken');
-    String? sEmpCode = prefs.getString('sEmpCode');
+    String? sUserId = prefs.getString('sContactNo');
 
     print('-----48---$sToken');
-    print('-----49---$sEmpCode');
+    print('-----49-----xxxxx----xxx---$sUserId');
 
     var baseURL = BaseRepo().baseurl;
-    var endPoint = "EmpBasedProject/EmpBasedProject";
+    var endPoint = "ActivitiesParameters/ActivitiesParameters";
     var projectList = "$baseURL$endPoint";
     print('------------17---EmpBasedProject---$projectList');
     showLoader();
@@ -61,7 +61,7 @@ class ProjectEmployRepo
       };
       var request = http.Request('POST', Uri.parse('$projectList'));
       request.body = json.encode({
-        "sEmpCode": sEmpCode,
+        "sUserId": sUserId,
       });
 
       request.headers.addAll(headers);
