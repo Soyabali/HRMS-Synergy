@@ -25,7 +25,6 @@ import '../reimbursementStatus/consumableItem.dart';
 import '../reimbursementStatus/reimbursementlog.dart';
 import 'duplicateExpenseEntry.dart';
 
-
 class PendingTeamReimbPage extends StatefulWidget {
 
   const PendingTeamReimbPage({super.key});
@@ -643,9 +642,10 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
               ),
             ),
             title: const Padding(
+
               padding: EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                'Pending Team Reimb',
+                'Pending Team Reim',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -1392,6 +1392,41 @@ class _MyHomePageState extends State<PendingTeamReimbPage> {
                                                                 style: AppTextStyle
                                                                     .font12OpenSansRegularBlack45TextStyle),
                                                           ),
+                                                          SizedBox(height: 10),
+                                                          Row(
+                                                            mainAxisAlignment: MainAxisAlignment.start,
+                                                            children: <Widget>[
+                                                              Container(
+                                                                height: 10.0,
+                                                                width: 10.0,
+                                                                decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  // Change this to your preferred color
+                                                                  borderRadius: BorderRadius
+                                                                      .circular(
+                                                                      5.0),
+                                                                ),
+                                                              ),
+                                                              SizedBox(width: 5),
+                                                              Text(
+                                                                  'Ticket No',
+                                                                  style: AppTextStyle
+                                                                      .font12OpenSansRegularBlackTextStyle)
+                                                            ],
+                                                          ),
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .only(
+                                                                left: 15),
+                                                            child: Text(
+                                                                leaveData
+                                                                    .sTicketNo,
+                                                                // item['sExpDetails'] ?? '',
+                                                                style: AppTextStyle
+                                                                    .font12OpenSansRegularBlack45TextStyle),
+                                                          ),
+
                                                           SizedBox(height: 10),
                                                           // bottom
                                                           Container(

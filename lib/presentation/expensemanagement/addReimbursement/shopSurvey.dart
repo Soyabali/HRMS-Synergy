@@ -108,6 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextEditingController _amountController = TextEditingController();
   TextEditingController _expenseController = TextEditingController();
+  TextEditingController _ticketNoController = TextEditingController();
   TextEditingController _itemDescriptionController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
   TextEditingController _amountController2 = TextEditingController();
@@ -119,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
   FocusNode _contactfocus = FocusNode();
   FocusNode _landMarkfocus = FocusNode();
   FocusNode _addressfocus = FocusNode();
+  FocusNode _ticketNofocus = FocusNode();
 
   // FocusNode descriptionfocus = FocusNode();
 
@@ -147,6 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var uplodedImage, uplodedImage2, uplodedImage3, uplodedImage4;
   double? lat, long;
   var _dropDownValueBindReimType;
+  var ticketNo;
 
   //var dExpDate;
   String? dExpDate;
@@ -846,7 +849,9 @@ class _MyHomePageState extends State<MyHomePage> {
     _addressfocus.dispose();
     _amountController.dispose();
     _expenseController.dispose();
-    FocusScope.of(context).unfocus(); //
+    _ticketNoController.dispose();
+    _ticketNofocus.dispose();
+      FocusScope.of(context).unfocus(); //
   }
   // Todo bind sector code
   Widget _bindSector() {
@@ -1423,6 +1428,60 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: TextFormField(
                                       focusNode: _owenerfocus,
                                       controller: _expenseController,
+                                      textInputAction: TextInputAction.next,
+                                      onEditingComplete: () =>
+                                          FocusScope.of(context).nextFocus(),
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 10.0),
+                                        filled: true, // Enable background color
+                                        fillColor: Color(0xFFf2f3f5), // Set your desired background color here
+                                      ),
+                                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                                      // validator: (value) {
+                                      //   if (value !=null && value =="0") {
+                                      //     return 'Enter an amount greater than 0';
+                                      //   }
+                                      //   return null;
+                                      // },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Padding(
+                                padding:
+                                const EdgeInsets.only(bottom: 5, top: 5),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                        margin: EdgeInsets.only(left: 0, right: 2),
+                                        child: const Icon(
+                                          Icons.forward_sharp,
+                                          size: 12,
+                                          color: Colors.black54,
+                                        )),
+                                    const Text('Ticket No',
+                                        style: TextStyle(
+                                            fontFamily: 'Montserrat',
+                                            color: Color(0xFF707d83),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold)),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 10, right: 0),
+                                child: Container(
+                                  height: 42,
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 0),
+                                    child: TextFormField(
+                                      focusNode: _ticketNofocus,
+                                      controller: _ticketNoController,
                                       textInputAction: TextInputAction.next,
                                       onEditingComplete: () =>
                                           FocusScope.of(context).nextFocus(),
@@ -2338,6 +2397,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   int sTranCode = 10000000 + random.nextInt(90000000);
                                   var amount = '${_amountController.text}';
                                   var expenseDetails = '${_expenseController.text}';
+                                  ticketNo = '${_ticketNoController.text}';
                                   var conList="abc";
 
                                   if (_formKey.currentState!.validate() &&
@@ -2403,7 +2463,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           uplodedImage3,
                                           uplodedImage4,
                                           consumableList,
-                                            conList);
+                                            conList,ticketNo);
                                     print('---1050--$hrmsPostReimbursement');
                                     result = "${hrmsPostReimbursement[0]['Result']}";
                                     msg = "${hrmsPostReimbursement[0]['Msg']}";
@@ -2529,7 +2589,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             uplodedImage3,
                             uplodedImage4,
                             consumableList,
-                            conList);
+                            conList,ticketNo);
                     print('---2421--$hrmsPostReimbursement');
                     result = "${hrmsPostReimbursement[0]['Result']}";
                     msg = "${hrmsPostReimbursement[0]['Msg']}";

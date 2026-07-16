@@ -17,6 +17,7 @@ class HrmsReimbursementClarificationModel {
   String sProjectCode;
   String sExpHeadCode;
   String dExpDate;
+  String sTicketNo;
 
   HrmsReimbursementClarificationModel({
     required this.sTranCode,
@@ -37,6 +38,7 @@ class HrmsReimbursementClarificationModel {
     required this.sProjectCode,
     required this.sExpHeadCode,
     required this.dExpDate,
+    required this.sTicketNo
   });
 
   // Factory constructor to create an object from JSON
@@ -60,6 +62,7 @@ class HrmsReimbursementClarificationModel {
       sProjectCode: json['sProjectCode'] as String,
       sExpHeadCode: json['sExpHeadCode'] as String,
       dExpDate: json['dExpDate'] as String,
+      sTicketNo: json['sTicketNo'] as String
     );
   }
   // Method to convert the object back to JSON
@@ -84,6 +87,7 @@ class HrmsReimbursementClarificationModel {
       'sProjectCode': sProjectCode,
       'sExpHeadCode': sExpHeadCode,
       'dExpDate': dExpDate,
+      'sTicketNo': sTicketNo
     };
   }
 }

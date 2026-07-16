@@ -40,7 +40,8 @@ class ReimbursementrevertPage extends StatefulWidget {
       sExpBillPhoto4,
       sTranCode,
       dExpDate,
-      sRemarks;
+      sRemarks,
+      sTicketNo;
 
   ReimbursementrevertPage(
       this.sProjectName,
@@ -57,6 +58,7 @@ class ReimbursementrevertPage extends StatefulWidget {
       this.sTranCode,
       this.dExpDate,
       this.sRemarks,
+      this.sTicketNo,
       {super.key});
 
   @override
@@ -110,6 +112,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   TextEditingController _amountController = TextEditingController();
   TextEditingController _expenseController = TextEditingController();
   TextEditingController _remarkController = TextEditingController();
+  TextEditingController _ticketNoController = TextEditingController();
 
   TextEditingController _itemDescriptionController = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
@@ -123,6 +126,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
   FocusNode _remarkfocus = FocusNode();
   FocusNode _landMarkfocus = FocusNode();
   FocusNode _addressfocus = FocusNode();
+  FocusNode _ticketNoFocus = FocusNode();
 
   // FocusNode descriptionfocus = FocusNode();
   String? todayDate;
@@ -1019,6 +1023,7 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
      sTranCode = '${widget.sTranCode}';
 
      print("------922----$sTranCode");
+     print("------1026--XX--TICKETnO Controller----${widget.sTicketNo}");
 
 
     // widget.dEntryAt}
@@ -1027,12 +1032,14 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     _contactfocus = FocusNode();
     _landMarkfocus = FocusNode();
     _addressfocus = FocusNode();
+    _ticketNoFocus = FocusNode();
     _amountController = TextEditingController(text: widget.fAmount);
     _expenseController = TextEditingController(text: widget.sExpDetails);
     _remarkController = TextEditingController();
     _itemDescriptionController = TextEditingController();
     _quantityController = TextEditingController();
     _amountController2 = TextEditingController();
+    _ticketNoController = TextEditingController(text: widget.sTicketNo);
     uplodedImage = "${widget.sExpBillPhoto}";
     uplodedImage2 = "${widget.sExpBillPhoto2}";
     uplodedImage3 = "${widget.sExpBillPhoto3}";
@@ -1055,6 +1062,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
     _itemDescriptionController.dispose();
     _quantityController.dispose();
     _amountController2.dispose();
+    _ticketNoController.dispose();
+    _ticketNoFocus.dispose();
   }
 
   // Todo bind sector code
@@ -1592,6 +1601,63 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                     ),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
+                                    // validator: (value) {
+                                    //   if (value !=null && value =="0") {
+                                    //     return 'Enter an amount greater than 0';
+                                    //   }
+                                    //   return null;
+                                    // },
+                                  ),
+                                ),
+                              ),
+                            ),
+                            // Ticket No
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5, top: 5),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  Container(
+                                      margin:
+                                      EdgeInsets.only(left: 0, right: 2),
+                                      child: const Icon(
+                                        Icons.forward_sharp,
+                                        size: 12,
+                                        color: Colors.black54,
+                                      )),
+                                  const Text('Ticket No',
+                                      style: TextStyle(
+                                          fontFamily: 'Montserrat',
+                                          color: Color(0xFF707d83),
+                                          fontSize: 14.0,
+                                          fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                              const EdgeInsets.only(left: 10, right: 0),
+                              child: Container(
+                                height: 42,
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 0),
+                                  child: TextFormField(
+                                    focusNode: _ticketNoFocus,
+                                    controller: _ticketNoController,
+                                    textInputAction: TextInputAction.next,
+                                    onEditingComplete: () =>
+                                        FocusScope.of(context).nextFocus(),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 10.0, horizontal: 10.0),
+                                      filled: true, // Enable background color
+                                      fillColor: Color(
+                                          0xFFf2f3f5), // Set your desired background color here
+                                    ),
+                                    autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
                                     // validator: (value) {
                                     //   if (value !=null && value =="0") {
                                     //     return 'Enter an amount greater than 0';
@@ -2728,7 +2794,8 @@ class _MyHomePageState extends State<ReimbursementrevertPage> {
                                       uplodedImage3,
                                       uplodedImage4,
                                       consumableList,
-                                      consumableItemString
+                                      consumableItemString,
+                                      ""
                                   );
 
                                   result = "${hrmsPostReimbursement[0]['Result']}";

@@ -18,6 +18,7 @@ class GetPendingForApprovalReimmodel {
   final String sDuplicate;
   final String sProjectCode;
   final String sExpHeadCode;
+  final String sTicketNo;
 
   GetPendingForApprovalReimmodel({
     required this.sTranCode,
@@ -39,6 +40,7 @@ class GetPendingForApprovalReimmodel {
     required this.sDuplicate,
     required this.sProjectCode,
     required this.sExpHeadCode,
+    required this.sTicketNo,
   });
 
   // Factory method to create a Transaction from JSON
@@ -63,6 +65,7 @@ class GetPendingForApprovalReimmodel {
       sDuplicate: json['sDuplicate'],
       sProjectCode: json['sProjectCode'],
       sExpHeadCode: json['sExpHeadCode'],
+        sTicketNo: json['sTicketNo']
     );
   }
 
@@ -88,6 +91,7 @@ class GetPendingForApprovalReimmodel {
       'sDuplicate': sDuplicate,
       'sProjectCode': sProjectCode,
       'sExpHeadCode': sExpHeadCode,
+      'sTicketNo': sTicketNo,
     };
   }
 }

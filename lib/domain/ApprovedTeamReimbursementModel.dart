@@ -19,6 +19,7 @@ class ApprovedTeamReimbursementModel {
   final String sExpHeadCode;
   final String dActionEntryAt;
   final String sRemarks;
+  final String sTicketNo;
 
   ApprovedTeamReimbursementModel({
     required this.sTranCode,
@@ -40,6 +41,7 @@ class ApprovedTeamReimbursementModel {
     required this.sExpHeadCode,
     required this.dActionEntryAt,
     required this.sRemarks,
+    required this.sTicketNo,
   });
   // Factory method to create an instance from JSON
 
@@ -64,6 +66,7 @@ class ApprovedTeamReimbursementModel {
       sExpHeadCode: json['sExpHeadCode'] ?? '',
       dActionEntryAt: json['dActionEntryAt'] ?? '',
       sRemarks: json['sRemarks'] ?? '',
+      sTicketNo: json['sTicketNo'] ?? '',
     );
   }
 
@@ -89,6 +92,7 @@ class ApprovedTeamReimbursementModel {
       'sExpHeadCode': sExpHeadCode,
       'dActionEntryAt': dActionEntryAt,
       'sRemarks': sRemarks,
+      'sTicketNo': sTicketNo,
     };
   }
 }

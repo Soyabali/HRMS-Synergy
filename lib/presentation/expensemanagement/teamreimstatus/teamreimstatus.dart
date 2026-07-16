@@ -684,6 +684,34 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                                   .font12OpenSansRegularBlack45TextStyle),
                                                         ),
                                                         SizedBox(height: 10),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                          MainAxisAlignment.start,
+                                                          children: <Widget>[
+                                                            Container(
+                                                              height: 10.0,
+                                                              width: 10.0,
+                                                              decoration: BoxDecoration(
+                                                                color: Colors.black,
+                                                                // Change this to your preferred color
+                                                                borderRadius:
+                                                                BorderRadius.circular(5.0),
+                                                              ),
+                                                            ),
+                                                            SizedBox(width: 5),
+                                                            Text('Ticket No',
+                                                                style: AppTextStyle
+                                                                    .font12OpenSansRegularBlackTextStyle)
+                                                          ],
+                                                        ),
+                                                        Padding(
+                                                          padding: EdgeInsets.only(left: 15),
+                                                          child: Text(empinfo.sTicketNo,
+                                                              // item['sTicketNo'] ?? '',
+                                                              style: AppTextStyle
+                                                                  .font12OpenSansRegularBlack45TextStyle),
+                                                        ),
+                                                        SizedBox(height: 10),
                             
                                                         // bottom
                                                         Container(
@@ -847,10 +875,9 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                                         child: GestureDetector(
                                                                           onTap: () {
                                                                             //var projact =  item['sProjectName'] ??'';
-                                                                            var sTranCode =
-                                                                                empinfo.sTranCode;
-                                                                            var project = empinfo
-                                                                                .sProjectName;
+                                                                            var sTranCode = empinfo.sTranCode;
+                                                                            var project = empinfo.sProjectName;
+                                                                            var ticketNo = empinfo.sTicketNo;
                                                                             print(
                                                                                 "----1257----$sTranCode");
                                                                             Navigator.push(
@@ -859,7 +886,8 @@ class _MyLeaveStatusPageState extends State<TeamReimStatusPage> {
                                                                                   builder: (context) =>
                                                                                       ReimbursementLogPage(
                                                                                           project,
-                                                                                          sTranCode)),
+                                                                                          sTranCode,
+                                                                                      )),
                                                                             );
                                                                           },
                                                                           child: Row(

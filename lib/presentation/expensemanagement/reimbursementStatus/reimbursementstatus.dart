@@ -107,7 +107,8 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
         _filteredData = _allData.where((item) {
           return item.sProjectName.toLowerCase().contains(query.toLowerCase()) ||  // Filter by project name
               item.sExpHeadName.toLowerCase().contains(query.toLowerCase()) ||
-              item.sStatusName.toLowerCase().contains(query.toLowerCase());
+              item.sStatusName.toLowerCase().contains(query.toLowerCase())||
+              item.sTicketNo.toLowerCase().contains(query.toLowerCase());
           // Filter by employee name
         }).toList();
       }
@@ -827,6 +828,34 @@ class _MyHomePageState extends State<ReimbursementstatusPage> {
                                                     .font12OpenSansRegularBlack45TextStyle
                                             ),
                                           ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                height: 10.0,
+                                                width: 10.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black,
+                                                  // Change this to your preferred color
+                                                  borderRadius: BorderRadius.circular(5.0),
+                                                ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text('Ticket No', style: AppTextStyle.font12OpenSansRegularBlackTextStyle
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(height: 5),
+                                          Padding(
+                                            padding: EdgeInsets.only(left: 15),
+                                            child: Text(
+                                                leaveData.sTicketNo,
+                                                style: AppTextStyle
+                                                    .font12OpenSansRegularBlack45TextStyle
+                                            ),
+                                          ),
+
                                           SizedBox(height: 5),
                                           Row(
                                             mainAxisAlignment:

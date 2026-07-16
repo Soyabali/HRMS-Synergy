@@ -18,6 +18,7 @@ class Hrmsreimbursementstatusv3model {
   final String sExpHeadCode;
   final String dExpDate;
   final String iStatus;
+  final String sTicketNo;
 
   Hrmsreimbursementstatusv3model({
     required this.sTranCode,
@@ -39,6 +40,7 @@ class Hrmsreimbursementstatusv3model {
     required this.sExpHeadCode,
     required this.dExpDate,
     required this.iStatus,
+    required this.sTicketNo
   });
 
   // Factory constructor to create an instance from JSON
@@ -62,7 +64,8 @@ class Hrmsreimbursementstatusv3model {
       sProjectCode: json['sProjectCode'],
       sExpHeadCode: json['sExpHeadCode'],
       dExpDate: json['dExpDate'],
-      iStatus:json['iStatus']
+      iStatus:json['iStatus'],
+      sTicketNo: json['sTicketNo']
     );
   }
 }

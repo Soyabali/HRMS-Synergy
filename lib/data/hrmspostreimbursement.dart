@@ -22,7 +22,7 @@ class HrmsPostReimbursementRepo {
       uplodedImage,
       String? sContactNo,
       result,
-      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList, consumableItemString,
+      String remarks, uplodedImage2, uplodedImage3, uplodedImage4, String? consumableList, consumableItemString, String ticketNo
       ) async {
     try {
       //uplodedImage2, uplodedImage3, uplodedImage4
@@ -46,9 +46,11 @@ class HrmsPostReimbursementRepo {
       print('----uplode image 4--44---$uplodedImage4');
       print('----ConsumaleList --45---$consumableList');
       print('----consumableItemString --45---$consumableItemString');
+      print("------49---ticketNo---$ticketNo");
       //
       var baseURL = BaseRepo().baseurl;
-      var endPoint = "hrmsPostReimbursementNew/hrmsPostReimbursementNew";
+      //var endPoint = "hrmsPostReimbursementNew/hrmsPostReimbursementNew";
+      var endPoint = "hrmsPostReimbursementNewV1/hrmsPostReimbursementNewV1";
       var hrmsPostReimbursementApi = "$baseURL$endPoint";
       print('------------17---hrmsPostReimbursementApi---$hrmsPostReimbursementApi');
 
@@ -71,6 +73,7 @@ class HrmsPostReimbursementRepo {
         "sExpHeadCode": selectedShopId ?? "",
         "sProjectCode": selectedSectorId ?? "",
         "sEmpCode": sEmpCode ?? "",
+         "sTicketNo": ticketNo ?? "",
         "sItemArray": consumableList ?? consumableItemString,
         //"sItemArray": consumableList ?? '[{"":""}]',
         //"sItemArray": (consumableList == null || consumableList.isEmpty) ? [] : consumableList,
