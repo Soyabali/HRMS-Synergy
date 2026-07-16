@@ -8,7 +8,7 @@ import 'loader_helper.dart';
 class HrmsDailyActivityNew {
   // this is a loginApi call functin
 
-  Future hrmsDailyActivityNew(BuildContext context, projectCode, String workDetail, String timeSpent) async {
+  Future hrmsDailyActivityNew(BuildContext context, projectCode, String workDetail, String timeSpent, String todayTask) async {
     try {
       //uplodedImage2, uplodedImage3, uplodedImage4
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -20,10 +20,12 @@ class HrmsDailyActivityNew {
       print("------20  project code-------$projectCode");
       print("------21  work detail-------$workDetail");
       print("------22  time spent-------$timeSpent");
+      print("-------23---$todayTask");
 
 
       var baseURL = BaseRepo().baseurl;
-      var endPoint = "hrmsDailyActivityNew/hrmsDailyActivityNew";
+      //var endPoint = "hrmsDailyActivityNew/hrmsDailyActivityNew";
+      var endPoint = "hrmsDailyActivityNewV1/hrmsDailyActivityNewV1";
       var hrmsDailyActivityNew = "$baseURL$endPoint";
       print('------------17--hrmsDailyActivityNew/hrmsDailyActivityNew---$hrmsDailyActivityNew');
 
@@ -35,7 +37,8 @@ class HrmsDailyActivityNew {
         "sEmpCode": sEmpCode,
         "sProjectCode": projectCode,
         "sActivity":workDetail,
-        "iWorkingMinutes":timeSpent
+        "iWorkingMinutes":timeSpent,
+        "sUserAcknowlegement":todayTask
 
       });
       request.headers.addAll(headers);

@@ -29,6 +29,8 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
   final TextEditingController timeSpentController =
   TextEditingController();
+  final TextEditingController todaytaskfocus=
+  TextEditingController();
   List<dynamic>?  baseProjectList;
   List<dynamic> distList = [];
   List<dynamic> activityParameter = [];
@@ -38,9 +40,16 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   List<dynamic> activityList = [];
   String currentDate = "";
   bool isLoading = false;
+  var sEmpImage;
+
+  /// SHOW/HIDE THE "TODAY'S WORK STATUS" LIST (hidden by default)
+  bool isActivityVisible = false;
+
+  /// SHOW/HIDE THE STAT CARD VALUES (hidden by default, shows '0' until toggled)
+  bool isStatValueVisible = false;
+
   /// DROPDOWN
   String? selectedProject;
-  var fCTC_firstCard,fMontlyCTC_secondCard,fDayWiseSalary_thirdCard,weeklyoffFourthCard,weeklyoffFiveCard,holidayleavesixCard;
   var compleName,Acknowledgement;
   /// STAT CARDS AUTO-SCROLL
   final ScrollController _statScrollController = ScrollController();
@@ -66,11 +75,14 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var sFirstName = prefs.getString('sFirstName');
     var sLastName = prefs.getString('sLastName');
+    sEmpImage = prefs.getString('sEmpImage');
+    // sEmpImage
     compleName = "$sFirstName $sLastName";
     setState(() {
 
     });
-    print("-----69--$compleName");
+    print("-----84--$compleName");
+    print("-----85----$sEmpImage");
 
   }
 
@@ -110,7 +122,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
     setState(() {
 
-      activityList = map ?? [];
+      activityList = map;
 
       isLoading = false;
     });
@@ -127,35 +139,15 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   activityParameterResponse() async {
     activityParameter = await ActivitiesParametersRepo().activityparameter();
 
-    print("Response: $activityParameter");
+    print("Response:----136--xx-- $activityParameter");
 
     // Wait for 1 second
     await Future.delayed(const Duration(seconds: 1));
 
     if (activityParameter.isNotEmpty) {
-      fCTC_firstCard = activityParameter[0]["fCTC"] ?? 0;
-      fMontlyCTC_secondCard = activityParameter[0]["fMontlyCTC"] ?? 0;
-      fDayWiseSalary_thirdCard = activityParameter[0]["fDayWiseSalary"] ?? 0;
-
-      var fAbsent = activityParameter[0]["fAbsent"] ?? 0;
-      var fPresents = activityParameter[0]["fPresents"] ?? 0;
-      weeklyoffFourthCard = "$fAbsent/$fPresents";
-
-      weeklyoffFiveCard = activityParameter[0]["WeeklyOff"] ?? 0;
-
-      var holidays = activityParameter[0]["Holidays"] ?? 0;
-      var fLeaves = activityParameter[0]["fLeaves"] ?? 0;
-      holidayleavesixCard = "$holidays/$fLeaves";
       //  Acknowledgement
-      Acknowledgement = activityParameter[0]["Acknowledgement"] ?? 0;
-      print("fCTC: $fCTC_firstCard");
-      print("fMontlyCTC_secondCard: $fMontlyCTC_secondCard");
-      print("fDayWiseSalary_thirdCard: $fDayWiseSalary_thirdCard");
-      print("weeklyoffFourthCard: $weeklyoffFourthCard");
-      print("weeklyoffFiveCard: $weeklyoffFiveCard");
-      print("holidayleavesixCard: $holidayleavesixCard");
+      Acknowledgement = activityParameter[0]["Acknowledgement"]?.toString() ?? "";
       print("----157--$Acknowledgement");
-
     }
 
     setState(() {});
@@ -233,70 +225,62 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     );
   }
   /// ====================================
-  /// TOP STAT CARDS DATA (bind your real values here)
+  /// TOP STAT CARDS DATA
   /// ====================================
+  /// Built from activityParameter[0], which the API returns as a single
+  /// object holding 3 heading/value pairs, e.g.:
+  /// { sHeading1: "...", sValue1: "...", sHeading2: "...", sValue2: "...",
+  ///   sHeading3: "...", sValue3: "..." }
+  ///
+  /// 'title' -> shown in the small top text slot   (bound to sValueN)
+  /// 'value' -> shown in the large bottom text slot (bound to sHeadingN)
   /// 'bgColor'    -> main card background (#EAF5FF sample)
   /// 'corner1'    -> bottom-right corner shape, lighter layer  (#CBEFFD sample)
   /// 'corner2'    -> bottom-right corner shape, darker layer   (#A8E1F7 sample)
   /// 'iconColor'  -> color of the icon inside the white circle
   /// 'iconAsset'  -> optional asset image path; when set, replaces the Icon
   ///                 inside the circle (share the assets and this will just work)
-  List<Map<String, dynamic>> get statCardList => [
-    {
-      'icon': Icons.currency_rupee_rounded,
-      'title': 'CTC',
-      'value': fCTC_firstCard ?? 0,
-      'bgColor': Color(0xFFEAF5FF),
-      'corner1': Color(0xFFCBEFFD),
-      'corner2': Color(0xFFA8E1F7),
-      'iconColor': Color(0xFF11998E),
-    },
-    {
-      'icon': Icons.event_available_rounded,
-      'title': 'Monthly Salary',
-      'value': fMontlyCTC_secondCard ?? 0,
-      'bgColor': Color(0xFFE9F8EB),
-      'corner1': Color(0xFFD0FFE1),
-      'corner2': Color(0xFFBBF2C8),
-      'iconColor': Color(0xFF2E9E4F),
-    },
-    {
-      'icon': Icons.event_busy_rounded,
-      'title': 'Per Day Salary',
-      'value': fDayWiseSalary_thirdCard ?? 0,
-      'bgColor': Color(0xFFFFF9F3),
-      'corner1': Color(0xFFFFF0E3),
-      'corner2': Color(0xFFFFDCC2),
-      'iconColor': Color(0xFFEF8C3C),
-    },
-    {
-      'icon': Icons.access_time_filled_rounded,
-      'title': 'Absent/Present',
-      'value': weeklyoffFourthCard ?? 0,
-      'bgColor': Color(0xFFE7E9F6),
-      'corner1': Color(0xFFB4BFFA),
-      'corner2': Color(0xFF6679E4),
-      'iconColor': Color(0xFF6679E4),
-    },
-    {
-      'icon': Icons.beach_access_rounded,
-      'title': 'Weekly Off',
-      'value': weeklyoffFiveCard ?? 0,
-      'bgColor': Color(0xFFF6E9E8),
-      'corner1': Color(0xFFF8BCB8),
-      'corner2': Color(0xFFF44336),
-      'iconColor': Color(0xFFF44336),
-    },
-    {
-      'icon': Icons.timer_outlined,
-      'title': 'Holiday/Leave',
-      'value': holidayleavesixCard ?? 0,
-      'bgColor': Color(0xFFEAFBF9),
-      'corner1': Color(0xFFB5F8F1),
-      'corner2': Color(0xFF009688),
-      'iconColor': Color(0xFF009688),
-    },
-  ];
+  List<Map<String, dynamic>> get statCardList {
+    if (activityParameter.isEmpty) return [];
+
+    final Map data = activityParameter[0];
+
+    /// HIDDEN BY DEFAULT -> SHOWS '0' UNTIL THE EYE ICON IS TOGGLED ON
+    String maskedValue(dynamic raw) {
+      if (!isStatValueVisible) return '0';
+      return raw?.toString() ?? '';
+    }
+
+    return [
+      {
+        'icon': Icons.beach_access_rounded,
+        'title': maskedValue(data['sValue1']),
+        'value': data['sHeading1']?.toString() ?? '',
+        'bgColor': Color(0xFFEAF5FF),
+        'corner1': Color(0xFFCBEFFD),
+        'corner2': Color(0xFFA8E1F7),
+        'iconColor': Color(0xFF11998E),
+      },
+      {
+        'icon': Icons.event_available_rounded,
+        'title': maskedValue(data['sValue2']),
+        'value': data['sHeading2']?.toString() ?? '',
+        'bgColor': Color(0xFFE9F8EB),
+        'corner1': Color(0xFFD0FFE1),
+        'corner2': Color(0xFFBBF2C8),
+        'iconColor': Color(0xFF2E9E4F),
+      },
+      {
+        'icon': Icons.currency_rupee_rounded,
+        'title': maskedValue(data['sValue3']),
+        'value': data['sHeading3']?.toString() ?? '',
+        'bgColor': Color(0xFFFFF9F3),
+        'corner1': Color(0xFFFFF0E3),
+        'corner2': Color(0xFFFFDCC2),
+        'iconColor': Color(0xFFEF8C3C),
+      },
+    ];
+  }
 
   /// ====================================
   /// STAT CARD WIDGET (circle icon + title + value)
@@ -309,9 +293,9 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     final String? iconAsset = data['iconAsset'] as String?;
 
     return Container(
-      width: 180,
-      height: 190,
-      margin: const EdgeInsets.only(right: 14),
+      width: 150,
+      height: 140,
+      margin: const EdgeInsets.only(right: 8),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(22),
         child: Container(
@@ -340,16 +324,16 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                 padding: const EdgeInsets.only(
                   left: 25,
                   right: 14,
-                  top: 22,
-                  bottom: 18,
+                  top: 10,
+                  bottom: 8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// ICON CIRCLE (~70 x 70, white background)
+                    /// ICON CIRCLE (~46 x 46, white background)
                     Container(
-                      height: 70,
-                      width: 70,
+                      height: 46,
+                      width: 46,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         shape: BoxShape.circle,
@@ -365,41 +349,43 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                           ? ClipOval(
                         child: Image.asset(
                           iconAsset,
-                          width: 36,
-                          height: 36,
+                          width: 24,
+                          height: 24,
                           fit: BoxFit.contain,
                         ),
                       )
                           : Icon(
                         data['icon'] as IconData,
                         color: iconColor,
-                        size: 32,
+                        size: 20,
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 6),
 
-                    /// TITLE
+                    /// TITLE (bound to sValueN)
                     Text(
                       data['title'] as String,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Color(0xFF5B6472),
-                        fontSize: 13,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
 
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 2),
 
-                    /// VALUE
+                    /// VALUE (bound to sHeadingN)
                     Text(
                       data['value'].toString(),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         color: Color(0xFF1E2230),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ],
@@ -463,15 +449,46 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
               /// TOP STAT CARDS (HORIZONTAL LIST)
               /// ====================================
 
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    /// SHOW / HIDE TOGGLE (EYE ICON, LIKE A PASSWORD FIELD)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF12B8C6).withOpacity(0.10),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isStatValueVisible = !isStatValueVisible;
+                          });
+                        },
+                        icon: Icon(
+                          isStatValueVisible
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                          color: const Color(0xFF12B8C6),
+                          size: 26,
+                        ),
+                        tooltip: isStatValueVisible ? 'Hide values' : 'Show values',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
               SizedBox(
-                height: 210,
+                height: 170,
                 child: ListView.builder(
                   controller: _statScrollController,
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 10,
+                    vertical: 8,
                   ),
                   itemCount: statCardList.length,
                   itemBuilder: (context, index) {
@@ -479,47 +496,6 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                   },
                 ),
               ),
-              //SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Dear $compleName',style: TextStyle(
-                  color:Colors.red,
-                  fontSize: 16,
-                ),
-                ),
-              ),
-              //SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ReadMoreText(
-                  Acknowledgement ?? "",
-
-                  trimLines: 3,
-
-                  trimMode: TrimMode.Line,
-
-                  trimCollapsedText: ' Read More',
-
-                  trimExpandedText: ' Read Less',
-
-                  style: AppTextStyle
-                      .font14OpenSansRegularBlackTextStyle,
-
-                  moreStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF12B8C6),
-                  ),
-
-                  lessStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF12B8C6),
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                 child: Card(
@@ -531,7 +507,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                   child: Container(
                     width: double.infinity,
 
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(8),
 
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -545,7 +521,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                             title: "Project Name",
                             child: _bindProject()
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         /// WORK DETAIL
                         buildInputRow(
                             icon: Icons.file_copy_outlined,
@@ -560,7 +536,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                               ),
                             )
                         ),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 8),
                         /// TIME SPENT
                         buildInputRow(
                             icon: Icons.watch_later_rounded,
@@ -600,7 +576,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                               ),
                               elevation: 3,
                             ),
-                            onPressed: () async {
+                            onPressed: () {
 
                               print("-------xxxx----");
 
@@ -633,35 +609,16 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
                                 return;
                               }
-                              /// ALL VALIDATION SUCCESS
+
+                              /// ALL VALIDATION SUCCESS -> SHOW THE CONFIRM/REMARKS DIALOG
+                              /// (the API is only called from inside that dialog's Submit button)
                               print("All fields are valid");
 
-                              /// TODO API CALL
-                              var map = await HrmsDailyActivityNew()
-                                  .hrmsDailyActivityNew(context,projectCode,workDetail,timeSpent);
-                              print("-------Daily Activity Response--------");
-                              print(map);
-                              var result = int.parse(map[0]['Result'].toString()); //map[0]['Result'];
-                              var message = map[0]['Msg'];
-                              print("-----result-------$result");
-                              print("-----message-------$message");
-                              if(result==1){
-                                // call Daily Activity list
-                                hrmsActivityList();
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      _buildDialogSucces2(context, message),
-                                );
-
-                              }else{
-                                // info Dialog
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      _buildDialogInfo(context, message),
-                                );
-                              }
+                              _showRemarksDialog(
+                                projectCode: projectCode.toString(),
+                                workDetail: workDetail,
+                                timeSpent: timeSpent,
+                              );
                             },
                             child: const Text(
                               "Submit",
@@ -678,7 +635,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               /// ====================================
               /// TODAY STATUS TITLE
               /// ====================================
@@ -696,7 +653,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                   ? Container()
               :
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 child: Row(
                   children:[
                     Container(
@@ -710,29 +667,57 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                       ),
                     ),
                     SizedBox(width: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Today's Work Status",
-                          style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Today's Work Status",
+                            style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                          ),
+                          SizedBox(height: 5),
+                          Text('$currentDate',style: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xFF12B8C6),
+                          ),)
+                        ],
+                      ),
+                    ),
+
+                    /// SHOW / HIDE TOGGLE (EYE ICON, LIKE A PASSWORD FIELD)
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF12B8C6).withOpacity(0.10),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isActivityVisible = !isActivityVisible;
+                          });
+                        },
+                        icon: Icon(
+                          isActivityVisible
+                              ? Icons.visibility_rounded
+                              : Icons.visibility_off_rounded,
+                          color: const Color(0xFF12B8C6),
+                          size: 26,
                         ),
-                        SizedBox(height: 5),
-                        Text('$currentDate',style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF12B8C6),
-                        ),)
-                      ],
-                    )
+                        tooltip: isActivityVisible ? 'Hide list' : 'Show list',
+                      ),
+                    ),
                   ],
                 ),
               ),
               /// ====================================
-              /// HORIZONTAL LIST
+              /// VERTICAL LIST
               /// ====================================
 
-              isLoading
+              !isActivityVisible
+                  ? Container()
+
+                  : isLoading
                   ? const SizedBox(
                 height: 320,
                 child: Center(
@@ -748,40 +733,34 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
                 color: Colors.white,
 
-                margin: const EdgeInsets.all(10),
+                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
 
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
 
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
 
                   child: Container(
                     color: Colors.white,
 
-                    child: SizedBox(
-                      height: 260,
+                    child: ListView.builder(
 
-                      child: ListView.builder(
+                      scrollDirection: Axis.vertical,
 
-                        scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
 
-                        physics: const BouncingScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
 
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ),
+                      itemCount: activityList.length,
 
-                        itemCount: activityList.length,
+                      itemBuilder: (context, index) {
 
-                        itemBuilder: (context, index) {
+                        var item = activityList[index];
 
-                          var item = activityList[index];
-
-                          return taskCard(item);
-                        },
-                      ),
+                        return taskCard(item);
+                      },
                     ),
                   ),
                 ),
@@ -814,7 +793,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
               //     ),
               //   ),
               // ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -835,17 +814,17 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: isIOS ? 10 : 8,
+        vertical: isIOS ? 6 : 4,
         horizontal: isIOS ? 2 : 0,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
            Padding(
-             padding: const EdgeInsets.only(top: 27),
+             padding: const EdgeInsets.only(top: 18),
              child: Container(
-               height: 45,
-               width: 45,
+               height: 40,
+               width: 40,
 
                decoration: BoxDecoration(
                  color: const Color(0xFF12B8C6).withOpacity(0.10),
@@ -902,7 +881,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                     color: Colors.black,
                   ),
                 ),
-                SizedBox(height: isIOS ? 10 : 8),
+                SizedBox(height: isIOS ? 6 : 5),
                 /// INPUT CHILD
                 child,
               ],
@@ -926,7 +905,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 4,
-        vertical: 5,
+        vertical: 4,
       ),
 
       enabledBorder: OutlineInputBorder(
@@ -954,11 +933,10 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   Widget taskCard(item) {
 
     return Container(
-      width: 340,
+      width: double.infinity,
 
       margin: const EdgeInsets.only(
-        right: 14,
-        bottom: 10,
+        bottom: 14,
       ),
 
       child: Card(
@@ -1055,7 +1033,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                       children: [
 
                         Text(
-                          item['sProject'] ?? "",
+                          item['sProject']?.toString() ?? "",
 
                           style: const TextStyle(
                             fontSize: 14,
@@ -1143,7 +1121,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                         const SizedBox(width: 5),
 
                         Text(
-                          item['WorkingHrs'] ?? "",
+                          item['WorkingHrs']?.toString() ?? "",
 
                           style: const TextStyle(
                             fontSize: 13,
@@ -1159,38 +1137,268 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
               const SizedBox(height: 10),
 
-              Expanded(
-                child: ReadMoreText(
-                  item['Activity'] ?? "",
+              ReadMoreText(
+                item['Activity']?.toString() ?? "",
 
-                  trimLines: 3,
+                trimLines: 3,
 
-                  trimMode: TrimMode.Line,
+                trimMode: TrimMode.Line,
 
-                  trimCollapsedText: ' Read More',
+                trimCollapsedText: ' Read More',
 
-                  trimExpandedText: ' Read Less',
+                trimExpandedText: ' Read Less',
 
-                  style: AppTextStyle
-                      .font14OpenSansRegularBlackTextStyle,
+                style: AppTextStyle
+                    .font14OpenSansRegularBlackTextStyle,
 
-                  moreStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF12B8C6),
-                  ),
+                moreStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF12B8C6),
+                ),
 
-                  lessStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF12B8C6),
-                  ),
+                lessStyle: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF12B8C6),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  /// ====================================
+  /// REMARKS CONFIRMATION DIALOG
+  /// (employee image + greeting + acknowledgement + compulsory remarks field)
+  /// The API is only called from the Submit button inside this dialog -
+  /// the main-screen Submit button just validates and opens this dialog.
+  /// ====================================
+  void _showRemarksDialog({
+    required String projectCode,
+    required String workDetail,
+    required String timeSpent,
+  }) {
+    final String? empImage = sEmpImage?.toString();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.white,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  /// EMPLOYEE IMAGE + NAME
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundColor: const Color(0xFF12B8C6).withOpacity(0.10),
+                        backgroundImage: (empImage != null && empImage.isNotEmpty)
+                            ? NetworkImage(empImage)
+                            : null,
+                        child: (empImage == null || empImage.isEmpty)
+                            ? const Icon(
+                          Icons.person,
+                          color: Color(0xFF12B8C6),
+                          size: 28,
+                        )
+                            : null,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Dear $compleName,',
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF1E2230),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  /// ACKNOWLEDGEMENT MESSAGE
+                  ReadMoreText(
+                    Acknowledgement ?? "",
+                    trimLines: 3,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: ' Read More',
+                    trimExpandedText: ' Read Less',
+                    textAlign: TextAlign.justify,
+                    style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                    moreStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF12B8C6),
+                    ),
+                    lessStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF12B8C6),
+                    ),
+                  ),
+
+                  const SizedBox(height: 14),
+                  Divider(color: Colors.grey.shade300),
+                  const SizedBox(height: 8),
+
+                  /// REMARKS LABEL
+                  RichText(
+                    text: const TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Remarks ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '*',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  /// REMARKS INPUT (compulsory)
+                  TextFormField(
+                    controller: todaytaskfocus,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 2,
+                    maxLines: 4,
+                    decoration: inputDecoration('Enter your remarks here...'),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// CANCEL / SUBMIT
+                  Row(
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          onPressed: () {
+                            Navigator.of(dialogContext).pop();
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Color(0xFF12B8C6)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF12B8C6),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF12B8C6),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            elevation: 3,
+                          ),
+                          onPressed: () async {
+
+                            var todayTask = todaytaskfocus.text.trim();
+
+                            /// REMARKS VALIDATION (compulsory)
+                            if (todayTask.isEmpty) {
+                              displayToast("Please enter your remarks");
+                              return;
+                            }
+
+                            /// API CALL (only from here, not the main screen)
+                            var map = await HrmsDailyActivityNew()
+                                .hrmsDailyActivityNew(context, projectCode, workDetail, timeSpent, todayTask);
+                            print("-------Daily Activity Response-----686-----");
+                            print(map);
+                            var result = int.parse(map[0]['Result'].toString());
+                            var message = map[0]['Msg'];
+                            print("-----result-------$result");
+                            print("-----message-------$message");
+
+                            Navigator.of(dialogContext).pop();
+
+                            if (result == 1) {
+                              /// CLEAR THE FORM SO THE MAIN SCREEN LOOKS FRESH
+                              setState(() {
+                                workDetailController.clear();
+                                timeSpentController.clear();
+                                todaytaskfocus.clear();
+                                _dropDownSector = null;
+                                _selectedProjectCode = null;
+                              });
+
+                              // call Daily Activity list
+                              hrmsActivityList();
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    _buildDialogSucces2(context, message),
+                              );
+                            } else {
+                              // info Dialog
+                              showDialog(
+                                context: context,
+                                builder: (context) =>
+                                    _buildDialogInfo(context, message),
+                              );
+                            }
+                          },
+                          child: const Text(
+                            "Submit",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

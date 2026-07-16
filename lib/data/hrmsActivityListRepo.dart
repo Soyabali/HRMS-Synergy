@@ -8,7 +8,7 @@ import 'loader_helper.dart';
 class HrmsActivityList {
   // this is a loginApi call functin
 
-  Future hrmsActivityList(BuildContext context) async {
+  Future<List> hrmsActivityList(BuildContext context) async {
     try {
       //uplodedImage2, uplodedImage3, uplodedImage4
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -30,19 +30,17 @@ class HrmsActivityList {
       });
       request.headers.addAll(headers);
       http.StreamedResponse response = await request.send();
-      var map;
       var data = await response.stream.bytesToString();
-      map = json.decode(data);
-      print('----------41-------$map');
-      if (response.statusCode == 200) {
-        hideLoader();
+      var map = json.decode(data);
+      hideLoader();
+
+      if (response.statusCode == 200 && map is List) {
         print('----------44-----$map');
         return map;
       } else {
         print('----------47------$map');
-        hideLoader();
         print(response.reasonPhrase);
-        return map;
+        return [];
       }
     } catch (e) {
       hideLoader();
