@@ -1,0 +1,53 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'baseurl.dart';
+import 'loader_helper.dart';
+
+class HrmsUpdateUserAcknowledgementRepo {
+  // this is a loginApi call functin
+
+  Future<List> hrmsupdateAcknowledgement(
+      BuildContext context, String dDate, String sEmpCode, String sUserAckn) async {
+    try {
+      //uplodedImage2, uplodedImage3, uplodedImage4
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+      print("-----18---$sEmpCode");
+
+      var baseURL = BaseRepo().baseurl;
+      var endPoint = "HrmsUpdateUserAcknowledgement/HrmsUpdateUserAcknowledgement";
+      var hrmsActivityList = "$baseURL$endPoint";
+      print('------------17--hrmsActivityList---$hrmsActivityList');
+
+      showLoader();
+      var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
+      var request = http.Request('POST', Uri.parse('$hrmsActivityList'));
+
+      request.body = json.encode({
+        "dDate": dDate,
+        "sEmpCode": sEmpCode,
+        "sUserAckn": sUserAckn,// send remarks here
+      });
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      var data = await response.stream.bytesToString();
+      var map = json.decode(data);
+      hideLoader();
+
+      if (response.statusCode == 200 && map is List) {
+        print('----------44-----$map');
+        return map;
+      } else {
+        print('----------47------$map');
+        print(response.reasonPhrase);
+        return [];
+      }
+    } catch (e) {
+      hideLoader();
+      debugPrint("exception: $e");
+      throw e;
+    }
+  }
+}

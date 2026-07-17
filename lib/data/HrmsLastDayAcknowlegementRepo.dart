@@ -1,0 +1,52 @@
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'baseurl.dart';
+import 'loader_helper.dart';
+
+class HrmsLastDayAcknowlegementRepo {
+  // this is a loginApi call functin
+
+  Future<List> hrmslastDay(BuildContext context) async {
+    try {
+      //uplodedImage2, uplodedImage3, uplodedImage4
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? sToken = prefs.getString('sToken');
+      var sContactNo = prefs.getString('sContactNo');
+      var sEmpCode = prefs.getString('sEmpCode');
+      print("-----18---$sEmpCode");
+
+      var baseURL = BaseRepo().baseurl;
+      var endPoint = "HrmsLastDayAcknowlegement/HrmsLastDayAcknowlegement";
+      var hrmsActivityList = "$baseURL$endPoint";
+      print('------------17--hrmsActivityList---$hrmsActivityList');
+
+      showLoader();
+      var headers = {'token': '$sToken', 'Content-Type': 'application/json'};
+      var request = http.Request('POST', Uri.parse('$hrmsActivityList'));
+
+      request.body = json.encode({
+        "sEmpCode": sContactNo,
+      });
+      request.headers.addAll(headers);
+      http.StreamedResponse response = await request.send();
+      var data = await response.stream.bytesToString();
+      var map = json.decode(data);
+      hideLoader();
+
+      if (response.statusCode == 200 && map is List) {
+        print('----------44-----$map');
+        return map;
+      } else {
+        print('----------47------$map');
+        print(response.reasonPhrase);
+        return [];
+      }
+    } catch (e) {
+      hideLoader();
+      debugPrint("exception: $e");
+      throw e;
+    }
+  }
+}

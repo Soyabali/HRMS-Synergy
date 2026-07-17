@@ -24,8 +24,8 @@ class HrmsDailyActivityNew {
 
 
       var baseURL = BaseRepo().baseurl;
-      //var endPoint = "hrmsDailyActivityNew/hrmsDailyActivityNew";
-      var endPoint = "hrmsDailyActivityNewV1/hrmsDailyActivityNewV1";
+      var endPoint = "hrmsDailyActivityNew/hrmsDailyActivityNew";
+      //var endPoint = "hrmsDailyActivityNewV1/hrmsDailyActivityNewV1";
       var hrmsDailyActivityNew = "$baseURL$endPoint";
       print('------------17--hrmsDailyActivityNew/hrmsDailyActivityNew---$hrmsDailyActivityNew');
 
@@ -38,7 +38,7 @@ class HrmsDailyActivityNew {
         "sProjectCode": projectCode,
         "sActivity":workDetail,
         "iWorkingMinutes":timeSpent,
-        "sUserAcknowlegement":todayTask
+       // "sUserAcknowlegement":todayTask
 
       });
       request.headers.addAll(headers);

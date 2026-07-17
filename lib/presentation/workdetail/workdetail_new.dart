@@ -6,6 +6,9 @@ import 'package:oktoast/oktoast.dart' as Fluttertoast;
 import 'package:readmore/readmore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/ActivitiesParametersRepo.dart';
+import '../../data/HrmsEmpWorkStatusReportRepo.dart';
+import '../../data/HrmsLastDayAcknowlegementRepo.dart';
+import '../../data/HrmsUpdateUserAcknowledgementRepo.dart';
 import '../../data/hrmsActivityListRepo.dart';
 import '../../data/hrmsDailyActivityNewRepo.dart';
 import '../../data/projectemploybase.dart';
@@ -38,10 +41,13 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
   final sectorFocus = GlobalKey();
   var _selectedProjectCode;
   List<dynamic> activityList = [];
+  List<dynamic> hrmslastDayAcknowlegement = [];
   String currentDate = "";
   bool isLoading = false;
   var sEmpImage;
-
+  var hrmsLastDayResult,dDatelastDay,sEmpCodelastDay,dDate,sEmpCode;
+  /// LOGIN CONTACT NO (used as sEmpCode for the work-status report API inside the dialog)
+  String contactNo = "";
   /// SHOW/HIDE THE "TODAY'S WORK STATUS" LIST (hidden by default)
   bool isActivityVisible = false;
 
@@ -50,7 +56,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
   /// DROPDOWN
   String? selectedProject;
-  var compleName,Acknowledgement;
+  var compleName,Acknowledgement,ResultLastDay;
   /// STAT CARDS AUTO-SCROLL
   final ScrollController _statScrollController = ScrollController();
   Timer? _statAutoScrollTimer;
@@ -62,6 +68,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     activityParameterResponse();
     hrmsActivityList();
     getLocaldata();
+    hrmsLastdayAcknowledge();
     currentDate =
         DateFormat('dd-MMM-yyyy')
             .format(DateTime.now());
@@ -71,12 +78,17 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     super.initState();
   }
 
+
+
   getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var sFirstName = prefs.getString('sFirstName');
     var sLastName = prefs.getString('sLastName');
     sEmpImage = prefs.getString('sEmpImage');
     // sEmpImage
+    contactNo = prefs.getString('sContactNo') ?? "";
+    //sEmpCode
+    sEmpCode = prefs.getString('sEmpCode') ?? "";
     compleName = "$sFirstName $sLastName";
     setState(() {
 
@@ -117,15 +129,40 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     var map = await HrmsActivityList()
         .hrmsActivityList(context);
 
-    print("--------50------HRMS Daily Activity--------");
-    print(map);
-
     setState(() {
 
       activityList = map;
 
       isLoading = false;
     });
+  }
+  // Hrms Last day Acknowlegement API Call
+  void hrmsLastdayAcknowledge() async {
+
+    setState(() {
+      isLoading = true;
+    });
+    var map = await HrmsLastDayAcknowlegementRepo()
+        .hrmslastDay(context);
+    print(map);
+
+    setState(() {
+      print("----151----$map");
+      hrmslastDayAcknowlegement = map;
+
+      isLoading = false;
+    });
+    dDate = hrmslastDayAcknowlegement[0]["dDate"]?.toString() ?? "";
+    sEmpCode = hrmslastDayAcknowlegement[0]["sEmpCode"]?.toString() ?? "";
+    //ResultLastDay = hrmslastDayAcknowlegement[0]["Result"]?.toString() ?? "";
+    ResultLastDay ="1";
+
+    /// todo here its may you have to store locally thes fileds
+    print("----160--$hrmslastDayAcknowlegement");
+
+   if(ResultLastDay=="1"){
+     print("----------xxxx---152--");
+   }
   }
 
   // Project List API Call
@@ -506,7 +543,6 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
 
                   child: Container(
                     width: double.infinity,
-
                     padding: const EdgeInsets.all(8),
 
                     decoration: BoxDecoration(
@@ -543,18 +579,13 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                             title: "Time Spent (Minutes)",
                             child: TextFormField(
                               controller: timeSpentController,
-
                               keyboardType: TextInputType.number,
-
                               inputFormatters: [
-
                                 /// ONLY INTEGER
                                 FilteringTextInputFormatter.digitsOnly,
-
                                 /// MAX 3 DIGITS
                                 LengthLimitingTextInputFormatter(3),
                               ],
-
                               decoration: inputDecoration(
                                 'Enter Minutes',
                               ),
@@ -584,41 +615,44 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                               var workDetail = workDetailController.text.trim();
                               var timeSpent = timeSpentController.text.trim();
 
-                              print("-------projectCode--------$projectCode");
-                              print("-------workDetail--------$workDetail");
-                              print("-------timeSpent--------$timeSpent");
-
                               /// PROJECT VALIDATION
                               if (projectCode == null || projectCode.toString().isEmpty) {
                                 displayToast("Please select a project");
-
                                 return;
                               }
-
                               /// WORK DETAIL VALIDATION
                               if (workDetail.isEmpty) {
-
                                 displayToast("Please enter work detail");
                                 return;
                               }
-
                               /// TIME SPENT VALIDATION
                               if (timeSpent.isEmpty) {
-
                                 displayToast("Please enter time spent");
-
                                 return;
                               }
 
-                              /// ALL VALIDATION SUCCESS -> SHOW THE CONFIRM/REMARKS DIALOG
-                              /// (the API is only called from inside that dialog's Submit button)
+                              /// ALL VALIDATION SUCCESS
                               print("All fields are valid");
 
-                              _showRemarksDialog(
-                                projectCode: projectCode.toString(),
-                                workDetail: workDetail,
-                                timeSpent: timeSpent,
-                              );
+                              /// LAST-DAY ACKNOWLEDGEMENT GATE
+                              /// ResultLastDay == "1" -> employee must acknowledge yesterday's
+                              /// work status first, so open the acknowledgement dialog.
+                              /// ResultLastDay == "0" (or anything else) -> already acknowledged,
+                              /// so save the work directly on this page (no dialog).
+                              if (ResultLastDay?.toString() == "1") {
+                                _showRemarksDialog(
+                                  projectCode: projectCode.toString(),
+                                  workDetail: workDetail,
+                                  timeSpent: timeSpent,
+                                );
+                              } else {
+                                _submitDailyActivity(
+                                  projectCode: projectCode.toString(),
+                                  workDetail: workDetail,
+                                  timeSpent: timeSpent,
+                                  remarks: "",
+                                );
+                              }
                             },
                             child: const Text(
                               "Submit",
@@ -850,10 +884,9 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
              //   ),
              // ),
            ),
-
-          SizedBox(width: isIOS ? 5 : 6),
-          /// TEXT + FIELD SECTION
-          Expanded(
+           SizedBox(width: isIOS ? 5 : 6),
+           /// TEXT + FIELD SECTION
+           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1180,8 +1213,24 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     required String projectCode,
     required String workDetail,
     required String timeSpent,
-  }) {
+  }) async {
     final String? empImage = sEmpImage?.toString();
+
+    /// FETCH YESTERDAY'S WORK-STATUS REPORT (shown as cards inside the dialog).
+    /// Body -> { dDate: dDate (from HrmsLastDayAcknowlegement), sEmpCode: contactNo (login) }
+    ///
+    print("------1219------${dDate.toString()}");
+    print("------1220------${sEmpCode.toString()}");
+
+    final List<dynamic> workStatusReport = await HrmsEmpWorkStatusReportRepo()
+        .hrmsEmpWorkStatusReport(
+      context,
+      dDate?.toString() ?? "",
+      sEmpCode,
+    );
+    print("-----1228-----workStatusReport---$workStatusReport");
+
+    if (!mounted) return;
 
     showDialog(
       context: context,
@@ -1255,6 +1304,23 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                       color: Color(0xFF12B8C6),
                     ),
                   ),
+
+                  /// ====================================
+                  /// WORK STATUS REPORT (cards, below the acknowledgement text)
+                  /// Rendered as a plain Column so it never conflicts with the
+                  /// dialog's own SingleChildScrollView (no nested scroll issue).
+                  /// ====================================
+                  if (workStatusReport.isNotEmpty) ...[
+                    const SizedBox(height: 14),
+                    Text(
+                      "Work Status Report",
+                      style: AppTextStyle.font14OpenSansRegularBlackTextStyle,
+                    ),
+                    const SizedBox(height: 8),
+                    ...workStatusReport
+                        .map((item) => _workStatusReportCard(item))
+                        .toList(),
+                  ],
 
                   const SizedBox(height: 14),
                   Divider(color: Colors.grey.shade300),
@@ -1343,43 +1409,30 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                               return;
                             }
 
-                            /// API CALL (only from here, not the main screen)
-                            var map = await HrmsDailyActivityNew()
-                                .hrmsDailyActivityNew(context, projectCode, workDetail, timeSpent, todayTask);
-                            print("-------Daily Activity Response-----686-----");
-                            print(map);
-                            var result = int.parse(map[0]['Result'].toString());
-                            var message = map[0]['Msg'];
-                            print("-----result-------$result");
-                            print("-----message-------$message");
-
                             Navigator.of(dialogContext).pop();
+                            workStatusReport.clear();
 
-                            if (result == 1) {
-                              /// CLEAR THE FORM SO THE MAIN SCREEN LOOKS FRESH
-                              setState(() {
-                                workDetailController.clear();
-                                timeSpentController.clear();
-                                todaytaskfocus.clear();
-                                _dropDownSector = null;
-                                _selectedProjectCode = null;
-                              });
+                            /// 1) ACKNOWLEDGE LAST DAY -> HrmsUpdateUserAcknowledgement
+                            ///    dDate + sEmpCode from the initState acknowledgement API,
+                            ///    sUserAckn = the remarks typed in this dialog.
+                            await HrmsUpdateUserAcknowledgementRepo()
+                                .hrmsupdateAcknowledgement(
+                              context,
+                              dDate?.toString() ?? "",
+                              sEmpCode?.toString() ?? "",
+                              todayTask,
+                            );
 
-                              // call Daily Activity list
-                              hrmsActivityList();
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    _buildDialogSucces2(context, message),
-                              );
-                            } else {
-                              // info Dialog
-                              showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    _buildDialogInfo(context, message),
-                              );
-                            }
+                            /// After acknowledging, no dialog is needed on the next submit.
+                            ResultLastDay = "0";
+
+                            /// 2) SAVE THE DAILY WORK (unchanged behaviour)
+                            await _submitDailyActivity(
+                              projectCode: projectCode,
+                              workDetail: workDetail,
+                              timeSpent: timeSpent,
+                              remarks: todayTask,
+                            );
                           },
                           child: const Text(
                             "Submit",
@@ -1399,6 +1452,156 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
           ),
         );
       },
+    );
+  }
+
+  /// ====================================
+  /// SHARED DAILY-ACTIVITY SUBMIT
+  /// Called from the dialog Submit (ResultLastDay == "1") and directly from the
+  /// main Submit button (ResultLastDay == "0"). Keeps the success/info UX.
+  /// ====================================
+  Future<void> _submitDailyActivity({
+    required String projectCode,
+    required String workDetail,
+    required String timeSpent,
+    required String remarks,
+  }) async {
+    var map = await HrmsDailyActivityNew()
+        .hrmsDailyActivityNew(context, projectCode, workDetail, timeSpent, remarks);
+    print("-------Daily Activity Response-----686-----");
+    print(map);
+    var result = int.parse(map[0]['Result'].toString());
+    var message = map[0]['Msg'];
+    print("-----result-------$result");
+    print("-----message-------$message");
+
+    if (!mounted) return;
+
+    if (result == 1) {
+      /// CLEAR THE FORM SO THE MAIN SCREEN LOOKS FRESH
+      setState(() {
+        workDetailController.clear();
+        timeSpentController.clear();
+        todaytaskfocus.clear();
+        _dropDownSector = null;
+        _selectedProjectCode = null;
+      });
+
+      // call Daily Activity list
+      hrmsActivityList();
+      showDialog(
+        context: context,
+        builder: (context) => _buildDialogSucces2(context, message),
+      );
+    } else {
+      // info Dialog
+      showDialog(
+        context: context,
+        builder: (context) => _buildDialogInfo(context, message),
+      );
+    }
+  }
+
+  /// ====================================
+  /// WORK STATUS REPORT CARD (used inside the acknowledgement dialog)
+  /// ====================================
+  Widget _workStatusReportCard(item) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7FCFD),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(
+          color: const Color(0xFF12B8C6).withOpacity(0.20),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /// PROJECT NAME + WORKING HOURS
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Icon(
+                Icons.work_outline_rounded,
+                size: 16,
+                color: Color(0xFF12B8C6),
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  item['sProjectName']?.toString() ?? "",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF1E2230),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: Colors.red.withOpacity(.08),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.watch_later_rounded,
+                      size: 12,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      item['sWoringHrs']?.toString() ?? "",
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
+          /// ACTIVITY
+          Text(
+            item['sActivity']?.toString() ?? "",
+            style: AppTextStyle.font12OpenSansRegularBlackTextStyle,
+          ),
+
+          const SizedBox(height: 8),
+
+          /// ACTIVITY TIME
+          Row(
+            children: [
+              const Icon(
+                Icons.access_time_rounded,
+                size: 12,
+                color: Colors.black45,
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  item['dActivityTime']?.toString() ?? "",
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
