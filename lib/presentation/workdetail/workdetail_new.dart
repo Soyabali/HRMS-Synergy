@@ -77,9 +77,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
     _startStatCardAutoScroll();
     super.initState();
   }
-
-
-
+  
   getLocaldata() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var sFirstName = prefs.getString('sFirstName');
@@ -452,6 +450,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
           backgroundColor: const Color(0xFF12B8C6),
           elevation: 0,
           centerTitle: true,
+          toolbarHeight: 48,
 
           title: const Text(
             'Daily Work Status',
@@ -475,6 +474,25 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
               );
             },
           ),
+
+          /// SHOW / HIDE TOGGLE (EYE ICON, LIKE A PASSWORD FIELD) - MOVED TO APPBAR
+          actions: [
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isStatValueVisible = !isStatValueVisible;
+                });
+              },
+              icon: Icon(
+                isStatValueVisible
+                    ? Icons.visibility_rounded
+                    : Icons.visibility_off_rounded,
+                color: Colors.white,
+                size: 26,
+              ),
+              tooltip: isStatValueVisible ? 'Hide values' : 'Show values',
+            ),
+          ],
         ),
 
         body: SingleChildScrollView(
@@ -486,46 +504,15 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
               /// TOP STAT CARDS (HORIZONTAL LIST)
               /// ====================================
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    /// SHOW / HIDE TOGGLE (EYE ICON, LIKE A PASSWORD FIELD)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF12B8C6).withOpacity(0.10),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            isStatValueVisible = !isStatValueVisible;
-                          });
-                        },
-                        icon: Icon(
-                          isStatValueVisible
-                              ? Icons.visibility_rounded
-                              : Icons.visibility_off_rounded,
-                          color: const Color(0xFF12B8C6),
-                          size: 26,
-                        ),
-                        tooltip: isStatValueVisible ? 'Hide values' : 'Show values',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
               SizedBox(
-                height: 170,
+                height: 148,
                 child: ListView.builder(
                   controller: _statScrollController,
                   scrollDirection: Axis.horizontal,
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
-                    vertical: 8,
+                    vertical: 4,
                   ),
                   itemCount: statCardList.length,
                   itemBuilder: (context, index) {
@@ -534,7 +521,7 @@ class _DailyWorkStatusScreenState extends State<WorkDetailNew> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
                 child: Card(
                   elevation: 5,
                   shape: RoundedRectangleBorder(
