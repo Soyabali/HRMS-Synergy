@@ -19,11 +19,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>25</string>
+	<string>29</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>25.0.0</string>
+	<string>29.0.0</string>
 	<key>FLTEnableImpeller</key>
 	<false/>
 	<key>LSApplicationCategoryType</key>
@@ -35,21 +35,13 @@
 		<string>Hrms</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
-	<string>Camera Usage Description</string>
+	<string>Synergy HRMS uses the camera to capture photos for Expense Management</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>We need your location to provide better services.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always and when in use!</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Your location is required for some functionality to work.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Older devices need location.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need location when in use</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Camera MicroPhone Description</string>
+	<string>Synergy HRMS uses your location to mark attendance and record the location when starting or stopping a trip</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Camera Photo LIb</string>
+	<string>Synergy HRMS uses the photo library to allow you to select images for Expense Management</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
