@@ -366,28 +366,17 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
           },
           calendarBuilders: CalendarBuilders(
             defaultBuilder: (context, day, focusedDay) {
-              if (sPresents!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF689F38));
-              } else if (sAbsent!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF7C0A02));
-              } else if (sLeave!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF1157C3));
-              } else if (sHalfDay!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFFCFB203));
-              } else if (sHolidays!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF0097A7));
-              } else if (sLateComing!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFFFFA000));
-              } else if (sEarlyGoing!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFFd93124));
-              } else if (sLcEg!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFFF57C00));
-              } else if (sOnSite!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF006064));
-              } else if (sWeeklyOff!.contains(day.day)) {
-                return _buildCalendarDay(day, Color(0xFF006064));
-              }
-              return _buildCalendarDay(day, null);
+              return _buildStatusDay(day);
+            },
+            todayBuilder: (context, day, focusedDay) {
+              return _buildStatusDay(day);
+            },
+            selectedBuilder: (context, day, focusedDay) {
+              // table_calendar checks isSelected before isToday, and
+              // _selectedDate defaults to today, so without this the
+              // library's default blue "selected" style wins over
+              // todayBuilder/defaultBuilder and hides the status color.
+              return _buildStatusDay(day);
             },
           ),
         ),
@@ -1097,6 +1086,34 @@ class _CustomCalendarScreenState extends State<CustomCalendarScreen> {
         ],
       ),
     );
+  }
+
+  // Resolves the correct status color for a given day (used for both
+  // normal days and today) so today follows the same present/absent/leave/
+  // etc. rules instead of the calendar's default "today" highlight color.
+  Widget _buildStatusDay(DateTime day) {
+    if (sPresents!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF689F38));
+    } else if (sAbsent!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF7C0A02));
+    } else if (sLeave!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF1157C3));
+    } else if (sHalfDay!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFFCFB203));
+    } else if (sHolidays!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF0097A7));
+    } else if (sLateComing!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFFFFA000));
+    } else if (sEarlyGoing!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFFd93124));
+    } else if (sLcEg!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFFF57C00));
+    } else if (sOnSite!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF006064));
+    } else if (sWeeklyOff!.contains(day.day)) {
+      return _buildCalendarDay(day, Color(0xFF006064));
+    }
+    return _buildCalendarDay(day, null);
   }
 
   // Widget to build calendar day with color circles
